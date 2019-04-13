@@ -153,6 +153,7 @@ func (p *Player) Attack(g *Game, posToAttack Pos) {
 		if isThereAMonster(level, posToAttack) {
 			m := level.Monsters[posToAttack]
 			m.TakeDamage(level, p.Strength.Current)
+			p.Strength.RaiseXp(2)
 		}
 	}
 }
@@ -167,6 +168,7 @@ func (p *Player) PowerAttack(g *Game) {
 			}
 			p.IsMoving = false
 			p.IsPowerAttacking = false
+			p.Energy.RaiseXp(10)
 		}(p)
 		switch p.CurrentPower.Type {
 		case PowerEnergyBall:
@@ -188,6 +190,7 @@ func (p *Player) TakeDamage(game *Game, damage int) {
 	}
 	p.Hitpoints.Current -= damage
 	game.Level.MakeExplosion(p.Pos, damage, 50)
+	p.Hitpoints.RaiseXp(damage)
 
 	game.GetEventManager().Dispatch(&Event{
 		Type:    PlayerEventsType,

@@ -4,14 +4,27 @@ import "time"
 
 const CharacterDeltaTime = 100
 
+const CharacteristicXpMultiplier = 7
+
 type Characteristic struct {
 	Initial int
 	Current int
+	Xp      int
 }
 
 func (ch *Characteristic) Init(value int) {
 	ch.Initial = value
 	ch.Current = value
+	ch.Xp = 0
+}
+
+func (ch *Characteristic) RaiseXp(value int) {
+	ch.Xp += value
+	if ch.Xp >= ch.Initial*CharacteristicXpMultiplier {
+		ch.Initial += 1
+		ch.Current = ch.Initial
+		ch.Xp = 0
+	}
 }
 
 type Fighter struct {

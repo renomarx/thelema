@@ -8,14 +8,14 @@ import (
 
 func (ui *UI) DrawCharacteristics(p *game.Character, offsetX, offsetH int32) int32 {
 	_, h := ui.DrawText(
-		"Health : "+strconv.Itoa(p.Hitpoints.Current)+"/"+strconv.Itoa(p.Hitpoints.Initial),
+		"Health : "+strconv.Itoa(p.Hitpoints.Current)+"/"+strconv.Itoa(p.Hitpoints.Initial)+" (xp: "+strconv.Itoa(p.Hitpoints.Xp)+")",
 		TextSizeM,
 		ColorActive,
 		offsetX*Res,
 		offsetH)
 	offsetH += h
 	_, h = ui.DrawText(
-		"Energy : "+strconv.Itoa(p.Energy.Current)+"/"+strconv.Itoa(p.Energy.Initial),
+		"Energy : "+strconv.Itoa(p.Energy.Current)+"/"+strconv.Itoa(p.Energy.Initial)+" (xp: "+strconv.Itoa(p.Energy.Xp)+")",
 		TextSizeM,
 		ColorActive,
 		offsetX*Res,
@@ -28,7 +28,7 @@ func (ui *UI) DrawCharacteristics(p *game.Character, offsetX, offsetH int32) int
 		offsetX*Res, offsetH)
 	offsetH += h
 	_, h = ui.DrawText(
-		"Strength : "+strconv.Itoa(p.Strength.Current),
+		"Strength : "+strconv.Itoa(p.Strength.Current)+" (xp: "+strconv.Itoa(p.Strength.Xp)+")",
 		TextSizeM,
 		ColorActive,
 		offsetX*Res,
