@@ -1,0 +1,14 @@
+{
+  "a": {
+    "quest": {
+      "id": "sarahs_gin",
+      "steps_fullfilling": ["get_alcohol"]
+    }
+  },
+  "e": {
+    "quest": {
+      "id": "sarahs_gin",
+      "steps_fullfilling": ["get_herbs"]
+    }
+  }
+}

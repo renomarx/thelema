@@ -1,0 +1,4 @@
+level1,22,18 level2,25,9
+level2,25,9 level1,22,18
+level2,13,0 world,87,14
+world,87,14 level2,13,0

@@ -1,0 +1,28 @@
+{
+  "sarahs_gin": {
+    "current_step": "talk_to_jason_about_sarah",
+    "name": "Sarah's Gin",
+    "steps": {
+      "talk_to_jason_about_sarah": {
+        "order": 1,
+        "description" : "Ask Jason about Sarah"
+      },
+      "get_alcohol": {
+        "order": 2,
+        "description" : "Get a bottle of alcohol"
+      },
+      "get_herbs": {
+        "order": 2,
+        "description" : "Get herbs"
+      },
+      "talk_to_sarah": {
+        "order": 3,
+        "description" : "Bring alcohol and herbs to Sarah",
+        "objects_taken": ["a","e"],
+        "gold_given": 30,
+        "objects_given": [],
+        "final": true
+      }
+    }
+  }
+}

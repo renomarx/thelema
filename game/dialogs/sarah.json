@@ -1,0 +1,33 @@
+{
+  "current_node": "greetings",
+  "nodes" : {
+    "greetings": {
+      "initial": true,
+      "message": "Hi honey.",
+      "choices": [
+        {
+          "quest": {
+            "id": "sarahs_gin",
+            "steps_mandatory": ["get_herbs", "get_alcohol"],
+            "steps_fullfilling": [
+              "talk_to_sarah"
+            ]
+          },
+          "cmd": "Here, I have your herbs and alcohol.",
+          "node": "thanks"
+        },
+        {
+          "cmd": "Bye."
+        }
+      ]
+    },
+      "thanks": {
+        "message": "Thanks my love ! You can have these 30$.",
+        "choices": [
+          {
+            "cmd": "Bye."
+          }
+        ]
+      }
+  }
+}
