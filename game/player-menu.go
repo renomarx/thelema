@@ -15,6 +15,7 @@ func (p *Player) LoadPlayerMenu() {
 }
 
 func (g *Game) OpenPlayerMenu() {
+	g.DispatchEventMenu(ActionMenuOpen)
 	g.Level.Player.Menu.IsOpen = true
 	g.Level.Paused = true
 	adaptMenuSpeed()
@@ -40,7 +41,7 @@ func (g *Game) HandleInputPlayerMenu() {
 			g.DispatchEventMenu(ActionMenuSelect)
 			menu.ChoiceDown()
 		case Action:
-			g.DispatchEventMenu(ActionMenuConfirm)
+			g.DispatchEventMenu(ActionMenuOpen)
 			c := menu.ConfirmChoice()
 			switch c.Cmd {
 			case PlayerMenuCmdInventory:

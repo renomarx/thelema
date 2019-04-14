@@ -17,6 +17,7 @@ const ActionMenuSelect = "MENU_SELECT"
 const ActionMenuConfirm = "MENU_CONFIRM"
 const ActionMenuOpen = "MENU_OPEN"
 const ActionMenuClose = "MENU_CLOSE"
+const ActionReadBook = "READ_BOOK"
 
 type Event struct {
 	Action  string

@@ -124,15 +124,19 @@ func (iv *Inventory) HandleInput(g *Game) {
 	input := g.GetInput()
 	switch input.Typ {
 	case Up:
+		g.GetEventManager().Dispatch(&Event{Action: ActionMenuSelect})
 		iv.ChoiceUp()
 		adaptMenuSpeed()
 	case Down:
+		g.GetEventManager().Dispatch(&Event{Action: ActionMenuSelect})
 		iv.ChoiceDown()
 		adaptMenuSpeed()
 	case Action:
+		g.GetEventManager().Dispatch(&Event{Action: ActionMenuConfirm})
 		iv.ConfirmChoice(g)
 		adaptMenuSpeed()
 	case Select:
+		g.GetEventManager().Dispatch(&Event{Action: ActionMenuClose})
 		iv.Close(g)
 		adaptMenuSpeed()
 	default:

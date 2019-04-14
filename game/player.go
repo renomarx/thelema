@@ -226,6 +226,7 @@ func (p *Player) Talk(g *Game, posTo Pos) {
 	level := g.Level
 	pnj, exists := level.Pnjs[posTo]
 	if exists {
+		g.GetEventManager().Dispatch(&Event{Action: ActionTalk})
 		p.IsTalking = true
 		p.TalkingTo = pnj
 		pnj.Talk(p)
@@ -289,6 +290,7 @@ func (p *Player) TakeQuestObject(o *Object, g *Game) bool {
 	if !isQuestObject {
 		return false
 	}
+	g.GetEventManager().Dispatch(&Event{Action: ActionTake})
 	Mux.Lock()
 	p.Inventory.QuestObjects[o.Rune] = o
 	delete(g.Level.Objects, o.Pos)
@@ -304,6 +306,7 @@ func (p *Player) TakeQuestObject(o *Object, g *Game) bool {
 func (p *Player) TakeUsable(o *Object, g *Game) bool {
 	taken := p.Inventory.TakeUsable(o)
 	if taken {
+		g.GetEventManager().Dispatch(&Event{Action: ActionTake})
 		Mux.Lock()
 		delete(g.Level.Objects, o.Pos)
 		Mux.Unlock()
@@ -315,6 +318,7 @@ func (p *Player) TakeUsable(o *Object, g *Game) bool {
 func (p *Player) TakeBook(o *Object, g *Game) bool {
 	taken := p.AddBook(o, g)
 	if taken {
+		g.GetEventManager().Dispatch(&Event{Action: ActionTake})
 		Mux.Lock()
 		delete(g.Level.Objects, o.Pos)
 		Mux.Unlock()

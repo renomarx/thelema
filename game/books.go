@@ -85,14 +85,17 @@ func (l *Library) HandleInput(g *Game) {
 	input := g.GetInput()
 	switch input.Typ {
 	case Right:
+		g.GetEventManager().Dispatch(&Event{Action: ActionReadBook})
 		l.ChoiceRight()
 		l.ConfirmChoice(g)
 		adaptMenuSpeed()
 	case Left:
+		g.GetEventManager().Dispatch(&Event{Action: ActionReadBook})
 		l.ChoiceLeft()
 		l.ConfirmChoice(g)
 		adaptMenuSpeed()
 	case Select:
+		g.GetEventManager().Dispatch(&Event{Action: ActionMenuClose})
 		l.Close(g)
 		adaptMenuSpeed()
 	default:

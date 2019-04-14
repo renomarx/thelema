@@ -112,6 +112,10 @@ func (mp *MusicPlayer) On(e *game.Event) {
 		mp.PlaySound("footstep01.ogg")
 	case game.ActionExplode:
 		mp.PlaySound("explodemini.wav")
+	case game.ActionTalk:
+		mp.PlaySound("interface1.wav")
+	case game.ActionTake:
+		mp.PlaySound("interface1.wav")
 	}
 }
 
