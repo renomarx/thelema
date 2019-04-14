@@ -88,7 +88,8 @@ func (mp *MusicPlayer) ChangeMusic(musicName string) {
 	mp.PlayMusic()
 }
 
-func (mp *MusicPlayer) PlaySound(name string) {
+func (mp *MusicPlayer) PlaySound(name string, volume int) {
+	mp.Sounds[name].Volume(volume)
 	mp.Sounds[name].Play(-1, 0)
 }
 
@@ -99,31 +100,31 @@ func (mp *MusicPlayer) On(e *game.Event) {
 	// case game.ActionWalk:
 	// 	mp.PlaySound("footstep00.ogg")
 	case game.ActionOpenDoor:
-		mp.PlaySound("doorOpen_1.ogg")
+		mp.PlaySound("doorOpen_1.ogg", 32)
 	case game.ActionCloseDoor:
-		mp.PlaySound("doorClose_1.ogg")
+		mp.PlaySound("doorClose_1.ogg", 32)
 	case game.ActionMenuOpen:
-		mp.PlaySound("interface2.wav")
+		mp.PlaySound("interface2.wav", 64)
 	case game.ActionMenuClose:
-		mp.PlaySound("interface2.wav")
+		mp.PlaySound("interface2.wav", 64)
 	case game.ActionMenuSelect:
-		mp.PlaySound("interface1.wav")
+		mp.PlaySound("interface1.wav", 48)
 	case game.ActionMenuConfirm:
-		mp.PlaySound("interface2.wav")
+		mp.PlaySound("interface2.wav", 64)
 	case game.ActionAttack:
-		mp.PlaySound("footstep08.ogg")
+		mp.PlaySound("footstep08.ogg", 48)
 	case game.ActionPower:
 		mp.PlayPowerSound(e)
 	case game.ActionHurt:
-		mp.PlaySound("footstep01.ogg")
+		mp.PlaySound("footstep01.ogg", 48)
 	case game.ActionExplode:
 		mp.PlayExplosion(e)
 	case game.ActionTalk:
 		mp.PlayVoice(e)
 	case game.ActionTake:
-		mp.PlaySound("interface1.wav")
+		mp.PlaySound("interface1.wav", 48)
 	case game.ActionReadBook:
-		mp.PlaySound("bookFlip2.ogg")
+		mp.PlaySound("bookFlip2.ogg", 64)
 	case game.ActionRoar:
 		mp.PlayMonsterRoar(e)
 	}
@@ -139,20 +140,24 @@ func (mp *MusicPlayer) PlayMusicForLevel(levelType string) {
 }
 
 func (mp *MusicPlayer) PlayPowerSound(e *game.Event) {
+	volume := 48
 	sound := "magic1.wav"
 	typ, exists := e.Payload["type"]
 	if exists {
 		switch typ {
 		case game.PowerEnergyBall:
 			sound = "magic1.wav"
+			volume = 32
 		case game.PowerInvocation:
 			sound = "spell.wav"
+			volume = 64
 		}
 	}
-	mp.PlaySound(sound)
+	mp.PlaySound(sound, volume)
 }
 
 func (mp *MusicPlayer) PlayExplosion(e *game.Event) {
+	volume := 48
 	sound := "explodemini.wav"
 	size, exists := e.Payload["size"]
 	if exists {
@@ -163,9 +168,10 @@ func (mp *MusicPlayer) PlayExplosion(e *game.Event) {
 			sound = "explodemini.wav"
 		case game.ExplosionSizeLarge:
 			sound = "explode.wav"
+			volume = 64
 		}
 	}
-	mp.PlaySound(sound)
+	mp.PlaySound(sound, volume)
 }
 
 func (mp *MusicPlayer) PlayVoice(e *game.Event) {
@@ -179,7 +185,7 @@ func (mp *MusicPlayer) PlayVoice(e *game.Event) {
 			sound = "voices/female_standard_1.ogg"
 		}
 	}
-	mp.PlaySound(sound)
+	mp.PlaySound(sound, 48)
 }
 
 func (mp *MusicPlayer) PlayMonsterRoar(e *game.Event) {
@@ -194,5 +200,5 @@ func (mp *MusicPlayer) PlayMonsterRoar(e *game.Event) {
 			sound = "monsters/rat.wav"
 		}
 	}
-	mp.PlaySound(sound)
+	mp.PlaySound(sound, 64)
 }

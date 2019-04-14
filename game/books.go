@@ -56,7 +56,7 @@ func (l *Library) ConfirmChoice(g *Game) {
 		return
 	}
 	for _, powername := range b.Powers {
-		g.Level.Player.NewPower(powername)
+		g.Level.Player.NewPower(powername, g)
 	}
 }
 

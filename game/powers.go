@@ -16,17 +16,21 @@ type PlayerPower struct {
 	Lifetime int
 }
 
-func (p *Player) NewPower(powername string) {
+func (p *Player) NewPower(powername string, g *Game) {
 	_, exists := p.Powers[powername]
-	if exists {
-		return
+	if !exists {
+		switch powername {
+		case PowerEnergyBall:
+			p.Powers[string(PowerEnergyBall)] = &PlayerPower{Type: PowerEnergyBall, Strength: 50, Speed: 10, Energy: 10, Tile: Energyball}
+		case PowerInvocation:
+			p.Powers[string(PowerInvocation)] = &PlayerPower{Type: PowerInvocation, Strength: 100, Speed: 10, Energy: 100, Lifetime: 15, Tile: Fox}
+		}
 	}
-	switch powername {
-	case PowerEnergyBall:
-		p.Powers[string(PowerEnergyBall)] = &PlayerPower{Type: PowerEnergyBall, Strength: 50, Speed: 10, Energy: 10, Tile: Energyball}
-	case PowerInvocation:
-		p.Powers[string(PowerInvocation)] = &PlayerPower{Type: PowerInvocation, Strength: 100, Speed: 10, Energy: 100, Lifetime: 15, Tile: Fox}
-	}
+	pp := p.Powers[powername]
+	g.GetEventManager().Dispatch(&Event{
+		Message: "You learned power: '" + string(pp.Type) + "' with this book!",
+		Action:  ActionPower,
+		Payload: map[string]string{"type": string(pp.Type)}})
 }
 
 func (p *Player) NextPower() {
