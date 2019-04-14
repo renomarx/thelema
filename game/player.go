@@ -229,7 +229,7 @@ func (p *Player) Talk(g *Game, posTo Pos) {
 		g.GetEventManager().Dispatch(&Event{Action: ActionTalk})
 		p.IsTalking = true
 		p.TalkingTo = pnj
-		pnj.Talk(p)
+		pnj.Talk(p, g)
 		adaptDialogSpeed()
 	}
 }
@@ -249,7 +249,8 @@ func (p *Player) Discuss(g *Game) {
 		pnj.TalkChoiceDown()
 		adaptDialogSpeed()
 	case Action:
-		pnj.TalkConfirmChoice()
+		g.GetEventManager().Dispatch(&Event{Action: ActionTalk})
+		pnj.TalkConfirmChoice(g)
 		adaptDialogSpeed()
 	default:
 	}

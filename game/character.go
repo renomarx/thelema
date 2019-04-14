@@ -32,9 +32,13 @@ type Fighter struct {
 	IsPowerAttacking bool
 }
 
+const VoiceMaleStandard = "MALE_STANDARD"
+const VoiceFemaleStandard = "FEMALE_STANDARD"
+
 type Talker struct {
 	IsTalking bool
 	Dialog    *Dialog
+	Voice     string
 }
 
 type Character struct {

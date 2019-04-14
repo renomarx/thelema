@@ -56,7 +56,9 @@ func (mp *MusicPlayer) LoadSounds() {
 		"interface1.wav",
 		"interface2.wav",
 		"explodemini.wav",
-		// TODO
+		"voices/male_standard_1.ogg",
+		"voices/female_standard_1.ogg",
+		"bookFlip2.ogg",
 	}
 	for _, name := range sounds {
 		sound, err := mix.LoadWAV("ui2d/assets/sounds/" + name)
@@ -113,9 +115,11 @@ func (mp *MusicPlayer) On(e *game.Event) {
 	case game.ActionExplode:
 		mp.PlaySound("explodemini.wav")
 	case game.ActionTalk:
-		mp.PlaySound("interface1.wav")
+		mp.PlayVoice(e)
 	case game.ActionTake:
 		mp.PlaySound("interface1.wav")
+	case game.ActionReadBook:
+		mp.PlaySound("bookFlip2.ogg")
 	}
 }
 
@@ -126,4 +130,18 @@ func (mp *MusicPlayer) PlayMusicForLevel(levelType string) {
 	case game.LevelTypeOutdoor:
 		mp.ChangeMusic("forest.mp3")
 	}
+}
+
+func (mp *MusicPlayer) PlayVoice(e *game.Event) {
+	sound := "interface1.wav"
+	voice, exists := e.Payload["voice"]
+	if exists {
+		switch voice {
+		case game.VoiceMaleStandard:
+			sound = "voices/male_standard_1.ogg"
+		case game.VoiceFemaleStandard:
+			sound = "voices/female_standard_1.ogg"
+		}
+	}
+	mp.PlaySound(sound)
 }

@@ -110,9 +110,9 @@ func (g *Game) loadLevelFromFile(levelName string, levelType string) *Level {
 			case Upstairs:
 				level.Objects[Pos{x, y}] = &Object{Rune: rune(Upstairs)}
 			case Jason:
-				level.Pnjs[Pos{x, y}] = NewPnj(Pos{x, y}, rune(Jason), "jason")
+				level.Pnjs[Pos{x, y}] = NewPnj(Pos{x, y}, rune(Jason), "jason", VoiceMaleStandard)
 			case Sarah:
-				level.Pnjs[Pos{x, y}] = NewPnj(Pos{x, y}, rune(Sarah), "sarah")
+				level.Pnjs[Pos{x, y}] = NewPnj(Pos{x, y}, rune(Sarah), "sarah", VoiceFemaleStandard)
 			default:
 				o := &Object{Rune: c, Blocking: true}
 				o.Pos = Pos{x, y}

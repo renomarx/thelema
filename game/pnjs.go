@@ -9,13 +9,13 @@ type Pnj struct {
 	TalkingTo *Player
 }
 
-func NewPnj(p Pos, r rune, name string) *Pnj {
+func NewPnj(p Pos, r rune, name string, voice string) *Pnj {
 	pnj := &Pnj{}
 	pnj.Rune = r
 	pnj.Name = name
 	pnj.Hitpoints.Init(50)
 	pnj.Strength.Init(5)
-	pnj.Speed.Init(2)
+	pnj.Speed.Init(4)
 	pnj.ActionPoints = 0.0
 	pnj.Pos = p
 	pnj.Xb = 0
@@ -24,17 +24,31 @@ func NewPnj(p Pos, r rune, name string) *Pnj {
 	pnj.IsMoving = false
 	pnj.LookAt = Left
 	pnj.IsTalking = false
+	pnj.Voice = voice
 
 	return pnj
 }
 
-func (pnj *Pnj) Talk(p *Player) {
+func (pnj *Pnj) Talk(p *Player, g *Game) {
+	g.GetEventManager().Dispatch(&Event{Action: ActionTalk, Payload: map[string]string{"voice": pnj.Voice}})
 	pnj.Dialog.Init(p)
 	node := pnj.Dialog.GetCurrentNode()
 	node.ClearHighlight()
 	node.SetHighlightedIndex(0)
 	pnj.IsTalking = true
 	pnj.TalkingTo = p
+	if p.X == pnj.X && p.Y < pnj.Y {
+		pnj.LookAt = Up
+	}
+	if p.X == pnj.X && p.Y > pnj.Y {
+		pnj.LookAt = Down
+	}
+	if p.Y == pnj.Y && p.X < pnj.X {
+		pnj.LookAt = Left
+	}
+	if p.Y == pnj.Y && p.X > pnj.X {
+		pnj.LookAt = Right
+	}
 }
 
 func (pnj *Pnj) TalkChoiceUp() {
@@ -49,13 +63,13 @@ func (pnj *Pnj) TalkChoiceDown() {
 	node.SetHighlightedIndex(choiceIdx + 1)
 }
 
-func (pnj *Pnj) TalkConfirmChoice() {
+func (pnj *Pnj) TalkConfirmChoice(g *Game) {
 	node := pnj.Dialog.GetCurrentNode()
 	choice := node.GetCurrentChoice()
-	pnj.ChooseTalkOption(choice.Cmd)
+	pnj.ChooseTalkOption(choice.Cmd, g)
 }
 
-func (pnj *Pnj) ChooseTalkOption(cmd string) {
+func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
 	node := pnj.Dialog.GetCurrentNode()
 	nodeTo := pnj.Dialog.CurrentNode
 	p := pnj.TalkingTo
@@ -72,6 +86,7 @@ func (pnj *Pnj) ChooseTalkOption(cmd string) {
 		}
 	}
 	pnj.Dialog.CurrentNode = nodeTo
+	g.GetEventManager().Dispatch(&Event{Action: ActionTalk, Payload: map[string]string{"voice": pnj.Voice}})
 }
 
 func (pnj *Pnj) StopTalking() {
