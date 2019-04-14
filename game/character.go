@@ -4,7 +4,7 @@ import "time"
 
 const CharacterDeltaTime = 100
 
-const CharacteristicXpMultiplier = 7
+const CharacteristicXpMultiplier = 1
 
 type Characteristic struct {
 	Initial int
@@ -18,9 +18,10 @@ func (ch *Characteristic) Init(value int) {
 	ch.Xp = 0
 }
 
-func (ch *Characteristic) RaiseXp(value int) {
+func (ch *Characteristic) RaiseXp(value int, g *Game) {
 	ch.Xp += value
 	if ch.Xp >= ch.Initial*CharacteristicXpMultiplier {
+		g.GetEventManager().Dispatch(&Event{Action: ActionCharacteristicUp})
 		ch.Initial += 1
 		ch.Current = ch.Initial
 		ch.Xp = 0

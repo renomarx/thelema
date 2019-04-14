@@ -84,10 +84,9 @@ func (p *Player) finishQuestStep(questID string, stepID string, g *Game) {
 		panic("Step " + stepID + "in quest " + questID + " does not exist")
 	}
 	st.IsFinished = true
-	// TODO : play sound
 	if st.Final {
 		q.IsFinished = true
-		// TODO : play sound
+		g.GetEventManager().Dispatch(&Event{Action: ActionQuestFinished})
 	}
 	for _, s := range st.ObjectsTaken {
 		g.GetEventManager().Dispatch(&Event{

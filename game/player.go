@@ -162,7 +162,7 @@ func (p *Player) Attack(g *Game, posToAttack Pos) {
 			g.GetEventManager().Dispatch(&Event{Action: ActionAttack})
 			m := level.Monsters[posToAttack]
 			m.TakeDamage(g, p.Strength.Current)
-			p.Strength.RaiseXp(2)
+			p.Strength.RaiseXp(2, g)
 		}
 	}
 }
@@ -177,7 +177,7 @@ func (p *Player) PowerAttack(g *Game) {
 			}
 			p.IsMoving = false
 			p.IsPowerAttacking = false
-			p.Energy.RaiseXp(10)
+			p.Energy.RaiseXp(10, g)
 		}(p)
 		switch p.CurrentPower.Type {
 		case PowerEnergyBall:
@@ -194,16 +194,16 @@ func (p *Player) PowerAttack(g *Game) {
 	}
 }
 
-func (p *Player) TakeDamage(game *Game, damage int) {
+func (p *Player) TakeDamage(g *Game, damage int) {
 	if p.Hitpoints.Current <= 0 {
-		p.Die(game)
+		p.Die(g)
 		return
 	}
 	p.Hitpoints.Current -= damage
-	game.MakeExplosion(p.Pos, damage, 50)
-	p.Hitpoints.RaiseXp(damage)
+	g.MakeExplosion(p.Pos, damage, 50)
+	p.Hitpoints.RaiseXp(damage, g)
 
-	game.GetEventManager().Dispatch(&Event{
+	g.GetEventManager().Dispatch(&Event{
 		Action:  ActionHurt,
 		Message: "Health left :" + strconv.Itoa(p.Hitpoints.Current)})
 }
