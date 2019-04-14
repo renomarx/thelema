@@ -59,6 +59,7 @@ func (mp *MusicPlayer) LoadSounds() {
 		"explodemini.wav",
 		"explode.wav",
 		"bookFlip2.ogg",
+		"coin3.wav",
 		"voices/male_standard_1.ogg",
 		"voices/female_standard_1.ogg",
 		"monsters/rat.wav",
@@ -127,6 +128,8 @@ func (mp *MusicPlayer) On(e *game.Event) {
 		mp.PlaySound("bookFlip2.ogg", 64)
 	case game.ActionRoar:
 		mp.PlayMonsterRoar(e)
+	case game.ActionTakeGold:
+		mp.PlaySound("coin3.wav", 48)
 	}
 }
 

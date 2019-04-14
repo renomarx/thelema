@@ -74,7 +74,7 @@ func (p *Player) LoadQuestsObjects(dirpath string) {
 	p.QuestsObjects = objectsByRune
 }
 
-func (p *Player) finishQuestStep(questID string, stepID string) {
+func (p *Player) finishQuestStep(questID string, stepID string, g *Game) {
 	q, questExists := p.Quests[questID]
 	if !questExists {
 		panic("Quest " + questID + " does not exist")
@@ -84,10 +84,15 @@ func (p *Player) finishQuestStep(questID string, stepID string) {
 		panic("Step " + stepID + "in quest " + questID + " does not exist")
 	}
 	st.IsFinished = true
+	// TODO : play sound
 	if st.Final {
 		q.IsFinished = true
+		// TODO : play sound
 	}
 	for _, s := range st.ObjectsTaken {
+		g.GetEventManager().Dispatch(&Event{
+			Message: "Quest object taken",
+			Action:  ActionTake})
 		r := rune(s[0])
 		_, exists := p.Inventory.QuestObjects[r]
 		if exists {
@@ -95,6 +100,9 @@ func (p *Player) finishQuestStep(questID string, stepID string) {
 		}
 	}
 	for _, s := range st.ObjectsGiven {
+		g.GetEventManager().Dispatch(&Event{
+			Message: "Quest object given!",
+			Action:  ActionTake})
 		r := rune(s[0])
 		_, exists := p.QuestsObjects[r]
 		if !exists {
@@ -102,7 +110,8 @@ func (p *Player) finishQuestStep(questID string, stepID string) {
 		}
 		p.Inventory.QuestObjects[r] = &Object{Rune: r}
 	}
-	if st.GoldGiven >= 0 {
+	if st.GoldGiven > 0 {
+		g.GetEventManager().Dispatch(&Event{Action: ActionTakeGold})
 		p.Inventory.Gold += st.GoldGiven
 	}
 }

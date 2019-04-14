@@ -299,7 +299,7 @@ func (p *Player) TakeQuestObject(o *Object, g *Game) bool {
 	Mux.Unlock()
 
 	for _, stepID := range qo.Quest.StepsFullfilling {
-		p.finishQuestStep(qo.Quest.ID, stepID)
+		p.finishQuestStep(qo.Quest.ID, stepID, g)
 	}
 
 	return true

@@ -13,6 +13,7 @@ const ActionTalk = "TALK"
 const ActionTake = "TAKE"
 const ActionExplode = "EXPLODE"
 const ActionRoar = "ROAR"
+const ActionTakeGold = "TAKE_GOLD"
 
 const ActionMenuSelect = "MENU_SELECT"
 const ActionMenuConfirm = "MENU_CONFIRM"

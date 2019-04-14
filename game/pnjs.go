@@ -76,7 +76,7 @@ func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
 	for _, choice := range node.Choices {
 		if choice.Cmd == cmd {
 			for _, stepID := range choice.Quest.StepsFullfilling {
-				p.finishQuestStep(choice.Quest.ID, stepID)
+				p.finishQuestStep(choice.Quest.ID, stepID, g)
 			}
 			if choice.NodeId == "" {
 				pnj.StopTalking()
