@@ -63,29 +63,33 @@ func (p *Player) Move(g *Game) {
 	switch input.Typ {
 	case Up:
 		if canGo(level, Pos{p.X, p.Y - 1}) {
-			openDoor(level, Pos{p.X, p.Y - 1})
-			closeDoor(level, Pos{p.X, p.Y})
+			openDoor(g, Pos{p.X, p.Y - 1})
+			closeDoor(g, Pos{p.X, p.Y})
+			p.DispatchWalkingEvent(g)
 			p.WalkUp()
 			p.openPortal(g, Pos{p.X, p.Y})
 		}
 	case Down:
 		if canGo(level, Pos{p.X, p.Y + 1}) {
-			openDoor(level, Pos{p.X, p.Y + 1})
-			closeDoor(level, Pos{p.X, p.Y})
+			openDoor(g, Pos{p.X, p.Y + 1})
+			closeDoor(g, Pos{p.X, p.Y})
+			p.DispatchWalkingEvent(g)
 			p.WalkDown()
 			p.openPortal(g, Pos{p.X, p.Y})
 		}
 	case Left:
 		if canGo(level, Pos{p.X - 1, p.Y}) {
-			openDoor(level, Pos{p.X - 1, p.Y})
-			closeDoor(level, Pos{p.X, p.Y})
+			openDoor(g, Pos{p.X - 1, p.Y})
+			closeDoor(g, Pos{p.X, p.Y})
+			p.DispatchWalkingEvent(g)
 			p.WalkLeft()
 			p.openPortal(g, Pos{p.X, p.Y})
 		}
 	case Right:
 		if canGo(level, Pos{p.X + 1, p.Y}) {
-			openDoor(level, Pos{p.X + 1, p.Y})
-			closeDoor(level, Pos{p.X, p.Y})
+			openDoor(g, Pos{p.X + 1, p.Y})
+			closeDoor(g, Pos{p.X, p.Y})
+			p.DispatchWalkingEvent(g)
 			p.WalkRight()
 			p.openPortal(g, Pos{p.X, p.Y})
 		}
@@ -108,6 +112,12 @@ func (p *Player) Move(g *Game) {
 		p.PowerAttack(g)
 	default:
 	}
+}
+
+func (p *Player) DispatchWalkingEvent(g *Game) {
+	g.GetEventManager().Dispatch(&Event{
+		Type:   PlayerEventsType,
+		Action: ActionWalk})
 }
 
 func (p *Player) WalkDown() {

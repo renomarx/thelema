@@ -4,10 +4,13 @@ type EventType string
 
 const PlayerEventsType = EventType("PLAYER")
 
+const ActionWalk = "WALK"
 const ActionEat = "EAT"
 const ActionHurt = "HURT"
 const ActionDie = "DIE"
 const ActionChangeLevel = "CHANGE_LEVEL"
+const ActionOpenDoor = "OPEN_DOOR"
+const ActionCloseDoor = "CLOSE_DOOR"
 
 type Event struct {
 	Action  string

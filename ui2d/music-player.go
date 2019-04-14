@@ -7,6 +7,7 @@ import (
 
 type MusicPlayer struct {
 	Musics           map[string]*mix.Music
+	Sounds           map[string]*mix.Chunk
 	CurrentMusicName string
 }
 
@@ -18,6 +19,7 @@ func NewMusicPlayer() *MusicPlayer {
 
 	mp := &MusicPlayer{}
 	mp.Musics = make(map[string]*mix.Music)
+	mp.Sounds = make(map[string]*mix.Chunk)
 	return mp
 }
 
@@ -43,6 +45,23 @@ func (mp *MusicPlayer) LoadMusics() {
 	mp.CurrentMusicName = "great_mission.mp3"
 }
 
+func (mp *MusicPlayer) LoadSounds() {
+	var sounds []string = []string{
+		"footstep09.ogg",
+		"doorOpen_1.ogg",
+		"doorClose_1.ogg",
+		// TODO
+	}
+	for _, name := range sounds {
+		sound, err := mix.LoadWAV("ui2d/assets/sounds/" + name)
+		if err != nil {
+			panic(err)
+		}
+		sound.Volume(64)
+		mp.Sounds[name] = sound
+	}
+}
+
 func (mp *MusicPlayer) PlayMusic() {
 	mp.Musics[mp.CurrentMusicName].Play(-1)
 }
@@ -57,12 +76,22 @@ func (mp *MusicPlayer) ChangeMusic(musicName string) {
 	mp.PlayMusic()
 }
 
+func (mp *MusicPlayer) PlaySound(name string) {
+	mp.Sounds[name].Play(-1, 0)
+}
+
 func (mp *MusicPlayer) On(e *game.Event) {
 	switch e.Type {
 	case game.PlayerEventsType:
 		switch e.Action {
 		case game.ActionChangeLevel:
 			mp.PlayMusicForLevel(e.Payload["levelType"])
+		// case game.ActionWalk:
+		// 	mp.PlaySound("footstep09.ogg")
+		case game.ActionOpenDoor:
+			mp.PlaySound("doorOpen_1.ogg")
+		case game.ActionCloseDoor:
+			mp.PlaySound("doorClose_1.ogg")
 		}
 	}
 }

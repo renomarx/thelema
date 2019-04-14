@@ -28,6 +28,10 @@ syncopika (https://opengameart.org/users/syncopika)
 - forest
 
 
+SOUNDS
+- Kenney.nl (www.kenney.nl)
+
+
 THANKS TO
 - Jack Mott for his RPG tutorial in GO (https://www.youtube.com/watch?v=isVYbVe9JbI)
 - Every Open-source game contributor, your work is really fantastic

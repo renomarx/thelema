@@ -99,6 +99,7 @@ func NewUI(g *game.Game) *UI {
 
 	ui.Mp = NewMusicPlayer()
 	ui.Mp.LoadMusics()
+	ui.Mp.LoadSounds()
 
 	g.GetEventManager().Subscribe(&ui, game.PlayerEventsType)
 
@@ -106,7 +107,9 @@ func NewUI(g *game.Game) *UI {
 }
 
 func (ui *UI) On(e *game.Event) {
-	fmt.Println(e.Message)
+	if e.Message != "" {
+		fmt.Println(e.Message)
+	}
 	ui.Mp.On(e)
 }
 
