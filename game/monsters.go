@@ -10,7 +10,7 @@ type Monster struct {
 
 func NewRat(p Pos) *Monster {
 	monster := &Monster{}
-	monster.Rune = 'R'
+	monster.Rune = rune(Rat)
 	monster.Name = "Rat"
 	monster.Hitpoints.Init(50)
 	monster.Strength.Init(5)
@@ -28,7 +28,7 @@ func NewRat(p Pos) *Monster {
 
 func NewSpider(p Pos) *Monster {
 	monster := &Monster{}
-	monster.Rune = 'S'
+	monster.Rune = rune(Spider)
 	monster.Name = "Spider"
 	monster.Hitpoints.Init(50)
 	monster.Strength.Init(10)
@@ -42,8 +42,8 @@ func NewSpider(p Pos) *Monster {
 	return monster
 }
 
-func (m *Monster) Update(game *Game) {
-	level := game.Level
+func (m *Monster) Update(g *Game) {
+	level := g.Level
 	p := level.Player
 	if m.IsMoving || p.IsDead() {
 		return
@@ -52,24 +52,27 @@ func (m *Monster) Update(game *Game) {
 	deltaD := t.Sub(m.LastActionTime)
 	delta := 0.001 * float64(deltaD.Nanoseconds())
 	m.ActionPoints += float64(m.Speed.Current) * delta
-	playerPos := m.getTargetPos(level)
+	playerPos := m.getTargetPos(g)
 	positions := level.astar(m.Pos, playerPos, m)
 	if len(positions) > 1 && m.ActionPoints >= 100000 { // 0.1 second
 		if m.canMove(positions[1], level) {
 			m.Move(positions[1], level)
 		}
 		if m.canAttackInvocation(positions[1], level) {
-			m.AttackInvocation(level.Invocations[positions[1]], game)
+			g.GetEventManager().Dispatch(&Event{Action: ActionRoar, Payload: map[string]string{"monster": string(m.Rune)}})
+			m.AttackInvocation(level.Invocations[positions[1]], g)
 		}
 		if m.canAttackPlayer(positions[1], level) {
-			m.AttackPlayer(level.Player, game)
+			g.GetEventManager().Dispatch(&Event{Action: ActionRoar, Payload: map[string]string{"monster": string(m.Rune)}})
+			m.AttackPlayer(level.Player, g)
 		}
 		m.ActionPoints = 0.0
 	}
 	m.LastActionTime = time.Now()
 }
 
-func (m *Monster) getTargetPos(level *Level) Pos {
+func (m *Monster) getTargetPos(g *Game) Pos {
+	level := g.Level
 	if m.target != nil {
 		_, monsterExists := level.Invocations[m.target.Pos]
 		if !monsterExists {

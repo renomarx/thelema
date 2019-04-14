@@ -7,9 +7,19 @@ type Effect struct {
 	Size int
 }
 
+const ExplosionSizeSmall = "SMALL"
+const ExplosionSizeMedium = "MEDIUM"
+const ExplosionSizeLarge = "LARGE"
+
 func (g *Game) MakeExplosion(p Pos, size int, lifetime int) {
-	g.GetEventManager().Dispatch(&Event{
-		Action: ActionExplode})
+	esize := ExplosionSizeSmall
+	if size >= 50 {
+		esize = ExplosionSizeMedium
+		if size >= 100 {
+			esize = ExplosionSizeLarge
+		}
+	}
+	g.GetEventManager().Dispatch(&Event{Action: ActionExplode, Payload: map[string]string{"size": esize}})
 	level := g.Level
 	eff := &Effect{}
 	eff.Rune = rune(Explosion)

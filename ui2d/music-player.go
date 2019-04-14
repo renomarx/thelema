@@ -56,16 +56,19 @@ func (mp *MusicPlayer) LoadSounds() {
 		"interface1.wav",
 		"interface2.wav",
 		"explodemini.wav",
+		"explode.wav",
+		"bookFlip2.ogg",
 		"voices/male_standard_1.ogg",
 		"voices/female_standard_1.ogg",
-		"bookFlip2.ogg",
+		"monsters/rat.wav",
+		"monsters/spider.wav",
 	}
 	for _, name := range sounds {
 		sound, err := mix.LoadWAV("ui2d/assets/sounds/" + name)
 		if err != nil {
 			panic(err)
 		}
-		sound.Volume(64)
+		sound.Volume(48)
 		mp.Sounds[name] = sound
 	}
 }
@@ -113,13 +116,15 @@ func (mp *MusicPlayer) On(e *game.Event) {
 	case game.ActionHurt:
 		mp.PlaySound("footstep01.ogg")
 	case game.ActionExplode:
-		mp.PlaySound("explodemini.wav")
+		mp.PlayExplosion(e)
 	case game.ActionTalk:
 		mp.PlayVoice(e)
 	case game.ActionTake:
 		mp.PlaySound("interface1.wav")
 	case game.ActionReadBook:
 		mp.PlaySound("bookFlip2.ogg")
+	case game.ActionRoar:
+		mp.PlayMonsterRoar(e)
 	}
 }
 
@@ -132,6 +137,22 @@ func (mp *MusicPlayer) PlayMusicForLevel(levelType string) {
 	}
 }
 
+func (mp *MusicPlayer) PlayExplosion(e *game.Event) {
+	sound := "explodemini.wav"
+	size, exists := e.Payload["size"]
+	if exists {
+		switch size {
+		case game.ExplosionSizeSmall:
+			sound = "footstep08.ogg"
+		case game.ExplosionSizeMedium:
+			sound = "explodemini.wav"
+		case game.ExplosionSizeLarge:
+			sound = "explode.wav"
+		}
+	}
+	mp.PlaySound(sound)
+}
+
 func (mp *MusicPlayer) PlayVoice(e *game.Event) {
 	sound := "interface1.wav"
 	voice, exists := e.Payload["voice"]
@@ -141,6 +162,21 @@ func (mp *MusicPlayer) PlayVoice(e *game.Event) {
 			sound = "voices/male_standard_1.ogg"
 		case game.VoiceFemaleStandard:
 			sound = "voices/female_standard_1.ogg"
+		}
+	}
+	mp.PlaySound(sound)
+}
+
+func (mp *MusicPlayer) PlayMonsterRoar(e *game.Event) {
+	sound := "interface1.wav"
+	monsterName, exists := e.Payload["monster"]
+	if exists {
+		monsterRune := game.Tile(monsterName[0])
+		switch monsterRune {
+		case game.Spider:
+			sound = "monsters/spider.wav"
+		case game.Rat:
+			sound = "monsters/rat.wav"
 		}
 	}
 	mp.PlaySound(sound)

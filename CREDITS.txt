@@ -3,12 +3,9 @@
 --------------------
 
 2D GRAPHICS:
-Copyright/Attribution Notice:
-You can use these tilesets in your program freely.
-No attribution is required. As a courtesy, include a link to the OGA page:
-http://opengameart.org/content/dungeon-crawl-32x32-tiles,
-the crawl-tiles page: http://code.google.com/p/crawl-tiles/
-or see the License Notice instructions on http://rltiles.sourceforge.net/
+http://opengameart.org/content/dungeon-crawl-32x32-tiles
+
+Pnjs : http://gaurav.munjal.us/Universal-LPC-Spritesheet-Character-Generator/#
 
 
 MUSICS:
@@ -20,16 +17,17 @@ Alexhander Ehlers
 - twists
 - doomed
 - waking_the_devil
-
 Remaxim (https://opengameart.org/users/remaxim)
 - dark_fallout
-
 syncopika (https://opengameart.org/users/syncopika)
 - forest
 
 
 SOUNDS
 - Kenney.nl (www.kenney.nl)
+- https://opengameart.org/users/artisticdude
+- http://www.johannespinter.com/inu/ljudbank.htm
+- Michel Baradari (http://apollo-music.de/)
 
 
 THANKS TO

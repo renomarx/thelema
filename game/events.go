@@ -12,6 +12,7 @@ const ActionPower = "POWER"
 const ActionTalk = "TALK"
 const ActionTake = "TAKE"
 const ActionExplode = "EXPLODE"
+const ActionRoar = "ROAR"
 
 const ActionMenuSelect = "MENU_SELECT"
 const ActionMenuConfirm = "MENU_CONFIRM"
@@ -44,6 +45,6 @@ func (m *EventManager) Subscribe(subscriber EventSubscriber) {
 
 func (m *EventManager) Dispatch(e *Event) {
 	for _, subscriber := range m.Subscribers {
-		subscriber.On(e)
+		go subscriber.On(e)
 	}
 }
