@@ -4,7 +4,7 @@ import "time"
 
 const CharacterDeltaTime = 100
 
-const CharacteristicXpMultiplier = 1
+const CharacteristicXpMultiplier = 7
 
 type Characteristic struct {
 	Initial int
