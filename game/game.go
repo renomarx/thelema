@@ -38,6 +38,10 @@ func (g *Game) GetEventManager() *EventManager {
 	return g.eventManager
 }
 
+func (g *Game) SetEventManager(em *EventManager) {
+	g.eventManager = em
+}
+
 func (g *Game) GetMenu() *Menu {
 	return g.menu
 }

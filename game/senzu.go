@@ -15,6 +15,6 @@ func (s USenzu) Use(g *Game) {
 
 	g.GetEventManager().Dispatch(&Event{
 		Type:    PlayerEventsType,
-		Action:  EventActionRegenerateAll,
+		Action:  ActionEat,
 		Message: "Health and energy regenerated"})
 }

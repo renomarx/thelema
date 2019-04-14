@@ -26,6 +26,7 @@ func SaveGame(g *Game, slot string) {
 }
 
 func LoadGame(g *Game, slot string) {
+	eventManager := g.GetEventManager()
 	filepath := g.generateSlotFilepath(slot)
 	fmt.Println("Loading game...")
 	lg := NewGame(g.GameDir)
@@ -34,6 +35,7 @@ func LoadGame(g *Game, slot string) {
 	if err != nil {
 		panic(err)
 	}
+	g.SetEventManager(eventManager)
 	fmt.Println("Loaded.")
 }
 

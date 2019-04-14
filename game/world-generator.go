@@ -32,9 +32,9 @@ func (g *Game) LoadPlayer(p *Player) {
 
 func (g *Game) loadLevels() *Level {
 	g.Levels = make(map[string]*Level)
-	firstLevel := g.loadLevelFromFile("level1")
-	g.loadLevelFromFile("level2")
-	g.loadLevelFromFile("world")
+	firstLevel := g.loadLevelFromFile("level1", LevelTypeGrotto)
+	g.loadLevelFromFile("level2", LevelTypeGrotto)
+	g.loadLevelFromFile("world", LevelTypeOutdoor)
 	return firstLevel
 }
 
@@ -42,7 +42,7 @@ func (g *Game) loadLevelPortals(filepath string) {
 	g.loadLevelPortalsFromFile(g.GameDir + filepath)
 }
 
-func (g *Game) loadLevelFromFile(levelName string) *Level {
+func (g *Game) loadLevelFromFile(levelName string, levelType string) *Level {
 	dirpath := g.GameDir
 	filename := dirpath + "/maps/" + levelName + ".map"
 	file, err := os.Open(filename)
@@ -67,6 +67,7 @@ func (g *Game) loadLevelFromFile(levelName string) *Level {
 	}
 
 	level := &Level{}
+	level.Type = levelType
 	level.Map = make([][]Tile, len(levelLines))
 	level.Monsters = make(map[Pos]*Monster)
 	level.Objects = make(map[Pos]*Object)

@@ -1,17 +1,19 @@
 package game
 
 type EventType string
-type EventAction string
 
 const PlayerEventsType = EventType("PLAYER")
 
-const EventActionTakeDamage = EventAction("TAKE_DAMAGE")
-const EventActionRegenerateAll = EventAction("REGENERATE_ALL")
+const ActionEat = "EAT"
+const ActionHurt = "HURT"
+const ActionDie = "DIE"
+const ActionChangeLevel = "CHANGE_LEVEL"
 
 type Event struct {
-	Action  EventAction
+	Action  string
 	Message string
 	Type    EventType
+	Payload map[string]string
 }
 
 type EventSubscriber interface {

@@ -194,7 +194,7 @@ func (p *Player) TakeDamage(game *Game, damage int) {
 
 	game.GetEventManager().Dispatch(&Event{
 		Type:    PlayerEventsType,
-		Action:  EventActionTakeDamage,
+		Action:  ActionHurt,
 		Message: "Health left :" + strconv.Itoa(p.Hitpoints.Current)})
 }
 
@@ -204,7 +204,10 @@ func (p *Player) Die(g *Game) {
 	}
 	p.isDead = true
 	g.GetMenu().Choices[1].Disabled = true
-	g.GetEventManager().Dispatch(&Event{Type: PlayerEventsType, Message: "You're dead !"})
+	g.GetEventManager().Dispatch(&Event{
+		Type:    PlayerEventsType,
+		Action:  ActionDie,
+		Message: "You're dead !"})
 }
 
 func (p *Player) openPortal(g *Game, pos Pos) {

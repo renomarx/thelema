@@ -1,6 +1,11 @@
 package game
 
+const LevelTypeOutdoor = "OUTDOOR"
+const LevelTypeGrotto = "GROTTO"
+const LevelTypeHouse = "HOUSE"
+
 type Level struct {
+	Type        string
 	Map         [][]Tile
 	Player      *Player
 	Monsters    map[Pos]*Monster
@@ -70,6 +75,12 @@ func (level *Level) OpenPortal(g *Game, pos Pos) {
 		p.Y = port.PosTo.Y
 		g.Level = g.Levels[port.LevelTo]
 		g.Level.Player = p
+
+		g.GetEventManager().Dispatch(&Event{
+			Type:    PlayerEventsType,
+			Action:  ActionChangeLevel,
+			Payload: map[string]string{"levelType": g.Level.Type},
+			Message: "Going to level " + port.LevelTo})
 	}
 }
 

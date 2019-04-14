@@ -36,6 +36,7 @@ type UI struct {
 	Texts          map[int]*TextCache
 	Keymap         map[string]sdl.Keycode
 	LastKeyDown    sdl.Keycode
+	Mp             *MusicPlayer
 }
 
 func init() {
@@ -72,8 +73,6 @@ func NewUI(g *game.Game) *UI {
 	ui.Cam.X = 0
 	ui.Cam.Y = 0
 
-	g.GetEventManager().Subscribe(&ui, game.PlayerEventsType)
-
 	ui.playerTextures = make(map[string]*sdl.Texture)
 	ui.playerTextures["sayan"] = ui.imgFileToTexture("ui2d/assets/player/sayan.png")
 	ui.playerTextures["monk"] = ui.imgFileToTexture("ui2d/assets/player/monk.png")
@@ -98,11 +97,17 @@ func NewUI(g *game.Game) *UI {
 		ui.Texts[i] = NewTextCache()
 	}
 
+	ui.Mp = NewMusicPlayer()
+	ui.Mp.LoadMusics()
+
+	g.GetEventManager().Subscribe(&ui, game.PlayerEventsType)
+
 	return &ui
 }
 
 func (ui *UI) On(e *game.Event) {
 	fmt.Println(e.Message)
+	ui.Mp.On(e)
 }
 
 func (ui *UI) Draw() {
@@ -121,6 +126,7 @@ func (ui *UI) drawObject(pos game.Pos, tile game.Tile) {
 }
 
 func (ui *UI) Run() {
+	ui.Mp.PlayMusic()
 	for {
 		ui.Draw()
 	}

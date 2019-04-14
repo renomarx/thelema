@@ -150,6 +150,12 @@ func (g *Game) HandleInputMenu() {
 				g.Playing = true
 				g.menu.Choices[1].Disabled = false
 				g.CloseMenu()
+
+				g.GetEventManager().Dispatch(&Event{
+					Type:    PlayerEventsType,
+					Action:  ActionChangeLevel,
+					Payload: map[string]string{"levelType": g.Level.Type},
+					Message: "Loaded level"})
 			case MenuCmdQuit:
 				g.Running = false
 			default:
