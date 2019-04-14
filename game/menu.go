@@ -15,8 +15,8 @@ type MenuChoice struct {
 }
 
 const MenuCmdNew = "Nouvelle partie"
-const MenuCmdSave = "Charger"
-const MenuCmdLoad = "Sauvegarder"
+const MenuCmdSave = "Sauvegarder"
+const MenuCmdLoad = "Charger"
 const MenuCmdQuit = "Quitter"
 
 func (menu *Menu) GetHighlightedIndex() int {
