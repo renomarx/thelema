@@ -169,7 +169,6 @@ func (p *Player) Attack(g *Game, posToAttack Pos) {
 
 func (p *Player) PowerAttack(g *Game) {
 	if p.Energy.Current > 0 {
-		g.GetEventManager().Dispatch(&Event{Action: ActionPower})
 		p.IsMoving = true
 		p.IsPowerAttacking = true
 		go func(p *Player) {
@@ -182,9 +181,11 @@ func (p *Player) PowerAttack(g *Game) {
 		}(p)
 		switch p.CurrentPower.Type {
 		case PowerEnergyBall:
+			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerEnergyBall}})
 			g.Level.MakeEnergyball(p.Pos, p.LookAt, p.CurrentPower.Strength, p.CurrentPower.Speed)
 			p.Energy.Current -= p.CurrentPower.Energy
 		case PowerInvocation:
+			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerInvocation}})
 			if g.Level.MakeInvocation(p.Pos, p.LookAt, p.CurrentPower) {
 				p.Energy.Current -= p.CurrentPower.Energy
 			}

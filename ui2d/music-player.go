@@ -51,6 +51,7 @@ func (mp *MusicPlayer) LoadSounds() {
 		"footstep01.ogg",
 		"footstep08.ogg",
 		"magic1.wav",
+		"spell.wav",
 		"doorOpen_1.ogg",
 		"doorClose_1.ogg",
 		"interface1.wav",
@@ -112,7 +113,7 @@ func (mp *MusicPlayer) On(e *game.Event) {
 	case game.ActionAttack:
 		mp.PlaySound("footstep08.ogg")
 	case game.ActionPower:
-		mp.PlaySound("magic1.wav")
+		mp.PlayPowerSound(e)
 	case game.ActionHurt:
 		mp.PlaySound("footstep01.ogg")
 	case game.ActionExplode:
@@ -135,6 +136,20 @@ func (mp *MusicPlayer) PlayMusicForLevel(levelType string) {
 	case game.LevelTypeOutdoor:
 		mp.ChangeMusic("forest.mp3")
 	}
+}
+
+func (mp *MusicPlayer) PlayPowerSound(e *game.Event) {
+	sound := "magic1.wav"
+	typ, exists := e.Payload["type"]
+	if exists {
+		switch typ {
+		case game.PowerEnergyBall:
+			sound = "magic1.wav"
+		case game.PowerInvocation:
+			sound = "spell.wav"
+		}
+	}
+	mp.PlaySound(sound)
 }
 
 func (mp *MusicPlayer) PlayExplosion(e *game.Event) {
