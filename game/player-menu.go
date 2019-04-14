@@ -34,10 +34,13 @@ func (g *Game) HandleInputPlayerMenu() {
 	if sidx < 0 {
 		switch input.Typ {
 		case Up:
+			g.DispatchEventMenu(ActionMenuSelect)
 			menu.ChoiceUp()
 		case Down:
+			g.DispatchEventMenu(ActionMenuSelect)
 			menu.ChoiceDown()
 		case Action:
+			g.DispatchEventMenu(ActionMenuConfirm)
 			c := menu.ConfirmChoice()
 			switch c.Cmd {
 			case PlayerMenuCmdInventory:
@@ -51,6 +54,7 @@ func (g *Game) HandleInputPlayerMenu() {
 			}
 			adaptMenuSpeed()
 		case Select:
+			g.DispatchEventMenu(ActionMenuClose)
 			g.ClosePlayerMenu()
 			adaptMenuSpeed()
 		default:
@@ -66,6 +70,7 @@ func (g *Game) HandleInputPlayerMenu() {
 			switch input.Typ {
 			case Select:
 				g.Level.Player.QuestMenuOpen = false
+				g.DispatchEventMenu(ActionMenuClose)
 				menu.ClearSelected()
 				adaptMenuSpeed()
 			default:
@@ -74,12 +79,15 @@ func (g *Game) HandleInputPlayerMenu() {
 			switch input.Typ {
 			case Right:
 				g.Level.Player.NextPower()
+				g.DispatchEventMenu(ActionMenuSelect)
 				adaptMenuSpeed()
 			case Left:
 				g.Level.Player.LastPower()
+				g.DispatchEventMenu(ActionMenuSelect)
 				adaptMenuSpeed()
 			case Select:
 				g.Level.Player.CharacterMenuOpen = false
+				g.DispatchEventMenu(ActionMenuClose)
 				menu.ClearSelected()
 				adaptMenuSpeed()
 			}

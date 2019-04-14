@@ -115,9 +115,7 @@ func (p *Player) Move(g *Game) {
 }
 
 func (p *Player) DispatchWalkingEvent(g *Game) {
-	g.GetEventManager().Dispatch(&Event{
-		Type:   PlayerEventsType,
-		Action: ActionWalk})
+	g.GetEventManager().Dispatch(&Event{Action: ActionWalk})
 }
 
 func (p *Player) WalkDown() {
@@ -161,8 +159,9 @@ func (p *Player) Attack(g *Game, posToAttack Pos) {
 			p.IsAttacking = false
 		}(p)
 		if isThereAMonster(level, posToAttack) {
+			g.GetEventManager().Dispatch(&Event{Action: ActionAttack})
 			m := level.Monsters[posToAttack]
-			m.TakeDamage(level, p.Strength.Current)
+			m.TakeDamage(g, p.Strength.Current)
 			p.Strength.RaiseXp(2)
 		}
 	}
@@ -170,6 +169,7 @@ func (p *Player) Attack(g *Game, posToAttack Pos) {
 
 func (p *Player) PowerAttack(g *Game) {
 	if p.Energy.Current > 0 {
+		g.GetEventManager().Dispatch(&Event{Action: ActionPower})
 		p.IsMoving = true
 		p.IsPowerAttacking = true
 		go func(p *Player) {
@@ -199,11 +199,10 @@ func (p *Player) TakeDamage(game *Game, damage int) {
 		return
 	}
 	p.Hitpoints.Current -= damage
-	game.Level.MakeExplosion(p.Pos, damage, 50)
+	game.MakeExplosion(p.Pos, damage, 50)
 	p.Hitpoints.RaiseXp(damage)
 
 	game.GetEventManager().Dispatch(&Event{
-		Type:    PlayerEventsType,
 		Action:  ActionHurt,
 		Message: "Health left :" + strconv.Itoa(p.Hitpoints.Current)})
 }
@@ -215,7 +214,6 @@ func (p *Player) Die(g *Game) {
 	p.isDead = true
 	g.GetMenu().Choices[1].Disabled = true
 	g.GetEventManager().Dispatch(&Event{
-		Type:    PlayerEventsType,
 		Action:  ActionDie,
 		Message: "You're dead !"})
 }

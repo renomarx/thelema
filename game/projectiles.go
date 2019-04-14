@@ -35,11 +35,10 @@ func (level *Level) MakeEnergyball(p Pos, dir InputType, size int, speed int) {
 	level.Projectiles[p] = eb
 }
 
-func (p *Projectile) Update(game *Game) {
+func (p *Projectile) Update(g *Game) {
 	if p.IsMoving {
 		return
 	}
-	level := game.Level
 
 	to := p.Pos
 	if p.Direction == Left {
@@ -55,7 +54,7 @@ func (p *Projectile) Update(game *Game) {
 		to.Y++
 	}
 
-	p.Move(to, level)
+	p.Move(to, g)
 }
 
 func (p *Projectile) canMove(level *Level, pos Pos) bool {
@@ -65,10 +64,11 @@ func (p *Projectile) canMove(level *Level, pos Pos) bool {
 	return level.Map[pos.Y][pos.X] != StoneWall && level.Map[pos.Y][pos.X] != DoorClosed
 }
 
-func (p *Projectile) Move(to Pos, level *Level) {
+func (p *Projectile) Move(to Pos, g *Game) {
 	if p.IsMoving {
 		return
 	}
+	level := g.Level
 	p.IsMoving = true
 	Mux.Lock()
 	delete(level.Projectiles, p.Pos)
@@ -77,11 +77,11 @@ func (p *Projectile) Move(to Pos, level *Level) {
 	p.Pos = to
 
 	if !p.canMove(level, to) {
-		p.Die(level)
+		p.Die(g)
 		return
 	}
 
-	p.MakeDamage(level)
+	p.MakeDamage(g)
 
 	go func(p *Projectile) {
 
@@ -113,19 +113,20 @@ func (p *Projectile) adaptSpeed() {
 	time.Sleep(time.Duration(ProjectileDeltaTime/p.Speed) * time.Millisecond)
 }
 
-func (p *Projectile) MakeDamage(level *Level) {
+func (p *Projectile) MakeDamage(g *Game) {
+	level := g.Level
 	Mux.Lock()
 	m, ok := level.Monsters[p.Pos]
 	Mux.Unlock()
 	if ok {
 		// There is a monster !
-		m.TakeDamage(level, p.Size)
+		m.TakeDamage(g, p.Size)
 	}
 }
 
-func (p *Projectile) Die(level *Level) {
+func (p *Projectile) Die(g *Game) {
 	Mux.Lock()
-	delete(level.Projectiles, p.Pos)
+	delete(g.Level.Projectiles, p.Pos)
 	Mux.Unlock()
-	level.MakeExplosion(p.Pos, 100, 100)
+	g.MakeExplosion(p.Pos, 100, 100)
 }

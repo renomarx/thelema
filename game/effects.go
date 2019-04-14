@@ -7,7 +7,10 @@ type Effect struct {
 	Size int
 }
 
-func (level *Level) MakeExplosion(p Pos, size int, lifetime int) {
+func (g *Game) MakeExplosion(p Pos, size int, lifetime int) {
+	g.GetEventManager().Dispatch(&Event{
+		Action: ActionExplode})
+	level := g.Level
 	eff := &Effect{}
 	eff.Rune = rune(Explosion)
 	eff.Blocking = false

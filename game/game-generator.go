@@ -36,7 +36,6 @@ func (gg *GameGenerator) ConfirmChoice(g *Game) {
 	g.CloseMenu()
 
 	g.GetEventManager().Dispatch(&Event{
-		Type:    PlayerEventsType,
 		Action:  ActionChangeLevel,
 		Payload: map[string]string{"levelType": g.Level.Type},
 		Message: "First level loaded"})
@@ -58,15 +57,19 @@ func (gg *GameGenerator) HandleInput(g *Game) {
 	input := g.GetInput()
 	switch input.Typ {
 	case Right:
+		g.DispatchEventMenu(ActionMenuSelect)
 		gg.ChoiceRight()
 		adaptMenuSpeed()
 	case Left:
+		g.DispatchEventMenu(ActionMenuSelect)
 		gg.ChoiceLeft()
 		adaptMenuSpeed()
 	case Action:
+		g.DispatchEventMenu(ActionMenuConfirm)
 		gg.ConfirmChoice(g)
 		adaptMenuSpeed()
 	case Escape:
+		g.DispatchEventMenu(ActionMenuClose)
 		gg.Close()
 		adaptMenuSpeed()
 	default:

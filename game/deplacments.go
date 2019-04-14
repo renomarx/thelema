@@ -53,9 +53,7 @@ func openDoor(g *Game, pos Pos) {
 	switch t {
 	case DoorClosed:
 		level.Map[pos.Y][pos.X] = DoorOpened
-		g.GetEventManager().Dispatch(&Event{
-			Type:   PlayerEventsType,
-			Action: ActionOpenDoor})
+		g.GetEventManager().Dispatch(&Event{Action: ActionOpenDoor})
 	}
 }
 
@@ -65,9 +63,7 @@ func closeDoor(g *Game, pos Pos) {
 	switch t {
 	case DoorOpened:
 		level.Map[pos.Y][pos.X] = DoorClosed
-		g.GetEventManager().Dispatch(&Event{
-			Type:   PlayerEventsType,
-			Action: ActionCloseDoor})
+		g.GetEventManager().Dispatch(&Event{Action: ActionCloseDoor})
 	}
 }
 

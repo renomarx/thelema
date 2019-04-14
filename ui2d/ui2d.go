@@ -101,7 +101,7 @@ func NewUI(g *game.Game) *UI {
 	ui.Mp.LoadMusics()
 	ui.Mp.LoadSounds()
 
-	g.GetEventManager().Subscribe(&ui, game.PlayerEventsType)
+	g.GetEventManager().Subscribe(&ui)
 
 	return &ui
 }

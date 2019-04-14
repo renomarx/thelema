@@ -14,7 +14,6 @@ func (s USenzu) Use(g *Game) {
 	p.Energy.Current = p.Energy.Initial
 
 	g.GetEventManager().Dispatch(&Event{
-		Type:    PlayerEventsType,
 		Action:  ActionEat,
 		Message: "Health and energy regenerated"})
 }

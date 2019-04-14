@@ -47,9 +47,15 @@ func (mp *MusicPlayer) LoadMusics() {
 
 func (mp *MusicPlayer) LoadSounds() {
 	var sounds []string = []string{
-		"footstep09.ogg",
+		"footstep00.ogg",
+		"footstep01.ogg",
+		"footstep08.ogg",
+		"magic1.wav",
 		"doorOpen_1.ogg",
 		"doorClose_1.ogg",
+		"interface1.wav",
+		"interface2.wav",
+		"explodemini.wav",
 		// TODO
 	}
 	for _, name := range sounds {
@@ -81,18 +87,31 @@ func (mp *MusicPlayer) PlaySound(name string) {
 }
 
 func (mp *MusicPlayer) On(e *game.Event) {
-	switch e.Type {
-	case game.PlayerEventsType:
-		switch e.Action {
-		case game.ActionChangeLevel:
-			mp.PlayMusicForLevel(e.Payload["levelType"])
-		// case game.ActionWalk:
-		// 	mp.PlaySound("footstep09.ogg")
-		case game.ActionOpenDoor:
-			mp.PlaySound("doorOpen_1.ogg")
-		case game.ActionCloseDoor:
-			mp.PlaySound("doorClose_1.ogg")
-		}
+	switch e.Action {
+	case game.ActionChangeLevel:
+		mp.PlayMusicForLevel(e.Payload["levelType"])
+	// case game.ActionWalk:
+	// 	mp.PlaySound("footstep00.ogg")
+	case game.ActionOpenDoor:
+		mp.PlaySound("doorOpen_1.ogg")
+	case game.ActionCloseDoor:
+		mp.PlaySound("doorClose_1.ogg")
+	case game.ActionMenuOpen:
+		mp.PlaySound("interface2.wav")
+	case game.ActionMenuClose:
+		mp.PlaySound("interface2.wav")
+	case game.ActionMenuSelect:
+		mp.PlaySound("interface1.wav")
+	case game.ActionMenuConfirm:
+		mp.PlaySound("interface2.wav")
+	case game.ActionAttack:
+		mp.PlaySound("footstep08.ogg")
+	case game.ActionPower:
+		mp.PlaySound("magic1.wav")
+	case game.ActionHurt:
+		mp.PlaySound("footstep01.ogg")
+	case game.ActionExplode:
+		mp.PlaySound("explodemini.wav")
 	}
 }
 

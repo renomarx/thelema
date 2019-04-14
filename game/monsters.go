@@ -142,15 +142,15 @@ func (m *Monster) AttackInvocation(p *Invoked, g *Game) {
 		m.IsMoving = false
 		m.IsAttacking = false
 	}(m)
-	p.TakeDamage(g.Level, m.Strength.Current)
+	p.TakeDamage(g, m.Strength.Current)
 }
 
-func (m *Monster) TakeDamage(level *Level, damage int) {
+func (m *Monster) TakeDamage(g *Game, damage int) {
 	if m.Hitpoints.Current <= 0 {
-		m.Die(level)
+		m.Die(g.Level)
 	}
 	m.Hitpoints.Current -= damage
-	level.MakeExplosion(m.Pos, damage, 50)
+	g.MakeExplosion(m.Pos, damage, 50)
 }
 
 func (m *Monster) Die(level *Level) {
