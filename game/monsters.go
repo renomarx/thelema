@@ -8,37 +8,20 @@ type Monster struct {
 	target *Invoked
 }
 
-func NewRat(p Pos) *Monster {
+func NewMonster(mt *MonsterType, p Pos) *Monster {
 	monster := &Monster{}
-	monster.Rune = rune(Rat)
-	monster.Name = "Rat"
-	monster.Hitpoints.Init(50)
-	monster.Strength.Init(5)
-	monster.Speed.Init(10)
+	monster.Rune = rune(mt.Tile)
+	monster.Name = mt.Name
+	monster.Hitpoints.Init(mt.Hitpoints)
+	monster.Strength.Init(mt.Strength)
+	monster.Speed.Init(mt.Speed)
 	monster.ActionPoints = 0.0
 	monster.Pos = p
 	monster.Xb = 0
 	monster.Yb = 0
 	monster.LastActionTime = time.Now()
 	monster.IsMoving = false
-	monster.VisionRange = 5
-
-	return monster
-}
-
-func NewSpider(p Pos) *Monster {
-	monster := &Monster{}
-	monster.Rune = rune(Spider)
-	monster.Name = "Spider"
-	monster.Hitpoints.Init(50)
-	monster.Strength.Init(10)
-	monster.Speed.Init(5)
-	monster.ActionPoints = 0.0
-	monster.Pos = p
-	monster.LastActionTime = time.Now()
-	monster.IsMoving = false
-	monster.VisionRange = 5
-
+	monster.VisionRange = mt.VisionRange
 	return monster
 }
 
