@@ -14,6 +14,7 @@ const (
 	Downstairs Tile = 'd'
 	Explosion  Tile = 'x'
 	Book       Tile = 'b'
+	Ocean      Tile = 'o'
 )
 
 // Monsters and invocations

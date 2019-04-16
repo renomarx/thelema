@@ -18,6 +18,18 @@ type Level struct {
 	Paused      bool
 }
 
+func NewLevel(levelType string) *Level {
+	level := &Level{}
+	level.Type = levelType
+	level.Monsters = make(map[Pos]*Monster)
+	level.Objects = make(map[Pos]*Object)
+	level.Effects = make(map[Pos]*Effect)
+	level.Projectiles = make(map[Pos]*Projectile)
+	level.Pnjs = make(map[Pos]*Pnj)
+	level.Invocations = make(map[Pos]*Invoked)
+	return level
+}
+
 func (g *Game) UpdateLevel() {
 	input := g.input
 	if g.Level.Paused {

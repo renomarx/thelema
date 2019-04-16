@@ -11,13 +11,77 @@ import (
 const (
 	PlayerInitialX = 3
 	PlayerInitialY = 2
+	WorldHeight    = 100
+	WorldWidth     = 100
 )
 
 func (g *Game) GenerateWorld() {
+	g.loadBooks()
 	firstLevel := g.loadLevels()
 	g.Level = firstLevel
 	g.loadLevelPortals("/maps/world.txt")
-	g.loadBooks()
+}
+
+func (g *Game) loadLevels() *Level {
+	g.Levels = make(map[string]*Level)
+	firstLevel := g.loadLevelFromFile("level1", LevelTypeGrotto)
+	g.loadLevelFromFile("level2", LevelTypeGrotto)
+	g.generateOutdoor("world")
+	return firstLevel
+}
+
+func (g *Game) generateGrotto(levelName string) *Level {
+	level := NewLevel(LevelTypeGrotto)
+	g.Levels[levelName] = level
+	return level
+}
+
+func (g *Game) generateOutdoor(levelName string) *Level {
+	level := NewLevel(LevelTypeOutdoor)
+	level.Map = make([][]Tile, WorldHeight)
+	for i := range level.Map {
+		level.Map[i] = make([]Tile, WorldWidth)
+	}
+
+	for y := 0; y < WorldHeight; y++ {
+		for x := 0; x < WorldWidth; x++ {
+			t := DirtFloor
+			level.Map[y][x] = t
+		}
+	}
+
+	for y := 0; y < 5; y++ {
+		for x := 0; x < WorldWidth; x++ {
+			o := &Object{Rune: rune(Tree), Blocking: true}
+			o.Pos = Pos{x, y}
+			level.Objects[Pos{x, y}] = o
+		}
+	}
+	for y := WorldHeight - 5; y < WorldHeight; y++ {
+		for x := 0; x < WorldWidth; x++ {
+			o := &Object{Rune: rune(Tree), Blocking: true}
+			o.Pos = Pos{x, y}
+			level.Objects[Pos{x, y}] = o
+		}
+	}
+
+	for y := 0; y < WorldHeight; y++ {
+		for x := 0; x < 5; x++ {
+			o := &Object{Rune: rune(Tree), Blocking: true}
+			o.Pos = Pos{x, y}
+			level.Objects[Pos{x, y}] = o
+		}
+	}
+	for y := 0; y < WorldHeight; y++ {
+		for x := WorldWidth - 5; x < WorldWidth; x++ {
+			o := &Object{Rune: rune(Tree), Blocking: true}
+			o.Pos = Pos{x, y}
+			level.Objects[Pos{x, y}] = o
+		}
+	}
+
+	g.Levels[levelName] = level
+	return level
 }
 
 func (g *Game) LoadPlayer(p *Player) {
@@ -30,7 +94,7 @@ func (g *Game) LoadPlayer(p *Player) {
 	g.Level.Player = p
 }
 
-func (g *Game) loadLevels() *Level {
+func (g *Game) loadLevelsOld() *Level {
 	g.Levels = make(map[string]*Level)
 	firstLevel := g.loadLevelFromFile("level1", LevelTypeGrotto)
 	g.loadLevelFromFile("level2", LevelTypeGrotto)
@@ -66,15 +130,8 @@ func (g *Game) loadLevelFromFile(levelName string, levelType string) *Level {
 		log.Fatal(err)
 	}
 
-	level := &Level{}
-	level.Type = levelType
+	level := NewLevel(levelType)
 	level.Map = make([][]Tile, len(levelLines))
-	level.Monsters = make(map[Pos]*Monster)
-	level.Objects = make(map[Pos]*Object)
-	level.Effects = make(map[Pos]*Effect)
-	level.Projectiles = make(map[Pos]*Projectile)
-	level.Pnjs = make(map[Pos]*Pnj)
-	level.Invocations = make(map[Pos]*Invoked)
 	for i := range level.Map {
 		level.Map[i] = make([]Tile, longestRow)
 	}
