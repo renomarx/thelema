@@ -56,12 +56,13 @@ func (g *Game) generateOutdoor(levelName string) *Level {
 			o.Pos = Pos{x, y}
 			level.Objects[Pos{x, y}] = o
 		}
-		for x := 0; x < WorldWidth; x++ {
-			o := &Object{Rune: rune(OceanTopSide), Blocking: true}
-			o.Pos = Pos{x, 9}
-			level.Objects[Pos{x, 9}] = o
-		}
 	}
+	for x := 9; x < WorldWidth; x++ {
+		o := &Object{Rune: rune(OceanTopSide), Blocking: true}
+		o.Pos = Pos{x, 9}
+		level.Objects[Pos{x, 9}] = o
+	}
+
 	for y := WorldHeight - 10; y < WorldHeight; y++ {
 		for x := 0; x < WorldWidth; x++ {
 			o := &Object{Rune: rune(Ocean), Blocking: true}
@@ -82,6 +83,7 @@ func (g *Game) generateOutdoor(levelName string) *Level {
 		o.Pos = Pos{9, y}
 		level.Objects[Pos{9, y}] = o
 	}
+
 	for y := 0; y < WorldHeight; y++ {
 		for x := WorldWidth - 10; x < WorldWidth; x++ {
 			o := &Object{Rune: rune(Ocean), Blocking: true}

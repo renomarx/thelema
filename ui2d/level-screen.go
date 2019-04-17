@@ -17,10 +17,10 @@ func (ui *UI) DrawLevel() {
 		ui.renderer.Clear()
 		minY := int(math.Floor(math.Max(0, float64(player.Y-(ui.WindowHeight/2/Res)-2))))
 		maxY := int(math.Floor(math.Min(float64(len(level.Map)), float64(player.Y+(ui.WindowHeight/2/Res)+2))))
+		minX := int(math.Floor(math.Max(0, float64(player.X-(ui.WindowWidth/2/Res)-2))))
+		maxX := int(math.Floor(math.Min(float64(len(level.Map[0])), float64(player.X+(ui.WindowWidth/2/Res)+2))))
 		for y := minY; y < maxY; y++ {
 			row := level.Map[y]
-			minX := int(math.Floor(math.Max(0, float64(player.X-(ui.WindowWidth/2/Res)-2))))
-			maxX := int(math.Floor(math.Min(float64(len(row)), float64(player.X+(ui.WindowWidth/2/Res)+2))))
 			for x := minX; x < maxX; x++ {
 				tile := row[x]
 				if len(ui.textureIndex[tile]) > 0 {
@@ -33,8 +33,14 @@ func (ui *UI) DrawLevel() {
 		}
 
 		game.Mux.Lock()
-		for pos, object := range level.Objects {
-			ui.drawObject(pos, game.Tile(object.Rune))
+		for y := minY; y < maxY; y++ {
+			for x := minX; x < maxX; x++ {
+				pos := game.Pos{X: x, Y: y}
+				object, exists := level.Objects[pos]
+				if exists {
+					ui.drawObject(pos, game.Tile(object.Rune))
+				}
+			}
 		}
 		game.Mux.Unlock()
 		game.Mux.Lock()
