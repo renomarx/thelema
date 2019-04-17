@@ -16,6 +16,7 @@ type Level struct {
 	Pnjs        map[Pos]*Pnj
 	Invocations map[Pos]*Invoked
 	Paused      bool
+	PRay        int
 }
 
 func NewLevel(levelType string) *Level {
@@ -27,6 +28,7 @@ func NewLevel(levelType string) *Level {
 	level.Projectiles = make(map[Pos]*Projectile)
 	level.Pnjs = make(map[Pos]*Pnj)
 	level.Invocations = make(map[Pos]*Invoked)
+	level.PRay = 100
 	return level
 }
 
@@ -56,8 +58,14 @@ func (g *Game) handleInput() {
 }
 
 func (g *Game) handleMonsters() {
-	for _, monster := range g.Level.Monsters {
-		monster.Update(g)
+	l := g.Level
+	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
+		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
+			m, e := l.Monsters[Pos{X: x, Y: y}]
+			if e {
+				m.Update(g)
+			}
+		}
 	}
 }
 

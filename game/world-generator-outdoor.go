@@ -92,7 +92,7 @@ func (wg *WorldGenerator) generateTrees(level *Level) {
 
 func (wg *WorldGenerator) generateMonsters(level *Level) {
 	bestiary := Bestiary()
-	nbMonsters := 50
+	nbMonsters := 500
 	for i := 0; i < nbMonsters; i++ {
 		x := rand.Intn(WorldWidth)
 		y := rand.Intn(WorldHeight)
