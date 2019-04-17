@@ -32,27 +32,42 @@ func (ui *UI) DrawLevel() {
 			}
 		}
 
-		game.Mux.Lock()
 		for y := minY; y < maxY; y++ {
 			for x := minX; x < maxX; x++ {
 				pos := game.Pos{X: x, Y: y}
+				game.Mux.Lock()
 				object, exists := level.Objects[pos]
+				game.Mux.Unlock()
 				if exists {
 					ui.drawObject(pos, game.Tile(object.Rune))
 				}
 			}
 		}
-		game.Mux.Unlock()
-		game.Mux.Lock()
-		for _, pnj := range level.Pnjs {
-			ui.drawPnj(pnj)
+
+		for y := minY; y < maxY; y++ {
+			for x := minX; x < maxX; x++ {
+				pos := game.Pos{X: x, Y: y}
+				game.Mux.Lock()
+				pnj, exists := level.Pnjs[pos]
+				game.Mux.Unlock()
+				if exists {
+					ui.drawPnj(pnj)
+				}
+			}
 		}
-		game.Mux.Unlock()
-		game.Mux.Lock()
-		for pos, monster := range level.Monsters {
-			ui.drawMonster(pos, monster)
+
+		for y := minY; y < maxY; y++ {
+			for x := minX; x < maxX; x++ {
+				pos := game.Pos{X: x, Y: y}
+				game.Mux.Lock()
+				monster, exists := level.Monsters[pos]
+				game.Mux.Unlock()
+				if exists {
+					ui.drawMonster(pos, monster)
+				}
+			}
 		}
-		game.Mux.Unlock()
+
 		game.Mux.Lock()
 		for pos, invoked := range level.Invocations {
 			ui.drawInvoked(pos, invoked)

@@ -15,6 +15,10 @@ const (
 	WorldWidth     = 1000
 )
 
+type WorldGenerator struct {
+	g *Game
+}
+
 func (g *Game) GenerateWorld() {
 	g.loadBooks()
 	firstLevel := g.loadLevels()
@@ -24,74 +28,16 @@ func (g *Game) GenerateWorld() {
 
 func (g *Game) loadLevels() *Level {
 	g.Levels = make(map[string]*Level)
+
+	wg := &WorldGenerator{g: g}
 	firstLevel := g.loadLevelFromFile("level1", LevelTypeGrotto)
 	g.loadLevelFromFile("level2", LevelTypeGrotto)
-	g.generateOutdoor("world")
+	wg.generateOutdoor("world")
 	return firstLevel
 }
 
 func (g *Game) generateGrotto(levelName string) *Level {
 	level := NewLevel(LevelTypeGrotto)
-	g.Levels[levelName] = level
-	return level
-}
-
-func (g *Game) generateOutdoor(levelName string) *Level {
-	level := NewLevel(LevelTypeOutdoor)
-	level.Map = make([][]Tile, WorldHeight)
-	for i := range level.Map {
-		level.Map[i] = make([]Tile, WorldWidth)
-	}
-
-	for y := 0; y < WorldHeight; y++ {
-		for x := 0; x < WorldWidth; x++ {
-			t := DirtFloor
-			level.Map[y][x] = t
-		}
-	}
-
-	for y := 0; y < 9; y++ {
-		for x := 0; x < WorldWidth; x++ {
-			o := &Object{Rune: rune(Ocean), Blocking: true}
-			o.Pos = Pos{x, y}
-			level.Objects[Pos{x, y}] = o
-		}
-	}
-	for x := 9; x < WorldWidth; x++ {
-		o := &Object{Rune: rune(OceanTopSide), Blocking: true}
-		o.Pos = Pos{x, 9}
-		level.Objects[Pos{x, 9}] = o
-	}
-
-	for y := WorldHeight - 10; y < WorldHeight; y++ {
-		for x := 0; x < WorldWidth; x++ {
-			o := &Object{Rune: rune(Ocean), Blocking: true}
-			o.Pos = Pos{x, y}
-			level.Objects[Pos{x, y}] = o
-		}
-	}
-
-	for y := 0; y < WorldHeight; y++ {
-		for x := 0; x < 9; x++ {
-			o := &Object{Rune: rune(Ocean), Blocking: true}
-			o.Pos = Pos{x, y}
-			level.Objects[Pos{x, y}] = o
-		}
-	}
-	for y := 9; y < WorldHeight; y++ {
-		o := &Object{Rune: rune(OceanLeftSide), Blocking: true}
-		o.Pos = Pos{9, y}
-		level.Objects[Pos{9, y}] = o
-	}
-
-	for y := 0; y < WorldHeight; y++ {
-		for x := WorldWidth - 10; x < WorldWidth; x++ {
-			o := &Object{Rune: rune(Ocean), Blocking: true}
-			o.Pos = Pos{x, y}
-			level.Objects[Pos{x, y}] = o
-		}
-	}
-
 	g.Levels[levelName] = level
 	return level
 }
