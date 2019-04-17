@@ -11,8 +11,8 @@ import (
 const (
 	PlayerInitialX = 3
 	PlayerInitialY = 2
-	WorldHeight    = 100
-	WorldWidth     = 100
+	WorldHeight    = 500
+	WorldWidth     = 1000
 )
 
 func (g *Game) GenerateWorld() {

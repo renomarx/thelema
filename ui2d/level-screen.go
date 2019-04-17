@@ -1,8 +1,9 @@
 package ui2d
 
 import (
-	"thelema/game"
 	"github.com/veandco/go-sdl2/sdl"
+	"math"
+	"thelema/game"
 )
 
 func (ui *UI) DrawLevel() {
@@ -14,8 +15,14 @@ func (ui *UI) DrawLevel() {
 		ui.Cam.Y = int32((ui.WindowHeight / 2) - player.Y*Res + player.Yb)
 
 		ui.renderer.Clear()
-		for y, row := range level.Map {
-			for x, tile := range row {
+		minY := int(math.Floor(math.Max(0, float64(player.Y-(ui.WindowHeight/2/Res)-2))))
+		maxY := int(math.Floor(math.Min(float64(len(level.Map)), float64(player.Y+(ui.WindowHeight/2/Res)+2))))
+		for y := minY; y < maxY; y++ {
+			row := level.Map[y]
+			minX := int(math.Floor(math.Max(0, float64(player.X-(ui.WindowWidth/2/Res)-2))))
+			maxX := int(math.Floor(math.Min(float64(len(row)), float64(player.X+(ui.WindowWidth/2/Res)+2))))
+			for x := minX; x < maxX; x++ {
+				tile := row[x]
 				if len(ui.textureIndex[tile]) > 0 {
 					srcRect := ui.textureIndex[tile][(x+y)%len(ui.textureIndex[tile])]
 					dstRect := sdl.Rect{X: int32(x*Res) + ui.Cam.X, Y: int32(y*Res) + ui.Cam.Y, W: Res, H: Res}
