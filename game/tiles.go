@@ -3,18 +3,22 @@ package game
 type Tile rune
 
 const (
-	StoneWall  Tile = '#'
-	DirtFloor  Tile = '.'
-	DoorClosed Tile = '|'
-	DoorOpened Tile = '/'
-	Tree       Tile = '&'
-	Blank      Tile = ' '
-	Statue     Tile = 'é'
-	Upstairs   Tile = 'u'
-	Downstairs Tile = 'd'
-	Explosion  Tile = 'x'
-	Book       Tile = 'b'
-	Ocean      Tile = 'o'
+	StoneWall      Tile = '#'
+	DirtFloor      Tile = '.'
+	DoorClosed     Tile = '|'
+	DoorOpened     Tile = '/'
+	Tree           Tile = '&'
+	Blank          Tile = ' '
+	Statue         Tile = 'é'
+	Upstairs       Tile = 'u'
+	Downstairs     Tile = 'd'
+	Explosion      Tile = 'x'
+	Book           Tile = 'b'
+	Ocean          Tile = 'o'
+	OceanTopSide   Tile = 'ô'
+	OceanLeftSide  Tile = 'ò'
+	OceanRightSide Tile = 'ó'
+	OceanDownSide  Tile = 'õ'
 )
 
 // Monsters and invocations

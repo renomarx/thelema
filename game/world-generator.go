@@ -50,31 +50,41 @@ func (g *Game) generateOutdoor(levelName string) *Level {
 		}
 	}
 
-	for y := 0; y < 5; y++ {
+	for y := 0; y < 9; y++ {
 		for x := 0; x < WorldWidth; x++ {
-			o := &Object{Rune: rune(Tree), Blocking: true}
+			o := &Object{Rune: rune(Ocean), Blocking: true}
 			o.Pos = Pos{x, y}
 			level.Objects[Pos{x, y}] = o
 		}
-	}
-	for y := WorldHeight - 5; y < WorldHeight; y++ {
 		for x := 0; x < WorldWidth; x++ {
-			o := &Object{Rune: rune(Tree), Blocking: true}
+			o := &Object{Rune: rune(OceanTopSide), Blocking: true}
+			o.Pos = Pos{x, 9}
+			level.Objects[Pos{x, 9}] = o
+		}
+	}
+	for y := WorldHeight - 10; y < WorldHeight; y++ {
+		for x := 0; x < WorldWidth; x++ {
+			o := &Object{Rune: rune(Ocean), Blocking: true}
 			o.Pos = Pos{x, y}
 			level.Objects[Pos{x, y}] = o
 		}
 	}
 
 	for y := 0; y < WorldHeight; y++ {
-		for x := 0; x < 5; x++ {
-			o := &Object{Rune: rune(Tree), Blocking: true}
+		for x := 0; x < 9; x++ {
+			o := &Object{Rune: rune(Ocean), Blocking: true}
 			o.Pos = Pos{x, y}
 			level.Objects[Pos{x, y}] = o
 		}
 	}
+	for y := 9; y < WorldHeight; y++ {
+		o := &Object{Rune: rune(OceanLeftSide), Blocking: true}
+		o.Pos = Pos{9, y}
+		level.Objects[Pos{9, y}] = o
+	}
 	for y := 0; y < WorldHeight; y++ {
-		for x := WorldWidth - 5; x < WorldWidth; x++ {
-			o := &Object{Rune: rune(Tree), Blocking: true}
+		for x := WorldWidth - 10; x < WorldWidth; x++ {
+			o := &Object{Rune: rune(Ocean), Blocking: true}
 			o.Pos = Pos{x, y}
 			level.Objects[Pos{x, y}] = o
 		}
