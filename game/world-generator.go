@@ -13,6 +13,8 @@ const (
 	PlayerInitialY = 2
 	WorldHeight    = 500
 	WorldWidth     = 1000
+	OceanX         = 20
+	OceanY         = 10
 )
 
 type WorldGenerator struct {

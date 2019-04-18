@@ -123,7 +123,7 @@ func (ui *UI) Draw() {
 func (ui *UI) drawObject(pos game.Pos, tile game.Tile) {
 	if len(ui.textureIndex[tile]) > 0 {
 		ui.renderer.Copy(ui.textureAtlas,
-			&ui.textureIndex[tile][0],
+			&ui.textureIndex[tile][(pos.X+pos.Y)%len(ui.textureIndex[tile])],
 			&sdl.Rect{X: int32(pos.X*Res) + ui.Cam.X, Y: int32(pos.Y*Res) + ui.Cam.Y, W: Res, H: Res})
 	}
 }
