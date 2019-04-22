@@ -17,8 +17,10 @@ func (wg *WorldGenerator) generateOutdoor(levelName string) *Level {
 	}
 
 	wg.generateOcean(level)
-	wg.generateTrees(level)
-	wg.generateMonsters(level)
+	wg.generateTrees(level, 10000)
+	wg.generateMonsters(level, 1000)
+	wg.generateGrottos(level)
+	wg.generateCities(level)
 
 	wg.g.Levels[levelName] = level
 	return level
@@ -82,8 +84,7 @@ func (wg *WorldGenerator) generateOcean(level *Level) {
 	}
 }
 
-func (wg *WorldGenerator) generateTrees(level *Level) {
-	nbTrees := 10000
+func (wg *WorldGenerator) generateTrees(level *Level, nbTrees int) {
 	for i := 0; i < nbTrees; i++ {
 		x := rand.Intn(WorldWidth)
 		y := rand.Intn(WorldHeight)
@@ -97,12 +98,11 @@ func (wg *WorldGenerator) generateTrees(level *Level) {
 	}
 }
 
-func (wg *WorldGenerator) generateMonsters(level *Level) {
+func (wg *WorldGenerator) generateMonsters(level *Level, nbMonsters int) {
 	bestiary := Bestiary()
-	nbMonsters := 1000
 	for i := 0; i < nbMonsters; i++ {
-		x := rand.Intn(WorldWidth)
-		y := rand.Intn(WorldHeight)
+		x := rand.Intn(len(level.Map[0]))
+		y := rand.Intn(len(level.Map))
 		m := rand.Intn(len(bestiary))
 		pos := Pos{X: x, Y: y}
 

@@ -2,6 +2,7 @@ package game
 
 const LevelTypeOutdoor = "OUTDOOR"
 const LevelTypeGrotto = "GROTTO"
+const LevelTypeCity = "CITY"
 const LevelTypeHouse = "HOUSE"
 
 type Level struct {
@@ -17,6 +18,10 @@ type Level struct {
 	Invocations map[Pos]*Invoked
 	Paused      bool
 	PRay        int
+}
+
+func (l *Level) GetRandomFreePos() Pos {
+	return Pos{X: 1, Y: 1} // TODO
 }
 
 func NewLevel(levelType string) *Level {

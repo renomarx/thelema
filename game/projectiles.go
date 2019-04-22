@@ -58,6 +58,9 @@ func (p *Projectile) Update(g *Game) {
 }
 
 func (p *Projectile) canMove(level *Level, pos Pos) bool {
+	if pos.Y < 0 || pos.Y > len(level.Map) || pos.X < 0 || pos.X > len(level.Map[pos.Y]) {
+		return false
+	}
 	if isThereABlockingObject(level, pos) {
 		return false
 	}

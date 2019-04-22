@@ -19,6 +19,8 @@ const (
 	OceanLeftSide  Tile = 'ò'
 	OceanRightSide Tile = 'ó'
 	OceanDownSide  Tile = 'õ'
+	CityEntry      Tile = 'c'
+	CityOut        Tile = 'C'
 )
 
 // Monsters and invocations

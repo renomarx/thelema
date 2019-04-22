@@ -145,6 +145,8 @@ func (mp *MusicPlayer) PlayMusicForLevel(levelType string) {
 		mp.ChangeMusic("dark_fallout.ogg")
 	case game.LevelTypeOutdoor:
 		mp.ChangeMusic("forest.mp3")
+	case game.LevelTypeCity:
+		mp.ChangeMusic("warped.mp3")
 	}
 }
 
