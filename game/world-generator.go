@@ -3,6 +3,7 @@ package game
 import (
 	"bufio"
 	"log"
+	"math/rand"
 	"os"
 )
 
@@ -104,4 +105,47 @@ func (g *Game) loadBookFromFile(filename string, powers []string) *OBook {
 	}
 
 	return &OBook{Title: title, Text: lines, Powers: powers, Rune: rune(Book)}
+}
+
+func (wg *WorldGenerator) generateTrees(level *Level, nbTrees int) {
+	for i := 0; i < nbTrees; i++ {
+		x := rand.Intn(WorldWidth)
+		y := rand.Intn(WorldHeight)
+		pos := Pos{X: x, Y: y}
+		o := &Object{Rune: rune(Tree), Blocking: true}
+		o.Pos = pos
+		_, oe := level.Objects[pos]
+		if !oe {
+			level.Objects[pos] = o
+		}
+	}
+}
+
+func (wg *WorldGenerator) generateMonsters(level *Level, nbMonsters int) {
+	bestiary := Bestiary()
+	for i := 0; i < nbMonsters; i++ {
+		x := rand.Intn(len(level.Map[0]))
+		y := rand.Intn(len(level.Map))
+		m := rand.Intn(len(bestiary))
+		pos := Pos{X: x, Y: y}
+
+		mt := bestiary[m]
+		if canGo(level, pos) {
+			level.Monsters[pos] = NewMonster(mt, pos)
+		}
+	}
+}
+
+func (wg *WorldGenerator) generateBooks(level *Level, nbBooks int) {
+	for i := 0; i < nbBooks; i++ {
+		x := rand.Intn(len(level.Map[0]))
+		y := rand.Intn(len(level.Map))
+		pos := Pos{X: x, Y: y}
+
+		if canGo(level, pos) {
+			b := &Object{Rune: rune(Book), Blocking: true}
+			b.Pos = pos
+			level.Objects[pos] = b
+		}
+	}
 }

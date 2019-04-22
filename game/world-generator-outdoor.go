@@ -1,7 +1,5 @@
 package game
 
-import "math/rand"
-
 func (wg *WorldGenerator) generateOutdoor(levelName string) *Level {
 	level := NewLevel(LevelTypeOutdoor)
 	level.Map = make([][]Tile, WorldHeight)
@@ -19,6 +17,7 @@ func (wg *WorldGenerator) generateOutdoor(levelName string) *Level {
 	wg.generateOcean(level)
 	wg.generateTrees(level, 10000)
 	wg.generateMonsters(level, 1000)
+	wg.generateBooks(level, 100)
 	wg.generateGrottos(level)
 	wg.generateCities(level)
 
@@ -81,35 +80,5 @@ func (wg *WorldGenerator) generateOcean(level *Level) {
 		o := &Object{Rune: rune(OceanRightSide), Blocking: false}
 		o.Pos = Pos{WorldWidth - OceanX, y}
 		level.Objects[Pos{WorldWidth - OceanX, y}] = o
-	}
-}
-
-func (wg *WorldGenerator) generateTrees(level *Level, nbTrees int) {
-	for i := 0; i < nbTrees; i++ {
-		x := rand.Intn(WorldWidth)
-		y := rand.Intn(WorldHeight)
-		pos := Pos{X: x, Y: y}
-		o := &Object{Rune: rune(Tree), Blocking: true}
-		o.Pos = pos
-		_, oe := level.Objects[pos]
-		if !oe {
-			level.Objects[pos] = o
-		}
-	}
-}
-
-func (wg *WorldGenerator) generateMonsters(level *Level, nbMonsters int) {
-	bestiary := Bestiary()
-	for i := 0; i < nbMonsters; i++ {
-		x := rand.Intn(len(level.Map[0]))
-		y := rand.Intn(len(level.Map))
-		m := rand.Intn(len(bestiary))
-		pos := Pos{X: x, Y: y}
-
-		mt := bestiary[m]
-		_, oe := level.Objects[pos]
-		if !oe {
-			level.Monsters[pos] = NewMonster(mt, pos)
-		}
 	}
 }

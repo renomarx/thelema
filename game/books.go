@@ -3,6 +3,7 @@ package game
 type OBook struct {
 	Rune   rune
 	Title  string
+	Score  int
 	Text   []string
 	Powers []string
 }
@@ -20,6 +21,11 @@ func NewLibrary() *Library {
 }
 
 func (l *Library) AddBook(book *OBook) {
+	for _, b := range l.Books {
+		if book.Title == b.Title {
+			return
+		}
+	}
 	l.Books = append(l.Books, book)
 }
 
@@ -27,12 +33,21 @@ func (p *Player) AddBook(o *Object, g *Game) bool {
 	if Tile(o.Rune) != Book {
 		return false
 	}
-	for key, book := range g.Books {
-		p.Library.AddBook(book)
-		delete(g.Books, key)
+	var firstBook *OBook
+	firstScore := 1000
+	for _, book := range g.Books {
+		if book.Score <= firstScore {
+			firstBook = book
+			firstScore = book.Score
+			if book.Score < 1000 {
+				book.Score += 1
+			}
+		}
+	}
+	if firstBook != nil {
+		p.Library.AddBook(firstBook)
 		return true
 	}
-
 	return false
 }
 
