@@ -87,7 +87,8 @@ func (ui *UI) DrawLevel() {
 		}
 		game.Mux.Unlock()
 
-		ui.DrawPlayerMenu()
+		ui.DrawMap()
 		ui.DrawPlayerStats()
+		ui.DrawPlayerMenu()
 	}
 }
