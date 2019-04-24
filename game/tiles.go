@@ -48,6 +48,13 @@ const (
 const (
 	Jason Tile = 'J'
 	Sarah Tile = 'A'
+
+	Lord      Tile = 'L'
+	Warrior   Tile = 'W'
+	Policeman Tile = 'P'
+	Doctor    Tile = 'D'
+	Monk      Tile = 'M'
+	Artist    Tile = 'T'
 )
 
 // Usables

@@ -24,7 +24,7 @@ type WorldGenerator struct {
 func (g *Game) GenerateWorld() {
 	g.loadBooks()
 	firstLevel := g.loadLevels()
-	g.loadPnjs()
+	g.loadPnjsVIP()
 	g.Level = firstLevel
 }
 
@@ -46,7 +46,7 @@ func (g *Game) loadLevels() *Level {
 	return firstLevel
 }
 
-func (g *Game) loadPnjs() {
+func (g *Game) loadPnjsVIP() {
 	pnjNames := []string{
 		"jason",
 		"sarah",
@@ -61,13 +61,18 @@ func (g *Game) loadPnjs() {
 	}
 	i := 0
 	for _, l := range g.Levels {
-		pos := l.GetRandomFreePos()
-		pnj := NewPnj(pos, rune(pnjRunes[pnjNames[i]]), pnjNames[i], pnjVoices[pnjNames[i]])
-		pnj.LoadDialogs(g.GameDir)
-		l.Pnjs[pos] = pnj
-		i++
-		if i >= len(pnjNames) {
-			break
+		if l.Type == LevelTypeCity {
+			pos := l.GetRandomFreePos()
+			if pos != nil {
+				pnj := NewPnj(*pos, rune(pnjRunes[pnjNames[i]]), pnjNames[i], pnjVoices[pnjNames[i]])
+				filename := g.GameDir + "/dialogs/" + pnj.Name + ".json"
+				pnj.LoadDialogs(filename)
+				l.Pnjs[*pos] = pnj
+			}
+			i++
+			if i >= len(pnjNames) {
+				break
+			}
 		}
 	}
 }
@@ -146,6 +151,43 @@ func (wg *WorldGenerator) generateBooks(level *Level, nbBooks int) {
 			b := &Object{Rune: rune(Book), Blocking: true}
 			b.Pos = pos
 			level.Objects[pos] = b
+		}
+	}
+}
+
+func (wg *WorldGenerator) generatePnjs(l *Level, nbPnjs int) {
+	pnjNames := []string{
+		"warrior",
+		"doctor",
+		"policeman",
+		"artist",
+		"lord",
+		"monk",
+	} // TODO : different number for each type
+	pnjVoices := map[string]string{
+		"warrior":   VoiceMaleStandard,
+		"doctor":    VoiceFemaleStandard,
+		"policeman": VoiceMaleStandard,
+		"artist":    VoiceFemaleStandard,
+		"lord":      VoiceMaleStandard,
+		"monk":      VoiceMaleStandard,
+	} // TODO : better sex handling
+	pnjRunes := map[string]Tile{
+		"warrior":   Warrior,
+		"doctor":    Doctor,
+		"policeman": Policeman,
+		"artist":    Artist,
+		"lord":      Lord,
+		"monk":      Monk,
+	}
+	for i := 0; i < nbPnjs; i++ {
+		j := i % len(pnjNames)
+		pos := l.GetRandomFreePos()
+		if pos != nil {
+			pnj := NewPnj(*pos, rune(pnjRunes[pnjNames[j]]), pnjNames[j], pnjVoices[pnjNames[j]])
+			filename := wg.g.GameDir + "/dialogs/common/" + pnj.Name + ".json"
+			pnj.LoadDialogs(filename)
+			l.Pnjs[*pos] = pnj
 		}
 	}
 }

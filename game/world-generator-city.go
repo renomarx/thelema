@@ -30,5 +30,5 @@ func (wg *WorldGenerator) generateCity(level *Level, pos Pos, cityName string, c
 	level.AddPortal(pos, &Portal{LevelTo: levelName, PosTo: npos})
 	nl.AddPortal(npos, &Portal{LevelTo: WorldName, PosTo: pos})
 
-	//wg.generatePnjs(nl)
+	wg.generatePnjs(nl, rand.Intn(20)+1)
 }

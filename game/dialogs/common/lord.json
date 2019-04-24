@@ -1,0 +1,14 @@
+{
+  "current_node": "greetings",
+  "nodes" : {
+    "greetings": {
+      "initial": true,
+      "message": "Hello, I'm a Lord.",
+      "choices": [
+        {
+          "cmd": "After you."
+        }
+      ]
+    }
+  }
+}

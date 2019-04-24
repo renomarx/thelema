@@ -33,8 +33,7 @@ type StoryChoice struct {
 	} `json:"quest"`
 }
 
-func (p *Pnj) LoadDialogs(dirpath string) {
-	filename := dirpath + "/dialogs/" + p.Name + ".json"
+func (p *Pnj) LoadDialogs(filename string) {
 	jsonFile, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)

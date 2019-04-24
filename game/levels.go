@@ -1,5 +1,8 @@
 package game
 
+import "math/rand"
+import "log"
+
 const LevelTypeOutdoor = "OUTDOOR"
 const LevelTypeGrotto = "GROTTO"
 const LevelTypeCity = "CITY"
@@ -20,8 +23,22 @@ type Level struct {
 	PRay        int
 }
 
-func (l *Level) GetRandomFreePos() Pos {
-	return Pos{X: 1, Y: 1} // TODO
+func (l *Level) GetRandomFreePos() *Pos {
+	x := rand.Intn(len(l.Map[0]))
+	y := rand.Intn(len(l.Map))
+	pos := Pos{X: x, Y: y}
+	i := 0
+	for !canGo(l, pos) && i < 100 {
+		x := rand.Intn(len(l.Map[0]))
+		y := rand.Intn(len(l.Map))
+		pos = Pos{X: x, Y: y}
+		i++
+	}
+	if i >= 100 {
+		log.Println("No place left on level")
+		return nil
+	}
+	return &pos
 }
 
 func NewLevel(levelType string) *Level {
