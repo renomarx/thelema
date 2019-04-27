@@ -78,17 +78,18 @@ func NewUI(g *game.Game) *UI {
 	ui.playerTextures["monk"] = ui.imgFileToTexture("ui2d/assets/player/monk.png")
 	ui.playerTextures["namek"] = ui.imgFileToTexture("ui2d/assets/player/namek.png")
 	ui.playerTextures["cyborg"] = ui.imgFileToTexture("ui2d/assets/player/cyborg.png")
+
 	ui.pnjTextures = make(map[string]*sdl.Texture)
+	// VIPs
 	ui.pnjTextures["jason"] = ui.imgFileToTexture("ui2d/assets/pnjs/jason.png")
 	ui.pnjTextures["sarah"] = ui.imgFileToTexture("ui2d/assets/pnjs/sarah.png")
-
-	// TODO : load real textures
-	ui.pnjTextures["monk"] = ui.imgFileToTexture("ui2d/assets/pnjs/jason.png")
-	ui.pnjTextures["lord"] = ui.imgFileToTexture("ui2d/assets/pnjs/jason.png")
-	ui.pnjTextures["warrior"] = ui.imgFileToTexture("ui2d/assets/pnjs/jason.png")
-	ui.pnjTextures["policeman"] = ui.imgFileToTexture("ui2d/assets/pnjs/jason.png")
-	ui.pnjTextures["doctor"] = ui.imgFileToTexture("ui2d/assets/pnjs/sarah.png")
-	ui.pnjTextures["artist"] = ui.imgFileToTexture("ui2d/assets/pnjs/sarah.png")
+	// Common
+	ui.pnjTextures["monk"] = ui.imgFileToTexture("ui2d/assets/pnjs/common/monk.png")
+	ui.pnjTextures["lord"] = ui.imgFileToTexture("ui2d/assets/pnjs/common/lord.png")
+	ui.pnjTextures["warrior"] = ui.imgFileToTexture("ui2d/assets/pnjs/common/warrior.png")
+	ui.pnjTextures["policeman"] = ui.imgFileToTexture("ui2d/assets/pnjs/common/policeman.png")
+	ui.pnjTextures["doctor"] = ui.imgFileToTexture("ui2d/assets/pnjs/common/doctor.png")
+	ui.pnjTextures["artist"] = ui.imgFileToTexture("ui2d/assets/pnjs/common/artist.png")
 
 	if err := ttf.Init(); err != nil {
 		panic(err)
