@@ -24,7 +24,7 @@ func (ui *UI) DrawLevel() {
 			for x := minX; x < maxX; x++ {
 				tile := row[x]
 				if len(ui.textureIndex[tile]) > 0 {
-					srcRect := ui.textureIndex[tile][(x+y)%len(ui.textureIndex[tile])]
+					srcRect := ui.textureIndex[tile][(x*(y+1)+y*(x+3))%len(ui.textureIndex[tile])]
 					dstRect := sdl.Rect{X: int32(x*Res) + ui.Cam.X, Y: int32(y*Res) + ui.Cam.Y, W: Res, H: Res}
 
 					ui.renderer.Copy(ui.textureAtlas, &srcRect, &dstRect)

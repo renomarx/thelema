@@ -16,7 +16,8 @@ func (ui *UI) drawMapBox() {
 }
 
 func (ui *UI) DrawMap() {
-	level := ui.Game.Level
+	g := ui.Game
+	level := g.Level
 	player := level.Player
 	if player.MapMenuOpen {
 		ui.drawMapBox()
@@ -41,6 +42,7 @@ func (ui *UI) DrawMap() {
 
 				ui.renderer.SetDrawColor(uint8(r), uint8(g), uint8(b), 255)
 				ui.renderer.DrawPoint(int32(x)+CamX, int32(y)+CamY)
+				ui.renderer.SetDrawColor(0, 0, 0, 0)
 			}
 		}
 
@@ -48,9 +50,23 @@ func (ui *UI) DrawMap() {
 			ui.drawMapObject(game.Pos{X: pos.X + int(CamX), Y: pos.Y + int(CamY)}, game.Tile(object.Rune))
 		}
 
+		for pos, portal := range level.Portals {
+			levelTo := g.Levels[portal.LevelTo]
+			if levelTo.Type == game.LevelTypeCity {
+				tex := ui.GetTexture(portal.LevelTo, TextSizeXS, ColorWhite)
+				_, _, w, h, _ := tex.Query()
+				for j := -2; j < int(h)+2; j++ {
+					for i := -2; i < int(w)+2; i++ {
+						ui.renderer.SetDrawColor(0, 0, 0, 255)
+						ui.renderer.DrawPoint(int32(pos.X+int(CamX)+i), int32(pos.Y+int(CamY)+j))
+					}
+				}
+				ui.renderer.Copy(tex, nil, &sdl.Rect{int32(pos.X + int(CamX)), int32(pos.Y + int(CamY)), w, h})
+			}
+		}
+
 		// Player
-		ui.drawMapPlayer(game.Pos{X: player.X + int(CamX), Y: player.Y + int(CamY)})
-		ui.renderer.SetDrawColor(0, 0, 0, 0)
+		ui.drawMapPlayer(game.Pos{X: player.X + int(CamX), Y: player.Y + int(CamY)}, 3)
 	}
 }
 
@@ -85,11 +101,13 @@ func (ui *UI) drawMapObject(pos game.Pos, tile game.Tile) {
 	}
 	ui.renderer.SetDrawColor(uint8(r), uint8(g), uint8(b), 255)
 	ui.drawMapPoints(pos, rr)
+	ui.renderer.SetDrawColor(0, 0, 0, 0)
 }
 
-func (ui *UI) drawMapPlayer(pos game.Pos) {
+func (ui *UI) drawMapPlayer(pos game.Pos, ray int) {
 	ui.renderer.SetDrawColor(255, 0, 0, 255)
-	ui.drawMapPoints(pos, 2)
+	ui.drawMapPoints(pos, ray)
+	ui.renderer.SetDrawColor(0, 0, 0, 0)
 }
 
 func (ui *UI) drawMapPoints(pos game.Pos, ray int) {

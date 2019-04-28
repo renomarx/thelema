@@ -1,9 +1,8 @@
 package ui2d
 
 import (
-	"thelema/game"
 	"math/rand"
-	"time"
+	"thelema/game"
 
 	"github.com/veandco/go-sdl2/sdl"
 )
@@ -32,7 +31,6 @@ func (ui *UI) drawCharacter(p *game.Character, texture *sdl.Texture) {
 	}
 	if p.IsAttacking {
 		tileY = tileY + 8*64
-		rand.Seed(time.Now().UnixNano())
 		tileX = 64 * rand.Intn(13)
 	}
 	if p.IsDead() {

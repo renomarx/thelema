@@ -4,7 +4,7 @@ import "math/rand"
 import "strconv"
 
 func (wg *WorldGenerator) generateCities(level *Level) {
-	nbCities := 100
+	nbCities := 50
 	nbTemplates := 1 // TODO load as much templates as there are
 	cityNumber := 0
 	for i := 0; i < nbCities; i++ {
@@ -25,7 +25,7 @@ func (wg *WorldGenerator) generateCities(level *Level) {
 
 func (wg *WorldGenerator) generateCity(level *Level, pos Pos, cityName string, cityNumber int) {
 	nl, npos := wg.g.LoadMapTemplate(cityName, LevelTypeCity)
-	levelName := "city" + strconv.Itoa(cityNumber)
+	levelName := "City " + strconv.Itoa(cityNumber)
 	wg.g.Levels[levelName] = nl
 	level.AddPortal(pos, &Portal{LevelTo: levelName, PosTo: npos})
 	nl.AddPortal(npos, &Portal{LevelTo: WorldName, PosTo: pos})

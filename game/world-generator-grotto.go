@@ -25,7 +25,7 @@ func (wg *WorldGenerator) generateGrottos(level *Level) {
 
 func (wg *WorldGenerator) generateGrotto(level *Level, pos Pos, grottoName string, grottoNumber int) {
 	nl, npos := wg.g.LoadMapTemplate(grottoName, LevelTypeGrotto)
-	levelName := "grotto" + strconv.Itoa(grottoNumber)
+	levelName := "Grotto " + strconv.Itoa(grottoNumber)
 	wg.g.Levels[levelName] = nl
 	level.AddPortal(pos, &Portal{LevelTo: levelName, PosTo: npos})
 	nl.AddPortal(npos, &Portal{LevelTo: WorldName, PosTo: pos})

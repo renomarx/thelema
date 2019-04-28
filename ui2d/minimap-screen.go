@@ -51,7 +51,7 @@ func (ui *UI) DrawMinimap() {
 		}
 
 		// Player
-		ui.drawMapPlayer(game.Pos{X: player.X + int(CamX), Y: player.Y + int(CamY)})
+		ui.drawMapPlayer(game.Pos{X: player.X + int(CamX), Y: player.Y + int(CamY)}, 2)
 		ui.renderer.SetDrawColor(0, 0, 0, 0)
 	}
 }

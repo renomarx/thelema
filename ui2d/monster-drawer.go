@@ -1,9 +1,8 @@
 package ui2d
 
 import (
-	"thelema/game"
 	"math/rand"
-	"time"
+	"thelema/game"
 
 	"github.com/veandco/go-sdl2/sdl"
 )
@@ -16,7 +15,6 @@ func (ui *UI) drawMonster(pos game.Pos, m *game.Monster) {
 		yb := m.Yb
 		fieldLen := 4
 		if m.IsAttacking {
-			rand.Seed(time.Now().UnixNano())
 			xb = rand.Intn(fieldLen*2) - fieldLen
 			yb = rand.Intn(fieldLen*2) - fieldLen
 		}
