@@ -290,7 +290,10 @@ func (p *Player) TakeQuestObject(o *Object, g *Game) bool {
 	if !isQuestObject {
 		return false
 	}
-	g.GetEventManager().Dispatch(&Event{Action: ActionTake})
+	g.GetEventManager().Dispatch(&Event{
+		Action:  ActionTake,
+		Message: "You got a special object!",
+	})
 	Mux.Lock()
 	p.Inventory.QuestObjects[o.Rune] = o
 	delete(g.Level.Objects, o.Pos)
@@ -318,7 +321,10 @@ func (p *Player) TakeUsable(o *Object, g *Game) bool {
 func (p *Player) TakeBook(o *Object, g *Game) bool {
 	taken := p.AddBook(o, g)
 	if taken {
-		g.GetEventManager().Dispatch(&Event{Action: ActionTake})
+		g.GetEventManager().Dispatch(&Event{
+			Action:  ActionTake,
+			Message: "You got a new book!",
+		})
 		Mux.Lock()
 		delete(g.Level.Objects, o.Pos)
 		Mux.Unlock()

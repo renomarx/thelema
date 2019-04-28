@@ -30,6 +30,7 @@ func (l *Library) AddBook(book *OBook) {
 }
 
 func (p *Player) AddBook(o *Object, g *Game) bool {
+	// TODO : not taking book when already have it
 	if Tile(o.Rune) != Book {
 		return false
 	}

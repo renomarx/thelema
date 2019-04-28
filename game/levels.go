@@ -1,7 +1,6 @@
 package game
 
 import "math/rand"
-import "log"
 
 const LevelTypeOutdoor = "OUTDOOR"
 const LevelTypeGrotto = "GROTTO"
@@ -28,14 +27,13 @@ func (l *Level) GetRandomFreePos() *Pos {
 	y := rand.Intn(len(l.Map))
 	pos := Pos{X: x, Y: y}
 	i := 0
-	for !canGo(l, pos) && i < 100 {
+	for !canGo(l, pos) && i < 333 {
 		x := rand.Intn(len(l.Map[0]))
 		y := rand.Intn(len(l.Map))
 		pos = Pos{X: x, Y: y}
 		i++
 	}
-	if i >= 100 {
-		log.Println("No place left on level")
+	if i >= 333 {
 		return nil
 	}
 	return &pos

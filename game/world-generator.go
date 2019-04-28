@@ -188,7 +188,8 @@ func (g *Game) loadQuestsObjects() {
 			physicalObj.Pos = *pos
 			l.Objects[*pos] = physicalObj
 			objectsByRune[rune] = obj
-			break
+		} else {
+			log.Fatal("No place left on level " + obj.Level)
 		}
 	}
 

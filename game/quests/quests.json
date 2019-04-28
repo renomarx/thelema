@@ -13,7 +13,7 @@
       },
       "get_herbs": {
         "order": 2,
-        "description" : "Get herbs in City 1"
+        "description" : "Get herbs in City 21"
       },
       "talk_to_sarah": {
         "order": 3,

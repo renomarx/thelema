@@ -62,7 +62,10 @@ func (p *Player) finishQuestStep(questID string, stepID string, g *Game) {
 	st.IsFinished = true
 	if st.Final {
 		q.IsFinished = true
-		g.GetEventManager().Dispatch(&Event{Action: ActionQuestFinished})
+		g.GetEventManager().Dispatch(&Event{
+			Action:  ActionQuestFinished,
+			Message: "You finished " + q.Name + " quest !",
+		})
 	}
 	for _, s := range st.ObjectsTaken {
 		g.GetEventManager().Dispatch(&Event{
