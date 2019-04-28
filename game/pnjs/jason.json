@@ -1,4 +1,5 @@
 {
+  "level": "City 8",
   "current_node": "greetings",
   "nodes" : {
     "greetings": {
@@ -57,7 +58,7 @@
       ]
     },
     "sarah_quest": {
-      "message": "Sarah is looking for you. She wants you to bring her alcohol and herbs to make gin for tonight.",
+      "message": "Sarah is looking for you, in City 32. She wants you to bring her alcohol (City 8) and herbs (City 1) to make gin for tonight.",
       "choices": [
         {
           "quest": {

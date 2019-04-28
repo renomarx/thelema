@@ -11,6 +11,7 @@ import (
 const DialogDeltaTime = 200
 
 type Dialog struct {
+	Level       string                `json:"level"`
 	CurrentNode string                `json:"current_node"`
 	Nodes       map[string]*StoryNode `json:"nodes"`
 }

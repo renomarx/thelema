@@ -52,7 +52,7 @@ func (g *Game) loadPnjsVIP() {
 	pnjNames := []string{
 		"jason",
 		"sarah",
-	} // TODO : load automatically from dialogs
+	} // TODO : load automatically from pnjs directory
 	pnjVoices := map[string]string{
 		"jason": VoiceMaleStandard,
 		"sarah": VoiceFemaleStandard,
@@ -61,21 +61,22 @@ func (g *Game) loadPnjsVIP() {
 		"jason": Jason,
 		"sarah": Sarah,
 	}
-	i := 0
-	for _, l := range g.Levels {
-		if l.Type == LevelTypeCity {
-			pos := l.GetRandomFreePos()
-			if pos != nil {
-				pnj := NewPnj(*pos, rune(pnjRunes[pnjNames[i]]), pnjNames[i], pnjVoices[pnjNames[i]])
-				filename := g.GameDir + "/dialogs/" + pnj.Name + ".json"
-				pnj.LoadDialogs(filename)
-				l.Pnjs[*pos] = pnj
-			}
-			i++
-			if i >= len(pnjNames) {
-				break
-			}
+	for _, name := range pnjNames {
+		p := Pos{}
+		pnj := NewPnj(p, rune(pnjRunes[name]), name, pnjVoices[name])
+		filename := g.GameDir + "/pnjs/" + pnj.Name + ".json"
+		pnj.LoadDialogs(filename)
+
+		l, exists := g.Levels[pnj.Dialog.Level]
+		if !exists {
+			log.Fatal("Level " + pnj.Dialog.Level + " does not exist")
 		}
+		pos := l.GetRandomFreePos()
+		if pos == nil {
+			log.Fatal("No place left on level " + pnj.Dialog.Level)
+		}
+		pnj.Pos = *pos
+		l.Pnjs[*pos] = pnj
 	}
 }
 
@@ -176,17 +177,18 @@ func (g *Game) loadQuestsObjects() {
 
 	objectsByRune := make(map[rune]*QuestObject)
 	for key, obj := range objects {
-		for _, l := range g.Levels {
-			if l.Type == LevelTypeCity || l.Type == LevelTypeGrotto || l.Type == LevelTypeHouse {
-				pos := l.GetRandomFreePos()
-				if pos != nil {
-					rune := rune(key[0])
-					physicalObj := &Object{Rune: rune, Blocking: true}
-					l.Objects[*pos] = physicalObj
-					objectsByRune[rune] = obj
-					break
-				}
-			}
+		l, exists := g.Levels[obj.Level]
+		if !exists {
+			log.Fatal("Level " + obj.Level + " does not exist")
+		}
+		pos := l.GetRandomFreePos()
+		if pos != nil {
+			rune := rune(key[0])
+			physicalObj := &Object{Rune: rune, Blocking: true}
+			physicalObj.Pos = *pos
+			l.Objects[*pos] = physicalObj
+			objectsByRune[rune] = obj
+			break
 		}
 	}
 
@@ -223,7 +225,7 @@ func (wg *WorldGenerator) generatePnjs(l *Level, nbPnjs int) {
 		pos := l.GetRandomFreePos()
 		if pos != nil {
 			pnj := NewPnj(*pos, rune(pnjRunes[pnjNames[j]]), pnjNames[j], pnjVoices[pnjNames[j]])
-			filename := wg.g.GameDir + "/dialogs/common/" + pnj.Name + ".json"
+			filename := wg.g.GameDir + "/pnjs/common/" + pnj.Name + ".json"
 			pnj.LoadDialogs(filename)
 			l.Pnjs[*pos] = pnj
 		}

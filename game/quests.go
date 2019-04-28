@@ -26,6 +26,7 @@ type Step struct {
 }
 
 type QuestObject struct {
+	Level string `json:"level"`
 	Quest struct {
 		ID               string   `json:"id"`
 		StepsFullfilling []string `json:"steps_fullfilling"`

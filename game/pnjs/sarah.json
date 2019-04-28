@@ -1,4 +1,5 @@
 {
+  "level": "City 32",
   "current_node": "greetings",
   "nodes" : {
     "greetings": {

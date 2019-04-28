@@ -9,15 +9,15 @@
       },
       "get_alcohol": {
         "order": 2,
-        "description" : "Get a bottle of alcohol"
+        "description" : "Get a bottle of alcohol in City 8"
       },
       "get_herbs": {
         "order": 2,
-        "description" : "Get herbs"
+        "description" : "Get herbs in City 1"
       },
       "talk_to_sarah": {
         "order": 3,
-        "description" : "Bring alcohol and herbs to Sarah",
+        "description" : "Bring alcohol and herbs to Sarah in City 32",
         "objects_taken": ["a","e"],
         "gold_given": 30,
         "objects_given": [],
