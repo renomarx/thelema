@@ -121,7 +121,7 @@ func (level *Level) OpenPortal(g *Game, pos Pos) {
 		g.GetEventManager().Dispatch(&Event{
 			Action:  ActionChangeLevel,
 			Payload: map[string]string{"levelType": g.Level.Type},
-			Message: "Going to level " + port.LevelTo})
+			Message: "Going to " + port.LevelTo})
 	}
 }
 
