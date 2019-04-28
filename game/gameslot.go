@@ -2,7 +2,7 @@ package game
 
 import (
 	"encoding/gob"
-	"fmt"
+	"log"
 	"os"
 )
 
@@ -16,19 +16,19 @@ func SaveGame(g *Game, slot string) {
 	}
 	filepath := g.generateSlotFilepath(slot)
 	Mux.Lock()
-	fmt.Println("Saving game...")
+	log.Println("Saving game...")
 	err := writeGob(filepath, g)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Saved")
+	log.Println("Saved")
 	Mux.Unlock()
 }
 
 func LoadGame(g *Game, slot string) {
 	eventManager := g.GetEventManager()
 	filepath := g.generateSlotFilepath(slot)
-	fmt.Println("Loading game...")
+	log.Println("Loading game...")
 	lg := NewGame(g.GameDir)
 	err := readGob(filepath, lg)
 	*g = *lg
@@ -36,7 +36,7 @@ func LoadGame(g *Game, slot string) {
 		panic(err)
 	}
 	g.SetEventManager(eventManager)
-	fmt.Println("Loaded.")
+	log.Println("Loaded.")
 }
 
 func (g *Game) generateSlotFilepath(slot string) string {

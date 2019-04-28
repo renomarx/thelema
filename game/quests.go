@@ -49,31 +49,6 @@ func (p *Player) LoadQuests(dirpath string) {
 	p.Quests = quests
 }
 
-func (p *Player) LoadQuestsObjects(dirpath string) {
-	filename := dirpath + "/quests/objects.json"
-	jsonFile, err := os.Open(filename)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer jsonFile.Close()
-
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-
-	objects := make(map[string]*QuestObject)
-
-	err = json.Unmarshal(byteValue, &objects)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	objectsByRune := make(map[rune]*QuestObject)
-	for key, obj := range objects {
-		objectsByRune[rune(key[0])] = obj
-	}
-
-	p.QuestsObjects = objectsByRune
-}
-
 func (p *Player) finishQuestStep(questID string, stepID string, g *Game) {
 	q, questExists := p.Quests[questID]
 	if !questExists {
@@ -103,7 +78,7 @@ func (p *Player) finishQuestStep(questID string, stepID string, g *Game) {
 			Message: "Quest object given!",
 			Action:  ActionTake})
 		r := rune(s[0])
-		_, exists := p.QuestsObjects[r]
+		_, exists := g.QuestsObjects[r]
 		if !exists {
 			panic("Quest object " + s + " does not exist")
 		}

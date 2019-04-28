@@ -1,12 +1,11 @@
 package ui2d
 
 import (
-	"fmt"
-	"path/filepath"
-	"thelema/game"
-
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
+	"log"
+	"path/filepath"
+	"thelema/game"
 )
 
 const WindowTitle = "L'abbaye de Thelema"
@@ -37,6 +36,7 @@ type UI struct {
 	Keymap         map[string]sdl.Keycode
 	LastKeyDown    sdl.Keycode
 	Mp             *MusicPlayer
+	Event          *UIEvent
 }
 
 func init() {
@@ -117,7 +117,8 @@ func NewUI(g *game.Game) *UI {
 
 func (ui *UI) On(e *game.Event) {
 	if e.Message != "" {
-		fmt.Println(e.Message)
+		log.Println(e.Message)
+		ui.Event = NewUIEvent(e.Message)
 	}
 	ui.Mp.On(e)
 }
@@ -126,6 +127,7 @@ func (ui *UI) Draw() {
 	ui.DrawLevel()
 	ui.DrawMenu()
 	ui.DrawGameGeneratorScreen()
+	ui.DrawEvents()
 	ui.renderer.Present()
 }
 

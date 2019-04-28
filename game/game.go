@@ -1,7 +1,7 @@
 package game
 
 import (
-	"fmt"
+	"log"
 	"sync"
 )
 
@@ -11,19 +11,20 @@ const CaseLen = 32
 var Mux *sync.Mutex = &sync.Mutex{}
 
 type Game struct {
-	GameDir      string
-	Level        *Level
-	Levels       map[string]*Level
-	Books        map[string]*OBook
-	Paused       bool
-	Running      bool
-	Playing      bool
-	input        *Input
-	input2       *Input
-	eventManager *EventManager
-	menu         *Menu
-	GG           *GameGenerator
-	Config       *Config
+	GameDir       string
+	Level         *Level
+	Levels        map[string]*Level
+	Books         map[string]*OBook
+	QuestsObjects map[rune]*QuestObject
+	Paused        bool
+	Running       bool
+	Playing       bool
+	input         *Input
+	input2        *Input
+	eventManager  *EventManager
+	menu          *Menu
+	GG            *GameGenerator
+	Config        *Config
 }
 
 func (g *Game) GetInput() *Input {
@@ -105,7 +106,7 @@ func (g *Game) Run() {
 	for g.Running {
 		input := g.input
 		if input.Typ == Quit {
-			fmt.Println("Quit")
+			log.Println("Quit")
 			break
 		}
 		if g.menu.IsOpen {

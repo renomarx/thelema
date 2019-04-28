@@ -1,6 +1,5 @@
 package game
 
-import "strconv"
 import "time"
 
 type Player struct {
@@ -8,7 +7,6 @@ type Player struct {
 	Talker
 	TalkingTo            *Pnj
 	Quests               map[string]*Quest
-	QuestsObjects        map[rune]*QuestObject
 	Inventory            *Inventory
 	Library              *Library
 	IsTaking             bool
@@ -204,8 +202,7 @@ func (p *Player) TakeDamage(g *Game, damage int) {
 	p.Hitpoints.RaiseXp(damage, g)
 
 	g.GetEventManager().Dispatch(&Event{
-		Action:  ActionHurt,
-		Message: "Health left :" + strconv.Itoa(p.Hitpoints.Current)})
+		Action: ActionHurt})
 }
 
 func (p *Player) Die(g *Game) {
@@ -288,7 +285,7 @@ func (p *Player) Take(g *Game, posTo Pos) {
 }
 
 func (p *Player) TakeQuestObject(o *Object, g *Game) bool {
-	qo, isQuestObject := p.QuestsObjects[o.Rune]
+	qo, isQuestObject := g.QuestsObjects[o.Rune]
 	if !isQuestObject {
 		return false
 	}

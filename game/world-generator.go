@@ -2,6 +2,8 @@ package game
 
 import (
 	"bufio"
+	"encoding/json"
+	"io/ioutil"
 	"log"
 	"math/rand"
 	"os"
@@ -25,6 +27,7 @@ func (g *Game) GenerateWorld() {
 	g.loadBooks()
 	firstLevel := g.loadLevels()
 	g.loadPnjsVIP()
+	g.loadQuestsObjects()
 	g.Level = firstLevel
 }
 
@@ -33,7 +36,6 @@ func (g *Game) LoadPlayer(p *Player) {
 	p.X = PlayerInitialX
 	p.Y = PlayerInitialY
 	p.LoadQuests(gameDir)
-	p.LoadQuestsObjects(gameDir)
 	p.LoadPlayerMenu()
 	g.Level.Player = p
 }
@@ -153,6 +155,42 @@ func (wg *WorldGenerator) generateBooks(level *Level, nbBooks int) {
 			level.Objects[pos] = b
 		}
 	}
+}
+
+func (g *Game) loadQuestsObjects() {
+	filename := g.GameDir + "/quests/objects.json"
+	jsonFile, err := os.Open(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer jsonFile.Close()
+
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+
+	objects := make(map[string]*QuestObject)
+
+	err = json.Unmarshal(byteValue, &objects)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	objectsByRune := make(map[rune]*QuestObject)
+	for key, obj := range objects {
+		for _, l := range g.Levels {
+			if l.Type == LevelTypeCity || l.Type == LevelTypeGrotto || l.Type == LevelTypeHouse {
+				pos := l.GetRandomFreePos()
+				if pos != nil {
+					rune := rune(key[0])
+					physicalObj := &Object{Rune: rune, Blocking: true}
+					l.Objects[*pos] = physicalObj
+					objectsByRune[rune] = obj
+					break
+				}
+			}
+		}
+	}
+
+	g.QuestsObjects = objectsByRune
 }
 
 func (wg *WorldGenerator) generatePnjs(l *Level, nbPnjs int) {
