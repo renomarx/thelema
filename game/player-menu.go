@@ -4,6 +4,7 @@ const PlayerMenuCmdCharacter = "Personnage"
 const PlayerMenuCmdInventory = "Inventaire"
 const PlayerMenuCmdLibrary = "Bibliothèque"
 const PlayerMenuCmdQuests = "Journal"
+const PlayerMenuCmdMap = "Carte"
 
 func (p *Player) LoadPlayerMenu() {
 	menu := &Menu{IsOpen: false}
@@ -11,6 +12,7 @@ func (p *Player) LoadPlayerMenu() {
 	menu.Choices = append(menu.Choices, &MenuChoice{Cmd: PlayerMenuCmdInventory})
 	menu.Choices = append(menu.Choices, &MenuChoice{Cmd: PlayerMenuCmdLibrary})
 	menu.Choices = append(menu.Choices, &MenuChoice{Cmd: PlayerMenuCmdQuests})
+	menu.Choices = append(menu.Choices, &MenuChoice{Cmd: PlayerMenuCmdMap})
 	p.Menu = menu
 }
 
@@ -52,6 +54,8 @@ func (g *Game) HandleInputPlayerMenu() {
 				g.Level.Player.QuestMenuOpen = true
 			case PlayerMenuCmdCharacter:
 				g.Level.Player.CharacterMenuOpen = true
+			case PlayerMenuCmdMap:
+				g.Level.Player.MapMenuOpen = true
 			}
 			adaptMenuSpeed()
 		case Select:
@@ -91,6 +95,15 @@ func (g *Game) HandleInputPlayerMenu() {
 				g.DispatchEventMenu(ActionMenuClose)
 				menu.ClearSelected()
 				adaptMenuSpeed()
+			}
+		case PlayerMenuCmdMap:
+			switch input.Typ {
+			case Select:
+				g.Level.Player.MapMenuOpen = false
+				g.DispatchEventMenu(ActionMenuClose)
+				menu.ClearSelected()
+				adaptMenuSpeed()
+			default:
 			}
 		default:
 		}

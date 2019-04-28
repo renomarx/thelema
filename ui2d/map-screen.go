@@ -1,27 +1,33 @@
 package ui2d
 
 import (
-	"math"
+	"github.com/veandco/go-sdl2/sdl"
 	"thelema/game"
 )
+
+func (ui *UI) drawMapBox() {
+	for x := PlayerMenuOffsetX; x <= ui.WindowWidth/Res; x++ {
+		for y := 0; y <= ui.WindowHeight/Res; y++ {
+			ui.renderer.Copy(ui.textureAtlas,
+				&ui.textureIndex['Ʈ'][0],
+				&sdl.Rect{X: int32(x * Res), Y: int32(y * Res), W: Res, H: Res})
+		}
+	}
+}
 
 func (ui *UI) DrawMap() {
 	level := ui.Game.Level
 	player := level.Player
-	if !player.Menu.IsOpen {
-		mapHeight := ui.WindowHeight / 10
-		mapWidth := ui.WindowWidth / 10
+	if player.MapMenuOpen {
+		ui.drawMapBox()
 
-		CamX := int32((mapWidth / 2) - player.X)
-		CamY := int32((mapHeight / 2) - player.Y)
+		// Working only because game world width < screen width && game world height < screen height
+		CamX := int32((ui.WindowWidth - len(level.Map[0])) / 2)
+		CamY := int32((ui.WindowHeight - len(level.Map)) / 2)
 
-		minY := int(math.Floor(math.Max(0, float64(player.Y-(mapHeight/2)-2))))
-		maxY := int(math.Floor(math.Min(float64(len(level.Map)), float64(player.Y+(mapHeight/2)+2))))
-		minX := int(math.Floor(math.Max(0, float64(player.X-(mapWidth/2)-2))))
-		maxX := int(math.Floor(math.Min(float64(len(level.Map[0])), float64(player.X+(mapWidth/2)+2))))
-		for y := minY; y < maxY; y++ {
+		for y := 0; y < len(level.Map); y++ {
 			row := level.Map[y]
-			for x := minX; x < maxX; x++ {
+			for x := 0; x < len(row); x++ {
 				tile := row[x]
 				r := 0
 				g := 0
@@ -38,16 +44,8 @@ func (ui *UI) DrawMap() {
 			}
 		}
 
-		for y := minY; y < maxY; y++ {
-			for x := minX; x < maxX; x++ {
-				pos := game.Pos{X: x, Y: y}
-				game.Mux.Lock()
-				object, exists := level.Objects[pos]
-				game.Mux.Unlock()
-				if exists {
-					ui.drawMapObject(game.Pos{X: pos.X + int(CamX), Y: pos.Y + int(CamY)}, game.Tile(object.Rune))
-				}
-			}
+		for pos, object := range level.Objects {
+			ui.drawMapObject(game.Pos{X: pos.X + int(CamX), Y: pos.Y + int(CamY)}, game.Tile(object.Rune))
 		}
 
 		// Player
@@ -71,13 +69,17 @@ func (ui *UI) drawMapObject(pos game.Pos, tile game.Tile) {
 		b = 0
 	}
 	ui.renderer.SetDrawColor(uint8(r), uint8(g), uint8(b), 255)
-	ui.renderer.DrawPoint(int32(pos.X), int32(pos.Y))
+	ui.drawMapPoints(pos, 1)
 }
 
 func (ui *UI) drawMapPlayer(pos game.Pos) {
 	ui.renderer.SetDrawColor(255, 0, 0, 255)
-	for y := pos.Y - 2; y < pos.Y+2; y++ {
-		for x := pos.X - 2; x < pos.X+2; x++ {
+	ui.drawMapPoints(pos, 3)
+}
+
+func (ui *UI) drawMapPoints(pos game.Pos, ray int) {
+	for y := pos.Y - ray; y < pos.Y+ray; y++ {
+		for x := pos.X - ray; x < pos.X+ray; x++ {
 			if x > 0 && y > 0 {
 				ui.renderer.DrawPoint(int32(x), int32(y))
 			}

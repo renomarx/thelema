@@ -26,6 +26,7 @@ func (ui *UI) DrawPlayerMenu() {
 		ui.DrawLibrary()
 		ui.DrawQuests()
 		ui.DrawPlayerCharacter()
+		ui.DrawMap()
 	}
 }
 

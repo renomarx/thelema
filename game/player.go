@@ -13,6 +13,7 @@ type Player struct {
 	Menu                 *Menu
 	QuestMenuOpen        bool
 	CharacterMenuOpen    bool
+	MapMenuOpen          bool
 	Powers               map[string]*PlayerPower
 	CurrentPower         *PlayerPower
 	LastRegenerationTime time.Time
