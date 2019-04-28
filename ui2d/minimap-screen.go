@@ -45,42 +45,13 @@ func (ui *UI) DrawMinimap() {
 				object, exists := level.Objects[pos]
 				game.Mux.Unlock()
 				if exists {
-					ui.drawMinimapObject(game.Pos{X: pos.X + int(CamX), Y: pos.Y + int(CamY)}, game.Tile(object.Rune))
+					ui.drawMapObject(game.Pos{X: pos.X + int(CamX), Y: pos.Y + int(CamY)}, game.Tile(object.Rune))
 				}
 			}
 		}
 
 		// Player
-		ui.drawMinimapPlayer(game.Pos{X: player.X + int(CamX), Y: player.Y + int(CamY)})
+		ui.drawMapPlayer(game.Pos{X: player.X + int(CamX), Y: player.Y + int(CamY)})
 		ui.renderer.SetDrawColor(0, 0, 0, 0)
-	}
-}
-
-func (ui *UI) drawMinimapObject(pos game.Pos, tile game.Tile) {
-	r := 0
-	g := 0
-	b := 0
-	switch tile {
-	case game.Ocean:
-		r = 0
-		g = 0
-		b = 255
-	case game.Tree:
-		r = 0
-		g = 255
-		b = 0
-	}
-	ui.renderer.SetDrawColor(uint8(r), uint8(g), uint8(b), 255)
-	ui.renderer.DrawPoint(int32(pos.X), int32(pos.Y))
-}
-
-func (ui *UI) drawMinimapPlayer(pos game.Pos) {
-	ui.renderer.SetDrawColor(255, 0, 0, 255)
-	for y := pos.Y - 2; y < pos.Y+2; y++ {
-		for x := pos.X - 2; x < pos.X+2; x++ {
-			if x > 0 && y > 0 {
-				ui.renderer.DrawPoint(int32(x), int32(y))
-			}
-		}
 	}
 }
