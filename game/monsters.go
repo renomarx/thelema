@@ -118,7 +118,7 @@ func (m *Monster) AttackPlayer(p *Player, game *Game) {
 		m.IsMoving = false
 		m.IsAttacking = false
 	}(m)
-	p.TakeDamage(game, m.Strength.Current)
+	p.TakeDamage(game, m.CalculateAttackScore())
 }
 
 func (m *Monster) canAttackInvocation(to Pos, level *Level) bool {
@@ -135,7 +135,7 @@ func (m *Monster) AttackInvocation(p *Invoked, g *Game) {
 		m.IsMoving = false
 		m.IsAttacking = false
 	}(m)
-	p.TakeDamage(g, m.Strength.Current)
+	p.TakeDamage(g, m.CalculateAttackScore())
 }
 
 func (m *Monster) TakeDamage(g *Game, damage int) {

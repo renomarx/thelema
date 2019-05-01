@@ -37,7 +37,13 @@ func NewFox(p Pos, pp *PlayerPower) *Invoked {
 	monster.Rune = rune(Fox)
 	monster.Name = "Invoked Fox"
 	monster.Health.Init(pp.Strength)
+	monster.Energy.Init(pp.Strength)
 	monster.Strength.Init(pp.Strength / 10)
+	monster.Dexterity.Init(pp.Strength / 10)
+	monster.Will.Init(pp.Strength / 10)
+	monster.Intelligence.Init(pp.Strength / 10)
+	monster.Luck.Init(20)
+	monster.Beauty.Init(0)
 	monster.Speed.Init(pp.Speed)
 	monster.VisionRange = 5
 	monster.ActionPoints = 0.0
@@ -134,7 +140,7 @@ func (m *Invoked) Attack(mm *Monster, g *Game) {
 		m.IsMoving = false
 		m.IsAttacking = false
 	}(m)
-	mm.TakeDamage(g, m.Strength.Current)
+	mm.TakeDamage(g, m.CalculateAttackScore())
 }
 
 func (m *Invoked) TakeDamage(g *Game, damage int) {

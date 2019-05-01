@@ -160,7 +160,7 @@ func (p *Player) Attack(g *Game, posToAttack Pos) {
 		if isThereAMonster(level, posToAttack) {
 			g.GetEventManager().Dispatch(&Event{Action: ActionAttack})
 			m := level.Monsters[posToAttack]
-			m.TakeDamage(g, p.Strength.Current)
+			m.TakeDamage(g, p.CalculateAttackScore())
 			p.Strength.RaiseXp(2, g)
 		}
 	}
@@ -183,10 +183,13 @@ func (p *Player) PowerAttack(g *Game) {
 			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerEnergyBall}})
 			g.Level.MakeEnergyball(p.Pos, p.LookAt, p.CurrentPower.Strength, p.CurrentPower.Speed)
 			p.Energy.Current -= p.CurrentPower.Energy
+			p.Will.RaiseXp(1, g)
 		case PowerInvocation:
 			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerInvocation}})
 			if g.Level.MakeInvocation(p.Pos, p.LookAt, p.CurrentPower) {
 				p.Energy.Current -= p.CurrentPower.Energy
+				p.Will.RaiseXp(1, g)
+				p.Charisma.RaiseXp(1, g)
 			}
 		default:
 		}

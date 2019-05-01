@@ -100,3 +100,8 @@ func (c *Character) moveDown() {
 func (c *Character) IsDead() bool {
 	return c.isDead
 }
+
+func (c *Character) CalculateAttackScore() int {
+	score := float64((c.Strength.Current+c.Dexterity.Current)/2) * (1.0 + float64(c.Luck.Current)/100.0)
+	return int(score)
+}
