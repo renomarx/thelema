@@ -57,13 +57,9 @@ func (g *Game) loadPnjsVIP() {
 		"jason": VoiceMaleStandard,
 		"sarah": VoiceFemaleStandard,
 	}
-	pnjRunes := map[string]Tile{
-		"jason": Jason,
-		"sarah": Sarah,
-	}
 	for _, name := range pnjNames {
 		p := Pos{}
-		pnj := NewPnj(p, rune(pnjRunes[name]), name, pnjVoices[name])
+		pnj := NewPnj(p, name, pnjVoices[name])
 		filename := g.GameDir + "/pnjs/" + pnj.Name + ".json"
 		pnj.LoadDialogs(filename)
 
@@ -213,19 +209,11 @@ func (wg *WorldGenerator) generatePnjs(l *Level, nbPnjs int) {
 		"lord":      VoiceMaleStandard,
 		"monk":      VoiceMaleStandard,
 	} // TODO : better sex handling
-	pnjRunes := map[string]Tile{
-		"warrior":   Warrior,
-		"doctor":    Doctor,
-		"policeman": Policeman,
-		"artist":    Artist,
-		"lord":      Lord,
-		"monk":      Monk,
-	}
 	for i := 0; i < nbPnjs; i++ {
 		j := i % len(pnjNames)
 		pos := l.GetRandomFreePos()
 		if pos != nil {
-			pnj := NewPnj(*pos, rune(pnjRunes[pnjNames[j]]), pnjNames[j], pnjVoices[pnjNames[j]])
+			pnj := NewPnj(*pos, pnjNames[j], pnjVoices[pnjNames[j]])
 			filename := wg.g.GameDir + "/pnjs/common/" + pnj.Name + ".json"
 			pnj.LoadDialogs(filename)
 			l.Pnjs[*pos] = pnj

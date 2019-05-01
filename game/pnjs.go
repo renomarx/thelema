@@ -9,11 +9,10 @@ type Pnj struct {
 	TalkingTo *Player
 }
 
-func NewPnj(p Pos, r rune, name string, voice string) *Pnj {
+func NewPnj(p Pos, name string, voice string) *Pnj {
 	pnj := &Pnj{}
-	pnj.Rune = r
 	pnj.Name = name
-	pnj.Hitpoints.Init(50)
+	pnj.Health.Init(50)
 	pnj.Strength.Init(5)
 	pnj.Speed.Init(4)
 	pnj.ActionPoints = 0.0

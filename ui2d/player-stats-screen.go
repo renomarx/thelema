@@ -11,7 +11,7 @@ func (ui *UI) DrawPlayerStats() {
 		ui.drawPlayerStatsBox()
 		offsetH := ui.WindowHeight - Res
 		w, _ := ui.DrawText(
-			"Health : "+strconv.Itoa(p.Hitpoints.Current)+"/"+strconv.Itoa(p.Hitpoints.Initial),
+			"Health : "+strconv.Itoa(p.Health.Current)+"/"+strconv.Itoa(p.Health.Initial),
 			TextSizeM,
 			ColorActive,
 			10,

@@ -49,8 +49,8 @@ func (p *Player) regenerate() {
 		if p.Energy.Current < p.Energy.Initial {
 			p.Energy.Current += 5
 		}
-		if p.Hitpoints.Current < p.Hitpoints.Initial {
-			p.Hitpoints.Current += 1
+		if p.Health.Current < p.Health.Initial {
+			p.Health.Current += 1
 		}
 		p.LastRegenerationTime = time.Now()
 	}
@@ -194,13 +194,13 @@ func (p *Player) PowerAttack(g *Game) {
 }
 
 func (p *Player) TakeDamage(g *Game, damage int) {
-	if p.Hitpoints.Current <= 0 {
+	if p.Health.Current <= 0 {
 		p.Die(g)
 		return
 	}
-	p.Hitpoints.Current -= damage
+	p.Health.Current -= damage
 	g.MakeExplosion(p.Pos, damage, 50)
-	p.Hitpoints.RaiseXp(damage, g)
+	p.Health.RaiseXp(damage, g)
 
 	g.GetEventManager().Dispatch(&Event{
 		Action: ActionHurt})

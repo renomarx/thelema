@@ -10,28 +10,17 @@ const (
 	Tree           Tile = '&'
 	Blank          Tile = ' '
 	Statue         Tile = 'é'
-	Upstairs       Tile = 'u'
-	Downstairs     Tile = 'd'
-	Explosion      Tile = 'x'
-	Book           Tile = 'b'
+	Upstairs       Tile = '^'
+	Downstairs     Tile = '~'
 	Ocean          Tile = 'o'
 	OceanTopSide   Tile = 'ô'
 	OceanLeftSide  Tile = 'ò'
 	OceanRightSide Tile = 'ó'
 	OceanDownSide  Tile = 'õ'
-	CityEntry      Tile = 'c'
-	CityOut        Tile = 'C'
-)
+	CityEntry      Tile = '>'
+	CityOut        Tile = '<'
 
-// Monsters and invocations
-const (
-	Rat    Tile = 'R'
-	Spider Tile = 'S'
-	Fox    Tile = 'F'
-)
-
-// Houses : TODO : only one tile, move others in ui2d
-const (
+	// Houses
 	HouseWall        Tile = 'h'
 	HouseDoor        Tile = '='
 	HouseTop         Tile = 'Ħ'
@@ -42,27 +31,27 @@ const (
 	HouseBottomLeft  Tile = 'ḩ'
 	HouseRight       Tile = 'Ḧ'
 	HouseLeft        Tile = 'ḧ'
-)
 
-// Pnjs
-const (
-	Jason Tile = 'J'
-	Sarah Tile = 'A'
+	// Monsters and invocations
+	Rat    Tile = 'R'
+	Spider Tile = 'S'
+	Fox    Tile = 'F'
+	Snake  Tile = 'Ƨ'
+	Cat    Tile = 'C'
+	Eagle  Tile = 'A'
+	Wolf   Tile = 'W'
+	Bear   Tile = 'B'
+	Daemon Tile = 'M'
+	Angel  Tile = 'L'
+	Spirit Tile = 'I'
+	Dragon Tile = 'D'
+	God    Tile = 'G'
 
-	Lord      Tile = 'L'
-	Warrior   Tile = 'W'
-	Policeman Tile = 'P'
-	Doctor    Tile = 'D'
-	Monk      Tile = 'M'
-	Artist    Tile = 'T'
-)
+	// Usables
+	Senzu     Tile = 'z'
+	Explosion Tile = 'x'
+	Book      Tile = 'b'
 
-// Usables
-const (
-	Senzu Tile = 'z'
-)
-
-// Powers
-const (
+	// Powers
 	Energyball Tile = 'p'
 )

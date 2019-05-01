@@ -8,7 +8,7 @@ import (
 
 func (ui *UI) DrawCharacteristics(p *game.Character, offsetX, offsetH int32) int32 {
 	_, h := ui.DrawText(
-		"Health : "+strconv.Itoa(p.Hitpoints.Current)+"/"+strconv.Itoa(p.Hitpoints.Initial)+" (xp: "+strconv.Itoa(p.Hitpoints.Xp)+")",
+		"Health : "+strconv.Itoa(p.Health.Current)+"/"+strconv.Itoa(p.Health.Initial)+" (xp: "+strconv.Itoa(p.Health.Xp)+")",
 		TextSizeM,
 		ColorActive,
 		offsetX*Res,

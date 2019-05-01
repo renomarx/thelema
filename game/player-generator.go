@@ -19,7 +19,7 @@ func newPlayer(speed, health, energy, strength, rg int) *Player {
 	player.Yb = 0
 	player.IsMoving = false
 	player.Speed.Init(speed)
-	player.Hitpoints.Init(health)
+	player.Health.Init(health)
 	player.Energy.Init(energy)
 	player.Strength.Init(strength)
 	player.RegenerationSpeed.Init(rg)

@@ -36,7 +36,7 @@ func NewFox(p Pos, pp *PlayerPower) *Invoked {
 	monster := &Invoked{}
 	monster.Rune = rune(Fox)
 	monster.Name = "Invoked Fox"
-	monster.Hitpoints.Init(pp.Strength)
+	monster.Health.Init(pp.Strength)
 	monster.Strength.Init(pp.Strength / 10)
 	monster.Speed.Init(pp.Speed)
 	monster.VisionRange = 5
@@ -138,10 +138,10 @@ func (m *Invoked) Attack(mm *Monster, g *Game) {
 }
 
 func (m *Invoked) TakeDamage(g *Game, damage int) {
-	if m.Hitpoints.Current <= 0 {
+	if m.Health.Current <= 0 {
 		m.Die(g.Level)
 	}
-	m.Hitpoints.Current -= damage
+	m.Health.Current -= damage
 	g.MakeExplosion(m.Pos, damage, 50)
 }
 

@@ -20,7 +20,7 @@ func (ui *UI) drawMonster(pos game.Pos, m *game.Monster) {
 		}
 
 		ui.renderer.Copy(ui.textureAtlas,
-			&ui.textureIndex[tile][(pos.X+pos.Y)%len(ui.textureIndex[tile])],
+			&ui.textureIndex[tile][m.Beauty.Initial%len(ui.textureIndex[tile])],
 			&sdl.Rect{X: int32(pos.X*Res-xb) + ui.Cam.X, Y: int32(pos.Y*Res-yb) + ui.Cam.Y, W: Res, H: Res})
 	}
 }

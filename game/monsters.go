@@ -2,6 +2,7 @@ package game
 
 import "time"
 import "math"
+import "math/rand"
 
 type Monster struct {
 	Character
@@ -12,9 +13,15 @@ func NewMonster(mt *MonsterType, p Pos) *Monster {
 	monster := &Monster{}
 	monster.Rune = rune(mt.Tile)
 	monster.Name = mt.Name
-	monster.Hitpoints.Init(mt.Hitpoints)
-	monster.Strength.Init(mt.Strength)
+	monster.Health.Init(mt.Health)
+	monster.Energy.Init(mt.Energy)
 	monster.Speed.Init(mt.Speed)
+	monster.Strength.Init(mt.Stats)
+	monster.Dexterity.Init(mt.Stats)
+	monster.Will.Init(mt.Stats)
+	monster.Intelligence.Init(mt.Stats)
+	monster.Luck.Init(mt.Luck)
+	monster.Beauty.Init(rand.Intn(20))
 	monster.ActionPoints = 0.0
 	monster.Pos = p
 	monster.Xb = 0
@@ -132,10 +139,10 @@ func (m *Monster) AttackInvocation(p *Invoked, g *Game) {
 }
 
 func (m *Monster) TakeDamage(g *Game, damage int) {
-	if m.Hitpoints.Current <= 0 {
+	if m.Health.Current <= 0 {
 		m.Die(g.Level)
 	}
-	m.Hitpoints.Current -= damage
+	m.Health.Current -= damage
 	g.MakeExplosion(m.Pos, damage, 50)
 }
 

@@ -10,7 +10,7 @@ func (s USenzu) GetObject() *Object {
 
 func (s USenzu) Use(g *Game) {
 	p := g.Level.Player
-	p.Hitpoints.Current = p.Hitpoints.Initial
+	p.Health.Current = p.Health.Initial
 	p.Energy.Current = p.Energy.Initial
 
 	g.GetEventManager().Dispatch(&Event{

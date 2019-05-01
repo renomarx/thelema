@@ -4,7 +4,7 @@ import "time"
 
 const CharacterDeltaTime = 100
 
-const CharacteristicXpMultiplier = 7
+const CharacteristicXpMultiplier = 2
 
 type Characteristic struct {
 	Initial int
@@ -47,11 +47,17 @@ type Character struct {
 	Fighter
 	LookAt            InputType
 	Name              string
-	Hitpoints         Characteristic
+	Health            Characteristic
 	Energy            Characteristic
-	Strength          Characteristic
 	Speed             Characteristic
 	RegenerationSpeed Characteristic
+	Strength          Characteristic
+	Dexterity         Characteristic
+	Beauty            Characteristic
+	Will              Characteristic
+	Intelligence      Characteristic
+	Charisma          Characteristic
+	Luck              Characteristic
 	ActionPoints      float64
 	LastActionTime    time.Time
 	isDead            bool
