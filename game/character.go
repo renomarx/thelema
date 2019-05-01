@@ -22,7 +22,7 @@ func (ch *Characteristic) RaiseXp(value int, g *Game) {
 	ch.Xp += value
 	if ch.Xp >= ch.Initial*CharacteristicXpMultiplier {
 		g.GetEventManager().Dispatch(&Event{Action: ActionCharacteristicUp})
-		ch.Initial += 1
+		ch.Initial += ch.Initial / 20
 		ch.Current = ch.Initial
 		ch.Xp = 0
 	}
@@ -58,6 +58,7 @@ type Character struct {
 	Intelligence      Characteristic
 	Charisma          Characteristic
 	Luck              Characteristic
+	Affinity          string
 	ActionPoints      float64
 	LastActionTime    time.Time
 	isDead            bool

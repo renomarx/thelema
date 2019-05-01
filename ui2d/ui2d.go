@@ -74,10 +74,13 @@ func NewUI(g *game.Game) *UI {
 	ui.Cam.Y = 0
 
 	ui.playerTextures = make(map[string]*sdl.Texture)
-	ui.playerTextures["sayan"] = ui.imgFileToTexture("ui2d/assets/player/sayan.png")
-	ui.playerTextures["monk"] = ui.imgFileToTexture("ui2d/assets/player/monk.png")
-	ui.playerTextures["namek"] = ui.imgFileToTexture("ui2d/assets/player/namek.png")
-	ui.playerTextures["cyborg"] = ui.imgFileToTexture("ui2d/assets/player/cyborg.png")
+	ui.playerTextures["asmodeus"] = ui.imgFileToTexture("ui2d/assets/player/asmodeus.png")
+	ui.playerTextures["kali"] = ui.imgFileToTexture("ui2d/assets/player/kali.png")
+	ui.playerTextures["baal"] = ui.imgFileToTexture("ui2d/assets/player/baal.png")
+	ui.playerTextures["lilith"] = ui.imgFileToTexture("ui2d/assets/player/lilith.png")
+	ui.playerTextures["dagon"] = ui.imgFileToTexture("ui2d/assets/player/dagon.png")
+	ui.playerTextures["lucifer"] = ui.imgFileToTexture("ui2d/assets/player/lucifer.png")
+	ui.playerTextures["hecate"] = ui.imgFileToTexture("ui2d/assets/player/hecate.png")
 
 	ui.pnjTextures = make(map[string]*sdl.Texture)
 	// VIPs

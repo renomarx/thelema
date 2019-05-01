@@ -4,14 +4,17 @@ import "time"
 
 func GeneratePlayers() []*Player {
 	var players []*Player
-	players = append(players, NewSayan())
-	players = append(players, NewMonk())
-	players = append(players, NewNamek())
-	players = append(players, NewCyborg())
+	players = append(players, NewAsmodeus())
+	players = append(players, NewKali())
+	players = append(players, NewBaal())
+	players = append(players, NewLilith())
+	players = append(players, NewDagon())
+	players = append(players, NewLucifer())
+	players = append(players, NewHecate())
 	return players
 }
 
-func newPlayer(speed, health, energy, strength, rg int) *Player {
+func newPlayer(speed, health, energy, stg, dex, bea, wil, intel, cha, rg int) *Player {
 	player := &Player{}
 	player.X = 0
 	player.Y = 0
@@ -21,8 +24,14 @@ func newPlayer(speed, health, energy, strength, rg int) *Player {
 	player.Speed.Init(speed)
 	player.Health.Init(health)
 	player.Energy.Init(energy)
-	player.Strength.Init(strength)
+	player.Strength.Init(stg)
+	player.Dexterity.Init(dex)
+	player.Beauty.Init(bea)
+	player.Will.Init(wil)
+	player.Intelligence.Init(intel)
+	player.Charisma.Init(cha)
 	player.RegenerationSpeed.Init(rg)
+	player.Luck.Init(20)
 	player.IsAttacking = false
 	player.IsPowerAttacking = false
 	player.IsTalking = false
@@ -38,26 +47,51 @@ func newPlayer(speed, health, energy, strength, rg int) *Player {
 	return player
 }
 
-func NewSayan() *Player {
-	p := newPlayer(12, 120, 120, 25, 1)
-	p.Name = "sayan"
+func NewAsmodeus() *Player {
+	p := newPlayer(10, 300, 200, 30, 20, 20, 30, 20, 20, 1)
+	p.Name = "asmodeus"
+	p.Affinity = "Asmodeus"
 	return p
 }
 
-func NewMonk() *Player {
-	p := newPlayer(14, 100, 100, 20, 1)
-	p.Name = "monk"
+func NewKali() *Player {
+	p := newPlayer(10, 200, 300, 20, 30, 20, 20, 30, 20, 1)
+	p.Name = "kali"
+	p.Affinity = "Kali"
 	return p
 }
 
-func NewNamek() *Player {
-	p := newPlayer(10, 100, 100, 10, 2)
-	p.Name = "namek"
+func NewBaal() *Player {
+	p := newPlayer(10, 300, 300, 20, 20, 20, 20, 20, 20, 1)
+	p.Name = "baal"
+	p.Affinity = "Baal"
 	return p
 }
 
-func NewCyborg() *Player {
-	p := newPlayer(8, 100, 200, 30, 1)
-	p.Name = "cyborg"
+func NewLilith() *Player {
+	p := newPlayer(10, 225, 225, 25, 25, 25, 25, 25, 25, 1)
+	p.Name = "lilith"
+	p.Affinity = "Lilith"
+	return p
+}
+
+func NewDagon() *Player {
+	p := newPlayer(10, 200, 200, 30, 30, 20, 30, 30, 20, 1)
+	p.Name = "dagon"
+	p.Affinity = "Dagon"
+	return p
+}
+
+func NewLucifer() *Player {
+	p := newPlayer(10, 200, 400, 20, 20, 20, 20, 20, 20, 1)
+	p.Name = "lucifer"
+	p.Affinity = "Lucifer"
+	return p
+}
+
+func NewHecate() *Player {
+	p := newPlayer(10, 200, 300, 20, 20, 30, 20, 20, 30, 1)
+	p.Name = "hecate"
+	p.Affinity = "Hecate"
 	return p
 }
