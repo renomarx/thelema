@@ -16,7 +16,7 @@ func (wg *WorldGenerator) generateOutdoor(levelName string) *Level {
 
 	wg.generateOcean(level)
 	wg.generateTrees(level, 10000)
-	wg.generateMonsters(level, 1000)
+	wg.generateMonsters(level, Bestiary(), 1000)
 	wg.generateBooks(level, 100)
 	wg.generateGrottos(level)
 	wg.generateCities(level)

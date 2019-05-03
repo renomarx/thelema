@@ -30,6 +30,6 @@ func (wg *WorldGenerator) generateGrotto(level *Level, pos Pos, grottoName strin
 	level.AddPortal(pos, &Portal{LevelTo: levelName, PosTo: npos})
 	nl.AddPortal(npos, &Portal{LevelTo: WorldName, PosTo: pos})
 
-	wg.generateMonsters(nl, rand.Intn(20)+1)
+	wg.generateMonsters(nl, BestiaryUnderworld(), rand.Intn(20)+1)
 	wg.generateBooks(nl, rand.Intn(2))
 }
