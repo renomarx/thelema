@@ -106,6 +106,23 @@ func (c *Character) IsDead() bool {
 }
 
 func (c *Character) Attack(g *Game, posToAttack Pos) bool {
+	if c.Weapon != nil {
+		switch c.Weapon.Typ {
+		case WeaponTypeDagger:
+			return c.attackMelee(g, posToAttack)
+		case WeaponTypeWand:
+			return c.attackMelee(g, posToAttack)
+		case WeaponTypeSpear:
+			return c.attackMelee(g, posToAttack)
+		case WeaponTypeBow:
+			c.attackBow(g, posToAttack)
+			return true
+		}
+	}
+	return c.attackMelee(g, posToAttack)
+}
+
+func (c *Character) attackMelee(g *Game, posToAttack Pos) bool {
 	level := g.Level
 	c.IsMoving = true
 	c.IsAttacking = true
@@ -124,10 +141,26 @@ func (c *Character) Attack(g *Game, posToAttack Pos) bool {
 	if isThereAMonster(level, posToAttack) {
 		m := level.Monsters[posToAttack]
 		m.TakeDamage(g, c.CalculateAttackScore())
+		c.Dexterity.RaiseXp(1, g)
 		c.Strength.RaiseXp(2, g)
 		return true
 	}
 	return false
+}
+
+func (c *Character) attackBow(g *Game, posToAttack Pos) {
+	c.IsMoving = true
+	c.IsAttacking = true
+	go func(c *Character) {
+		for c.AttackPos = 0; c.AttackPos < CaseLen; c.AttackPos++ {
+			c.Weapon.adaptSpeed()
+		}
+		c.AttackPos = 0
+		c.IsMoving = false
+		c.IsAttacking = false
+		g.Level.MakeArrow(c.Pos, c.LookAt, c.CalculateAttackBowScore(), 10)
+		c.Dexterity.RaiseXp(2, g)
+	}(c)
 }
 
 func (c *Character) CalculateAttackScore() int {
@@ -136,6 +169,13 @@ func (c *Character) CalculateAttackScore() int {
 	if c.Weapon != nil {
 		iscore += c.Weapon.Damages
 	}
+	return iscore
+}
+
+func (c *Character) CalculateAttackBowScore() int {
+	score := float64(c.Dexterity.Current) * (1.0 + float64(c.Luck.Current)/100.0)
+	iscore := int(score)
+	iscore += c.Weapon.Damages
 	return iscore
 }
 

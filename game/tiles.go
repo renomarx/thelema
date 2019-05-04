@@ -63,4 +63,5 @@ const (
 	Bow    Tile = 'a'
 	Wand   Tile = 'w'
 	Spear  Tile = 's'
+	Arrow  Tile = 'r'
 )

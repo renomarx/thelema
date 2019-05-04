@@ -35,6 +35,30 @@ func (level *Level) MakeEnergyball(p Pos, dir InputType, size int, speed int) {
 	level.Projectiles[p] = eb
 }
 
+func (level *Level) MakeArrow(p Pos, dir InputType, size int, speed int) {
+	eb := &Projectile{}
+	eb.Rune = rune(Arrow)
+	eb.Blocking = false
+	eb.Size = size
+	eb.Speed = speed
+	eb.Pos = p
+	eb.Direction = dir
+	if eb.Direction == Left {
+		eb.Xb = 32
+	}
+	if eb.Direction == Right {
+		eb.Xb = -32
+	}
+	if eb.Direction == Up {
+		eb.Yb = 32
+	}
+	if eb.Direction == Down {
+		eb.Yb = -32
+	}
+
+	level.Projectiles[p] = eb
+}
+
 func (p *Projectile) Update(g *Game) {
 	if p.IsMoving {
 		return
