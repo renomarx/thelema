@@ -74,17 +74,22 @@ func NewUI(g *game.Game) *UI {
 	ui.Cam.Y = 0
 
 	ui.playerTextures = make(map[string]*sdl.Texture)
-	ui.playerTextures["asmodeus"] = ui.imgFileToTexture("ui2d/assets/player/asmodeus.png")
-	ui.playerTextures["asmodeus_with_knife"] = ui.imgFileToTexture("ui2d/assets/player/asmodeus_with_knife.png")
-	ui.playerTextures["asmodeus_with_bow"] = ui.imgFileToTexture("ui2d/assets/player/asmodeus_with_bow.png")
-	ui.playerTextures["asmodeus_with_spear"] = ui.imgFileToTexture("ui2d/assets/player/asmodeus_with_spear.png")
-	ui.playerTextures["asmodeus_with_wand"] = ui.imgFileToTexture("ui2d/assets/player/asmodeus_with_wand.png")
-	ui.playerTextures["kali"] = ui.imgFileToTexture("ui2d/assets/player/kali.png")
-	ui.playerTextures["baal"] = ui.imgFileToTexture("ui2d/assets/player/baal.png")
-	ui.playerTextures["lilith"] = ui.imgFileToTexture("ui2d/assets/player/lilith.png")
-	ui.playerTextures["dagon"] = ui.imgFileToTexture("ui2d/assets/player/dagon.png")
-	ui.playerTextures["lucifer"] = ui.imgFileToTexture("ui2d/assets/player/lucifer.png")
-	ui.playerTextures["hecate"] = ui.imgFileToTexture("ui2d/assets/player/hecate.png")
+	playerNames := []string{
+		"asmodeus",
+		"kali",
+		"baal",
+		"lilith",
+		"dagon",
+		"lucifer",
+		"hecate",
+	}
+	for _, n := range playerNames {
+		ui.playerTextures[n] = ui.imgFileToTexture("ui2d/assets/player/" + n + ".png")
+		ui.playerTextures[n+"_with_knife"] = ui.imgFileToTexture("ui2d/assets/player/" + n + "_with_knife.png")
+		ui.playerTextures[n+"_with_bow"] = ui.imgFileToTexture("ui2d/assets/player/" + n + "_with_bow.png")
+		ui.playerTextures[n+"_with_spear"] = ui.imgFileToTexture("ui2d/assets/player/" + n + "_with_spear.png")
+		ui.playerTextures[n+"_with_wand"] = ui.imgFileToTexture("ui2d/assets/player/" + n + "_with_wand.png")
+	}
 
 	ui.pnjTextures = make(map[string]*sdl.Texture)
 	// VIPs
