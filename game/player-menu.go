@@ -90,6 +90,14 @@ func (g *Game) HandleInputPlayerMenu() {
 				g.Level.Player.LastPower()
 				g.DispatchEventMenu(ActionMenuSelect)
 				adaptMenuSpeed()
+			case Up:
+				g.Level.Player.LastWeapon()
+				g.DispatchEventMenu(ActionMenuSelect)
+				adaptMenuSpeed()
+			case Down:
+				g.Level.Player.NextWeapon()
+				g.DispatchEventMenu(ActionMenuSelect)
+				adaptMenuSpeed()
 			case Select:
 				g.Level.Player.CharacterMenuOpen = false
 				g.DispatchEventMenu(ActionMenuClose)

@@ -43,7 +43,11 @@ func newPlayer(speed, health, energy, stg, dex, bea, wil, intel, cha, rg int) *P
 	player.CurrentPower = player.Powers[string(PowerEnergyBall)]
 	player.LastRegenerationTime = time.Now()
 	player.LoadPlayerMenu()
-	player.Weapon = &Weapon{Typ: WeaponTypeDagger, Damages: 5, Speed: 20}
+	player.Weapons = append(player.Weapons, &Weapon{Tile: Dagger, Typ: WeaponTypeDagger, Damages: 7, Speed: 20})
+	player.Weapons = append(player.Weapons, &Weapon{Tile: Bow, Typ: WeaponTypeBow, Damages: 10, Speed: 10})
+	player.Weapons = append(player.Weapons, &Weapon{Tile: Wand, Typ: WeaponTypeWand, Damages: 5, Speed: 25})
+	player.Weapons = append(player.Weapons, &Weapon{Tile: Spear, Typ: WeaponTypeSpear, Damages: 20, Speed: 12})
+	player.Weapon = player.Weapons[0]
 
 	return player
 }

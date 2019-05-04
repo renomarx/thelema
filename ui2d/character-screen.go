@@ -90,14 +90,15 @@ func (ui *UI) DrawPlayerCharacter() {
 		offsetH += h + 10
 		offsetH = ui.DrawCharacteristics(&p.Character, PlayerMenuOffsetX, offsetH)
 		offsetH += 40
-		ui.DrawPowers(offsetH)
+		offsetH = ui.DrawPowers(offsetH)
+		ui.DrawWeapons(offsetH)
 	}
 }
 
-func (ui *UI) DrawPowers(offsetH int32) {
+func (ui *UI) DrawPowers(offsetH int32) int32 {
 	p := ui.Game.Level.Player
 	var offsetX = int32(PlayerMenuOffsetX * Res)
-	_, h := ui.DrawText("Magies", TextSizeL, ColorActive, offsetX, offsetH)
+	_, h := ui.DrawText("Magies (gauche ou droite pour changer)", TextSizeL, ColorActive, offsetX, offsetH)
 	offsetH += h + 10
 
 	powernames := p.GetSortedPowernames()
@@ -114,12 +115,29 @@ func (ui *UI) DrawPowers(offsetH int32) {
 			&ui.textureIndex[power.Tile][0],
 			&sdl.Rect{X: int32((PlayerMenuOffsetX + i) * Res), Y: offsetH, W: Res, H: Res})
 	}
+	//ui.DrawPower(p.CurrentPower, offsetH)
 	offsetH += 32 + 40
 
-	// currentPower := p.CurrentPower
-	// _, h = ui.DrawText(currentPower.Type, TextSizeL, ColorActive, PlayerMenuOffsetX*Res, offsetH)
-	// offsetH += h + 10
-	//ui.DrawPower(currentPower, offsetH)
+	return offsetH
+}
+
+func (ui *UI) DrawWeapons(offsetH int32) {
+	p := ui.Game.Level.Player
+	var offsetX = int32(PlayerMenuOffsetX * Res)
+	_, h := ui.DrawText("Armes (haut ou bas pour changer)", TextSizeL, ColorActive, offsetX, offsetH)
+	offsetH += h + 10
+
+	for i, w := range p.Weapons {
+		x := int32((PlayerMenuOffsetX + i) * Res)
+		if p.Weapon != nil && p.Weapon.Typ == w.Typ {
+			ui.renderer.Copy(ui.textureAtlas,
+				&ui.textureIndex['ʆ'][0],
+				&sdl.Rect{X: x, Y: offsetH, W: Res, H: Res})
+		}
+		ui.renderer.Copy(ui.textureAtlas,
+			&ui.textureIndex[w.Tile][0],
+			&sdl.Rect{X: int32((PlayerMenuOffsetX + i) * Res), Y: offsetH, W: Res, H: Res})
+	}
 }
 
 func (ui *UI) drawCharacterBox() {

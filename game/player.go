@@ -15,6 +15,7 @@ type Player struct {
 	CharacterMenuOpen    bool
 	MapMenuOpen          bool
 	LastRegenerationTime time.Time
+	Weapons              []*Weapon
 }
 
 func (p *Player) Update(g *Game) {

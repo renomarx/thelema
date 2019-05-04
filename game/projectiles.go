@@ -124,6 +124,7 @@ func (p *Projectile) MakeDamage(g *Game) {
 	if ok {
 		// There is a monster !
 		m.TakeDamage(g, p.Size)
+		p.Die(g)
 	}
 }
 
