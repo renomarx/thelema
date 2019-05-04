@@ -1,7 +1,6 @@
 package ui2d
 
 import (
-	"math/rand"
 	"thelema/game"
 
 	"github.com/veandco/go-sdl2/sdl"
@@ -30,8 +29,29 @@ func (ui *UI) drawCharacter(p *game.Character, texture *sdl.Texture) {
 		tileX = 64 * ((-1*p.Yb + Res) / (Res / 8))
 	}
 	if p.IsAttacking {
-		tileY = tileY + 8*64
-		tileX = 64 * rand.Intn(13)
+		if p.Weapon != nil {
+			switch p.Weapon.Typ {
+			case game.WeaponTypeDagger:
+				tileY = tileY + 4*64
+				tileX = 64 * (p.AttackPos / 6)
+			case game.WeaponTypeWand:
+				tileY = tileY + 4*64
+				tileX = 64 * (p.AttackPos / 6)
+			case game.WeaponTypeBow:
+				tileY = tileY + 8*64
+				tileX = 64 * (p.AttackPos / 13)
+			case game.WeaponTypeSpear:
+				tileY = tileY - 4*64
+				tileX = 64 * (p.AttackPos / 8)
+			}
+		} else {
+			tileY = tileY + 8*64
+			tileX = 64 * (p.AttackPos / 6)
+		}
+	}
+	if p.IsPowerAttacking {
+		tileY = tileY - 8*64
+		tileX = 64 * (p.AttackPos / 6)
 	}
 	if p.IsDead() {
 		tileY = 20 * 64

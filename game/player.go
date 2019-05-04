@@ -14,8 +14,6 @@ type Player struct {
 	QuestMenuOpen        bool
 	CharacterMenuOpen    bool
 	MapMenuOpen          bool
-	Powers               map[string]*PlayerPower
-	CurrentPower         *PlayerPower
 	LastRegenerationTime time.Time
 }
 
@@ -106,7 +104,11 @@ func (p *Player) Move(g *Game) {
 		}
 		p.Talk(g, posTo)
 		p.Take(g, posTo)
-		p.Attack(g, posTo)
+		if !p.IsTalking && !p.IsTaking {
+			if p.Attack(g, posTo) {
+				g.GetEventManager().Dispatch(&Event{Action: ActionAttack})
+			}
+		}
 	case Power:
 		p.PowerAttack(g)
 	default:
@@ -143,57 +145,6 @@ func (p *Player) WalkRight() {
 	p.X++
 	p.Xb = CaseLen
 	go p.moveRight()
-}
-
-func (p *Player) Attack(g *Game, posToAttack Pos) {
-	if !p.IsTalking && !p.IsTaking {
-		level := g.Level
-		p.IsMoving = true
-		p.IsAttacking = true
-		go func(p *Player) {
-			for i := CaseLen; i > 0; i = i - 2 {
-				p.adaptSpeed()
-			}
-			p.IsMoving = false
-			p.IsAttacking = false
-		}(p)
-		if isThereAMonster(level, posToAttack) {
-			g.GetEventManager().Dispatch(&Event{Action: ActionAttack})
-			m := level.Monsters[posToAttack]
-			m.TakeDamage(g, p.CalculateAttackScore())
-			p.Strength.RaiseXp(2, g)
-		}
-	}
-}
-
-func (p *Player) PowerAttack(g *Game) {
-	if p.Energy.Current > 0 {
-		p.IsMoving = true
-		p.IsPowerAttacking = true
-		go func(p *Player) {
-			for i := CaseLen; i > 0; i = i - 2 {
-				p.adaptSpeed()
-			}
-			p.IsMoving = false
-			p.IsPowerAttacking = false
-			p.Energy.RaiseXp(10, g)
-		}(p)
-		switch p.CurrentPower.Type {
-		case PowerEnergyBall:
-			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerEnergyBall}})
-			g.Level.MakeEnergyball(p.Pos, p.LookAt, p.CurrentPower.Strength, p.CurrentPower.Speed)
-			p.Energy.Current -= p.CurrentPower.Energy
-			p.Will.RaiseXp(1, g)
-		case PowerInvocation:
-			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerInvocation}})
-			if g.Level.MakeInvocation(p.Pos, p.LookAt, p.CurrentPower) {
-				p.Energy.Current -= p.CurrentPower.Energy
-				p.Will.RaiseXp(1, g)
-				p.Charisma.RaiseXp(1, g)
-			}
-		default:
-		}
-	}
 }
 
 func (p *Player) TakeDamage(g *Game, damage int) {

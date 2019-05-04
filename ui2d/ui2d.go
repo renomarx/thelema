@@ -75,6 +75,10 @@ func NewUI(g *game.Game) *UI {
 
 	ui.playerTextures = make(map[string]*sdl.Texture)
 	ui.playerTextures["asmodeus"] = ui.imgFileToTexture("ui2d/assets/player/asmodeus.png")
+	ui.playerTextures["asmodeus_with_knife"] = ui.imgFileToTexture("ui2d/assets/player/asmodeus_with_knife.png")
+	ui.playerTextures["asmodeus_with_bow"] = ui.imgFileToTexture("ui2d/assets/player/asmodeus_with_bow.png")
+	ui.playerTextures["asmodeus_with_spear"] = ui.imgFileToTexture("ui2d/assets/player/asmodeus_with_spear.png")
+	ui.playerTextures["asmodeus_with_wand"] = ui.imgFileToTexture("ui2d/assets/player/asmodeus_with_wand.png")
 	ui.playerTextures["kali"] = ui.imgFileToTexture("ui2d/assets/player/kali.png")
 	ui.playerTextures["baal"] = ui.imgFileToTexture("ui2d/assets/player/baal.png")
 	ui.playerTextures["lilith"] = ui.imgFileToTexture("ui2d/assets/player/lilith.png")
