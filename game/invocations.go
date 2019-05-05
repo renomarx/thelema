@@ -1,6 +1,7 @@
 package game
 
 import "time"
+import "math/rand"
 
 type Invoked struct {
 	Character
@@ -35,16 +36,16 @@ func NewFox(p Pos, lifetime int) *Invoked {
 	monster := &Invoked{}
 	monster.Rune = rune(Fox)
 	monster.Name = "Invoked Fox"
-	monster.Health.Init(300)
-	monster.Energy.Init(300)
-	monster.Strength.Init(40)
-	monster.Dexterity.Init(40)
-	monster.Will.Init(40)
-	monster.Intelligence.Init(40)
+	monster.Health.Init(200)
+	monster.Energy.Init(200)
+	monster.Strength.Init(30)
+	monster.Dexterity.Init(30)
+	monster.Will.Init(20)
+	monster.Intelligence.Init(20)
 	monster.Luck.Init(20)
 	monster.Beauty.Init(0)
 	monster.Speed.Init(10)
-	monster.VisionRange = 3
+	monster.VisionRange = 5
 	monster.ActionPoints = 0.0
 	monster.Pos = p
 	monster.Xb = 0
@@ -151,6 +152,7 @@ func (m *Invoked) TakeDamage(g *Game, damage int) {
 	}
 	m.Health.Current -= damage
 	g.MakeExplosion(m.Pos, damage, 50)
+	m.ParalyzedTime = rand.Intn(damage) * 10
 }
 
 func (m *Invoked) Die(level *Level) {
