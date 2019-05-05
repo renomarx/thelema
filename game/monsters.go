@@ -1,7 +1,6 @@
 package game
 
 import "time"
-import "math"
 import "math/rand"
 
 type Monster struct {
@@ -62,21 +61,25 @@ func (m *Monster) Update(g *Game) {
 }
 
 func (m *Monster) getTargetPos(g *Game) Pos {
-	level := g.Level
+	l := g.Level
 	if m.target != nil {
-		_, monsterExists := level.Invocations[m.target.Pos]
+		_, monsterExists := l.Invocations[m.target.Pos]
 		if !monsterExists {
 			m.target = nil
 		}
 	}
-	for mmpos, mm := range level.Invocations {
-		if math.Abs(float64(m.Pos.X-mmpos.X)) < float64(m.VisionRange) || math.Abs(float64(m.Pos.Y-mmpos.Y)) < float64(m.VisionRange) {
-			m.target = mm
-			return mmpos
+
+	for y := m.Y - m.VisionRange; y < m.Y+m.VisionRange; y++ {
+		for x := m.X - m.VisionRange; x < m.X+m.VisionRange; x++ {
+			mm, e := l.Invocations[Pos{X: x, Y: y}]
+			if e {
+				m.target = mm
+				return Pos{X: x, Y: y}
+			}
+			if l.Player.Pos.X == x && l.Player.Pos.Y == y {
+				return l.Player.Pos
+			}
 		}
-	}
-	if math.Abs(float64(m.Pos.X-level.Player.Pos.X)) < float64(m.VisionRange) || math.Abs(float64(m.Pos.Y-level.Player.Pos.Y)) < float64(m.VisionRange) {
-		return level.Player.Pos
 	}
 	return m.Pos
 }
