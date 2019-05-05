@@ -216,14 +216,14 @@ func (c *Character) PowerAttack(g *Game) {
 		c.IsPowerAttacking = true
 		go func(c *Character, g *Game) {
 			for c.AttackPos = 0; c.AttackPos < CaseLen; c.AttackPos++ {
-				c.adaptSpeed()
+				c.CurrentPower.adaptSpeed()
 			}
 			c.IsMoving = false
 			c.IsPowerAttacking = false
 			switch c.CurrentPower.Type {
 			case PowerEnergyBall:
 				g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerEnergyBall}})
-				g.Level.MakeEnergyball(c.Pos, c.LookAt, c.CalculatePowerAttackScore(), c.CurrentPower.Speed)
+				g.Level.MakeEnergyball(c.Pos, c.LookAt, c.CalculatePowerAttackScore())
 				c.Energy.Current -= c.CurrentPower.Energy
 				c.Will.RaiseXp(1, g)
 				c.Energy.RaiseXp(10, g)

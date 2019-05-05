@@ -1,7 +1,6 @@
 package game
 
 import "time"
-import "math"
 
 type Invoked struct {
 	Character
@@ -25,27 +24,27 @@ func (level *Level) MakeInvocation(p Pos, dir InputType, pp *PlayerPower) bool {
 		np.Y++
 	}
 	if canGo(level, np) {
-		m := NewFox(np, pp)
+		m := NewFox(np, pp.Lifetime)
 		level.Invocations[np] = m
 		return true
 	}
 	return false
 }
 
-func NewFox(p Pos, pp *PlayerPower) *Invoked {
+func NewFox(p Pos, lifetime int) *Invoked {
 	monster := &Invoked{}
 	monster.Rune = rune(Fox)
 	monster.Name = "Invoked Fox"
-	monster.Health.Init(pp.Strength)
-	monster.Energy.Init(pp.Strength)
-	monster.Strength.Init(pp.Strength / 10)
-	monster.Dexterity.Init(pp.Strength / 10)
-	monster.Will.Init(pp.Strength / 10)
-	monster.Intelligence.Init(pp.Strength / 10)
+	monster.Health.Init(300)
+	monster.Energy.Init(300)
+	monster.Strength.Init(40)
+	monster.Dexterity.Init(40)
+	monster.Will.Init(40)
+	monster.Intelligence.Init(40)
 	monster.Luck.Init(20)
 	monster.Beauty.Init(0)
-	monster.Speed.Init(pp.Speed)
-	monster.VisionRange = 5
+	monster.Speed.Init(10)
+	monster.VisionRange = 3
 	monster.ActionPoints = 0.0
 	monster.Pos = p
 	monster.Xb = 0
@@ -53,7 +52,7 @@ func NewFox(p Pos, pp *PlayerPower) *Invoked {
 	monster.CreatedAt = time.Now()
 	monster.LastActionTime = time.Now()
 	monster.IsMoving = false
-	monster.Lifetime = pp.Lifetime
+	monster.Lifetime = lifetime
 
 	return monster
 }
@@ -90,20 +89,23 @@ func (m *Invoked) Update(g *Game) {
 	m.LastActionTime = time.Now()
 }
 
-func (m *Invoked) getTargetPos(level *Level) Pos {
+func (m *Invoked) getTargetPos(l *Level) Pos {
 	if m.target != nil {
-		_, monsterExists := level.Monsters[m.target.Pos]
+		_, monsterExists := l.Monsters[m.target.Pos]
 		if !monsterExists {
 			m.target = nil
 		}
 	}
-	for mmpos, mm := range level.Monsters {
-		if math.Abs(float64(m.Pos.X-mmpos.X)) < float64(m.VisionRange) || math.Abs(float64(m.Pos.Y-mmpos.Y)) < float64(m.VisionRange) {
-			m.target = mm
-			return mmpos
+	for y := m.Y - m.VisionRange; y < m.Y+m.VisionRange; y++ {
+		for x := m.X - m.VisionRange; x < m.X+m.VisionRange; x++ {
+			mm, e := l.Monsters[Pos{X: x, Y: y}]
+			if e {
+				m.target = mm
+				return Pos{X: x, Y: y}
+			}
 		}
 	}
-	return level.Player.Pos
+	return l.Player.Pos
 }
 
 func (m *Invoked) canMove(to Pos, level *Level) bool {

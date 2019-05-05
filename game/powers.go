@@ -1,6 +1,7 @@
 package game
 
 import "sort"
+import "time"
 
 type PowerType string
 
@@ -21,6 +22,10 @@ type PlayerPower struct {
 	Description string
 }
 
+func (pow *PlayerPower) adaptSpeed() {
+	time.Sleep(time.Duration(CharacterDeltaTime/pow.Speed) * time.Millisecond)
+}
+
 func (p *Player) NewPower(powername string, g *Game) {
 	p.newPowerRaw(powername)
 	pp := p.Powers[powername]
@@ -38,16 +43,16 @@ func (p *Player) newPowerRaw(powername string) {
 			p.Powers[string(PowerEnergyBall)] = &PlayerPower{Type: PowerEnergyBall, Speed: 10, Energy: 30, Tile: Energyball,
 				Description: "Boule d'énergie. Explose quand recontre un obstacle ou un ennemi."}
 		case PowerInvocation:
-			p.Powers[string(PowerInvocation)] = &PlayerPower{Type: PowerInvocation, Strength: 100, Speed: 10, Energy: 100, Lifetime: 15, Tile: Fox,
+			p.Powers[string(PowerInvocation)] = &PlayerPower{Type: PowerInvocation, Strength: 100, Speed: 5, Energy: 100, Lifetime: 15, Tile: Fox,
 				Description: "Invoque un familier qui attaque vos ennemis et attire leur attention."}
 		case PowerStorm:
-			p.Powers[string(PowerStorm)] = &PlayerPower{Type: PowerStorm, Speed: 10, Energy: 50, Lifetime: 2, Tile: Storm, Range: 7,
+			p.Powers[string(PowerStorm)] = &PlayerPower{Type: PowerStorm, Speed: 12, Energy: 50, Lifetime: 2, Tile: Storm, Range: 7,
 				Description: "Crée un éclair devant vous qui blesse vos ennemis durant un court laps de temps."}
 		case PowerFlames:
-			p.Powers[string(PowerFlames)] = &PlayerPower{Type: PowerFlames, Speed: 10, Energy: 200, Lifetime: 3, Tile: Flames, Range: 5,
+			p.Powers[string(PowerFlames)] = &PlayerPower{Type: PowerFlames, Speed: 3, Energy: 200, Lifetime: 3, Tile: Flames, Range: 5,
 				Description: "Crée un incendie tout autour de vous qui blesse vos ennemis durant un court laps de temps."}
 		case PowerHealing:
-			p.Powers[string(PowerHealing)] = &PlayerPower{Type: PowerHealing, Speed: 10, Energy: 20, Tile: Healing,
+			p.Powers[string(PowerHealing)] = &PlayerPower{Type: PowerHealing, Speed: 4, Energy: 20, Tile: Healing,
 				Description: "Régénère votre santé."}
 		}
 	}

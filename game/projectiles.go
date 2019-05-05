@@ -11,12 +11,12 @@ type Projectile struct {
 	Direction InputType
 }
 
-func (level *Level) MakeEnergyball(p Pos, dir InputType, size int, speed int) {
+func (level *Level) MakeEnergyball(p Pos, dir InputType, size int) {
 	eb := &Projectile{}
 	eb.Rune = rune(Energyball)
 	eb.Blocking = false
 	eb.Size = size
-	eb.Speed = speed
+	eb.Speed = 10
 	eb.Pos = p
 	eb.Direction = dir
 	if eb.Direction == Left {
