@@ -66,29 +66,3 @@ func closeDoor(g *Game, pos Pos) {
 		g.GetEventManager().Dispatch(&Event{Action: ActionCloseDoor})
 	}
 }
-
-func (c *Character) moveFromTo(from Pos, to Pos) {
-	c.Pos = to
-	if from.Y == c.Pos.Y {
-		if from.X < c.Pos.X {
-			c.LookAt = Right
-			c.Xb = CaseLen
-			go c.moveRight()
-		} else if from.X > c.Pos.X {
-			c.LookAt = Left
-			c.Xb = -1 * CaseLen
-			go c.moveLeft()
-		}
-	}
-	if from.X == c.Pos.X {
-		if from.Y < c.Pos.Y {
-			c.LookAt = Down
-			c.Yb = CaseLen
-			go c.moveDown()
-		} else if from.Y > c.Pos.Y {
-			c.LookAt = Up
-			c.Yb = -1 * CaseLen
-			go c.moveUp()
-		}
-	}
-}

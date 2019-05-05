@@ -1,6 +1,7 @@
 package game
 
 import "time"
+import "math/rand"
 
 type Player struct {
 	Character
@@ -159,6 +160,7 @@ func (p *Player) TakeDamage(g *Game, damage int) {
 
 	g.GetEventManager().Dispatch(&Event{
 		Action: ActionHurt})
+	p.ParalyzedTime = rand.Intn(damage) * 10
 }
 
 func (p *Player) Die(g *Game) {

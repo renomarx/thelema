@@ -144,6 +144,7 @@ func (m *Monster) TakeDamage(g *Game, damage int) {
 	}
 	m.Health.Current -= damage
 	g.MakeExplosion(m.Pos, damage, 50)
+	m.ParalyzedTime = rand.Intn(damage) * 10
 }
 
 func (m *Monster) Die(level *Level) {
