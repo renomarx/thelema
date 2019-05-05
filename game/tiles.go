@@ -50,7 +50,12 @@ const (
 	Dragon   Tile = 'D'
 	God      Tile = 'G'
 
+	// Quests Objects
+	Alcohol Tile = 'c'
+	Herbs   Tile = 'v'
+
 	// Usables
+	Gold      Tile = 'g'
 	Senzu     Tile = 'z'
 	Explosion Tile = 'x'
 	Book      Tile = 'b'
@@ -59,6 +64,7 @@ const (
 	Energyball Tile = 'p'
 	Flames     Tile = 'f'
 	Storm      Tile = 't'
+	Healing    Tile = 'e'
 
 	// Weapons
 	Dagger Tile = 'd'

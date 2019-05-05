@@ -8,6 +8,7 @@ const PowerEnergyBall = "energy_ball"
 const PowerInvocation = "invocation"
 const PowerFlames = "flames"
 const PowerStorm = "storm"
+const PowerHealing = "healing"
 
 type PlayerPower struct {
 	Type        PowerType
@@ -45,6 +46,9 @@ func (p *Player) newPowerRaw(powername string) {
 		case PowerFlames:
 			p.Powers[string(PowerFlames)] = &PlayerPower{Type: PowerFlames, Speed: 10, Energy: 200, Lifetime: 3, Tile: Flames, Range: 5,
 				Description: "Crée un incendie tout autour de vous qui blesse vos ennemis durant un court laps de temps."}
+		case PowerHealing:
+			p.Powers[string(PowerHealing)] = &PlayerPower{Type: PowerHealing, Speed: 10, Energy: 20, Tile: Healing,
+				Description: "Régénère votre santé."}
 		}
 	}
 }

@@ -17,7 +17,7 @@ func (ui *UI) DrawInventory() {
 		offsetH += h + 10
 		gold := strconv.Itoa(inventory.Gold)
 		ui.renderer.Copy(ui.textureAtlas,
-			&ui.textureIndex[game.Tile('g')][0],
+			&ui.textureIndex[game.Gold][0],
 			&sdl.Rect{X: int32(offsetX), Y: offsetH, W: Res, H: Res})
 		_, h = ui.DrawText(gold, TextSizeM, ColorDisabled, (PlayerMenuOffsetX+1)*Res, offsetH)
 		offsetH += h + Res

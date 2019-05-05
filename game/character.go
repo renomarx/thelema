@@ -247,6 +247,16 @@ func (c *Character) PowerAttack(g *Game) {
 				c.Energy.Current -= c.CurrentPower.Energy
 				c.Will.RaiseXp(4, g)
 				c.Energy.RaiseXp(50, g)
+			case PowerHealing:
+				g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
+				g.MakeEffect(c.Pos, rune(Healing), 200)
+				c.Health.Current += c.CalculatePowerAttackScore()
+				if c.Health.Current > c.Health.Initial {
+					c.Health.Current = c.Health.Initial
+				}
+				c.Energy.Current -= c.CurrentPower.Energy
+				c.Will.RaiseXp(1, g)
+				c.Energy.RaiseXp(10, g)
 			default:
 			}
 		}(c, g)

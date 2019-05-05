@@ -142,6 +142,24 @@ func (g *Game) MakeFlame(p Pos, damages int, lifetime int) {
 	}()
 }
 
+func (g *Game) MakeEffect(p Pos, r rune, lifetime int) {
+	level := g.Level
+	eff := &Effect{}
+	eff.Rune = r
+	eff.Blocking = false
+	eff.TileIdx = 0
+
+	Mux.Lock()
+	level.Effects[p] = eff
+	Mux.Unlock()
+	go func() {
+		time.Sleep(time.Duration(lifetime) * time.Millisecond)
+		Mux.Lock()
+		delete(level.Effects, p)
+		Mux.Unlock()
+	}()
+}
+
 func (e *Effect) Update(g *Game) {
 	if e.Damages > 0 {
 		e.MakeDamage(g)
