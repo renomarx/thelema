@@ -21,6 +21,13 @@ func isThereAnInvocation(level *Level, pos Pos) bool {
 	return exists
 }
 
+func isThereAFriend(level *Level, pos Pos) bool {
+	Mux.Lock()
+	_, exists := level.Friends[pos]
+	Mux.Unlock()
+	return exists
+}
+
 func isThereABlockingObject(level *Level, pos Pos) bool {
 	if obj, ok := level.Objects[pos]; ok {
 		// There is an object !

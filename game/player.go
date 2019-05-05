@@ -289,3 +289,10 @@ func (p *Player) TakeBook(o *Object, g *Game) bool {
 
 	return true
 }
+
+func (p *Player) Recruit(pnj *Pnj, g *Game) {
+	Mux.Lock()
+	delete(g.Level.Pnjs, pnj.Pos)
+	g.Level.MakeFriend(pnj)
+	Mux.Unlock()
+}

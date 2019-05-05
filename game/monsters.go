@@ -5,7 +5,7 @@ import "math/rand"
 
 type Monster struct {
 	Character
-	target *Invoked
+	target *Character
 }
 
 func NewMonster(mt *MonsterType, p Pos) *Monster {
@@ -51,6 +51,10 @@ func (m *Monster) Update(g *Game) {
 			g.GetEventManager().Dispatch(&Event{Action: ActionRoar, Payload: map[string]string{"monster": string(m.Rune)}})
 			m.AttackInvocation(level.Invocations[positions[1]], g)
 		}
+		if m.canAttackFriend(positions[1], level) {
+			g.GetEventManager().Dispatch(&Event{Action: ActionRoar, Payload: map[string]string{"monster": string(m.Rune)}})
+			m.AttackFriend(level.Friends[positions[1]], g)
+		}
 		if m.canAttackPlayer(positions[1], level) {
 			g.GetEventManager().Dispatch(&Event{Action: ActionRoar, Payload: map[string]string{"monster": string(m.Rune)}})
 			m.AttackPlayer(level.Player, g)
@@ -73,7 +77,12 @@ func (m *Monster) getTargetPos(g *Game) Pos {
 		for x := m.X - m.VisionRange; x < m.X+m.VisionRange; x++ {
 			mm, e := l.Invocations[Pos{X: x, Y: y}]
 			if e {
-				m.target = mm
+				m.target = &mm.Character
+				return Pos{X: x, Y: y}
+			}
+			f, ef := l.Friends[Pos{X: x, Y: y}]
+			if ef {
+				m.target = &f.Character
 				return Pos{X: x, Y: y}
 			}
 			if l.Player.Pos.X == x && l.Player.Pos.Y == y {
@@ -89,6 +98,9 @@ func (m *Monster) canMove(to Pos, level *Level) bool {
 		return false
 	}
 	if isThereAnInvocation(level, to) {
+		return false
+	}
+	if isThereAFriend(level, to) {
 		return false
 	}
 	return true
@@ -129,6 +141,23 @@ func (m *Monster) canAttackInvocation(to Pos, level *Level) bool {
 }
 
 func (m *Monster) AttackInvocation(p *Invoked, g *Game) {
+	m.IsMoving = true
+	m.IsAttacking = true
+	go func(m *Monster) {
+		for i := 0; i < CaseLen; i++ {
+			m.adaptSpeed()
+		}
+		m.IsMoving = false
+		m.IsAttacking = false
+	}(m)
+	p.TakeDamage(g, m.CalculateAttackScore())
+}
+
+func (m *Monster) canAttackFriend(to Pos, level *Level) bool {
+	return isThereAFriend(level, to)
+}
+
+func (m *Monster) AttackFriend(p *Friend, g *Game) {
 	m.IsMoving = true
 	m.IsAttacking = true
 	go func(m *Monster) {

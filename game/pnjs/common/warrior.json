@@ -3,10 +3,15 @@
   "nodes" : {
     "greetings": {
       "initial": true,
-      "message": "Hello, I'm a Warrior.",
+      "message": "Bonjour.",
       "choices": [
         {
-          "cmd": "Respect."
+          "cmd": "J'ai besoin de votre aide (recruter)",
+          "required": {"beauty": 25, "charisma": 25},
+          "actions": ["recruit"]
+        },
+        {
+          "cmd": "Je dois y aller."
         }
       ]
     }

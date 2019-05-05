@@ -32,6 +32,8 @@ type StoryChoice struct {
 		StepsMandatory   []string `json:"steps_mandatory"`
 		StepsFullfilling []string `json:"steps_fullfilling"`
 	} `json:"quest"`
+	Required map[string]int `json:"required"`
+	Actions  []string       `json:"actions"`
 }
 
 func (p *Pnj) LoadDialogs(filename string) {
@@ -120,6 +122,28 @@ func (n *StoryNode) filterPossibleChoices(p *Player) {
 			for _, stepID := range choice.Quest.StepsMandatory {
 				if !p.IsQuestOpenStepFinished(choice.Quest.ID, stepID) {
 					isPossible = false
+				}
+			}
+		}
+		if len(choice.Required) > 0 {
+			for ch, val := range choice.Required {
+				switch ch {
+				case "intelligence":
+					if p.Intelligence.Current < val {
+						isPossible = false
+					}
+				case "charisma":
+					if p.Charisma.Current < val {
+						isPossible = false
+					}
+				case "will":
+					if p.Will.Current < val {
+						isPossible = false
+					}
+				case "beauty":
+					if p.Beauty.Current < val {
+						isPossible = false
+					}
 				}
 			}
 		}

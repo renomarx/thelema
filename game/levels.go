@@ -18,6 +18,7 @@ type Level struct {
 	Projectiles map[Pos]*Projectile
 	Pnjs        map[Pos]*Pnj
 	Invocations map[Pos]*Invoked
+	Friends     map[Pos]*Friend
 	Paused      bool
 	PRay        int
 }
@@ -48,6 +49,7 @@ func NewLevel(levelType string) *Level {
 	level.Projectiles = make(map[Pos]*Projectile)
 	level.Pnjs = make(map[Pos]*Pnj)
 	level.Invocations = make(map[Pos]*Invoked)
+	level.Friends = make(map[Pos]*Friend)
 	level.PRay = 100
 	return level
 }
@@ -61,6 +63,7 @@ func (g *Game) UpdateLevel() {
 		g.handleMonsters()
 		g.handlePnjs()
 		g.handleInvocations()
+		g.handleFriends()
 		g.handleProjectiles()
 		g.handleEffects()
 		if input.Typ == Select {
@@ -102,6 +105,12 @@ func (g *Game) handlePnjs() {
 	}
 }
 
+func (g *Game) handleFriends() {
+	for _, m := range g.Level.Friends {
+		m.Update(g)
+	}
+}
+
 func (g *Game) handleProjectiles() {
 	for _, projectile := range g.Level.Projectiles {
 		projectile.Update(g)
@@ -120,8 +129,16 @@ func (level *Level) OpenPortal(g *Game, pos Pos) {
 		p := level.Player
 		p.X = port.PosTo.X
 		p.Y = port.PosTo.Y
+		levelFrom := *g.Level
 		g.Level = g.Levels[port.LevelTo]
 		g.Level.Player = p
+		for oldP, f := range levelFrom.Friends {
+			f.Pos = port.PosTo
+			g.Level.Friends[port.PosTo] = f
+			Mux.Lock()
+			delete(levelFrom.Friends, oldP)
+			Mux.Unlock()
+		}
 
 		g.GetEventManager().Dispatch(&Event{
 			Action:  ActionChangeLevel,

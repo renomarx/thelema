@@ -6,14 +6,23 @@ import "math/rand"
 type Pnj struct {
 	Character
 	Talker
-	TalkingTo *Player
+	TalkingTo      *Player
+	IsPlayerFriend bool
 }
 
 func NewPnj(p Pos, name string, voice string) *Pnj {
 	pnj := &Pnj{}
 	pnj.Name = name
-	pnj.Health.Init(50)
-	pnj.Strength.Init(5)
+	pnj.Health.Init(200)
+	pnj.Energy.Init(200)
+	pnj.Strength.Init(20)
+	pnj.Dexterity.Init(20)
+	pnj.Beauty.Init(20)
+	pnj.Will.Init(20)
+	pnj.Intelligence.Init(20)
+	pnj.Charisma.Init(20)
+	pnj.RegenerationSpeed.Init(1)
+	pnj.Luck.Init(10)
 	pnj.Speed.Init(4)
 	pnj.ActionPoints = 0.0
 	pnj.Pos = p
@@ -24,6 +33,7 @@ func NewPnj(p Pos, name string, voice string) *Pnj {
 	pnj.LookAt = Left
 	pnj.IsTalking = false
 	pnj.Voice = voice
+	pnj.Weapon = &Weapon{Tile: Spear, Name: "Lance", Typ: WeaponTypeSpear, Damages: 20, Speed: 12}
 
 	return pnj
 }
@@ -76,6 +86,12 @@ func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
 		if choice.Cmd == cmd {
 			for _, stepID := range choice.Quest.StepsFullfilling {
 				p.finishQuestStep(choice.Quest.ID, stepID, g)
+			}
+			for _, action := range choice.Actions {
+				switch action {
+				case "recruit":
+					p.Recruit(pnj, g)
+				}
 			}
 			if choice.NodeId == "" {
 				pnj.StopTalking()
