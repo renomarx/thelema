@@ -62,6 +62,7 @@ func (g *Game) UpdateLevel() {
 		g.handlePnjs()
 		g.handleInvocations()
 		g.handleProjectiles()
+		g.handleEffects()
 		if input.Typ == Select {
 			g.OpenPlayerMenu()
 		}
@@ -104,6 +105,12 @@ func (g *Game) handlePnjs() {
 func (g *Game) handleProjectiles() {
 	for _, projectile := range g.Level.Projectiles {
 		projectile.Update(g)
+	}
+}
+
+func (g *Game) handleEffects() {
+	for _, eff := range g.Level.Effects {
+		eff.Update(g)
 	}
 }
 

@@ -10,11 +10,12 @@ const (
 )
 
 type Weapon struct {
-	Typ     string
-	Name    string
-	Tile    Tile
-	Damages int
-	Speed   int
+	Typ             string
+	Name            string
+	Tile            Tile
+	Damages         int
+	Speed           int
+	MagickalDamages int
 }
 
 func (w *Weapon) adaptSpeed() {

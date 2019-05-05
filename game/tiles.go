@@ -57,6 +57,8 @@ const (
 
 	// Powers
 	Energyball Tile = 'p'
+	Flames     Tile = 'f'
+	Storm      Tile = 't'
 
 	// Weapons
 	Dagger Tile = 'd'

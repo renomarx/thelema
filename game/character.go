@@ -189,22 +189,42 @@ func (c *Character) PowerAttack(g *Game) {
 			}
 			c.IsMoving = false
 			c.IsPowerAttacking = false
-			c.Energy.RaiseXp(10, g)
 			switch c.CurrentPower.Type {
 			case PowerEnergyBall:
 				g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerEnergyBall}})
-				g.Level.MakeEnergyball(c.Pos, c.LookAt, c.CurrentPower.Strength, c.CurrentPower.Speed)
+				g.Level.MakeEnergyball(c.Pos, c.LookAt, c.CalculatePowerAttackScore(), c.CurrentPower.Speed)
 				c.Energy.Current -= c.CurrentPower.Energy
 				c.Will.RaiseXp(1, g)
+				c.Energy.RaiseXp(10, g)
 			case PowerInvocation:
 				g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerInvocation}})
 				if g.Level.MakeInvocation(c.Pos, c.LookAt, c.CurrentPower) {
 					c.Energy.Current -= c.CurrentPower.Energy
 					c.Will.RaiseXp(1, g)
 					c.Charisma.RaiseXp(1, g)
+					c.Energy.RaiseXp(50, g)
 				}
+			case PowerStorm:
+				g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerStorm}})
+				g.MakeRangeStorm(c.Pos, c.CalculatePowerAttackScore(), c.LookAt, c.CurrentPower.Lifetime, c.CurrentPower.Range)
+				c.Energy.Current -= c.CurrentPower.Energy
+				c.Will.RaiseXp(2, g)
+				c.Energy.RaiseXp(20, g)
+			case PowerFlames:
+				g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerFlames}})
+				g.MakeFlames(c.Pos, c.CalculatePowerAttackScore(), c.CurrentPower.Lifetime, c.CurrentPower.Range)
+				c.Energy.Current -= c.CurrentPower.Energy
+				c.Will.RaiseXp(4, g)
+				c.Energy.RaiseXp(50, g)
 			default:
 			}
 		}(c, g)
 	}
+}
+
+func (c *Character) CalculatePowerAttackScore() int {
+	score := float64(c.Will.Current) * (1.0 + float64(c.Luck.Current)/100.0)
+	iscore := int(score)
+	iscore += c.Weapon.MagickalDamages
+	return iscore
 }

@@ -10,6 +10,7 @@ type MonsterType struct {
 	Luck        int
 	VisionRange int
 	Probability int
+	Powers      []string
 }
 
 func Bestiary() []*MonsterType {

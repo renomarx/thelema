@@ -39,13 +39,17 @@ func newPlayer(speed, health, energy, stg, dex, bea, wil, intel, cha, rg int) *P
 	player.Inventory = NewInventory()
 	player.Library = NewLibrary()
 	player.Powers = make(map[string]*PlayerPower)
-	player.Powers[string(PowerEnergyBall)] = &PlayerPower{Type: PowerEnergyBall, Strength: 50, Speed: 10, Energy: 10, Tile: Energyball}
+	// FIXME
+	player.newPowerRaw(PowerEnergyBall)
+	player.newPowerRaw(PowerFlames)
+	player.newPowerRaw(PowerStorm)
+	player.newPowerRaw(PowerInvocation)
 	player.CurrentPower = player.Powers[string(PowerEnergyBall)]
 	player.LastRegenerationTime = time.Now()
 	player.LoadPlayerMenu()
 	player.Weapons = append(player.Weapons, &Weapon{Tile: Dagger, Typ: WeaponTypeDagger, Damages: 7, Speed: 20})
 	player.Weapons = append(player.Weapons, &Weapon{Tile: Bow, Typ: WeaponTypeBow, Damages: 10, Speed: 10})
-	player.Weapons = append(player.Weapons, &Weapon{Tile: Wand, Typ: WeaponTypeWand, Damages: 5, Speed: 25})
+	player.Weapons = append(player.Weapons, &Weapon{Tile: Wand, Typ: WeaponTypeWand, Speed: 10, MagickalDamages: 20})
 	player.Weapons = append(player.Weapons, &Weapon{Tile: Spear, Typ: WeaponTypeSpear, Damages: 20, Speed: 12})
 	player.Weapon = player.Weapons[0]
 

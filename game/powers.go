@@ -6,6 +6,8 @@ type PowerType string
 
 const PowerEnergyBall = "energy_ball"
 const PowerInvocation = "invocation"
+const PowerFlames = "flames"
+const PowerStorm = "storm"
 
 type PlayerPower struct {
 	Type     PowerType
@@ -14,23 +16,32 @@ type PlayerPower struct {
 	Speed    int
 	Energy   int
 	Lifetime int
+	Range    int
 }
 
 func (p *Player) NewPower(powername string, g *Game) {
-	_, exists := p.Powers[powername]
-	if !exists {
-		switch powername {
-		case PowerEnergyBall:
-			p.Powers[string(PowerEnergyBall)] = &PlayerPower{Type: PowerEnergyBall, Strength: 50, Speed: 10, Energy: 10, Tile: Energyball}
-		case PowerInvocation:
-			p.Powers[string(PowerInvocation)] = &PlayerPower{Type: PowerInvocation, Strength: 100, Speed: 10, Energy: 100, Lifetime: 15, Tile: Fox}
-		}
-	}
+	p.newPowerRaw(powername)
 	pp := p.Powers[powername]
 	g.GetEventManager().Dispatch(&Event{
 		Message: "You learned power: '" + string(pp.Type) + "' with this book!",
 		Action:  ActionPower,
 		Payload: map[string]string{"type": string(pp.Type)}})
+}
+
+func (p *Player) newPowerRaw(powername string) {
+	_, exists := p.Powers[powername]
+	if !exists {
+		switch powername {
+		case PowerEnergyBall:
+			p.Powers[string(PowerEnergyBall)] = &PlayerPower{Type: PowerEnergyBall, Speed: 10, Energy: 30, Tile: Energyball}
+		case PowerInvocation:
+			p.Powers[string(PowerInvocation)] = &PlayerPower{Type: PowerInvocation, Strength: 100, Speed: 10, Energy: 100, Lifetime: 15, Tile: Fox}
+		case PowerStorm:
+			p.Powers[string(PowerStorm)] = &PlayerPower{Type: PowerStorm, Speed: 10, Energy: 50, Lifetime: 2, Tile: Storm, Range: 7}
+		case PowerFlames:
+			p.Powers[string(PowerFlames)] = &PlayerPower{Type: PowerFlames, Speed: 10, Energy: 200, Lifetime: 3, Tile: Flames, Range: 5}
+		}
+	}
 }
 
 func (p *Player) NextPower() {
