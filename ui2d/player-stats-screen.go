@@ -16,12 +16,24 @@ func (ui *UI) DrawPlayerStats() {
 			ColorActive,
 			10,
 			int32(offsetH))
-		ui.DrawText(
+		w += Res + 10
+		w2, _ := ui.DrawText(
 			"Energy : "+strconv.Itoa(p.Energy.Current)+"/"+strconv.Itoa(p.Energy.Initial),
 			TextSizeM,
 			ColorActive,
-			w+Res+10,
+			w,
 			int32(offsetH))
+		w += w2 + Res + 10
+
+		ui.renderer.Copy(ui.textureAtlas,
+			&ui.textureIndex[p.Weapon.Tile][0],
+			&sdl.Rect{X: int32(w), Y: int32(offsetH - 10), W: Res, H: Res})
+
+		w += Res + 10
+
+		ui.renderer.Copy(ui.textureAtlas,
+			&ui.textureIndex[p.CurrentPower.Tile][0],
+			&sdl.Rect{X: int32(w), Y: int32(offsetH - 10), W: Res, H: Res})
 	}
 }
 

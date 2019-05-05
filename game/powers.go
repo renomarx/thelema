@@ -10,13 +10,14 @@ const PowerFlames = "flames"
 const PowerStorm = "storm"
 
 type PlayerPower struct {
-	Type     PowerType
-	Tile     Tile
-	Strength int
-	Speed    int
-	Energy   int
-	Lifetime int
-	Range    int
+	Type        PowerType
+	Tile        Tile
+	Strength    int
+	Speed       int
+	Energy      int
+	Lifetime    int
+	Range       int
+	Description string
 }
 
 func (p *Player) NewPower(powername string, g *Game) {
@@ -33,13 +34,17 @@ func (p *Player) newPowerRaw(powername string) {
 	if !exists {
 		switch powername {
 		case PowerEnergyBall:
-			p.Powers[string(PowerEnergyBall)] = &PlayerPower{Type: PowerEnergyBall, Speed: 10, Energy: 30, Tile: Energyball}
+			p.Powers[string(PowerEnergyBall)] = &PlayerPower{Type: PowerEnergyBall, Speed: 10, Energy: 30, Tile: Energyball,
+				Description: "Boule d'énergie. Explose quand recontre un obstacle ou un ennemi."}
 		case PowerInvocation:
-			p.Powers[string(PowerInvocation)] = &PlayerPower{Type: PowerInvocation, Strength: 100, Speed: 10, Energy: 100, Lifetime: 15, Tile: Fox}
+			p.Powers[string(PowerInvocation)] = &PlayerPower{Type: PowerInvocation, Strength: 100, Speed: 10, Energy: 100, Lifetime: 15, Tile: Fox,
+				Description: "Invoque un familier qui attaque vos ennemis et attire leur attention."}
 		case PowerStorm:
-			p.Powers[string(PowerStorm)] = &PlayerPower{Type: PowerStorm, Speed: 10, Energy: 50, Lifetime: 2, Tile: Storm, Range: 7}
+			p.Powers[string(PowerStorm)] = &PlayerPower{Type: PowerStorm, Speed: 10, Energy: 50, Lifetime: 2, Tile: Storm, Range: 7,
+				Description: "Crée un éclair devant vous qui blesse vos ennemis durant un court laps de temps."}
 		case PowerFlames:
-			p.Powers[string(PowerFlames)] = &PlayerPower{Type: PowerFlames, Speed: 10, Energy: 200, Lifetime: 3, Tile: Flames, Range: 5}
+			p.Powers[string(PowerFlames)] = &PlayerPower{Type: PowerFlames, Speed: 10, Energy: 200, Lifetime: 3, Tile: Flames, Range: 5,
+				Description: "Crée un incendie tout autour de vous qui blesse vos ennemis durant un court laps de temps."}
 		}
 	}
 }

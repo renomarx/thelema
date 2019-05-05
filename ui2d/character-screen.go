@@ -98,7 +98,7 @@ func (ui *UI) DrawPlayerCharacter() {
 func (ui *UI) DrawPowers(offsetH int32) int32 {
 	p := ui.Game.Level.Player
 	var offsetX = int32(PlayerMenuOffsetX * Res)
-	_, h := ui.DrawText("Magies (gauche ou droite pour changer)", TextSizeL, ColorActive, offsetX, offsetH)
+	_, h := ui.DrawText("Magies (gauche ou droite pour changer)", TextSizeM, ColorGreen, offsetX, offsetH)
 	offsetH += h + 10
 
 	powernames := p.GetSortedPowernames()
@@ -115,8 +115,29 @@ func (ui *UI) DrawPowers(offsetH int32) int32 {
 			&ui.textureIndex[power.Tile][0],
 			&sdl.Rect{X: int32((PlayerMenuOffsetX + i) * Res), Y: offsetH, W: Res, H: Res})
 	}
-	//ui.DrawPower(p.CurrentPower, offsetH)
+	offsetH += 42
+	ui.DrawPower(p.CurrentPower, PlayerMenuOffsetX, offsetH)
 	offsetH += 32 + 40
+
+	return offsetH
+}
+
+func (ui *UI) DrawPower(power *game.PlayerPower, offsetX, offsetH int32) int32 {
+	_, h := ui.DrawText(
+		power.Description,
+		TextSizeM,
+		ColorActive,
+		offsetX*Res,
+		offsetH)
+
+	offsetH += h
+	_, h = ui.DrawText(
+		"Energy : "+strconv.Itoa(power.Energy),
+		TextSizeM,
+		ColorActive,
+		offsetX*Res,
+		offsetH)
+	offsetH += h
 
 	return offsetH
 }
@@ -124,7 +145,7 @@ func (ui *UI) DrawPowers(offsetH int32) int32 {
 func (ui *UI) DrawWeapons(offsetH int32) {
 	p := ui.Game.Level.Player
 	var offsetX = int32(PlayerMenuOffsetX * Res)
-	_, h := ui.DrawText("Armes (haut ou bas pour changer)", TextSizeL, ColorActive, offsetX, offsetH)
+	_, h := ui.DrawText("Armes (haut ou bas pour changer)", TextSizeM, ColorGreen, offsetX, offsetH)
 	offsetH += h + 10
 
 	for i, w := range p.Weapons {
@@ -138,6 +159,42 @@ func (ui *UI) DrawWeapons(offsetH int32) {
 			&ui.textureIndex[w.Tile][0],
 			&sdl.Rect{X: int32((PlayerMenuOffsetX + i) * Res), Y: offsetH, W: Res, H: Res})
 	}
+	offsetH += 42
+	ui.DrawWeapon(p.Weapon, PlayerMenuOffsetX, offsetH)
+}
+
+func (ui *UI) DrawWeapon(w *game.Weapon, offsetX, offsetH int32) int32 {
+	_, h := ui.DrawText(
+		w.Name,
+		TextSizeM,
+		ColorActive,
+		offsetX*Res,
+		offsetH)
+	offsetH += h
+
+	_, h = ui.DrawText(
+		"Damages (added) : "+strconv.Itoa(w.Damages),
+		TextSizeM,
+		ColorActive,
+		offsetX*Res,
+		offsetH)
+	_, h = ui.DrawText(
+		"Speed : "+strconv.Itoa(w.Speed),
+		TextSizeM,
+		ColorActive,
+		offsetX*Res+CharacteristicColumnLength,
+		offsetH)
+	offsetH += h
+
+	_, h = ui.DrawText(
+		"Magickal damages (added) : "+strconv.Itoa(w.MagickalDamages),
+		TextSizeM,
+		ColorActive,
+		offsetX*Res,
+		offsetH)
+	offsetH += h
+
+	return offsetH
 }
 
 func (ui *UI) drawCharacterBox() {
