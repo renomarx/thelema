@@ -10,10 +10,12 @@ func (wg *WorldGenerator) generateHouse(level *Level, pos Pos, mapName string, h
 	level.AddPortal(pos, &Portal{LevelTo: levelName, PosTo: npos})
 	nl.AddPortal(npos, &Portal{LevelTo: cityName, PosTo: pos})
 
-	wg.generatePnjs(nl, rand.Intn(2))
-	objects := []Tile{
-		Bread,
-		Water,
+	if levelName != FirstLevelName {
+		wg.generatePnjs(nl, rand.Intn(2))
+		objects := []Tile{
+			Bread,
+			Water,
+		}
+		wg.generateUsables(nl, objects, rand.Intn(3))
 	}
-	wg.generateUsables(nl, objects, rand.Intn(3))
 }
