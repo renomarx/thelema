@@ -23,18 +23,7 @@ const (
 	OceanDownSide  Tile = 'õ'
 	CityEntry      Tile = '>'
 	CityOut        Tile = '<'
-
-	// Houses
-	HouseWall        Tile = 'h'
-	HouseDoor        Tile = '='
-	HouseTop         Tile = 'Ħ'
-	HouseTopRight    Tile = 'Ĥ'
-	HouseTopLeft     Tile = 'ĥ'
-	HouseBottom      Tile = 'Ḫ'
-	HouseBottomRight Tile = 'Ḩ'
-	HouseBottomLeft  Tile = 'ḩ'
-	HouseRight       Tile = 'Ḧ'
-	HouseLeft        Tile = 'ḧ'
+	HouseDoor      Tile = '='
 
 	// Monsters and invocations
 	Rat      Tile = 'R'

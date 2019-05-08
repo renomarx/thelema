@@ -94,7 +94,7 @@ func (ui *UI) drawMapObject(pos game.Pos, tile game.Tile) {
 		g = 55
 		b = 55
 		rr = 1
-	case game.HouseWall:
+	case game.WhiteWall:
 		r = 136
 		g = 134
 		b = 131
