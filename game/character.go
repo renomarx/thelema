@@ -86,25 +86,43 @@ func (c *Character) adaptSpeed() {
 	time.Sleep(time.Duration(CharacterDeltaTime/c.Speed.Current) * time.Millisecond)
 }
 
+func (c *Character) DoLookAt(to Pos) {
+	from := c.Pos
+	if from.Y == to.Y {
+		if from.X < to.X {
+			c.LookAt = Right
+		} else if from.X > to.X {
+			c.LookAt = Left
+		}
+	}
+	if from.X == to.X {
+		if from.Y < to.Y {
+			c.LookAt = Down
+		} else if from.Y > to.Y {
+			c.LookAt = Up
+		}
+	}
+}
+
 func (c *Character) moveFromTo(from Pos, to Pos) {
 	c.Pos = to
-	if from.Y == c.Pos.Y {
-		if from.X < c.Pos.X {
+	if from.Y == to.Y {
+		if from.X < to.X {
 			c.LookAt = Right
 			c.Xb = CaseLen
 			go c.moveRight()
-		} else if from.X > c.Pos.X {
+		} else if from.X > to.X {
 			c.LookAt = Left
 			c.Xb = -1 * CaseLen
 			go c.moveLeft()
 		}
 	}
-	if from.X == c.Pos.X {
-		if from.Y < c.Pos.Y {
+	if from.X == to.X {
+		if from.Y < to.Y {
 			c.LookAt = Down
 			c.Yb = CaseLen
 			go c.moveDown()
-		} else if from.Y > c.Pos.Y {
+		} else if from.Y > to.Y {
 			c.LookAt = Up
 			c.Yb = -1 * CaseLen
 			go c.moveUp()
@@ -145,6 +163,7 @@ func (c *Character) IsDead() bool {
 }
 
 func (c *Character) Attack(g *Game, posToAttack Pos) bool {
+	c.DoLookAt(posToAttack)
 	if c.Weapon != nil {
 		switch c.Weapon.Typ {
 		case WeaponTypeDagger:

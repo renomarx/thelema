@@ -97,6 +97,9 @@ func (m *Friend) TakeDamage(g *Game, damage int) {
 
 func (m *Friend) Die(level *Level) {
 	m.isDead = true
+	Mux.Lock()
+	delete(level.Friends, m.Pos)
+	Mux.Unlock()
 }
 
 func (m *Friend) CanSee(level *Level, pos Pos) bool {

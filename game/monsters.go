@@ -82,7 +82,7 @@ func (m *Monster) getTargetPos(g *Game) Pos {
 				return Pos{X: x, Y: y}
 			}
 			f, ef := l.Friends[Pos{X: x, Y: y}]
-			if ef {
+			if ef && !f.IsDead() {
 				m.target = &f.Character
 				return Pos{X: x, Y: y}
 			}

@@ -1,6 +1,7 @@
 package game
 
 import "time"
+import "sync"
 
 type Effect struct {
 	Object
@@ -44,12 +45,12 @@ func (g *Game) MakeExplosion(p Pos, size int, lifetime int) {
 	Mux.Lock()
 	level.Effects[p] = eff
 	Mux.Unlock()
-	go func() {
+	go func(mux *sync.Mutex) {
 		time.Sleep(time.Duration(lifetime) * time.Millisecond)
-		Mux.Lock()
+		mux.Lock()
 		delete(level.Effects, p)
-		Mux.Unlock()
-	}()
+		mux.Unlock()
+	}(Mux)
 }
 
 func (g *Game) MakeRangeStorm(p Pos, damages int, dir InputType, lifetime int, rg int) {
@@ -152,12 +153,12 @@ func (g *Game) MakeEffect(p Pos, r rune, lifetime int) {
 	Mux.Lock()
 	level.Effects[p] = eff
 	Mux.Unlock()
-	go func() {
+	go func(mux *sync.Mutex) {
 		time.Sleep(time.Duration(lifetime) * time.Millisecond)
-		Mux.Lock()
+		mux.Lock()
 		delete(level.Effects, p)
-		Mux.Unlock()
-	}()
+		mux.Unlock()
+	}(Mux)
 }
 
 func (e *Effect) Update(g *Game) {
