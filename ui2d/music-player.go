@@ -147,6 +147,8 @@ func (mp *MusicPlayer) PlayMusicForLevel(levelType string) {
 		mp.ChangeMusic("forest.mp3")
 	case game.LevelTypeCity:
 		mp.ChangeMusic("warped.mp3")
+	case game.LevelTypeHouse:
+		mp.StopMusic()
 	}
 }
 

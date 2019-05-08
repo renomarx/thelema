@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	PlayerInitialX = 87
-	PlayerInitialY = 14
+	PlayerInitialX = 7
+	PlayerInitialY = 5
 	WorldHeight    = 500
 	WorldWidth     = 1000
 	OceanX         = 20
@@ -44,8 +44,9 @@ func (g *Game) loadLevels() *Level {
 	g.Levels = make(map[string]*Level)
 
 	wg := &WorldGenerator{g: g}
-	firstLevel := wg.generateOutdoor(WorldName)
-	return firstLevel
+	wg.generateOutdoor(WorldName)
+	firstLevelName := "City 1 - House 1"
+	return g.Levels[firstLevelName]
 }
 
 func (g *Game) loadPnjsVIP() {
