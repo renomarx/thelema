@@ -24,5 +24,19 @@
         "final": true
       }
     }
+  },
+  "nathaniel_revelation": {
+    "current_step": "talk_to_nathaniel",
+    "name": "La révélation de Nathaniel",
+    "steps": {
+      "talk_to_nathaniel": {
+        "order": 1,
+        "description" : "Parlez à Nathaniel (City 1 - House 1)"
+      },
+      "talk_to_nathaniel2": {
+        "order": 2,
+        "description" : "Retrouvez Nathaniel (City 32)"
+      }
+    }
   }
 }

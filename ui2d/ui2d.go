@@ -95,6 +95,7 @@ func NewUI(g *game.Game) *UI {
 	// VIPs
 	ui.pnjTextures["jason"] = ui.imgFileToTexture("ui2d/assets/pnjs/jason.png")
 	ui.pnjTextures["sarah"] = ui.imgFileToTexture("ui2d/assets/pnjs/sarah.png")
+	ui.pnjTextures["nathaniel"] = ui.imgFileToTexture("ui2d/assets/pnjs/nathaniel.png")
 	// Common
 	ui.pnjTextures["monk"] = ui.imgFileToTexture("ui2d/assets/pnjs/common/monk.png")
 	ui.pnjTextures["lord"] = ui.imgFileToTexture("ui2d/assets/pnjs/common/lord.png")

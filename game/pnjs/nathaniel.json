@@ -1,0 +1,59 @@
+{
+  "level": "City 1 - House 1",
+  "current_node": "greetings",
+  "nodes" : {
+    "greetings": {
+      "initial": true,
+      "message": "Je pensais que cette maison n'appartenait encore à personne...",
+      "choices": [
+        {
+          "cmd": "Qui êtes-vous ?",
+          "node": "who_are_you"
+        }
+      ]
+    },
+    "who_are_you": {
+      "message": "Je m'appelle Nathaniel. Vous êtes le nouveau propriétaire de cette maison ?",
+      "choices": [
+        {
+          "cmd": "Oui. Que faites-vous chez moi ?",
+          "node": "what_are_you"
+        }
+      ]
+    },
+    "what_are_you": {
+      "message": "Je fuis la police. J'aimerais vous expliquer plus en détail mais je dois partir. Si vous voulez en savoir plus, retrouvez-moi en City 32",
+      "choices": [
+        {
+          "cmd": "Attendez!",
+          "node": "bye"
+        }
+      ]
+    },
+    "bye": {
+      "message": "Notre rencontre n'est peut-être pas dû au hasard. Peut-être êtes-vous la seule personne capable de m'aider. Nous nous reverrons...",
+      "choices": [
+        {
+          "cmd": "...",
+          "actions": ["leave_to:City 32", "set_initial_node:greetings2"],
+          "quest": {
+            "id": "nathaniel_revelation",
+            "steps_mandatory": [],
+            "steps_fullfilling": [
+              "talk_to_nathaniel"
+            ]
+          }
+        }
+      ]
+    },
+
+    "greetings2": {
+      "message": "Ravi de vous revoir.",
+      "choices": [
+        {
+          "cmd": "TODO"
+        }
+      ]
+    }
+  }
+}

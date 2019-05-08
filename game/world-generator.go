@@ -53,10 +53,12 @@ func (g *Game) loadPnjsVIP() {
 	pnjNames := []string{
 		"jason",
 		"sarah",
+		"nathaniel",
 	} // TODO : load automatically from pnjs directory
 	pnjVoices := map[string]string{
-		"jason": VoiceMaleStandard,
-		"sarah": VoiceFemaleStandard,
+		"jason":     VoiceMaleStandard,
+		"sarah":     VoiceFemaleStandard,
+		"nathaniel": VoiceMaleStandard,
 	}
 	for _, name := range pnjNames {
 		p := Pos{}
