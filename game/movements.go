@@ -40,7 +40,7 @@ func canGo(level *Level, pos Pos) bool {
 	}
 	if pos.Y >= 0 && pos.Y < len(level.Map) {
 		if pos.X >= 0 && pos.X < len(level.Map[pos.Y]) {
-			return level.Map[pos.Y][pos.X] != StoneWall && level.Map[pos.Y][pos.X] != Blank && level.Map[pos.Y][pos.X] != 0
+			return level.Map[pos.Y][pos.X] != Blank && level.Map[pos.Y][pos.X] != 0
 		}
 	}
 	return false
@@ -48,20 +48,26 @@ func canGo(level *Level, pos Pos) bool {
 
 func openDoor(g *Game, pos Pos) {
 	level := g.Level
-	t := level.Map[pos.Y][pos.X]
-	switch t {
-	case DoorClosed:
-		level.Map[pos.Y][pos.X] = DoorOpened
-		g.GetEventManager().Dispatch(&Event{Action: ActionOpenDoor})
+	o, e := level.Objects[pos]
+	if e {
+		switch Tile(o.Rune) {
+		case DoorClosed:
+			o.Rune = rune(DoorOpened)
+			o.Blocking = false
+			g.GetEventManager().Dispatch(&Event{Action: ActionOpenDoor})
+		}
 	}
 }
 
 func closeDoor(g *Game, pos Pos) {
 	level := g.Level
-	t := level.Map[pos.Y][pos.X]
-	switch t {
-	case DoorOpened:
-		level.Map[pos.Y][pos.X] = DoorClosed
-		g.GetEventManager().Dispatch(&Event{Action: ActionCloseDoor})
+	o, e := level.Objects[pos]
+	if e {
+		switch Tile(o.Rune) {
+		case DoorOpened:
+			o.Rune = rune(DoorClosed)
+			o.Blocking = true
+			g.GetEventManager().Dispatch(&Event{Action: ActionCloseDoor})
+		}
 	}
 }

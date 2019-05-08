@@ -91,7 +91,7 @@ func (p *Projectile) canMove(level *Level, pos Pos) bool {
 	if isThereABlockingObject(level, pos) {
 		return false
 	}
-	return level.Map[pos.Y][pos.X] != StoneWall && level.Map[pos.Y][pos.X] != DoorClosed
+	return true
 }
 
 func (p *Projectile) Move(to Pos, g *Game) {

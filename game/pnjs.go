@@ -165,9 +165,6 @@ func (pnj *Pnj) canMove(to Pos, level *Level) bool {
 	if to.X == level.Player.X && to.Y == level.Player.Y {
 		return false
 	}
-	if level.Map[to.Y][to.X] == DoorClosed {
-		return false
-	}
 	return true
 }
 

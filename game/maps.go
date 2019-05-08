@@ -50,22 +50,16 @@ func (wg *WorldGenerator) LoadMapTemplate(mapName string, levelType string, leve
 		for x, c := range utf8line {
 			var t Tile
 			t = DirtFloor
-			if levelType == LevelTypeHouse {
+			switch levelType {
+			case LevelTypeHouse, LevelTypeCity:
 				t = GreenFloor
 			}
 			switch Tile(c) {
 			case ' ', '\t', '\n', '\r':
 				t = Blank
-			case StoneWall:
-				t = StoneWall
-			case DoorClosed:
-				t = DoorClosed
+			case DirtFloor, GreenFloor:
 			case DoorOpened:
-				t = DoorOpened
-			case DirtFloor:
-				t = DirtFloor
-			case GreenFloor:
-				t = GreenFloor
+				level.Objects[Pos{x, y}] = &Object{Rune: rune(DoorOpened)}
 			case Upstairs:
 				level.Objects[Pos{x, y}] = &Object{Rune: rune(Upstairs)}
 				initialPos = Pos{X: x, Y: y}

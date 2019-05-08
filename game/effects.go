@@ -192,5 +192,5 @@ func (e *Effect) canBe(level *Level, pos Pos) bool {
 	if isThereABlockingObject(level, pos) {
 		return false
 	}
-	return level.Map[pos.Y][pos.X] != StoneWall && level.Map[pos.Y][pos.X] != DoorClosed
+	return true
 }
