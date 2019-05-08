@@ -53,6 +53,8 @@ func (wg *WorldGenerator) LoadMapTemplate(mapName string, levelType string, leve
 			switch levelType {
 			case LevelTypeHouse, LevelTypeCity:
 				t = GreenFloor
+			case LevelTypeGrotto:
+				t = DirtFloor
 			}
 			switch Tile(c) {
 			case ' ', '\t', '\n', '\r':
