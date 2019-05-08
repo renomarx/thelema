@@ -1,12 +1,12 @@
 {
-  "a": {
+  "c": {
     "quest": {
       "id": "sarahs_gin",
       "steps_fullfilling": ["get_alcohol"]
     },
     "level": "City 8"
   },
-  "e": {
+  "v": {
     "quest": {
       "id": "sarahs_gin",
       "steps_fullfilling": ["get_herbs"]

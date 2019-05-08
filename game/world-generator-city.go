@@ -16,16 +16,16 @@ func (wg *WorldGenerator) generateCities(level *Level) {
 		_, oe := level.Objects[pos]
 		if !oe {
 			level.Objects[pos] = &Object{Rune: rune(CityEntry)} // TODO : maybe use a different city entry
-			cityName := "city/city" + strconv.Itoa(m)
-			wg.generateCity(level, pos, cityName, cityNumber)
+			mapName := "city/city" + strconv.Itoa(m)
+			wg.generateCity(level, pos, mapName, cityNumber)
 			cityNumber++
 		}
 	}
 }
 
-func (wg *WorldGenerator) generateCity(level *Level, pos Pos, cityName string, cityNumber int) {
-	nl, npos := wg.g.LoadMapTemplate(cityName, LevelTypeCity)
+func (wg *WorldGenerator) generateCity(level *Level, pos Pos, mapName string, cityNumber int) {
 	levelName := "City " + strconv.Itoa(cityNumber)
+	nl, npos := wg.LoadMapTemplate(mapName, LevelTypeCity, levelName)
 	wg.g.Levels[levelName] = nl
 	level.AddPortal(pos, &Portal{LevelTo: levelName, PosTo: npos})
 	nl.AddPortal(npos, &Portal{LevelTo: WorldName, PosTo: pos})

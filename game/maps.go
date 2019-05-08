@@ -3,12 +3,14 @@ package game
 import (
 	"bufio"
 	"log"
+	"math/rand"
 	"os"
+	"strconv"
 )
 
-func (g *Game) LoadMapTemplate(levelName string, levelType string) (*Level, Pos) {
-	dirpath := g.GameDir
-	filename := dirpath + "/maps/" + levelName + ".map"
+func (wg *WorldGenerator) LoadMapTemplate(mapName string, levelType string, levelName string) (*Level, Pos) {
+	dirpath := wg.g.GameDir
+	filename := dirpath + "/maps/" + mapName + ".map"
 	file, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
@@ -33,21 +35,24 @@ func (g *Game) LoadMapTemplate(levelName string, levelType string) (*Level, Pos)
 	level := NewLevel(levelType)
 	level.Map = make([][]Tile, len(levelLines))
 	initialPos := Pos{X: 1, Y: 1}
+	houseNumber := 0
+	nbHouseTemplates := 1 // TODO load as much templates as there are
 	for i := range level.Map {
 		level.Map[i] = make([]Tile, longestRow)
 	}
 	for y := 0; y < len(level.Map); y++ {
 		line := levelLines[y]
-
 		// Re-compose line to handle utf8
 		var utf8line []rune
 		for _, c := range line {
 			utf8line = append(utf8line, c)
 		}
-
 		for x, c := range utf8line {
 			var t Tile
 			t = DirtFloor
+			if levelType == LevelTypeHouse {
+				t = GreenFloor
+			}
 			switch Tile(c) {
 			case ' ', '\t', '\n', '\r':
 				t = Blank
@@ -59,12 +64,24 @@ func (g *Game) LoadMapTemplate(levelName string, levelType string) (*Level, Pos)
 				t = DoorOpened
 			case DirtFloor:
 				t = DirtFloor
+			case GreenFloor:
+				t = GreenFloor
 			case Upstairs:
-				level.Objects[Pos{x, y}] = &Object{Rune: rune(Upstairs)} // TODO : maybe use a different grotto out
+				level.Objects[Pos{x, y}] = &Object{Rune: rune(Upstairs)}
 				initialPos = Pos{X: x, Y: y}
 			case CityOut:
-				level.Objects[Pos{x, y}] = &Object{Rune: rune(CityOut)} // TODO : maybe use a different city out
+				level.Objects[Pos{x, y}] = &Object{Rune: rune(CityOut)}
 				initialPos = Pos{X: x, Y: y}
+			case HouseDoor:
+				level.Objects[Pos{x, y}] = &Object{Rune: rune(HouseDoor)}
+				if levelType == LevelTypeHouse {
+					initialPos = Pos{X: x, Y: y}
+				} else {
+					m := rand.Intn(nbHouseTemplates) + 1
+					mapName := "house/house" + strconv.Itoa(m)
+					wg.generateHouse(level, Pos{X: x, Y: y}, mapName, houseNumber, levelName)
+					houseNumber++
+				}
 			default:
 				o := &Object{Rune: c, Blocking: true}
 				o.Pos = Pos{x, y}

@@ -18,7 +18,7 @@
       "talk_to_sarah": {
         "order": 3,
         "description" : "Bring alcohol and herbs to Sarah in City 32",
-        "objects_taken": ["a","e"],
+        "objects_taken": ["c","v"],
         "gold_given": 30,
         "objects_given": [],
         "final": true

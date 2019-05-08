@@ -16,16 +16,16 @@ func (wg *WorldGenerator) generateGrottos(level *Level) {
 		_, oe := level.Objects[pos]
 		if !oe {
 			level.Objects[pos] = &Object{Rune: rune(Downstairs)} // TODO : maybe use a different grotto entry
-			grottoName := "grotto/grotto" + strconv.Itoa(m)
-			wg.generateGrotto(level, pos, grottoName, grottoNumber)
+			mapName := "grotto/grotto" + strconv.Itoa(m)
+			wg.generateGrotto(level, pos, mapName, grottoNumber)
 			grottoNumber++
 		}
 	}
 }
 
-func (wg *WorldGenerator) generateGrotto(level *Level, pos Pos, grottoName string, grottoNumber int) {
-	nl, npos := wg.g.LoadMapTemplate(grottoName, LevelTypeGrotto)
+func (wg *WorldGenerator) generateGrotto(level *Level, pos Pos, mapName string, grottoNumber int) {
 	levelName := "Grotto " + strconv.Itoa(grottoNumber)
+	nl, npos := wg.LoadMapTemplate(mapName, LevelTypeGrotto, levelName)
 	wg.g.Levels[levelName] = nl
 	level.AddPortal(pos, &Portal{LevelTo: levelName, PosTo: npos})
 	nl.AddPortal(npos, &Portal{LevelTo: WorldName, PosTo: pos})
