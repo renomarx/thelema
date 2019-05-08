@@ -1,10 +1,5 @@
 package game
 
-type Usable interface {
-	Use(g *Game)
-	GetObject() *Object
-}
-
 type InventoryUsable struct {
 	Usable
 	Highlighted bool
@@ -83,17 +78,14 @@ func (iv *Inventory) TakeUsable(o *Object) bool {
 	if len(iv.Usables) >= InventoryUsablesMax {
 		return false
 	}
-	switch Tile(o.Rune) {
-	case Senzu:
-		u := USenzu{}
-		u.Object = o
+	u := NewUsable(o)
+	if u != nil {
 		iu := InventoryUsable{Highlighted: false}
 		iu.Usable = u
 		iv.Usables = append(iv.Usables, iu)
-	default:
-		return false
+		return true
 	}
-	return true
+	return false
 }
 
 func (iv *Inventory) UseUsable(i int, g *Game) {
@@ -123,11 +115,11 @@ func (iv *Inventory) Close(g *Game) {
 func (iv *Inventory) HandleInput(g *Game) {
 	input := g.GetInput()
 	switch input.Typ {
-	case Up:
+	case Up, Left:
 		g.GetEventManager().Dispatch(&Event{Action: ActionMenuSelect})
 		iv.ChoiceUp()
 		adaptMenuSpeed()
-	case Down:
+	case Down, Right:
 		g.GetEventManager().Dispatch(&Event{Action: ActionMenuSelect})
 		iv.ChoiceDown()
 		adaptMenuSpeed()

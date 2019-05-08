@@ -31,4 +31,9 @@ func (wg *WorldGenerator) generateCity(level *Level, pos Pos, cityName string, c
 	nl.AddPortal(npos, &Portal{LevelTo: WorldName, PosTo: pos})
 
 	wg.generatePnjs(nl, rand.Intn(20)+1)
+	objects := []Tile{
+		Bread,
+		Water,
+	}
+	wg.generateUsables(nl, objects, rand.Intn(5)+1)
 }

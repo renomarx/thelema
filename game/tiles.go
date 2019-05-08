@@ -56,9 +56,13 @@ const (
 
 	// Usables
 	Gold      Tile = 'g'
-	Senzu     Tile = 'z'
 	Explosion Tile = 'x'
 	Book      Tile = 'b'
+	Senzu     Tile = 'z'
+	Bread     Tile = 'i'
+	Fruits    Tile = 'u'
+	Water     Tile = 'l'
+	Steak     Tile = 'k'
 
 	// Powers
 	Energyball Tile = 'p'

@@ -6,7 +6,7 @@ import (
 )
 
 func (g *Game) InitSlots() {
-	gob.Register(USenzu{})
+	gob.Register(Food{})
 }
 
 func SaveGame(g *Game, slot string) {

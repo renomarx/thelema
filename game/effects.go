@@ -173,7 +173,7 @@ func (e *Effect) MakeDamage(g *Game) {
 	Mux.Unlock()
 	if ok {
 		// There is a monster !
-		m.TakeDamage(g, e.Damages)
+		m.TakeDamage(g, e.Damages, nil)
 		e.Die(g)
 	}
 }

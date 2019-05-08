@@ -20,6 +20,10 @@ func (wg *WorldGenerator) generateOutdoor(levelName string) *Level {
 	wg.generateBooks(level, 100)
 	wg.generateGrottos(level)
 	wg.generateCities(level)
+	objects := []Tile{
+		Fruits,
+	}
+	wg.generateUsables(level, objects, 1000)
 
 	wg.g.Levels[levelName] = level
 	return level

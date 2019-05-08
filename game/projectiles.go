@@ -9,10 +9,12 @@ type Projectile struct {
 	Size      int
 	Speed     int
 	Direction InputType
+	From      *Character
 }
 
-func (level *Level) MakeEnergyball(p Pos, dir InputType, size int) {
+func (level *Level) MakeEnergyball(p Pos, dir InputType, size int, from *Character) {
 	eb := &Projectile{}
+	eb.From = from
 	eb.Rune = rune(Energyball)
 	eb.Blocking = false
 	eb.Size = size
@@ -35,8 +37,9 @@ func (level *Level) MakeEnergyball(p Pos, dir InputType, size int) {
 	level.Projectiles[p] = eb
 }
 
-func (level *Level) MakeArrow(p Pos, dir InputType, size int, speed int) {
+func (level *Level) MakeArrow(p Pos, dir InputType, size int, speed int, from *Character) {
 	eb := &Projectile{}
+	eb.From = from
 	eb.Rune = rune(Arrow)
 	eb.Blocking = false
 	eb.Size = size
@@ -147,7 +150,7 @@ func (p *Projectile) MakeDamage(g *Game) {
 	Mux.Unlock()
 	if ok {
 		// There is a monster !
-		m.TakeDamage(g, p.Size)
+		m.TakeDamage(g, p.Size, p.From)
 		p.Die(g)
 	}
 }

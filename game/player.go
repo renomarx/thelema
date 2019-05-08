@@ -1,22 +1,20 @@
 package game
 
-import "time"
 import "math/rand"
 
 type Player struct {
 	Character
 	Talker
-	TalkingTo            *Pnj
-	Quests               map[string]*Quest
-	Inventory            *Inventory
-	Library              *Library
-	IsTaking             bool
-	Menu                 *Menu
-	QuestMenuOpen        bool
-	CharacterMenuOpen    bool
-	MapMenuOpen          bool
-	LastRegenerationTime time.Time
-	Weapons              []*Weapon
+	TalkingTo         *Pnj
+	Quests            map[string]*Quest
+	Inventory         *Inventory
+	Library           *Library
+	IsTaking          bool
+	Menu              *Menu
+	QuestMenuOpen     bool
+	CharacterMenuOpen bool
+	MapMenuOpen       bool
+	Weapons           []*Weapon
 }
 
 func (p *Player) Update(g *Game) {
@@ -39,20 +37,6 @@ func (p *Player) Update(g *Game) {
 			}
 			p.Move(g)
 		}
-	}
-}
-
-func (p *Player) regenerate() {
-	t := time.Now()
-	deltaD := t.Sub(p.LastRegenerationTime)
-	if deltaD > time.Duration(1000/p.RegenerationSpeed.Current)*time.Millisecond {
-		if p.Energy.Current < p.Energy.Initial {
-			p.Energy.Current += 5
-		}
-		if p.Health.Current < p.Health.Initial {
-			p.Health.Current += 1
-		}
-		p.LastRegenerationTime = time.Now()
 	}
 }
 

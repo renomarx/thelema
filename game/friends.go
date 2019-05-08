@@ -18,12 +18,11 @@ func (level *Level) MakeFriend(pnj *Pnj) {
 }
 
 func (m *Friend) Update(g *Game) {
-	level := g.Level
-	if m.IsMoving {
+	if m.IsDead() {
 		return
 	}
-	if level.Player.IsDead() {
-		m.Die(g.Level)
+	level := g.Level
+	if m.IsMoving {
 		return
 	}
 	t := time.Now()
@@ -97,9 +96,7 @@ func (m *Friend) TakeDamage(g *Game, damage int) {
 }
 
 func (m *Friend) Die(level *Level) {
-	Mux.Lock()
-	delete(level.Friends, m.Pos)
-	Mux.Unlock()
+	m.isDead = true
 }
 
 func (m *Friend) CanSee(level *Level, pos Pos) bool {

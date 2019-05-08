@@ -143,7 +143,7 @@ func (m *Invoked) Attack(mm *Monster, g *Game) {
 		m.IsMoving = false
 		m.IsAttacking = false
 	}(m)
-	mm.TakeDamage(g, m.CalculateAttackScore())
+	mm.TakeDamage(g, m.CalculateAttackScore(), &m.Character)
 }
 
 func (m *Invoked) TakeDamage(g *Game, damage int) {
@@ -156,6 +156,7 @@ func (m *Invoked) TakeDamage(g *Game, damage int) {
 }
 
 func (m *Invoked) Die(level *Level) {
+	m.isDead = true
 	Mux.Lock()
 	delete(level.Invocations, m.Pos)
 	Mux.Unlock()

@@ -67,9 +67,10 @@ func (m *Monster) Update(g *Game) {
 func (m *Monster) getTargetPos(g *Game) Pos {
 	l := g.Level
 	if m.target != nil {
-		_, monsterExists := l.Invocations[m.target.Pos]
-		if !monsterExists {
+		if m.target.IsDead() {
 			m.target = nil
+		} else {
+			return m.target.Pos
 		}
 	}
 
@@ -170,18 +171,22 @@ func (m *Monster) AttackFriend(p *Friend, g *Game) {
 	p.TakeDamage(g, m.CalculateAttackScore())
 }
 
-func (m *Monster) TakeDamage(g *Game, damage int) {
+func (m *Monster) TakeDamage(g *Game, damage int, c *Character) {
 	if m.Health.Current <= 0 {
 		m.Die(g.Level)
 	}
 	m.Health.Current -= damage
 	g.MakeExplosion(m.Pos, damage, 50)
 	m.ParalyzedTime = rand.Intn(damage) * 10
+	m.target = c
 }
 
 func (m *Monster) Die(level *Level) {
 	Mux.Lock()
 	delete(level.Monsters, m.Pos)
+	b := &Object{Rune: rune(Steak), Blocking: true}
+	b.Pos = m.Pos
+	level.Objects[m.Pos] = b
 	Mux.Unlock()
 }
 

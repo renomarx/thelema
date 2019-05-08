@@ -18,6 +18,13 @@ func (ch *Characteristic) Init(value int) {
 	ch.Xp = 0
 }
 
+func (ch *Characteristic) Add(value int) {
+	ch.Current += value
+	if ch.Current > ch.Initial {
+		ch.Current = ch.Initial
+	}
+}
+
 func (ch *Characteristic) RaiseXp(value int, g *Game) {
 	ch.Xp += value
 	if ch.Xp >= ch.Initial*CharacteristicXpMultiplier {
@@ -46,28 +53,29 @@ type Talker struct {
 type Character struct {
 	MovingObject
 	Fighter
-	LookAt            InputType
-	Name              string
-	Health            Characteristic
-	Energy            Characteristic
-	Speed             Characteristic
-	RegenerationSpeed Characteristic
-	Strength          Characteristic
-	Dexterity         Characteristic
-	Beauty            Characteristic
-	Will              Characteristic
-	Intelligence      Characteristic
-	Charisma          Characteristic
-	Luck              Characteristic
-	Affinity          string
-	ActionPoints      float64
-	LastActionTime    time.Time
-	isDead            bool
-	VisionRange       int
-	Weapon            *Weapon
-	Powers            map[string]*PlayerPower
-	CurrentPower      *PlayerPower
-	ParalyzedTime     int
+	LookAt               InputType
+	Name                 string
+	Health               Characteristic
+	Energy               Characteristic
+	Speed                Characteristic
+	RegenerationSpeed    Characteristic
+	Strength             Characteristic
+	Dexterity            Characteristic
+	Beauty               Characteristic
+	Will                 Characteristic
+	Intelligence         Characteristic
+	Charisma             Characteristic
+	Luck                 Characteristic
+	Affinity             string
+	ActionPoints         float64
+	LastActionTime       time.Time
+	isDead               bool
+	VisionRange          int
+	Weapon               *Weapon
+	Powers               map[string]*PlayerPower
+	CurrentPower         *PlayerPower
+	ParalyzedTime        int
+	LastRegenerationTime time.Time
 }
 
 func (c *Character) adaptSpeed() {
@@ -171,7 +179,7 @@ func (c *Character) attackMelee(g *Game, posToAttack Pos) bool {
 	}(c)
 	if isThereAMonster(level, posToAttack) {
 		m := level.Monsters[posToAttack]
-		m.TakeDamage(g, c.CalculateAttackScore())
+		m.TakeDamage(g, c.CalculateAttackScore(), c)
 		c.Dexterity.RaiseXp(1, g)
 		c.Strength.RaiseXp(2, g)
 		return true
@@ -189,7 +197,7 @@ func (c *Character) attackBow(g *Game, posToAttack Pos) {
 		c.AttackPos = 0
 		c.IsMoving = false
 		c.IsAttacking = false
-		g.Level.MakeArrow(c.Pos, c.LookAt, c.CalculateAttackBowScore(), 10)
+		g.Level.MakeArrow(c.Pos, c.LookAt, c.CalculateAttackBowScore(), 10, c)
 		c.Dexterity.RaiseXp(2, g)
 	}(c)
 }
@@ -223,7 +231,7 @@ func (c *Character) PowerAttack(g *Game) {
 			switch c.CurrentPower.Type {
 			case PowerEnergyBall:
 				g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerEnergyBall}})
-				g.Level.MakeEnergyball(c.Pos, c.LookAt, c.CalculatePowerAttackScore())
+				g.Level.MakeEnergyball(c.Pos, c.LookAt, c.CalculatePowerAttackScore(), c)
 				c.Energy.Current -= c.CurrentPower.Energy
 				c.Will.RaiseXp(1, g)
 				c.Energy.RaiseXp(10, g)
@@ -268,4 +276,18 @@ func (c *Character) CalculatePowerAttackScore() int {
 	iscore := int(score)
 	iscore += c.Weapon.MagickalDamages
 	return iscore
+}
+
+func (p *Character) regenerate() {
+	t := time.Now()
+	deltaD := t.Sub(p.LastRegenerationTime)
+	if deltaD > time.Duration(1000/p.RegenerationSpeed.Current)*time.Millisecond {
+		if p.Energy.Current < p.Energy.Initial {
+			p.Energy.Current += 5
+		}
+		if p.Health.Current < p.Health.Initial {
+			p.Health.Current += 1
+		}
+		p.LastRegenerationTime = time.Now()
+	}
 }
