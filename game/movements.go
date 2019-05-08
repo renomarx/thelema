@@ -1,30 +1,22 @@
 package game
 
 func isThereAMonster(level *Level, pos Pos) bool {
-	Mux.Lock()
 	_, exists := level.Monsters[pos]
-	Mux.Unlock()
 	return exists
 }
 
 func isThereAPnj(level *Level, pos Pos) bool {
-	Mux.Lock()
 	_, exists := level.Pnjs[pos]
-	Mux.Unlock()
 	return exists
 }
 
 func isThereAnInvocation(level *Level, pos Pos) bool {
-	Mux.Lock()
 	_, exists := level.Invocations[pos]
-	Mux.Unlock()
 	return exists
 }
 
 func isThereAFriend(level *Level, pos Pos) bool {
-	Mux.Lock()
 	_, exists := level.Friends[pos]
-	Mux.Unlock()
 	return exists
 }
 
