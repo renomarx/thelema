@@ -2,6 +2,8 @@ package game
 
 import "time"
 import "math/rand"
+import "sync"
+import "strings"
 
 type Pnj struct {
 	Character
@@ -31,6 +33,7 @@ func NewPnj(p Pos, name string, voice string) *Pnj {
 	pnj.LastActionTime = time.Now()
 	pnj.IsMoving = false
 	pnj.LookAt = Left
+	pnj.Talkable = true
 	pnj.IsTalking = false
 	pnj.Voice = voice
 	pnj.Weapon = &Weapon{Tile: Spear, Name: "Lance", Typ: WeaponTypeSpear, Damages: 20, Speed: 12}
@@ -88,9 +91,14 @@ func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
 				p.finishQuestStep(choice.Quest.ID, stepID, g)
 			}
 			for _, action := range choice.Actions {
-				switch action {
+				act := strings.Split(action, ":")
+				switch act[0] {
 				case "recruit":
 					p.Recruit(pnj, g)
+				case "teleport_to":
+					pnj.Teleport(act[1], g)
+				case "set_initial_node":
+					pnj.Dialog.SetInitialNode(act[1])
 				}
 			}
 			if choice.NodeId == "" {
@@ -176,4 +184,26 @@ func (pnj *Pnj) Move(to Pos, level *Level) {
 	level.Pnjs[to] = pnj
 	Mux.Unlock()
 	pnj.moveFromTo(lastPos, to)
+}
+
+func (pnj *Pnj) Teleport(levelName string, g *Game) {
+	level := g.Levels[levelName]
+	pnj.Talkable = false
+	g.MakeEffect(pnj.Pos, rune(Teleport), 200)
+	pnj.IsMoving = true
+	pnj.IsPowerAttacking = true
+	go func(pnj *Pnj, level *Level, g *Game, mux *sync.Mutex) {
+		for pnj.AttackPos = 0; pnj.AttackPos < CaseLen; pnj.AttackPos++ {
+			pnj.adaptSpeed()
+		}
+		pos := level.GetRandomFreePos()
+		mux.Lock()
+		delete(g.Level.Pnjs, pnj.Pos)
+		pnj.Pos = *pos
+		level.Pnjs[*pos] = pnj
+		mux.Unlock()
+		pnj.IsMoving = false
+		pnj.IsPowerAttacking = false
+		pnj.Talkable = true
+	}(pnj, level, g, Mux)
 }

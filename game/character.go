@@ -28,7 +28,10 @@ func (ch *Characteristic) Add(value int) {
 func (ch *Characteristic) RaiseXp(value int, g *Game) {
 	ch.Xp += value
 	if ch.Xp >= ch.Initial*CharacteristicXpMultiplier {
-		g.GetEventManager().Dispatch(&Event{Action: ActionCharacteristicUp})
+		g.GetEventManager().Dispatch(&Event{
+			Action:  ActionCharacteristicUp,
+			Message: "Characteristic up!",
+		})
 		ch.Initial += ch.Initial / 20
 		ch.Current = ch.Initial
 		ch.Xp = 0
@@ -48,6 +51,7 @@ type Talker struct {
 	IsTalking bool
 	Dialog    *Dialog
 	Voice     string
+	Talkable  bool
 }
 
 type Character struct {

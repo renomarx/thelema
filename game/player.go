@@ -165,7 +165,7 @@ func (p *Player) openPortal(g *Game, pos Pos) {
 func (p *Player) Talk(g *Game, posTo Pos) {
 	level := g.Level
 	pnj, exists := level.Pnjs[posTo]
-	if exists {
+	if exists && pnj.Talkable {
 		g.GetEventManager().Dispatch(&Event{Action: ActionTalk})
 		p.IsTalking = true
 		p.TalkingTo = pnj

@@ -22,7 +22,7 @@
       ]
     },
     "what_are_you": {
-      "message": "Je fuis la police. J'aimerais vous expliquer plus en détail mais je dois partir. Si vous voulez en savoir plus, retrouvez-moi en City 32",
+      "message": "Je fuis la police. J'aimerais vous expliquer plus en détail mais je dois partir. Si vous voulez en savoir plus, retrouvez-moi en City 32.",
       "choices": [
         {
           "cmd": "Attendez!",
@@ -35,7 +35,7 @@
       "choices": [
         {
           "cmd": "...",
-          "actions": ["leave_to:City 32", "set_initial_node:greetings2"],
+          "actions": ["teleport_to:City 32", "set_initial_node:greetings2"],
           "quest": {
             "id": "nathaniel_revelation",
             "steps_mandatory": [],

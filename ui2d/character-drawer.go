@@ -33,16 +33,16 @@ func (ui *UI) drawCharacter(p *game.Character, texture *sdl.Texture) {
 			switch p.Weapon.Typ {
 			case game.WeaponTypeDagger:
 				tileY = tileY + 4*64
-				tileX = 64 * (p.AttackPos / 6)
+				tileX = 64 * (6 * p.AttackPos / 32)
 			case game.WeaponTypeWand:
 				tileY = tileY + 4*64
-				tileX = 64 * (p.AttackPos / 6)
+				tileX = 64 * (6 * p.AttackPos / 32)
 			case game.WeaponTypeBow:
 				tileY = tileY + 8*64
-				tileX = 64 * (p.AttackPos / 13)
+				tileX = 64 * (13 * p.AttackPos / 32)
 			case game.WeaponTypeSpear:
 				tileY = tileY - 4*64
-				tileX = 64 * (p.AttackPos / 8)
+				tileX = 64 * (8 * p.AttackPos / 32)
 			}
 		} else {
 			tileY = tileY + 8*64

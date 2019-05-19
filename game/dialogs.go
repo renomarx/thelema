@@ -78,6 +78,18 @@ func (d *Dialog) GetNode(key string) *StoryNode {
 	return node
 }
 
+func (d *Dialog) SetInitialNode(key string) *StoryNode {
+	node, exists := d.Nodes[key]
+	if !exists {
+		panic("Dialog node " + key + " does not exist")
+	}
+	for _, n := range d.Nodes {
+		n.Initial = false
+	}
+	node.Initial = true
+	return node
+}
+
 func (n *StoryNode) GetHighlightedIndex() int {
 	for i := 0; i < len(n.Choices); i++ {
 		if n.Choices[i].Highlighted {
