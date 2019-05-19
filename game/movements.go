@@ -5,6 +5,11 @@ func isThereAMonster(level *Level, pos Pos) bool {
 	return exists
 }
 
+func isThereAnEnemy(level *Level, pos Pos) bool {
+	_, exists := level.Enemies[pos]
+	return exists
+}
+
 func isThereAPnj(level *Level, pos Pos) bool {
 	_, exists := level.Pnjs[pos]
 	return exists
@@ -20,6 +25,30 @@ func isThereAFriend(level *Level, pos Pos) bool {
 	return exists
 }
 
+func isThereAPlayerCharacter(level *Level, pos Pos) bool {
+	p := level.Player
+	if p != nil && p.X == pos.X && p.Y == pos.Y {
+		return true
+	}
+	if _, exists := level.Friends[pos]; exists {
+		return true
+	}
+	if _, exists := level.Invocations[pos]; exists {
+		return true
+	}
+	return false
+}
+
+func isThereAnEnemyCharacter(level *Level, pos Pos) bool {
+	if _, exists := level.Monsters[pos]; exists {
+		return true
+	}
+	if _, exists := level.Enemies[pos]; exists {
+		return true
+	}
+	return false
+}
+
 func isThereABlockingObject(level *Level, pos Pos) bool {
 	if obj, ok := level.Objects[pos]; ok {
 		// There is an object !
@@ -33,6 +62,9 @@ func canGo(level *Level, pos Pos) bool {
 		return false
 	}
 	if isThereAMonster(level, pos) {
+		return false
+	}
+	if isThereAnEnemy(level, pos) {
 		return false
 	}
 	if isThereAPnj(level, pos) {

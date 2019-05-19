@@ -153,6 +153,14 @@ func (p *Projectile) MakeDamage(g *Game) {
 		m.TakeDamage(g, p.Size, p.From)
 		p.Die(g)
 	}
+	Mux.Lock()
+	e, ok := level.Enemies[p.Pos]
+	Mux.Unlock()
+	if ok {
+		// There is an annemy !
+		e.TakeDamage(g, p.Size)
+		p.Die(g)
+	}
 }
 
 func (p *Projectile) Die(g *Game) {

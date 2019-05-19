@@ -3,8 +3,7 @@ package game
 import "math/rand"
 import "strconv"
 
-func (wg *WorldGenerator) generateCities(level *Level) {
-	nbCities := 50
+func (wg *WorldGenerator) generateCities(level *Level, nbCities int) {
 	nbTemplates := 1 // TODO load as much templates as there are
 	cityNumber := 0
 	for i := 0; i < nbCities; i++ {

@@ -244,3 +244,23 @@ func (wg *WorldGenerator) generatePnjs(l *Level, nbPnjs int) {
 		}
 	}
 }
+
+func (wg *WorldGenerator) generateEnnemies(level *Level, bestiary []*MonsterType, nbMonsters int) {
+	for i := 0; i < nbMonsters; i++ {
+		x := rand.Intn(len(level.Map[0]))
+		y := rand.Intn(len(level.Map))
+		m := rand.Intn(len(bestiary))
+		pos := Pos{X: x, Y: y}
+
+		proba := rand.Intn(100)
+		mt := bestiary[m]
+		for proba > mt.Probability {
+			m := rand.Intn(len(bestiary))
+			proba = rand.Intn(100)
+			mt = bestiary[m]
+		}
+		if canGo(level, pos) {
+			level.Enemies[pos] = NewEnemy(mt, pos)
+		}
+	}
+}

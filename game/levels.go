@@ -19,6 +19,7 @@ type Level struct {
 	Pnjs        map[Pos]*Pnj
 	Invocations map[Pos]*Invoked
 	Friends     map[Pos]*Friend
+	Enemies     map[Pos]*Enemy
 	Paused      bool
 	PRay        int
 }
@@ -50,6 +51,7 @@ func NewLevel(levelType string) *Level {
 	level.Pnjs = make(map[Pos]*Pnj)
 	level.Invocations = make(map[Pos]*Invoked)
 	level.Friends = make(map[Pos]*Friend)
+	level.Enemies = make(map[Pos]*Enemy)
 	level.PRay = 100
 	return level
 }
@@ -64,6 +66,7 @@ func (g *Game) UpdateLevel() {
 		g.handlePnjs()
 		g.handleInvocations()
 		g.handleFriends()
+		g.handleEnemies()
 		g.handleProjectiles()
 		g.handleEffects()
 		if input.Typ == Select {
@@ -107,6 +110,12 @@ func (g *Game) handlePnjs() {
 
 func (g *Game) handleFriends() {
 	for _, m := range g.Level.Friends {
+		m.Update(g)
+	}
+}
+
+func (g *Game) handleEnemies() {
+	for _, m := range g.Level.Enemies {
 		m.Update(g)
 	}
 }

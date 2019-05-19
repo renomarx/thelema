@@ -95,13 +95,7 @@ func (m *Monster) getTargetPos(g *Game) Pos {
 }
 
 func (m *Monster) canMove(to Pos, level *Level) bool {
-	if to.X == level.Player.X && to.Y == level.Player.Y {
-		return false
-	}
-	if isThereAnInvocation(level, to) {
-		return false
-	}
-	if isThereAFriend(level, to) {
+	if isThereAPlayerCharacter(level, to) {
 		return false
 	}
 	return true

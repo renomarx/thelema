@@ -207,6 +207,34 @@ func (c *Character) attackMelee(g *Game, posToAttack Pos) bool {
 		c.Strength.RaiseXp(2, g)
 		return true
 	}
+	if isThereAnEnemy(level, posToAttack) {
+		m := level.Enemies[posToAttack]
+		m.TakeDamage(g, c.CalculateAttackScore())
+		c.Dexterity.RaiseXp(1, g)
+		c.Strength.RaiseXp(2, g)
+		return true
+	}
+	if isThereAFriend(level, posToAttack) {
+		m := level.Friends[posToAttack]
+		m.TakeDamage(g, c.CalculateAttackScore())
+		c.Dexterity.RaiseXp(1, g)
+		c.Strength.RaiseXp(2, g)
+		return true
+	}
+	if isThereAnInvocation(level, posToAttack) {
+		m := level.Friends[posToAttack]
+		m.TakeDamage(g, c.CalculateAttackScore())
+		c.Dexterity.RaiseXp(1, g)
+		c.Strength.RaiseXp(2, g)
+		return true
+	}
+	p := level.Player
+	if p != nil && p.X == posToAttack.X && p.Y == posToAttack.Y {
+		p.TakeDamage(g, c.CalculateAttackScore())
+		c.Dexterity.RaiseXp(1, g)
+		c.Strength.RaiseXp(2, g)
+		return true
+	}
 	return false
 }
 

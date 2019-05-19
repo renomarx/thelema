@@ -75,6 +75,12 @@ func (ui *UI) DrawLevel() {
 		game.Mux.Unlock()
 
 		game.Mux.Lock()
+		for _, enemy := range level.Enemies {
+			ui.drawEnemy(enemy)
+		}
+		game.Mux.Unlock()
+
+		game.Mux.Lock()
 		for _, friend := range level.Friends {
 			ui.drawFriend(friend)
 		}

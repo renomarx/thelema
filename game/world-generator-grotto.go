@@ -3,8 +3,7 @@ package game
 import "math/rand"
 import "strconv"
 
-func (wg *WorldGenerator) generateGrottos(level *Level) {
-	nbGrottos := 1000
+func (wg *WorldGenerator) generateGrottos(level *Level, nbGrottos int) {
 	nbTemplates := 2 // TODO load as much templates as there are
 	grottoNumber := 0
 	for i := 0; i < nbGrottos; i++ {
@@ -31,6 +30,7 @@ func (wg *WorldGenerator) generateGrotto(level *Level, pos Pos, mapName string, 
 	nl.AddPortal(npos, &Portal{LevelTo: WorldName, PosTo: pos})
 
 	wg.generateMonsters(nl, BestiaryUnderworld(), rand.Intn(20)+1)
+	wg.generateEnnemies(nl, CreaturesUnderworld(), rand.Intn(10)+1)
 	objects := []Tile{
 		Senzu,
 	}

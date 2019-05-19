@@ -103,6 +103,12 @@ func NewUI(g *game.Game) *UI {
 	ui.pnjTextures["policeman"] = ui.imgFileToTexture("ui2d/assets/pnjs/common/policeman.png")
 	ui.pnjTextures["doctor"] = ui.imgFileToTexture("ui2d/assets/pnjs/common/doctor.png")
 	ui.pnjTextures["artist"] = ui.imgFileToTexture("ui2d/assets/pnjs/common/artist.png")
+	// Enemies
+	ui.pnjTextures["orc_thief"] = ui.imgFileToTexture("ui2d/assets/pnjs/enemy/orc_thief.png")
+	ui.pnjTextures["orc_guard"] = ui.imgFileToTexture("ui2d/assets/pnjs/enemy/orc_guard.png")
+	ui.pnjTextures["skeleton_warrior"] = ui.imgFileToTexture("ui2d/assets/pnjs/enemy/skeleton_warrior.png")
+	ui.pnjTextures["skeleton_sorcerer"] = ui.imgFileToTexture("ui2d/assets/pnjs/enemy/skeleton_sorcerer.png")
+	ui.pnjTextures["skeleton_lord"] = ui.imgFileToTexture("ui2d/assets/pnjs/enemy/skeleton_lord.png")
 
 	if err := ttf.Init(); err != nil {
 		panic(err)

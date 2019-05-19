@@ -177,6 +177,14 @@ func (e *Effect) MakeDamage(g *Game) {
 		m.TakeDamage(g, e.Damages, nil)
 		e.Die(g)
 	}
+	Mux.Lock()
+	en, ok := level.Enemies[e.Pos]
+	Mux.Unlock()
+	if ok {
+		// There is an annemy !
+		en.TakeDamage(g, e.Damages)
+		e.Die(g)
+	}
 }
 
 func (e *Effect) Die(g *Game) {
@@ -186,7 +194,7 @@ func (e *Effect) Die(g *Game) {
 }
 
 func (e *Effect) canBe(level *Level, pos Pos) bool {
-	if pos.Y < 0 || pos.Y > len(level.Map) || pos.X < 0 || pos.X > len(level.Map[pos.Y]) {
+	if pos.Y < 0 || pos.Y >= len(level.Map) || pos.X < 0 || pos.X >= len(level.Map[pos.Y]) {
 		return false
 	}
 	if isThereABlockingObject(level, pos) {

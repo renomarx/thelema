@@ -113,7 +113,7 @@ func (m *Invoked) canMove(to Pos, level *Level) bool {
 	if to.X == level.Player.X && to.Y == level.Player.Y {
 		return false
 	}
-	if isThereAMonster(level, to) {
+	if isThereAnEnemyCharacter(level, to) {
 		return false
 	}
 	return true
@@ -167,6 +167,9 @@ func (m *Invoked) CanSee(level *Level, pos Pos) bool {
 		return false
 	}
 	if isThereAnInvocation(level, pos) {
+		return false
+	}
+	if isThereAFriend(level, pos) {
 		return false
 	}
 	if isThereAPnj(level, pos) {

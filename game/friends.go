@@ -66,7 +66,7 @@ func (m *Friend) canMove(to Pos, level *Level) bool {
 	if to.X == level.Player.X && to.Y == level.Player.Y {
 		return false
 	}
-	if isThereAMonster(level, to) {
+	if isThereAnEnemyCharacter(level, to) {
 		return false
 	}
 	return true
@@ -83,7 +83,7 @@ func (m *Friend) Move(to Pos, level *Level) {
 }
 
 func (m *Friend) canAttack(to Pos, level *Level) bool {
-	return isThereAMonster(level, to)
+	return isThereAnEnemyCharacter(level, to)
 }
 
 func (m *Friend) TakeDamage(g *Game, damage int) {
