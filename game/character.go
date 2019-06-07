@@ -222,7 +222,7 @@ func (c *Character) attackMelee(g *Game, posToAttack Pos) bool {
 		return true
 	}
 	if isThereAnInvocation(level, posToAttack) {
-		m := level.Friends[posToAttack]
+		m := level.Invocations[posToAttack]
 		m.TakeDamage(g, c.CalculateAttackScore())
 		c.Dexterity.RaiseXp(1, g)
 		c.Strength.RaiseXp(2, g)
