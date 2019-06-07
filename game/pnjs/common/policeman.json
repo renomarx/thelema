@@ -3,10 +3,19 @@
   "nodes" : {
     "greetings": {
       "initial": true,
-      "message": "Hello, I'm a Police officer.",
+      "message": "Circulez.",
       "choices": [
         {
-          "cmd": "I've done nothing!"
+          "cmd": "J'ai besoin de votre aide (recruter)",
+          "required": {"beauty": 25, "charisma": 25},
+          "actions": ["recruit"]
+        },
+        {
+          "cmd": "Je vous pisse à la raie.",
+          "actions": ["become_enemy"]
+        },
+        {
+          "cmd": "Je dois y aller."
         }
       ]
     }

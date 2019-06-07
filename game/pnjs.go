@@ -97,6 +97,8 @@ func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
 					p.Recruit(pnj, g)
 				case "teleport_to":
 					pnj.Teleport(act[1], g)
+				case "become_enemy":
+					pnj.BecomeEnemy(g)
 				case "set_initial_node":
 					pnj.Dialog.SetInitialNode(act[1])
 				}
@@ -206,4 +208,11 @@ func (pnj *Pnj) Teleport(levelName string, g *Game) {
 		pnj.IsPowerAttacking = false
 		pnj.Talkable = true
 	}(pnj, level, g, Mux)
+}
+
+func (pnj *Pnj) BecomeEnemy(g *Game) {
+	Mux.Lock()
+	delete(g.Level.Pnjs, pnj.Pos)
+	g.Level.MakeEnemy(pnj)
+	Mux.Unlock()
 }

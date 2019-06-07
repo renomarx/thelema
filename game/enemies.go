@@ -32,6 +32,15 @@ func NewEnemy(mt *MonsterType, p Pos) *Enemy {
 	return monster
 }
 
+func (level *Level) MakeEnemy(pnj *Pnj) {
+	np := pnj.Pos
+	y := &Enemy{}
+	y.Character = pnj.Character
+	y.Speed.Init(y.Speed.Current * 2)
+	y.VisionRange = 12
+	level.Enemies[np] = y
+}
+
 func (e *Enemy) Update(g *Game) {
 	if e.IsDead() {
 		return
