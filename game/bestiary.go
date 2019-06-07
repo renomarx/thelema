@@ -41,7 +41,7 @@ func Creatures() []*MonsterType {
 	return []*MonsterType{
 		&MonsterType{Name: "orc_thief", Health: 400, Energy: 100, Stats: 60, Speed: 10, Luck: 20, VisionRange: 12, Probability: 100,
 			Weapon: &Weapon{Tile: Dagger, Name: "Dague", Typ: WeaponTypeDagger, Damages: 7, Speed: 20}},
-		&MonsterType{Name: "orc_guard", Health: 800, Energy: 100, Stats: 80, Speed: 10, Luck: 20, VisionRange: 12, Probability: 100,
+		&MonsterType{Name: "orc_guard", Health: 800, Energy: 100, Stats: 80, Speed: 10, Luck: 20, VisionRange: 12, Probability: 20,
 			Weapon: &Weapon{Tile: Spear, Name: "Lance", Typ: WeaponTypeSpear, Damages: 20, Speed: 12}},
 	}
 }
