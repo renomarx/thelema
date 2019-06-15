@@ -166,6 +166,9 @@ func (m *Monster) AttackFriend(p *Friend, g *Game) {
 }
 
 func (m *Monster) TakeDamage(g *Game, damage int, c *Character) {
+	if m == nil {
+		return
+	}
 	if m.Health.Current <= 0 {
 		m.Die(g.Level)
 	}
@@ -176,6 +179,7 @@ func (m *Monster) TakeDamage(g *Game, damage int, c *Character) {
 }
 
 func (m *Monster) Die(level *Level) {
+	m.isDead = true
 	Mux.Lock()
 	delete(level.Monsters, m.Pos)
 	b := &Object{Rune: rune(Steak), Blocking: true}

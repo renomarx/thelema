@@ -1,13 +1,15 @@
 package game
 
-import "time"
-import "math/rand"
+import (
+	"math/rand"
+	"time"
+)
 
 type Invoked struct {
 	Character
 	CreatedAt time.Time
 	Lifetime  int
-	target    *Monster
+	target    *Character
 }
 
 func (level *Level) MakeInvocation(p Pos, dir InputType, pp *PlayerPower) bool {
@@ -26,7 +28,9 @@ func (level *Level) MakeInvocation(p Pos, dir InputType, pp *PlayerPower) bool {
 	}
 	if canGo(level, np) {
 		m := NewFox(np, pp.Lifetime)
+		Mux.Lock()
 		level.Invocations[np] = m
+		Mux.Unlock()
 		return true
 	}
 	return false
@@ -92,16 +96,22 @@ func (m *Invoked) Update(g *Game) {
 
 func (m *Invoked) getTargetPos(l *Level) Pos {
 	if m.target != nil {
-		_, monsterExists := l.Monsters[m.target.Pos]
-		if !monsterExists {
+		if m.target.IsDead() {
 			m.target = nil
+		} else {
+			return m.target.Pos
 		}
 	}
 	for y := m.Y - m.VisionRange; y < m.Y+m.VisionRange; y++ {
 		for x := m.X - m.VisionRange; x < m.X+m.VisionRange; x++ {
 			mm, e := l.Monsters[Pos{X: x, Y: y}]
 			if e {
-				m.target = mm
+				m.target = &mm.Character
+				return Pos{X: x, Y: y}
+			}
+			n, en := l.Enemies[Pos{X: x, Y: y}]
+			if en && !n.IsDead() {
+				m.target = &n.Character
 				return Pos{X: x, Y: y}
 			}
 		}
@@ -130,7 +140,7 @@ func (m *Invoked) Move(to Pos, level *Level) {
 }
 
 func (m *Invoked) canAttack(to Pos, level *Level) bool {
-	return isThereAMonster(level, to)
+	return isThereAnEnemyCharacter(level, to)
 }
 
 func (m *Invoked) Attack(mm *Monster, g *Game) {
@@ -175,10 +185,6 @@ func (m *Invoked) CanSee(level *Level, pos Pos) bool {
 	if isThereAPnj(level, pos) {
 		return false
 	}
-	if pos.Y >= 0 && pos.Y < len(level.Map) {
-		if pos.X >= 0 && pos.X < len(level.Map[pos.Y]) {
-			return true
-		}
-	}
-	return false
+
+	return isInsideMap(level, pos)
 }

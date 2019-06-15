@@ -5,7 +5,7 @@ import "math/rand"
 
 type Friend struct {
 	Character
-	target *Monster
+	target *Character
 }
 
 func (level *Level) MakeFriend(pnj *Pnj) {
@@ -45,16 +45,22 @@ func (m *Friend) Update(g *Game) {
 
 func (m *Friend) getTargetPos(l *Level) Pos {
 	if m.target != nil {
-		_, monsterExists := l.Monsters[m.target.Pos]
-		if !monsterExists {
+		if m.target.IsDead() {
 			m.target = nil
+		} else {
+			return m.target.Pos
 		}
 	}
 	for y := m.Y - m.VisionRange; y < m.Y+m.VisionRange; y++ {
 		for x := m.X - m.VisionRange; x < m.X+m.VisionRange; x++ {
 			mm, e := l.Monsters[Pos{X: x, Y: y}]
 			if e {
-				m.target = mm
+				m.target = &mm.Character
+				return Pos{X: x, Y: y}
+			}
+			n, en := l.Enemies[Pos{X: x, Y: y}]
+			if en && !n.IsDead() {
+				m.target = &n.Character
 				return Pos{X: x, Y: y}
 			}
 		}
@@ -106,19 +112,12 @@ func (m *Friend) CanSee(level *Level, pos Pos) bool {
 	if isThereABlockingObject(level, pos) {
 		return false
 	}
-	if isThereAnInvocation(level, pos) {
-		return false
-	}
 	if isThereAPnj(level, pos) {
 		return false
 	}
 	if isThereAFriend(level, pos) {
 		return false
 	}
-	if pos.Y >= 0 && pos.Y < len(level.Map) {
-		if pos.X >= 0 && pos.X < len(level.Map[pos.Y]) {
-			return true
-		}
-	}
-	return false
+
+	return isInsideMap(level, pos)
 }
