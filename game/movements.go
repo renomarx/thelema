@@ -58,6 +58,9 @@ func isThereABlockingObject(level *Level, pos Pos) bool {
 }
 
 func canGo(level *Level, pos Pos) bool {
+	if !isInsideMap(level, pos) {
+		return false
+	}
 	if isThereABlockingObject(level, pos) {
 		return false
 	}
@@ -70,12 +73,16 @@ func canGo(level *Level, pos Pos) bool {
 	if isThereAPnj(level, pos) {
 		return false
 	}
+	return true
+}
+
+func isInsideMap(level *Level, pos Pos) bool {
 	if pos.Y >= 0 && pos.Y < len(level.Map) {
 		if pos.X >= 0 && pos.X < len(level.Map[pos.Y]) {
 			return level.Map[pos.Y][pos.X] != Blank && level.Map[pos.Y][pos.X] != 0
 		}
 	}
-	return false
+	return true
 }
 
 func openDoor(g *Game, pos Pos) {
