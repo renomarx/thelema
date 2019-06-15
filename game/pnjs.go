@@ -2,7 +2,6 @@ package game
 
 import "time"
 import "math/rand"
-import "sync"
 import "strings"
 
 type Pnj struct {
@@ -137,11 +136,11 @@ func (pnj *Pnj) StopTalking() {
 	}
 }
 
-func (pnj *Pnj) Update(game *Game) {
+func (pnj *Pnj) Update(g *Game) {
 	if pnj.IsMoving || pnj.IsTalking {
 		return
 	}
-	level := game.Level
+	level := g.Level
 	t := time.Now()
 	deltaD := t.Sub(pnj.LastActionTime)
 	delta := 0.001 * float64(deltaD.Nanoseconds())
@@ -149,7 +148,7 @@ func (pnj *Pnj) Update(game *Game) {
 	pos := pnj.getWantedPosition()
 	if pnj.ActionPoints >= 1000000 { // 1 second
 		if pnj.canMove(pos, level) {
-			pnj.Move(pos, level)
+			pnj.Move(pos, g)
 		}
 		pnj.ActionPoints = 0.0
 	}
@@ -187,13 +186,14 @@ func (pnj *Pnj) canMove(to Pos, level *Level) bool {
 	return true
 }
 
-func (pnj *Pnj) Move(to Pos, level *Level) {
+func (pnj *Pnj) Move(to Pos, g *Game) {
+	level := g.Level
 	pnj.IsMoving = true
 	lastPos := Pos{X: pnj.Pos.X, Y: pnj.Pos.Y}
-	Mux.Lock()
+	g.Mux.Lock()
 	delete(level.Pnjs, pnj.Pos)
 	level.Pnjs[to] = pnj
-	Mux.Unlock()
+	g.Mux.Unlock()
 	pnj.moveFromTo(lastPos, to)
 }
 
@@ -203,25 +203,25 @@ func (pnj *Pnj) Teleport(levelName string, g *Game) {
 	g.MakeEffect(pnj.Pos, rune(Teleport), 200)
 	pnj.IsMoving = true
 	pnj.IsPowerAttacking = true
-	go func(pnj *Pnj, level *Level, g *Game, mux *sync.Mutex) {
+	go func(pnj *Pnj, level *Level, g *Game) {
 		for pnj.AttackPos = 0; pnj.AttackPos < CaseLen; pnj.AttackPos++ {
 			pnj.adaptSpeed()
 		}
 		pos := level.GetRandomFreePos()
-		mux.Lock()
+		g.Mux.Lock()
 		delete(g.Level.Pnjs, pnj.Pos)
 		pnj.Pos = *pos
 		level.Pnjs[*pos] = pnj
-		mux.Unlock()
+		g.Mux.Unlock()
 		pnj.IsMoving = false
 		pnj.IsPowerAttacking = false
 		pnj.Talkable = true
-	}(pnj, level, g, Mux)
+	}(pnj, level, g)
 }
 
 func (pnj *Pnj) BecomeEnemy(g *Game) {
-	Mux.Lock()
+	g.Mux.Lock()
 	delete(g.Level.Pnjs, pnj.Pos)
 	g.Level.MakeEnemy(pnj)
-	Mux.Unlock()
+	g.Mux.Unlock()
 }

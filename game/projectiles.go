@@ -100,10 +100,10 @@ func (p *Projectile) Move(to Pos, g *Game) {
 	}
 	level := g.Level
 	p.IsMoving = true
-	Mux.Lock()
+	g.Mux.Lock()
 	delete(level.Projectiles, p.Pos)
 	level.Projectiles[to] = p
-	Mux.Unlock()
+	g.Mux.Unlock()
 	p.Pos = to
 
 	if !p.canMove(level, to) {
@@ -145,17 +145,17 @@ func (p *Projectile) adaptSpeed() {
 
 func (p *Projectile) MakeDamage(g *Game) {
 	level := g.Level
-	Mux.Lock()
+	g.Mux.Lock()
 	m, ok := level.Monsters[p.Pos]
-	Mux.Unlock()
+	g.Mux.Unlock()
 	if ok {
 		// There is a monster !
 		m.TakeDamage(g, p.Size, p.From)
 		p.Die(g)
 	}
-	Mux.Lock()
+	g.Mux.Lock()
 	e, ok := level.Enemies[p.Pos]
-	Mux.Unlock()
+	g.Mux.Unlock()
 	if ok {
 		// There is an annemy !
 		e.TakeDamage(g, p.Size)
@@ -164,8 +164,8 @@ func (p *Projectile) MakeDamage(g *Game) {
 }
 
 func (p *Projectile) Die(g *Game) {
-	Mux.Lock()
+	g.Mux.Lock()
 	delete(g.Level.Projectiles, p.Pos)
-	Mux.Unlock()
+	g.Mux.Unlock()
 	g.MakeExplosion(p.Pos, 100, 100)
 }

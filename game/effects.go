@@ -1,7 +1,6 @@
 package game
 
 import "time"
-import "sync"
 
 type Effect struct {
 	Object
@@ -42,15 +41,15 @@ func (g *Game) MakeExplosion(p Pos, size int, lifetime int) {
 	}
 	eff.TileIdx = idx
 
-	Mux.Lock()
+	g.Mux.Lock()
 	level.Effects[p] = eff
-	Mux.Unlock()
-	go func(mux *sync.Mutex) {
+	g.Mux.Unlock()
+	go func(g *Game) {
 		time.Sleep(time.Duration(lifetime) * time.Millisecond)
-		mux.Lock()
-		delete(level.Effects, p)
-		mux.Unlock()
-	}(Mux)
+		g.Mux.Lock()
+		delete(g.Level.Effects, p)
+		g.Mux.Unlock()
+	}(g)
 }
 
 func (g *Game) MakeRangeStorm(p Pos, damages int, dir InputType, lifetime int, rg int) {
@@ -98,13 +97,13 @@ func (g *Game) MakeStorm(p Pos, damages int, dir InputType, lifetime int) {
 	case Down:
 		eff.TileIdx = 0
 	}
-	Mux.Lock()
+	g.Mux.Lock()
 	level.Effects[p] = eff
-	Mux.Unlock()
-	go func() {
+	g.Mux.Unlock()
+	go func(g *Game) {
 		time.Sleep(time.Duration(lifetime) * time.Second)
 		eff.Die(g)
-	}()
+	}(g)
 }
 
 func (g *Game) MakeFlames(p Pos, damages int, lifetime int, rg int) {
@@ -128,10 +127,10 @@ func (g *Game) MakeFlame(p Pos, damages int, lifetime int) {
 	eff.Blocking = false
 	eff.Damages = damages
 	eff.TileIdx = 0
-	Mux.Lock()
+	g.Mux.Lock()
 	level.Effects[p] = eff
-	Mux.Unlock()
-	go func() {
+	g.Mux.Unlock()
+	go func(eff *Effect, g *Game) {
 		time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
 		eff.TileIdx = 1
 		time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
@@ -140,7 +139,7 @@ func (g *Game) MakeFlame(p Pos, damages int, lifetime int) {
 		eff.TileIdx = 3
 		time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
 		eff.Die(g)
-	}()
+	}(eff, g)
 }
 
 func (g *Game) MakeEffect(p Pos, r rune, lifetime int) {
@@ -150,15 +149,15 @@ func (g *Game) MakeEffect(p Pos, r rune, lifetime int) {
 	eff.Blocking = false
 	eff.TileIdx = 0
 
-	Mux.Lock()
+	g.Mux.Lock()
 	level.Effects[p] = eff
-	Mux.Unlock()
-	go func(mux *sync.Mutex) {
+	g.Mux.Unlock()
+	go func(g *Game) {
 		time.Sleep(time.Duration(lifetime) * time.Millisecond)
-		mux.Lock()
-		delete(level.Effects, p)
-		mux.Unlock()
-	}(Mux)
+		g.Mux.Lock()
+		delete(g.Level.Effects, p)
+		g.Mux.Unlock()
+	}(g)
 }
 
 func (e *Effect) Update(g *Game) {
@@ -169,17 +168,17 @@ func (e *Effect) Update(g *Game) {
 
 func (e *Effect) MakeDamage(g *Game) {
 	level := g.Level
-	Mux.Lock()
+	g.Mux.Lock()
 	m, ok := level.Monsters[e.Pos]
-	Mux.Unlock()
+	g.Mux.Unlock()
 	if ok {
 		// There is a monster !
 		m.TakeDamage(g, e.Damages, nil)
 		e.Die(g)
 	}
-	Mux.Lock()
+	g.Mux.Lock()
 	en, ok := level.Enemies[e.Pos]
-	Mux.Unlock()
+	g.Mux.Unlock()
 	if ok {
 		// There is an annemy !
 		en.TakeDamage(g, e.Damages)
@@ -188,9 +187,9 @@ func (e *Effect) MakeDamage(g *Game) {
 }
 
 func (e *Effect) Die(g *Game) {
-	Mux.Lock()
+	g.Mux.Lock()
 	delete(g.Level.Effects, e.Pos)
-	Mux.Unlock()
+	g.Mux.Unlock()
 }
 
 func (e *Effect) canBe(level *Level, pos Pos) bool {

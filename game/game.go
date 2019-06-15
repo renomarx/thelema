@@ -8,8 +8,6 @@ import (
 // Length of a map case (in pixels)
 const CaseLen = 32
 
-var Mux *sync.Mutex = &sync.Mutex{}
-
 type Game struct {
 	GameDir       string
 	Level         *Level
@@ -25,6 +23,7 @@ type Game struct {
 	menu          *Menu
 	GG            *GameGenerator
 	Config        *Config
+	Mux           *sync.Mutex
 }
 
 func (g *Game) GetInput() *Input {
@@ -92,6 +91,7 @@ type MovingObject struct {
 
 func NewGame(gameDir string) *Game {
 	game := &Game{Paused: false, Running: true, Playing: false, GameDir: gameDir}
+	game.Mux = &sync.Mutex{}
 	game.LoadConfig()
 	game.LoadMenu()
 	game.menu.IsOpen = true

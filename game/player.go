@@ -231,10 +231,10 @@ func (p *Player) TakeQuestObject(o *Object, g *Game) bool {
 		Action:  ActionTake,
 		Message: "You got a special object!",
 	})
-	Mux.Lock()
+	g.Mux.Lock()
 	p.Inventory.QuestObjects[o.Rune] = o
 	delete(g.Level.Objects, o.Pos)
-	Mux.Unlock()
+	g.Mux.Unlock()
 
 	for _, stepID := range qo.Quest.StepsFullfilling {
 		p.finishQuestStep(qo.Quest.ID, stepID, g)
@@ -247,9 +247,9 @@ func (p *Player) TakeUsable(o *Object, g *Game) bool {
 	taken := p.Inventory.TakeUsable(o)
 	if taken {
 		g.GetEventManager().Dispatch(&Event{Action: ActionTake})
-		Mux.Lock()
+		g.Mux.Lock()
 		delete(g.Level.Objects, o.Pos)
-		Mux.Unlock()
+		g.Mux.Unlock()
 	}
 
 	return true
@@ -262,17 +262,17 @@ func (p *Player) TakeBook(o *Object, g *Game) bool {
 			Action:  ActionTake,
 			Message: "You got a new book!",
 		})
-		Mux.Lock()
+		g.Mux.Lock()
 		delete(g.Level.Objects, o.Pos)
-		Mux.Unlock()
+		g.Mux.Unlock()
 	}
 
 	return true
 }
 
 func (p *Player) Recruit(pnj *Pnj, g *Game) {
-	Mux.Lock()
+	g.Mux.Lock()
 	delete(g.Level.Pnjs, pnj.Pos)
 	g.Level.MakeFriend(pnj)
-	Mux.Unlock()
+	g.Mux.Unlock()
 }

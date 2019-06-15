@@ -45,7 +45,7 @@ func (m *Monster) Update(g *Game) {
 	positions := level.astar(m.Pos, playerPos, m)
 	if len(positions) > 1 && m.ActionPoints >= 100000 { // 0.1 second
 		if m.canMove(positions[1], level) {
-			m.Move(positions[1], level)
+			m.Move(positions[1], g)
 		}
 		if m.canAttackInvocation(positions[1], level) {
 			g.GetEventManager().Dispatch(&Event{Action: ActionRoar, Payload: map[string]string{"monster": string(m.Rune)}})
@@ -76,7 +76,9 @@ func (m *Monster) getTargetPos(g *Game) Pos {
 
 	for y := m.Y - m.VisionRange; y < m.Y+m.VisionRange; y++ {
 		for x := m.X - m.VisionRange; x < m.X+m.VisionRange; x++ {
+			g.Mux.Lock()
 			mm, e := l.Invocations[Pos{X: x, Y: y}]
+			g.Mux.Unlock()
 			if e {
 				m.target = &mm.Character
 				return Pos{X: x, Y: y}
@@ -101,13 +103,13 @@ func (m *Monster) canMove(to Pos, level *Level) bool {
 	return true
 }
 
-func (m *Monster) Move(to Pos, level *Level) {
+func (m *Monster) Move(to Pos, g *Game) {
 	m.IsMoving = true
 	lastPos := Pos{X: m.Pos.X, Y: m.Pos.Y}
-	Mux.Lock()
-	delete(level.Monsters, m.Pos)
-	level.Monsters[to] = m
-	Mux.Unlock()
+	g.Mux.Lock()
+	delete(g.Level.Monsters, m.Pos)
+	g.Level.Monsters[to] = m
+	g.Mux.Unlock()
 	m.moveFromTo(lastPos, to)
 }
 
@@ -170,7 +172,7 @@ func (m *Monster) TakeDamage(g *Game, damage int, c *Character) {
 		return
 	}
 	if m.Health.Current <= 0 {
-		m.Die(g.Level)
+		m.Die(g)
 	}
 	m.Health.Current -= damage
 	g.MakeExplosion(m.Pos, damage, 50)
@@ -178,14 +180,14 @@ func (m *Monster) TakeDamage(g *Game, damage int, c *Character) {
 	m.target = c
 }
 
-func (m *Monster) Die(level *Level) {
+func (m *Monster) Die(g *Game) {
 	m.isDead = true
-	Mux.Lock()
-	delete(level.Monsters, m.Pos)
+	g.Mux.Lock()
+	delete(g.Level.Monsters, m.Pos)
 	b := &Object{Rune: rune(Steak), Blocking: true}
 	b.Pos = m.Pos
-	level.Objects[m.Pos] = b
-	Mux.Unlock()
+	g.Level.Objects[m.Pos] = b
+	g.Mux.Unlock()
 }
 
 func (m *Monster) CanSee(level *Level, pos Pos) bool {

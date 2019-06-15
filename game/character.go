@@ -288,7 +288,7 @@ func (c *Character) PowerAttack(g *Game) {
 				c.Energy.RaiseXp(10, g)
 			case PowerInvocation:
 				g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerInvocation}})
-				if g.Level.MakeInvocation(c.Pos, c.LookAt, c.CurrentPower) {
+				if g.MakeInvocation(c.Pos, c.LookAt, c.CurrentPower) {
 					c.Energy.Current -= c.CurrentPower.Energy
 					c.Will.RaiseXp(1, g)
 					c.Charisma.RaiseXp(1, g)

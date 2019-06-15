@@ -12,7 +12,8 @@ type Invoked struct {
 	target    *Character
 }
 
-func (level *Level) MakeInvocation(p Pos, dir InputType, pp *PlayerPower) bool {
+func (g *Game) MakeInvocation(p Pos, dir InputType, pp *PlayerPower) bool {
+	level := g.Level
 	np := Pos{X: p.X, Y: p.Y}
 	if dir == Left {
 		np.X--
@@ -28,9 +29,9 @@ func (level *Level) MakeInvocation(p Pos, dir InputType, pp *PlayerPower) bool {
 	}
 	if canGo(level, np) {
 		m := NewFox(np, pp.Lifetime)
-		Mux.Lock()
+		g.Mux.Lock()
 		level.Invocations[np] = m
-		Mux.Unlock()
+		g.Mux.Unlock()
 		return true
 	}
 	return false
@@ -68,13 +69,13 @@ func (m *Invoked) Update(g *Game) {
 		return
 	}
 	if level.Player.IsDead() {
-		m.Die(g.Level)
+		m.Die(g)
 		return
 	}
 	t := time.Now()
 	deltaC := t.Sub(m.CreatedAt)
 	if deltaC >= time.Duration(m.Lifetime)*time.Second {
-		m.Die(g.Level)
+		m.Die(g)
 		return
 	}
 	deltaD := t.Sub(m.LastActionTime)
@@ -84,7 +85,7 @@ func (m *Invoked) Update(g *Game) {
 	positions := level.astar(m.Pos, monsterPos, m)
 	if len(positions) > 1 && m.ActionPoints >= 100000 { // 0.1 second
 		if m.canMove(positions[1], level) {
-			m.Move(positions[1], level)
+			m.Move(positions[1], g)
 		}
 		if m.canAttack(positions[1], level) {
 			m.Attack(level.Monsters[positions[1]], g)
@@ -129,13 +130,14 @@ func (m *Invoked) canMove(to Pos, level *Level) bool {
 	return true
 }
 
-func (m *Invoked) Move(to Pos, level *Level) {
+func (m *Invoked) Move(to Pos, g *Game) {
+	level := g.Level
 	m.IsMoving = true
 	lastPos := Pos{X: m.Pos.X, Y: m.Pos.Y}
-	Mux.Lock()
+	g.Mux.Lock()
 	delete(level.Invocations, m.Pos)
 	level.Invocations[to] = m
-	Mux.Unlock()
+	g.Mux.Unlock()
 	m.moveFromTo(lastPos, to)
 }
 
@@ -158,18 +160,18 @@ func (m *Invoked) Attack(mm *Monster, g *Game) {
 
 func (m *Invoked) TakeDamage(g *Game, damage int) {
 	if m.Health.Current <= 0 {
-		m.Die(g.Level)
+		m.Die(g)
 	}
 	m.Health.Current -= damage
 	g.MakeExplosion(m.Pos, damage, 50)
 	m.ParalyzedTime = rand.Intn(damage) * 10
 }
 
-func (m *Invoked) Die(level *Level) {
+func (m *Invoked) Die(g *Game) {
 	m.isDead = true
-	Mux.Lock()
-	delete(level.Invocations, m.Pos)
-	Mux.Unlock()
+	g.Mux.Lock()
+	delete(g.Level.Invocations, m.Pos)
+	g.Mux.Unlock()
 }
 
 func (m *Invoked) CanSee(level *Level, pos Pos) bool {

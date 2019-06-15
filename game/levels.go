@@ -144,9 +144,9 @@ func (level *Level) OpenPortal(g *Game, pos Pos) {
 		for oldP, f := range levelFrom.Friends {
 			f.Pos = port.PosTo
 			g.Level.Friends[port.PosTo] = f
-			Mux.Lock()
+			g.Mux.Lock()
 			delete(levelFrom.Friends, oldP)
-			Mux.Unlock()
+			g.Mux.Unlock()
 		}
 
 		g.GetEventManager().Dispatch(&Event{

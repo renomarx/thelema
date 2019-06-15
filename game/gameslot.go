@@ -14,7 +14,7 @@ func SaveGame(g *Game, slot string) {
 		return
 	}
 	filepath := g.generateSlotFilepath(slot)
-	Mux.Lock()
+	g.Mux.Lock()
 	g.GetEventManager().Dispatch(&Event{
 		Action:  ActionMenuConfirm,
 		Message: "Saving game..."})
@@ -25,7 +25,7 @@ func SaveGame(g *Game, slot string) {
 	g.GetEventManager().Dispatch(&Event{
 		Action:  ActionMenuConfirm,
 		Message: "Saved!"})
-	Mux.Unlock()
+	g.Mux.Unlock()
 }
 
 func LoadGame(g *Game, slot string) {

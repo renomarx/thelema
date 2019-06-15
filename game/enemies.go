@@ -57,7 +57,7 @@ func (e *Enemy) Update(g *Game) {
 	positions := level.astar(e.Pos, monsterPos, e)
 	if len(positions) > 1 && e.ActionPoints >= 100000 { // 0.1 second
 		if e.canMove(positions[1], level) {
-			e.Move(positions[1], level)
+			e.Move(positions[1], g)
 		}
 		if e.canAttack(positions[1], level) {
 			e.Attack(g, positions[1])
@@ -79,7 +79,9 @@ func (e *Enemy) getTargetPos(g *Game) Pos {
 
 	for y := e.Y - e.VisionRange; y < e.Y+e.VisionRange; y++ {
 		for x := e.X - e.VisionRange; x < e.X+e.VisionRange; x++ {
+			g.Mux.Lock()
 			mm, ex := l.Invocations[Pos{X: x, Y: y}]
+			g.Mux.Unlock()
 			if ex {
 				e.target = &mm.Character
 				return Pos{X: x, Y: y}
@@ -104,13 +106,14 @@ func (e *Enemy) canMove(to Pos, level *Level) bool {
 	return true
 }
 
-func (e *Enemy) Move(to Pos, level *Level) {
+func (e *Enemy) Move(to Pos, g *Game) {
+	level := g.Level
 	e.IsMoving = true
 	lastPos := Pos{X: e.Pos.X, Y: e.Pos.Y}
-	Mux.Lock()
+	g.Mux.Lock()
 	delete(level.Enemies, e.Pos)
 	level.Enemies[to] = e
-	Mux.Unlock()
+	g.Mux.Unlock()
 	e.moveFromTo(lastPos, to)
 }
 
@@ -120,18 +123,18 @@ func (e *Enemy) canAttack(to Pos, level *Level) bool {
 
 func (e *Enemy) TakeDamage(g *Game, damage int) {
 	if e.Health.Current <= 0 {
-		e.Die(g.Level)
+		e.Die(g)
 	}
 	e.Health.Current -= damage
 	g.MakeExplosion(e.Pos, damage, 50)
 	e.ParalyzedTime = rand.Intn(damage) * 10
 }
 
-func (e *Enemy) Die(level *Level) {
+func (e *Enemy) Die(g *Game) {
 	e.isDead = true
-	Mux.Lock()
-	delete(level.Enemies, e.Pos)
-	Mux.Unlock()
+	g.Mux.Lock()
+	delete(g.Level.Enemies, e.Pos)
+	g.Mux.Unlock()
 }
 
 func (e *Enemy) CanSee(level *Level, pos Pos) bool {

@@ -33,7 +33,7 @@ func (m *Friend) Update(g *Game) {
 	positions := level.astar(m.Pos, monsterPos, m)
 	if len(positions) > 1 && m.ActionPoints >= 100000 { // 0.1 second
 		if m.canMove(positions[1], level) {
-			m.Move(positions[1], level)
+			m.Move(positions[1], g)
 		}
 		if m.canAttack(positions[1], level) {
 			m.Attack(g, positions[1])
@@ -78,13 +78,13 @@ func (m *Friend) canMove(to Pos, level *Level) bool {
 	return true
 }
 
-func (m *Friend) Move(to Pos, level *Level) {
+func (m *Friend) Move(to Pos, g *Game) {
 	m.IsMoving = true
 	lastPos := Pos{X: m.Pos.X, Y: m.Pos.Y}
-	Mux.Lock()
-	delete(level.Friends, m.Pos)
-	level.Friends[to] = m
-	Mux.Unlock()
+	g.Mux.Lock()
+	delete(g.Level.Friends, m.Pos)
+	g.Level.Friends[to] = m
+	g.Mux.Unlock()
 	m.moveFromTo(lastPos, to)
 }
 
@@ -94,18 +94,18 @@ func (m *Friend) canAttack(to Pos, level *Level) bool {
 
 func (m *Friend) TakeDamage(g *Game, damage int) {
 	if m.Health.Current <= 0 {
-		m.Die(g.Level)
+		m.Die(g)
 	}
 	m.Health.Current -= damage
 	g.MakeExplosion(m.Pos, damage, 50)
 	m.ParalyzedTime = rand.Intn(damage) * 10
 }
 
-func (m *Friend) Die(level *Level) {
+func (m *Friend) Die(g *Game) {
 	m.isDead = true
-	Mux.Lock()
-	delete(level.Friends, m.Pos)
-	Mux.Unlock()
+	g.Mux.Lock()
+	delete(g.Level.Friends, m.Pos)
+	g.Mux.Unlock()
 }
 
 func (m *Friend) CanSee(level *Level, pos Pos) bool {
