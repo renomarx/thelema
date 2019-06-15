@@ -47,7 +47,6 @@ func (p *Player) Move(g *Game) {
 	case Up:
 		openDoor(g, Pos{p.X, p.Y - 1})
 		if canGo(level, Pos{p.X, p.Y - 1}) {
-			closeDoor(g, Pos{p.X, p.Y})
 			p.DispatchWalkingEvent(g)
 			p.WalkUp()
 			p.openPortal(g, Pos{p.X, p.Y})
@@ -55,7 +54,6 @@ func (p *Player) Move(g *Game) {
 	case Down:
 		openDoor(g, Pos{p.X, p.Y + 1})
 		if canGo(level, Pos{p.X, p.Y + 1}) {
-			closeDoor(g, Pos{p.X, p.Y})
 			p.DispatchWalkingEvent(g)
 			p.WalkDown()
 			p.openPortal(g, Pos{p.X, p.Y})
@@ -63,7 +61,6 @@ func (p *Player) Move(g *Game) {
 	case Left:
 		openDoor(g, Pos{p.X - 1, p.Y})
 		if canGo(level, Pos{p.X - 1, p.Y}) {
-			closeDoor(g, Pos{p.X, p.Y})
 			p.DispatchWalkingEvent(g)
 			p.WalkLeft()
 			p.openPortal(g, Pos{p.X, p.Y})
@@ -71,7 +68,6 @@ func (p *Player) Move(g *Game) {
 	case Right:
 		openDoor(g, Pos{p.X + 1, p.Y})
 		if canGo(level, Pos{p.X + 1, p.Y}) {
-			closeDoor(g, Pos{p.X, p.Y})
 			p.DispatchWalkingEvent(g)
 			p.WalkRight()
 			p.openPortal(g, Pos{p.X, p.Y})
