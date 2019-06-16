@@ -22,9 +22,6 @@ func (m *Friend) Update(g *Game) {
 		return
 	}
 	level := g.Level
-	if m.IsMoving {
-		return
-	}
 	t := time.Now()
 	deltaD := t.Sub(m.LastActionTime)
 	delta := 0.001 * float64(deltaD.Nanoseconds())
@@ -79,7 +76,6 @@ func (m *Friend) canMove(to Pos, level *Level) bool {
 }
 
 func (m *Friend) Move(to Pos, g *Game) {
-	m.IsMoving = true
 	lastPos := Pos{X: m.Pos.X, Y: m.Pos.Y}
 	g.Mux.Lock()
 	delete(g.Level.Friends, m.Pos)

@@ -44,12 +44,10 @@ func (g *Game) MakeExplosion(p Pos, size int, lifetime int) {
 	g.Mux.Lock()
 	level.Effects[p] = eff
 	g.Mux.Unlock()
-	go func(g *Game) {
-		time.Sleep(time.Duration(lifetime) * time.Millisecond)
-		g.Mux.Lock()
-		delete(g.Level.Effects, p)
-		g.Mux.Unlock()
-	}(g)
+	time.Sleep(time.Duration(lifetime) * time.Millisecond)
+	g.Mux.Lock()
+	delete(g.Level.Effects, p)
+	g.Mux.Unlock()
 }
 
 func (g *Game) MakeRangeStorm(p Pos, damages int, dir InputType, lifetime int, rg int) {
@@ -100,10 +98,8 @@ func (g *Game) MakeStorm(p Pos, damages int, dir InputType, lifetime int) {
 	g.Mux.Lock()
 	level.Effects[p] = eff
 	g.Mux.Unlock()
-	go func(g *Game) {
-		time.Sleep(time.Duration(lifetime) * time.Second)
-		eff.Die(g)
-	}(g)
+	time.Sleep(time.Duration(lifetime) * time.Second)
+	eff.Die(g)
 }
 
 func (g *Game) MakeFlames(p Pos, damages int, lifetime int, rg int) {
@@ -130,16 +126,14 @@ func (g *Game) MakeFlame(p Pos, damages int, lifetime int) {
 	g.Mux.Lock()
 	level.Effects[p] = eff
 	g.Mux.Unlock()
-	go func(eff *Effect, g *Game) {
-		time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
-		eff.TileIdx = 1
-		time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
-		eff.TileIdx = 2
-		time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
-		eff.TileIdx = 3
-		time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
-		eff.Die(g)
-	}(eff, g)
+	time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
+	eff.TileIdx = 1
+	time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
+	eff.TileIdx = 2
+	time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
+	eff.TileIdx = 3
+	time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
+	eff.Die(g)
 }
 
 func (g *Game) MakeEffect(p Pos, r rune, lifetime int) {
@@ -152,12 +146,10 @@ func (g *Game) MakeEffect(p Pos, r rune, lifetime int) {
 	g.Mux.Lock()
 	level.Effects[p] = eff
 	g.Mux.Unlock()
-	go func(g *Game) {
-		time.Sleep(time.Duration(lifetime) * time.Millisecond)
-		g.Mux.Lock()
-		delete(g.Level.Effects, p)
-		g.Mux.Unlock()
-	}(g)
+	time.Sleep(time.Duration(lifetime) * time.Millisecond)
+	g.Mux.Lock()
+	delete(g.Level.Effects, p)
+	g.Mux.Unlock()
 }
 
 func (e *Effect) Update(g *Game) {

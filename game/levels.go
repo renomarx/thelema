@@ -81,7 +81,13 @@ func (g *Game) UpdateLevel() {
 func (g *Game) handleInput() {
 	level := g.Level
 	p := level.Player
-	p.Update(g)
+	if !p.IsPlaying {
+		go func(p *Player) {
+			p.IsPlaying = true
+			p.Update(g)
+			p.IsPlaying = false
+		}(p)
+	}
 }
 
 func (g *Game) handleMonsters() {
@@ -89,8 +95,12 @@ func (g *Game) handleMonsters() {
 	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
 		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
 			m, e := l.Monsters[Pos{X: x, Y: y}]
-			if e {
-				m.Update(g)
+			if e && !m.IsPlaying {
+				go func(m *Monster) {
+					m.IsPlaying = true
+					m.Update(g)
+					m.IsPlaying = false
+				}(m)
 			}
 		}
 	}
@@ -98,37 +108,73 @@ func (g *Game) handleMonsters() {
 
 func (g *Game) handleInvocations() {
 	for _, m := range g.Level.Invocations {
-		m.Update(g)
+		if !m.IsPlaying {
+			go func(m *Invoked) {
+				m.IsPlaying = true
+				m.Update(g)
+				m.IsPlaying = false
+			}(m)
+		}
 	}
 }
 
 func (g *Game) handlePnjs() {
 	for _, pnj := range g.Level.Pnjs {
-		pnj.Update(g)
+		if !pnj.IsPlaying {
+			go func(pnj *Pnj) {
+				pnj.IsPlaying = true
+				pnj.Update(g)
+				pnj.IsPlaying = false
+			}(pnj)
+		}
 	}
 }
 
 func (g *Game) handleFriends() {
 	for _, m := range g.Level.Friends {
-		m.Update(g)
+		if !m.IsPlaying {
+			go func(m *Friend) {
+				m.IsPlaying = true
+				m.Update(g)
+				m.IsPlaying = false
+			}(m)
+		}
 	}
 }
 
 func (g *Game) handleEnemies() {
 	for _, m := range g.Level.Enemies {
-		m.Update(g)
+		if !m.IsPlaying {
+			go func(m *Enemy) {
+				m.IsPlaying = true
+				m.Update(g)
+				m.IsPlaying = false
+			}(m)
+		}
 	}
 }
 
 func (g *Game) handleProjectiles() {
 	for _, projectile := range g.Level.Projectiles {
-		projectile.Update(g)
+		if !projectile.IsPlaying {
+			go func(projectile *Projectile) {
+				projectile.IsPlaying = true
+				projectile.Update(g)
+				projectile.IsPlaying = false
+			}(projectile)
+		}
 	}
 }
 
 func (g *Game) handleEffects() {
 	for _, eff := range g.Level.Effects {
-		eff.Update(g)
+		if !eff.IsPlaying {
+			go func(eff *Effect) {
+				eff.IsPlaying = true
+				eff.Update(g)
+				eff.IsPlaying = false
+			}(eff)
+		}
 	}
 }
 

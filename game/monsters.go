@@ -26,7 +26,6 @@ func NewMonster(mt *MonsterType, p Pos) *Monster {
 	monster.Xb = 0
 	monster.Yb = 0
 	monster.LastActionTime = time.Now()
-	monster.IsMoving = false
 	monster.VisionRange = mt.VisionRange
 	return monster
 }
@@ -34,7 +33,7 @@ func NewMonster(mt *MonsterType, p Pos) *Monster {
 func (m *Monster) Update(g *Game) {
 	level := g.Level
 	p := level.Player
-	if m.IsMoving || p.IsDead() {
+	if p.IsDead() {
 		return
 	}
 	t := time.Now()
@@ -104,7 +103,6 @@ func (m *Monster) canMove(to Pos, level *Level) bool {
 }
 
 func (m *Monster) Move(to Pos, g *Game) {
-	m.IsMoving = true
 	lastPos := Pos{X: m.Pos.X, Y: m.Pos.Y}
 	g.Mux.Lock()
 	delete(g.Level.Monsters, m.Pos)
@@ -121,16 +119,12 @@ func (m *Monster) canAttackPlayer(to Pos, level *Level) bool {
 }
 
 func (m *Monster) AttackPlayer(p *Player, game *Game) {
-	m.IsMoving = true
 	m.IsAttacking = true
-	go func(m *Monster) {
-		for i := 0; i < CaseLen; i++ {
-			m.adaptSpeed()
-		}
-		m.IsMoving = false
-		m.IsAttacking = false
-	}(m)
+	for i := 0; i < CaseLen; i++ {
+		m.adaptSpeed()
+	}
 	p.TakeDamage(game, m.CalculateAttackScore())
+	m.IsAttacking = false
 }
 
 func (m *Monster) canAttackInvocation(to Pos, level *Level) bool {
@@ -138,16 +132,12 @@ func (m *Monster) canAttackInvocation(to Pos, level *Level) bool {
 }
 
 func (m *Monster) AttackInvocation(p *Invoked, g *Game) {
-	m.IsMoving = true
 	m.IsAttacking = true
-	go func(m *Monster) {
-		for i := 0; i < CaseLen; i++ {
-			m.adaptSpeed()
-		}
-		m.IsMoving = false
-		m.IsAttacking = false
-	}(m)
+	for i := 0; i < CaseLen; i++ {
+		m.adaptSpeed()
+	}
 	p.TakeDamage(g, m.CalculateAttackScore())
+	m.IsAttacking = false
 }
 
 func (m *Monster) canAttackFriend(to Pos, level *Level) bool {
@@ -155,16 +145,12 @@ func (m *Monster) canAttackFriend(to Pos, level *Level) bool {
 }
 
 func (m *Monster) AttackFriend(p *Friend, g *Game) {
-	m.IsMoving = true
 	m.IsAttacking = true
-	go func(m *Monster) {
-		for i := 0; i < CaseLen; i++ {
-			m.adaptSpeed()
-		}
-		m.IsMoving = false
-		m.IsAttacking = false
-	}(m)
+	for i := 0; i < CaseLen; i++ {
+		m.adaptSpeed()
+	}
 	p.TakeDamage(g, m.CalculateAttackScore())
+	m.IsAttacking = false
 }
 
 func (m *Monster) TakeDamage(g *Game, damage int, c *Character) {

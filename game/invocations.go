@@ -57,7 +57,6 @@ func NewFox(p Pos, lifetime int) *Invoked {
 	monster.Yb = 0
 	monster.CreatedAt = time.Now()
 	monster.LastActionTime = time.Now()
-	monster.IsMoving = false
 	monster.Lifetime = lifetime
 
 	return monster
@@ -65,9 +64,6 @@ func NewFox(p Pos, lifetime int) *Invoked {
 
 func (m *Invoked) Update(g *Game) {
 	level := g.Level
-	if m.IsMoving {
-		return
-	}
 	if level.Player.IsDead() {
 		m.Die(g)
 		return
@@ -132,7 +128,6 @@ func (m *Invoked) canMove(to Pos, level *Level) bool {
 
 func (m *Invoked) Move(to Pos, g *Game) {
 	level := g.Level
-	m.IsMoving = true
 	lastPos := Pos{X: m.Pos.X, Y: m.Pos.Y}
 	g.Mux.Lock()
 	delete(level.Invocations, m.Pos)
@@ -146,15 +141,11 @@ func (m *Invoked) canAttack(to Pos, level *Level) bool {
 }
 
 func (m *Invoked) Attack(mm *Monster, g *Game) {
-	m.IsMoving = true
 	m.IsAttacking = true
-	go func(m *Invoked) {
-		for i := 0; i < CaseLen; i++ {
-			m.adaptSpeed()
-		}
-		m.IsMoving = false
-		m.IsAttacking = false
-	}(m)
+	for i := 0; i < CaseLen; i++ {
+		m.adaptSpeed()
+	}
+	m.IsAttacking = false
 	mm.TakeDamage(g, m.CalculateAttackScore(), &m.Character)
 }
 

@@ -63,10 +63,6 @@ func (level *Level) MakeArrow(p Pos, dir InputType, size int, speed int, from *C
 }
 
 func (p *Projectile) Update(g *Game) {
-	if p.IsMoving {
-		return
-	}
-
 	to := p.Pos
 	if p.Direction == Left {
 		to.X--
@@ -95,11 +91,7 @@ func (p *Projectile) canMove(level *Level, pos Pos) bool {
 }
 
 func (p *Projectile) Move(to Pos, g *Game) {
-	if p.IsMoving {
-		return
-	}
 	level := g.Level
-	p.IsMoving = true
 	g.Mux.Lock()
 	delete(level.Projectiles, p.Pos)
 	level.Projectiles[to] = p
@@ -113,30 +105,26 @@ func (p *Projectile) Move(to Pos, g *Game) {
 
 	p.MakeDamage(g)
 
-	go func(p *Projectile) {
-
-		if p.Direction == Right {
-			for p.Xb = CaseLen; p.Xb > 0; p.Xb-- {
-				p.adaptSpeed()
-			}
+	if p.Direction == Right {
+		for p.Xb = CaseLen; p.Xb > 0; p.Xb-- {
+			p.adaptSpeed()
 		}
-		if p.Direction == Left {
-			for p.Xb = -1 * CaseLen; p.Xb < 0; p.Xb++ {
-				p.adaptSpeed()
-			}
+	}
+	if p.Direction == Left {
+		for p.Xb = -1 * CaseLen; p.Xb < 0; p.Xb++ {
+			p.adaptSpeed()
 		}
-		if p.Direction == Down {
-			for p.Yb = CaseLen; p.Yb > 0; p.Yb-- {
-				p.adaptSpeed()
-			}
+	}
+	if p.Direction == Down {
+		for p.Yb = CaseLen; p.Yb > 0; p.Yb-- {
+			p.adaptSpeed()
 		}
-		if p.Direction == Up {
-			for p.Yb = -1 * CaseLen; p.Yb < 0; p.Yb++ {
-				p.adaptSpeed()
-			}
+	}
+	if p.Direction == Up {
+		for p.Yb = -1 * CaseLen; p.Yb < 0; p.Yb++ {
+			p.adaptSpeed()
 		}
-		p.IsMoving = false
-	}(p)
+	}
 }
 
 func (p *Projectile) adaptSpeed() {

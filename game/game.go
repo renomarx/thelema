@@ -78,15 +78,15 @@ type Entity struct {
 
 type Object struct {
 	Entity
-	Rune     rune
-	Blocking bool
+	Rune      rune
+	Blocking  bool
+	IsPlaying bool
 }
 
 type MovingObject struct {
 	Object
-	Xb       int
-	Yb       int
-	IsMoving bool
+	Xb int
+	Yb int
 }
 
 func NewGame(gameDir string) *Game {

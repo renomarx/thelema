@@ -20,7 +20,6 @@ func newPlayer(speed, health, energy, stg, dex, bea, wil, intel, cha, rg int, we
 	player.Y = 0
 	player.Xb = 0
 	player.Yb = 0
-	player.IsMoving = false
 	player.Speed.Init(speed)
 	player.Health.Init(health)
 	player.Energy.Init(energy)

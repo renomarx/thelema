@@ -25,7 +25,6 @@ func NewEnemy(mt *MonsterType, p Pos) *Enemy {
 	monster.Xb = 0
 	monster.Yb = 0
 	monster.LastActionTime = time.Now()
-	monster.IsMoving = false
 	monster.VisionRange = mt.VisionRange
 	monster.Weapon = mt.Weapon
 	monster.CurrentPower = mt.Power
@@ -46,9 +45,6 @@ func (e *Enemy) Update(g *Game) {
 		return
 	}
 	level := g.Level
-	if e.IsMoving {
-		return
-	}
 	t := time.Now()
 	deltaD := t.Sub(e.LastActionTime)
 	delta := 0.001 * float64(deltaD.Nanoseconds())
@@ -108,7 +104,6 @@ func (e *Enemy) canMove(to Pos, level *Level) bool {
 
 func (e *Enemy) Move(to Pos, g *Game) {
 	level := g.Level
-	e.IsMoving = true
 	lastPos := Pos{X: e.Pos.X, Y: e.Pos.Y}
 	g.Mux.Lock()
 	delete(level.Enemies, e.Pos)

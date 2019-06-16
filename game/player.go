@@ -23,20 +23,18 @@ func (p *Player) Update(g *Game) {
 	}
 	input := g.GetInput()
 	p.regenerate()
-	if !p.IsMoving {
-		if p.IsTalking {
-			p.Discuss(g)
-		} else {
-			if input.Typ == Up || input.Typ == Down || input.Typ == Left || input.Typ == Right {
-				p.LookAt = input.Typ
-			}
-			if g.GetInput2().Typ == SpeedUp {
-				p.Speed.Current = p.Speed.Initial * 2.0
-			} else if g.GetInput2().Typ == None {
-				p.Speed.Current = p.Speed.Initial
-			}
-			p.Move(g)
+	if p.IsTalking {
+		p.Discuss(g)
+	} else {
+		if input.Typ == Up || input.Typ == Down || input.Typ == Left || input.Typ == Right {
+			p.LookAt = input.Typ
 		}
+		if g.GetInput2().Typ == SpeedUp {
+			p.Speed.Current = p.Speed.Initial * 2.0
+		} else if g.GetInput2().Typ == None {
+			p.Speed.Current = p.Speed.Initial
+		}
+		p.Move(g)
 	}
 }
 
@@ -102,31 +100,27 @@ func (p *Player) DispatchWalkingEvent(g *Game) {
 }
 
 func (p *Player) WalkDown() {
-	p.IsMoving = true
 	p.Y++
 	p.Yb = CaseLen
-	go p.moveDown()
+	p.moveDown()
 }
 
 func (p *Player) WalkUp() {
-	p.IsMoving = true
 	p.Y--
 	p.Yb = -1 * CaseLen
-	go p.moveUp()
+	p.moveUp()
 }
 
 func (p *Player) WalkLeft() {
-	p.IsMoving = true
 	p.X--
 	p.Xb = -1 * CaseLen
-	go p.moveLeft()
+	p.moveLeft()
 }
 
 func (p *Player) WalkRight() {
-	p.IsMoving = true
 	p.X++
 	p.Xb = CaseLen
-	go p.moveRight()
+	p.moveRight()
 }
 
 func (p *Player) TakeDamage(g *Game, damage int) {
@@ -207,18 +201,14 @@ func (p *Player) Take(g *Game, posTo Pos) {
 	level := g.Level
 	o, exists := level.Objects[posTo]
 	if exists {
-		p.IsMoving = true
 		p.IsTaking = true
 		p.TakeUsable(o, g)
 		p.TakeBook(o, g)
 		p.TakeQuestObject(o, g)
-		go func(p *Player) {
-			for i := CaseLen; i > 0; i = i - 2 {
-				p.adaptSpeed()
-			}
-			p.IsTaking = false
-			p.IsMoving = false
-		}(p)
+		for i := CaseLen; i > 0; i = i - 2 {
+			p.adaptSpeed()
+		}
+		p.IsTaking = false
 	}
 }
 

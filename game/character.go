@@ -114,22 +114,22 @@ func (c *Character) moveFromTo(from Pos, to Pos) {
 		if from.X < to.X {
 			c.LookAt = Right
 			c.Xb = CaseLen
-			go c.moveRight()
+			c.moveRight()
 		} else if from.X > to.X {
 			c.LookAt = Left
 			c.Xb = -1 * CaseLen
-			go c.moveLeft()
+			c.moveLeft()
 		}
 	}
 	if from.X == to.X {
 		if from.Y < to.Y {
 			c.LookAt = Down
 			c.Yb = CaseLen
-			go c.moveDown()
+			c.moveDown()
 		} else if from.Y > to.Y {
 			c.LookAt = Up
 			c.Yb = -1 * CaseLen
-			go c.moveUp()
+			c.moveUp()
 		}
 	}
 }
@@ -138,28 +138,24 @@ func (c *Character) moveLeft() {
 	for c.Xb = -1 * CaseLen; c.Xb < 0; c.Xb++ {
 		c.adaptSpeed()
 	}
-	c.IsMoving = false
 }
 
 func (c *Character) moveRight() {
 	for c.Xb = CaseLen; c.Xb > 0; c.Xb-- {
 		c.adaptSpeed()
 	}
-	c.IsMoving = false
 }
 
 func (c *Character) moveUp() {
 	for c.Yb = -1 * CaseLen; c.Yb < 0; c.Yb++ {
 		c.adaptSpeed()
 	}
-	c.IsMoving = false
 }
 
 func (c *Character) moveDown() {
 	for c.Yb = CaseLen; c.Yb > 0; c.Yb-- {
 		c.adaptSpeed()
 	}
-	c.IsMoving = false
 }
 
 func (c *Character) IsDead() bool {
@@ -186,20 +182,16 @@ func (c *Character) Attack(g *Game, posToAttack Pos) bool {
 
 func (c *Character) attackMelee(g *Game, posToAttack Pos) bool {
 	level := g.Level
-	c.IsMoving = true
 	c.IsAttacking = true
-	go func(c *Character) {
-		for c.AttackPos = 0; c.AttackPos < CaseLen; c.AttackPos++ {
-			if c.Weapon != nil {
-				c.Weapon.adaptSpeed()
-			} else {
-				c.adaptSpeed()
-			}
+	for c.AttackPos = 0; c.AttackPos < CaseLen; c.AttackPos++ {
+		if c.Weapon != nil {
+			c.Weapon.adaptSpeed()
+		} else {
+			c.adaptSpeed()
 		}
-		c.AttackPos = 0
-		c.IsMoving = false
-		c.IsAttacking = false
-	}(c)
+	}
+	c.AttackPos = 0
+	c.IsAttacking = false
 	if isThereAMonster(level, posToAttack) {
 		m := level.Monsters[posToAttack]
 		m.TakeDamage(g, c.CalculateAttackScore(), c)
@@ -239,18 +231,14 @@ func (c *Character) attackMelee(g *Game, posToAttack Pos) bool {
 }
 
 func (c *Character) attackBow(g *Game, posToAttack Pos) {
-	c.IsMoving = true
 	c.IsAttacking = true
-	go func(c *Character) {
-		for c.AttackPos = 0; c.AttackPos < CaseLen; c.AttackPos++ {
-			c.Weapon.adaptSpeed()
-		}
-		c.AttackPos = 0
-		c.IsMoving = false
-		c.IsAttacking = false
-		g.Level.MakeArrow(c.Pos, c.LookAt, c.CalculateAttackBowScore(), 10, c)
-		c.Dexterity.RaiseXp(2, g)
-	}(c)
+	for c.AttackPos = 0; c.AttackPos < CaseLen; c.AttackPos++ {
+		c.Weapon.adaptSpeed()
+	}
+	c.AttackPos = 0
+	c.IsAttacking = false
+	g.Level.MakeArrow(c.Pos, c.LookAt, c.CalculateAttackBowScore(), 10, c)
+	c.Dexterity.RaiseXp(2, g)
 }
 
 func (c *Character) CalculateAttackScore() int {
@@ -271,54 +259,50 @@ func (c *Character) CalculateAttackBowScore() int {
 
 func (c *Character) PowerAttack(g *Game) {
 	if c.Energy.Current > 0 {
-		c.IsMoving = true
 		c.IsPowerAttacking = true
-		go func(c *Character, g *Game) {
-			for c.AttackPos = 0; c.AttackPos < CaseLen; c.AttackPos++ {
-				c.CurrentPower.adaptSpeed()
-			}
-			c.IsMoving = false
-			c.IsPowerAttacking = false
-			switch c.CurrentPower.Type {
-			case PowerEnergyBall:
-				g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerEnergyBall}})
-				g.Level.MakeEnergyball(c.Pos, c.LookAt, c.CalculatePowerAttackScore(), c)
+		for c.AttackPos = 0; c.AttackPos < CaseLen; c.AttackPos++ {
+			c.CurrentPower.adaptSpeed()
+		}
+		switch c.CurrentPower.Type {
+		case PowerEnergyBall:
+			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerEnergyBall}})
+			g.Level.MakeEnergyball(c.Pos, c.LookAt, c.CalculatePowerAttackScore(), c)
+			c.Energy.Current -= c.CurrentPower.Energy
+			c.Will.RaiseXp(1, g)
+			c.Energy.RaiseXp(10, g)
+		case PowerInvocation:
+			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerInvocation}})
+			if g.MakeInvocation(c.Pos, c.LookAt, c.CurrentPower) {
 				c.Energy.Current -= c.CurrentPower.Energy
 				c.Will.RaiseXp(1, g)
-				c.Energy.RaiseXp(10, g)
-			case PowerInvocation:
-				g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerInvocation}})
-				if g.MakeInvocation(c.Pos, c.LookAt, c.CurrentPower) {
-					c.Energy.Current -= c.CurrentPower.Energy
-					c.Will.RaiseXp(1, g)
-					c.Charisma.RaiseXp(1, g)
-					c.Energy.RaiseXp(50, g)
-				}
-			case PowerStorm:
-				g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerStorm}})
-				g.MakeRangeStorm(c.Pos, c.CalculatePowerAttackScore(), c.LookAt, c.CurrentPower.Lifetime, c.CurrentPower.Range)
-				c.Energy.Current -= c.CurrentPower.Energy
-				c.Will.RaiseXp(2, g)
-				c.Energy.RaiseXp(20, g)
-			case PowerFlames:
-				g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerFlames}})
-				g.MakeFlames(c.Pos, c.CalculatePowerAttackScore(), c.CurrentPower.Lifetime, c.CurrentPower.Range)
-				c.Energy.Current -= c.CurrentPower.Energy
-				c.Will.RaiseXp(4, g)
+				c.Charisma.RaiseXp(1, g)
 				c.Energy.RaiseXp(50, g)
-			case PowerHealing:
-				g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
-				g.MakeEffect(c.Pos, rune(Healing), 200)
-				c.Health.Current += c.CalculatePowerAttackScore()
-				if c.Health.Current > c.Health.Initial {
-					c.Health.Current = c.Health.Initial
-				}
-				c.Energy.Current -= c.CurrentPower.Energy
-				c.Will.RaiseXp(1, g)
-				c.Energy.RaiseXp(10, g)
-			default:
 			}
-		}(c, g)
+		case PowerStorm:
+			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerStorm}})
+			g.MakeRangeStorm(c.Pos, c.CalculatePowerAttackScore(), c.LookAt, c.CurrentPower.Lifetime, c.CurrentPower.Range)
+			c.Energy.Current -= c.CurrentPower.Energy
+			c.Will.RaiseXp(2, g)
+			c.Energy.RaiseXp(20, g)
+		case PowerFlames:
+			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerFlames}})
+			g.MakeFlames(c.Pos, c.CalculatePowerAttackScore(), c.CurrentPower.Lifetime, c.CurrentPower.Range)
+			c.Energy.Current -= c.CurrentPower.Energy
+			c.Will.RaiseXp(4, g)
+			c.Energy.RaiseXp(50, g)
+		case PowerHealing:
+			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
+			g.MakeEffect(c.Pos, rune(Healing), 200)
+			c.Health.Current += c.CalculatePowerAttackScore()
+			if c.Health.Current > c.Health.Initial {
+				c.Health.Current = c.Health.Initial
+			}
+			c.Energy.Current -= c.CurrentPower.Energy
+			c.Will.RaiseXp(1, g)
+			c.Energy.RaiseXp(10, g)
+		default:
+		}
+		c.IsPowerAttacking = false
 	}
 }
 

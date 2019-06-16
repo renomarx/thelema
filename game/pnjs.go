@@ -30,7 +30,6 @@ func NewPnj(p Pos, name string, voice string, weaponType string) *Pnj {
 	pnj.Xb = 0
 	pnj.Yb = 0
 	pnj.LastActionTime = time.Now()
-	pnj.IsMoving = false
 	pnj.LookAt = Left
 	pnj.Talkable = true
 	pnj.IsTalking = false
@@ -137,7 +136,7 @@ func (pnj *Pnj) StopTalking() {
 }
 
 func (pnj *Pnj) Update(g *Game) {
-	if pnj.IsMoving || pnj.IsTalking {
+	if pnj.IsTalking {
 		return
 	}
 	level := g.Level
@@ -188,7 +187,6 @@ func (pnj *Pnj) canMove(to Pos, level *Level) bool {
 
 func (pnj *Pnj) Move(to Pos, g *Game) {
 	level := g.Level
-	pnj.IsMoving = true
 	lastPos := Pos{X: pnj.Pos.X, Y: pnj.Pos.Y}
 	g.Mux.Lock()
 	delete(level.Pnjs, pnj.Pos)
@@ -201,22 +199,18 @@ func (pnj *Pnj) Teleport(levelName string, g *Game) {
 	level := g.Levels[levelName]
 	pnj.Talkable = false
 	g.MakeEffect(pnj.Pos, rune(Teleport), 200)
-	pnj.IsMoving = true
 	pnj.IsPowerAttacking = true
-	go func(pnj *Pnj, level *Level, g *Game) {
-		for pnj.AttackPos = 0; pnj.AttackPos < CaseLen; pnj.AttackPos++ {
-			pnj.adaptSpeed()
-		}
-		pos := level.GetRandomFreePos()
-		g.Mux.Lock()
-		delete(g.Level.Pnjs, pnj.Pos)
-		pnj.Pos = *pos
-		level.Pnjs[*pos] = pnj
-		g.Mux.Unlock()
-		pnj.IsMoving = false
-		pnj.IsPowerAttacking = false
-		pnj.Talkable = true
-	}(pnj, level, g)
+	for pnj.AttackPos = 0; pnj.AttackPos < CaseLen; pnj.AttackPos++ {
+		pnj.adaptSpeed()
+	}
+	pos := level.GetRandomFreePos()
+	g.Mux.Lock()
+	delete(g.Level.Pnjs, pnj.Pos)
+	pnj.Pos = *pos
+	level.Pnjs[*pos] = pnj
+	g.Mux.Unlock()
+	pnj.IsPowerAttacking = false
+	pnj.Talkable = true
 }
 
 func (pnj *Pnj) BecomeEnemy(g *Game) {
