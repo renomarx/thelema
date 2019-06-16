@@ -306,17 +306,16 @@ func (level *Level) OpenPortal(g *Game, pos Pos) {
 		p := level.Player
 		p.X = port.PosTo.X
 		p.Y = port.PosTo.Y
-		//levelFrom := *g.Level
+		levelFrom := *g.Level
 		g.Level = g.Levels[port.LevelTo]
 		g.Level.Player = p
-		// TODO
-		// for oldP, f := range levelFrom.Friends {
-		// 	f.Pos = port.PosTo
-		// 	g.Level.Friends[port.PosTo] = f
-		// 	g.Mux.Lock()
-		// 	delete(levelFrom.Friends, oldP)
-		// 	g.Mux.Unlock()
-		// }
+		f := p.Friend
+		if f != nil {
+			oldP := f.Pos
+			f.Pos = port.PosTo
+			g.Level.Friends[port.PosTo.Y][port.PosTo.X] = f
+			levelFrom.Friends[oldP.Y][oldP.X] = nil
+		}
 
 		g.GetEventManager().Dispatch(&Event{
 			Action:  ActionChangeLevel,

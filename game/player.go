@@ -15,6 +15,7 @@ type Player struct {
 	CharacterMenuOpen bool
 	MapMenuOpen       bool
 	Weapons           []*Weapon
+	Friend            *Friend
 }
 
 func (p *Player) Update(g *Game) {
@@ -255,6 +256,12 @@ func (p *Player) TakeBook(o *Object, g *Game) bool {
 }
 
 func (p *Player) Recruit(pnj *Pnj, g *Game) {
-	g.Level.Pnjs[pnj.Y][pnj.X] = nil
-	g.Level.MakeFriend(pnj)
+	if p.Friend != nil {
+		g.GetEventManager().Dispatch(&Event{
+			Message: "You already have a friend, you can't recruit.",
+		})
+		return
+	}
+	f := g.Level.MakeFriend(pnj)
+	p.Friend = f
 }

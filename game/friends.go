@@ -8,13 +8,14 @@ type Friend struct {
 	target *Character
 }
 
-func (level *Level) MakeFriend(pnj *Pnj) {
-	np := pnj.Pos
+func (level *Level) MakeFriend(pnj *Pnj) *Friend {
 	f := &Friend{}
 	f.Character = pnj.Character
 	f.Speed.Init(f.Speed.Current * 2)
 	f.VisionRange = 7
-	level.Friends[np.Y][np.X] = f
+	level.Pnjs[pnj.Y][pnj.X] = nil
+	level.Friends[pnj.Y][pnj.X] = f
+	return f
 }
 
 func (m *Friend) Update(g *Game) {
@@ -98,6 +99,7 @@ func (m *Friend) TakeDamage(g *Game, damage int) {
 func (m *Friend) Die(g *Game) {
 	m.isDead = true
 	g.Level.Friends[m.Y][m.X] = nil
+	g.Level.Player.Friend = nil
 }
 
 func (m *Friend) CanSee(level *Level, pos Pos) bool {
