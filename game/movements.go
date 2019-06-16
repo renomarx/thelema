@@ -76,7 +76,7 @@ func isInsideMap(level *Level, pos Pos) bool {
 			return level.Map[pos.Y][pos.X] != Blank && level.Map[pos.Y][pos.X] != 0
 		}
 	}
-	return true
+	return false
 }
 
 func openDoor(g *Game, pos Pos) {

@@ -24,6 +24,78 @@ type Level struct {
 	PRay        int
 }
 
+func (l *Level) GetMonster(x, y int) *Monster {
+	if y >= 0 && y < len(l.Monsters) {
+		if x >= 0 && x < len(l.Monsters[y]) {
+			return l.Monsters[y][x]
+		}
+	}
+	return nil
+}
+
+func (l *Level) GetObject(x, y int) *Object {
+	if y >= 0 && y < len(l.Objects) {
+		if x >= 0 && x < len(l.Objects[y]) {
+			return l.Objects[y][x]
+		}
+	}
+	return nil
+}
+
+func (l *Level) GetEffect(x, y int) *Effect {
+	if y >= 0 && y < len(l.Effects) {
+		if x >= 0 && x < len(l.Effects[y]) {
+			return l.Effects[y][x]
+		}
+	}
+	return nil
+}
+
+func (l *Level) GetProjectile(x, y int) *Projectile {
+	if y >= 0 && y < len(l.Projectiles) {
+		if x >= 0 && x < len(l.Projectiles[y]) {
+			return l.Projectiles[y][x]
+		}
+	}
+	return nil
+}
+
+func (l *Level) GetPnj(x, y int) *Pnj {
+	if y >= 0 && y < len(l.Pnjs) {
+		if x >= 0 && x < len(l.Pnjs[y]) {
+			return l.Pnjs[y][x]
+		}
+	}
+	return nil
+}
+
+func (l *Level) GetInvocation(x, y int) *Invoked {
+	if y >= 0 && y < len(l.Invocations) {
+		if x >= 0 && x < len(l.Invocations[y]) {
+			return l.Invocations[y][x]
+		}
+	}
+	return nil
+}
+
+func (l *Level) GetFriend(x, y int) *Friend {
+	if y >= 0 && y < len(l.Friends) {
+		if x >= 0 && x < len(l.Friends[y]) {
+			return l.Friends[y][x]
+		}
+	}
+	return nil
+}
+
+func (l *Level) GetEnemy(x, y int) *Enemy {
+	if y >= 0 && y < len(l.Enemies) {
+		if x >= 0 && x < len(l.Enemies[y]) {
+			return l.Enemies[y][x]
+		}
+	}
+	return nil
+}
+
 func (l *Level) GetRandomFreePos() *Pos {
 	x := rand.Intn(len(l.Map[0]))
 	y := rand.Intn(len(l.Map))
@@ -109,13 +181,17 @@ func (g *Game) handleMonsters() {
 	l := g.Level
 	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
 		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
-			m := l.Monsters[y][x]
-			if m != nil && !m.IsPlaying {
-				go func(m *Monster) {
-					m.IsPlaying = true
-					m.Update(g)
-					m.IsPlaying = false
-				}(m)
+			if y >= 0 && y < len(l.Monsters) {
+				if x >= 0 && x < len(l.Monsters[y]) {
+					m := l.GetMonster(x, y)
+					if m != nil && !m.IsPlaying {
+						go func(m *Monster) {
+							m.IsPlaying = true
+							m.Update(g)
+							m.IsPlaying = false
+						}(m)
+					}
+				}
 			}
 		}
 	}
@@ -125,7 +201,7 @@ func (g *Game) handleInvocations() {
 	l := g.Level
 	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
 		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
-			m := l.Invocations[y][x]
+			m := l.GetInvocation(x, y)
 			if m != nil && !m.IsPlaying {
 				go func(m *Invoked) {
 					m.IsPlaying = true
@@ -141,7 +217,7 @@ func (g *Game) handlePnjs() {
 	l := g.Level
 	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
 		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
-			m := l.Pnjs[y][x]
+			m := l.GetPnj(x, y)
 			if m != nil && !m.IsPlaying {
 				go func(m *Pnj) {
 					m.IsPlaying = true
@@ -157,7 +233,7 @@ func (g *Game) handleFriends() {
 	l := g.Level
 	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
 		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
-			m := l.Friends[y][x]
+			m := l.GetFriend(x, y)
 			if m != nil && !m.IsPlaying {
 				go func(m *Friend) {
 					m.IsPlaying = true
@@ -173,7 +249,7 @@ func (g *Game) handleEnemies() {
 	l := g.Level
 	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
 		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
-			m := l.Enemies[y][x]
+			m := l.GetEnemy(x, y)
 			if m != nil && !m.IsPlaying {
 				go func(m *Enemy) {
 					m.IsPlaying = true
@@ -189,7 +265,7 @@ func (g *Game) handleProjectiles() {
 	l := g.Level
 	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
 		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
-			m := l.Projectiles[y][x]
+			m := l.GetProjectile(x, y)
 			if m != nil && !m.IsPlaying {
 				go func(m *Projectile) {
 					m.IsPlaying = true
@@ -205,7 +281,7 @@ func (g *Game) handleEffects() {
 	l := g.Level
 	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
 		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
-			m := l.Effects[y][x]
+			m := l.GetEffect(x, y)
 			if m != nil && !m.IsPlaying {
 				go func(m *Effect) {
 					m.IsPlaying = true
