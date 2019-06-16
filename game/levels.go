@@ -169,8 +169,8 @@ func (g *Game) handleInput() {
 	level := g.Level
 	p := level.Player
 	if !p.IsPlaying {
+		p.IsPlaying = true
 		go func(p *Player) {
-			p.IsPlaying = true
 			p.Update(g)
 			p.IsPlaying = false
 		}(p)
@@ -185,8 +185,8 @@ func (g *Game) handleMonsters() {
 				if x >= 0 && x < len(l.Monsters[y]) {
 					m := l.GetMonster(x, y)
 					if m != nil && !m.IsPlaying {
+						m.IsPlaying = true
 						go func(m *Monster) {
-							m.IsPlaying = true
 							m.Update(g)
 							m.IsPlaying = false
 						}(m)
@@ -203,8 +203,8 @@ func (g *Game) handleInvocations() {
 		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
 			m := l.GetInvocation(x, y)
 			if m != nil && !m.IsPlaying {
+				m.IsPlaying = true
 				go func(m *Invoked) {
-					m.IsPlaying = true
 					m.Update(g)
 					m.IsPlaying = false
 				}(m)
@@ -219,8 +219,8 @@ func (g *Game) handlePnjs() {
 		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
 			m := l.GetPnj(x, y)
 			if m != nil && !m.IsPlaying {
+				m.IsPlaying = true
 				go func(m *Pnj) {
-					m.IsPlaying = true
 					m.Update(g)
 					m.IsPlaying = false
 				}(m)
@@ -235,8 +235,8 @@ func (g *Game) handleFriends() {
 		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
 			m := l.GetFriend(x, y)
 			if m != nil && !m.IsPlaying {
+				m.IsPlaying = true
 				go func(m *Friend) {
-					m.IsPlaying = true
 					m.Update(g)
 					m.IsPlaying = false
 				}(m)
@@ -251,8 +251,8 @@ func (g *Game) handleEnemies() {
 		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
 			m := l.GetEnemy(x, y)
 			if m != nil && !m.IsPlaying {
+				m.IsPlaying = true
 				go func(m *Enemy) {
-					m.IsPlaying = true
 					m.Update(g)
 					m.IsPlaying = false
 				}(m)
@@ -267,8 +267,8 @@ func (g *Game) handleProjectiles() {
 		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
 			m := l.GetProjectile(x, y)
 			if m != nil && !m.IsPlaying {
+				m.IsPlaying = true
 				go func(m *Projectile) {
-					m.IsPlaying = true
 					m.Update(g)
 					m.IsPlaying = false
 				}(m)
@@ -283,8 +283,8 @@ func (g *Game) handleEffects() {
 		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
 			m := l.GetEffect(x, y)
 			if m != nil && !m.IsPlaying {
+				m.IsPlaying = true
 				go func(m *Effect) {
-					m.IsPlaying = true
 					m.Update(g)
 					m.IsPlaying = false
 				}(m)

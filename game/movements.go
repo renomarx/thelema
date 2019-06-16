@@ -1,23 +1,23 @@
 package game
 
 func isThereAMonster(level *Level, pos Pos) bool {
-	return level.Monsters[pos.Y][pos.X] != nil
+	return level.GetMonster(pos.X, pos.Y) != nil
 }
 
 func isThereAnEnemy(level *Level, pos Pos) bool {
-	return level.Enemies[pos.Y][pos.X] != nil
+	return level.GetEnemy(pos.X, pos.Y) != nil
 }
 
 func isThereAPnj(level *Level, pos Pos) bool {
-	return level.Pnjs[pos.Y][pos.X] != nil
+	return level.GetPnj(pos.X, pos.Y) != nil
 }
 
 func isThereAnInvocation(level *Level, pos Pos) bool {
-	return level.Invocations[pos.Y][pos.X] != nil
+	return level.GetInvocation(pos.X, pos.Y) != nil
 }
 
 func isThereAFriend(level *Level, pos Pos) bool {
-	return level.Friends[pos.Y][pos.X] != nil
+	return level.GetFriend(pos.X, pos.Y) != nil
 }
 
 func isThereAPlayerCharacter(level *Level, pos Pos) bool {
@@ -25,30 +25,31 @@ func isThereAPlayerCharacter(level *Level, pos Pos) bool {
 	if p != nil && p.X == pos.X && p.Y == pos.Y {
 		return true
 	}
-	if level.Friends[pos.Y][pos.X] != nil {
+	if level.GetFriend(pos.X, pos.Y) != nil {
 		return true
 	}
-	if level.Invocations[pos.Y][pos.X] != nil {
+	if level.GetInvocation(pos.X, pos.Y) != nil {
 		return true
 	}
 	return false
 }
 
 func isThereAnEnemyCharacter(level *Level, pos Pos) bool {
-	if level.Monsters[pos.Y][pos.X] != nil {
+	if level.GetMonster(pos.X, pos.Y) != nil {
 		return true
 	}
-	if level.Enemies[pos.Y][pos.X] != nil {
+	if level.GetEnemy(pos.X, pos.Y) != nil {
 		return true
 	}
 	return false
 }
 
 func isThereABlockingObject(level *Level, pos Pos) bool {
-	if level.Objects[pos.Y][pos.X] == nil {
+	o := level.GetObject(pos.X, pos.Y)
+	if o == nil {
 		return false
 	}
-	return level.Objects[pos.Y][pos.X].Blocking
+	return o.Blocking
 }
 
 func canGo(level *Level, pos Pos) bool {
