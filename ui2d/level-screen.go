@@ -34,23 +34,17 @@ func (ui *UI) DrawLevel() {
 
 		for y := minY; y < maxY; y++ {
 			for x := minX; x < maxX; x++ {
-				pos := game.Pos{X: x, Y: y}
-				ui.Game.Mux.Lock()
-				object, exists := level.Objects[pos]
-				ui.Game.Mux.Unlock()
-				if exists {
-					ui.drawObject(pos, game.Tile(object.Rune))
+				object := level.Objects[y][x]
+				if object != nil {
+					ui.drawObject(game.Pos{X: x, Y: y}, game.Tile(object.Rune))
 				}
 			}
 		}
 
 		for y := minY; y < maxY; y++ {
 			for x := minX; x < maxX; x++ {
-				pos := game.Pos{X: x, Y: y}
-				ui.Game.Mux.Lock()
-				pnj, exists := level.Pnjs[pos]
-				ui.Game.Mux.Unlock()
-				if exists {
+				pnj := level.Pnjs[y][x]
+				if pnj != nil {
 					ui.drawPnj(pnj)
 				}
 			}
@@ -58,46 +52,59 @@ func (ui *UI) DrawLevel() {
 
 		for y := minY; y < maxY; y++ {
 			for x := minX; x < maxX; x++ {
-				pos := game.Pos{X: x, Y: y}
-				ui.Game.Mux.Lock()
-				monster, exists := level.Monsters[pos]
-				ui.Game.Mux.Unlock()
-				if exists {
-					ui.drawMonster(pos, monster)
+				monster := level.Monsters[y][x]
+				if monster != nil {
+					ui.drawMonster(game.Pos{X: x, Y: y}, monster)
 				}
 			}
 		}
 
-		ui.Game.Mux.Lock()
-		for pos, invoked := range level.Invocations {
-			ui.drawInvoked(pos, invoked)
+		for y := minY; y < maxY; y++ {
+			for x := minX; x < maxX; x++ {
+				monster := level.Invocations[y][x]
+				if monster != nil {
+					ui.drawInvoked(game.Pos{X: x, Y: y}, monster)
+				}
+			}
 		}
-		ui.Game.Mux.Unlock()
 
-		ui.Game.Mux.Lock()
-		for _, enemy := range level.Enemies {
-			ui.drawEnemy(enemy)
+		for y := minY; y < maxY; y++ {
+			for x := minX; x < maxX; x++ {
+				monster := level.Enemies[y][x]
+				if monster != nil {
+					ui.drawEnemy(monster)
+				}
+			}
 		}
-		ui.Game.Mux.Unlock()
 
-		ui.Game.Mux.Lock()
-		for _, friend := range level.Friends {
-			ui.drawFriend(friend)
+		for y := minY; y < maxY; y++ {
+			for x := minX; x < maxX; x++ {
+				friend := level.Friends[y][x]
+				if friend != nil {
+					ui.drawFriend(friend)
+				}
+			}
 		}
-		ui.Game.Mux.Unlock()
 
 		ui.drawPlayer()
 
-		ui.Game.Mux.Lock()
-		for _, projectile := range level.Projectiles {
-			ui.drawProjectile(projectile, game.Tile(projectile.Rune))
+		for y := minY; y < maxY; y++ {
+			for x := minX; x < maxX; x++ {
+				projectile := level.Projectiles[y][x]
+				if projectile != nil {
+					ui.drawProjectile(projectile, game.Tile(projectile.Rune))
+				}
+			}
 		}
-		ui.Game.Mux.Unlock()
-		ui.Game.Mux.Lock()
-		for pos, effect := range level.Effects {
-			ui.drawEffect(pos, effect)
+
+		for y := minY; y < maxY; y++ {
+			for x := minX; x < maxX; x++ {
+				effect := level.Effects[y][x]
+				if effect != nil {
+					ui.drawEffect(game.Pos{X: x, Y: y}, effect)
+				}
+			}
 		}
-		ui.Game.Mux.Unlock()
 
 		ui.DrawMinimap()
 		ui.DrawPlayerStats()

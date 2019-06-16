@@ -48,11 +48,11 @@ func (m *Monster) Update(g *Game) {
 		}
 		if m.canAttackInvocation(positions[1], level) {
 			g.GetEventManager().Dispatch(&Event{Action: ActionRoar, Payload: map[string]string{"monster": string(m.Rune)}})
-			m.AttackInvocation(level.Invocations[positions[1]], g)
+			m.AttackInvocation(level.Invocations[positions[1].Y][positions[1].X], g)
 		}
 		if m.canAttackFriend(positions[1], level) {
 			g.GetEventManager().Dispatch(&Event{Action: ActionRoar, Payload: map[string]string{"monster": string(m.Rune)}})
-			m.AttackFriend(level.Friends[positions[1]], g)
+			m.AttackFriend(level.Friends[positions[1].Y][positions[1].X], g)
 		}
 		if m.canAttackPlayer(positions[1], level) {
 			g.GetEventManager().Dispatch(&Event{Action: ActionRoar, Payload: map[string]string{"monster": string(m.Rune)}})
@@ -75,15 +75,13 @@ func (m *Monster) getTargetPos(g *Game) Pos {
 
 	for y := m.Y - m.VisionRange; y < m.Y+m.VisionRange; y++ {
 		for x := m.X - m.VisionRange; x < m.X+m.VisionRange; x++ {
-			g.Mux.Lock()
-			mm, e := l.Invocations[Pos{X: x, Y: y}]
-			g.Mux.Unlock()
-			if e {
+			mm := l.Invocations[y][x]
+			if mm != nil {
 				m.target = &mm.Character
 				return Pos{X: x, Y: y}
 			}
-			f, ef := l.Friends[Pos{X: x, Y: y}]
-			if ef && !f.IsDead() {
+			f := l.Friends[y][x]
+			if f != nil && !f.IsDead() {
 				m.target = &f.Character
 				return Pos{X: x, Y: y}
 			}
@@ -104,10 +102,8 @@ func (m *Monster) canMove(to Pos, level *Level) bool {
 
 func (m *Monster) Move(to Pos, g *Game) {
 	lastPos := Pos{X: m.Pos.X, Y: m.Pos.Y}
-	g.Mux.Lock()
-	delete(g.Level.Monsters, m.Pos)
-	g.Level.Monsters[to] = m
-	g.Mux.Unlock()
+	g.Level.Monsters[m.Y][m.X] = nil
+	g.Level.Monsters[to.Y][to.X] = m
 	m.moveFromTo(lastPos, to)
 }
 
@@ -168,12 +164,10 @@ func (m *Monster) TakeDamage(g *Game, damage int, c *Character) {
 
 func (m *Monster) Die(g *Game) {
 	m.isDead = true
-	g.Mux.Lock()
-	delete(g.Level.Monsters, m.Pos)
+	g.Level.Monsters[m.Y][m.X] = nil
 	b := &Object{Rune: rune(Steak), Blocking: true}
 	b.Pos = m.Pos
-	g.Level.Objects[m.Pos] = b
-	g.Mux.Unlock()
+	g.Level.Objects[m.Y][m.X] = b
 }
 
 func (m *Monster) CanSee(level *Level, pos Pos) bool {

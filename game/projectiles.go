@@ -34,7 +34,7 @@ func (level *Level) MakeEnergyball(p Pos, dir InputType, size int, from *Charact
 		eb.Yb = -32
 	}
 
-	level.Projectiles[p] = eb
+	level.Projectiles[p.Y][p.X] = eb
 }
 
 func (level *Level) MakeArrow(p Pos, dir InputType, size int, speed int, from *Character) {
@@ -59,7 +59,7 @@ func (level *Level) MakeArrow(p Pos, dir InputType, size int, speed int, from *C
 		eb.Yb = -32
 	}
 
-	level.Projectiles[p] = eb
+	level.Projectiles[p.Y][p.X] = eb
 }
 
 func (p *Projectile) Update(g *Game) {
@@ -92,10 +92,8 @@ func (p *Projectile) canMove(level *Level, pos Pos) bool {
 
 func (p *Projectile) Move(to Pos, g *Game) {
 	level := g.Level
-	g.Mux.Lock()
-	delete(level.Projectiles, p.Pos)
-	level.Projectiles[to] = p
-	g.Mux.Unlock()
+	level.Projectiles[p.Y][p.X] = nil
+	level.Projectiles[to.Y][to.X] = p
 	p.Pos = to
 
 	if !p.canMove(level, to) {
@@ -133,18 +131,14 @@ func (p *Projectile) adaptSpeed() {
 
 func (p *Projectile) MakeDamage(g *Game) {
 	level := g.Level
-	g.Mux.Lock()
-	m, ok := level.Monsters[p.Pos]
-	g.Mux.Unlock()
-	if ok {
+	m := level.Monsters[p.Y][p.X]
+	if m != nil {
 		// There is a monster !
 		m.TakeDamage(g, p.Size, p.From)
 		p.Die(g)
 	}
-	g.Mux.Lock()
-	e, ok := level.Enemies[p.Pos]
-	g.Mux.Unlock()
-	if ok {
+	e := level.Enemies[p.Y][p.X]
+	if e != nil {
 		// There is an annemy !
 		e.TakeDamage(g, p.Size)
 		p.Die(g)
@@ -152,8 +146,6 @@ func (p *Projectile) MakeDamage(g *Game) {
 }
 
 func (p *Projectile) Die(g *Game) {
-	g.Mux.Lock()
-	delete(g.Level.Projectiles, p.Pos)
-	g.Mux.Unlock()
+	g.Level.Projectiles[p.Y][p.X] = nil
 	g.MakeExplosion(p.Pos, 100, 100)
 }

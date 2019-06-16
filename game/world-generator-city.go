@@ -12,9 +12,9 @@ func (wg *WorldGenerator) generateCities(level *Level, nbCities int) {
 		m := rand.Intn(nbTemplates) + 1
 		pos := Pos{X: x, Y: y}
 
-		_, oe := level.Objects[pos]
-		if !oe {
-			level.Objects[pos] = &Object{Rune: rune(CityEntry)} // TODO : maybe use a different city entry
+		o := level.Objects[pos.Y][pos.X]
+		if o == nil {
+			level.Objects[pos.Y][pos.X] = &Object{Rune: rune(CityEntry)} // TODO : maybe use a different city entry
 			mapName := "city/city" + strconv.Itoa(m)
 			wg.generateCity(level, pos, mapName, cityNumber)
 			cityNumber++

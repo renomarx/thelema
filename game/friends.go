@@ -14,7 +14,7 @@ func (level *Level) MakeFriend(pnj *Pnj) {
 	f.Character = pnj.Character
 	f.Speed.Init(f.Speed.Current * 2)
 	f.VisionRange = 7
-	level.Friends[np] = f
+	level.Friends[np.Y][np.X] = f
 }
 
 func (m *Friend) Update(g *Game) {
@@ -50,13 +50,13 @@ func (m *Friend) getTargetPos(l *Level) Pos {
 	}
 	for y := m.Y - m.VisionRange; y < m.Y+m.VisionRange; y++ {
 		for x := m.X - m.VisionRange; x < m.X+m.VisionRange; x++ {
-			mm, e := l.Monsters[Pos{X: x, Y: y}]
-			if e {
+			mm := l.Monsters[y][x]
+			if mm != nil {
 				m.target = &mm.Character
 				return Pos{X: x, Y: y}
 			}
-			n, en := l.Enemies[Pos{X: x, Y: y}]
-			if en && !n.IsDead() {
+			n := l.Enemies[y][x]
+			if n != nil && !n.IsDead() {
 				m.target = &n.Character
 				return Pos{X: x, Y: y}
 			}
@@ -77,10 +77,8 @@ func (m *Friend) canMove(to Pos, level *Level) bool {
 
 func (m *Friend) Move(to Pos, g *Game) {
 	lastPos := Pos{X: m.Pos.X, Y: m.Pos.Y}
-	g.Mux.Lock()
-	delete(g.Level.Friends, m.Pos)
-	g.Level.Friends[to] = m
-	g.Mux.Unlock()
+	g.Level.Friends[m.Y][m.X] = nil
+	g.Level.Friends[to.Y][to.X] = m
 	m.moveFromTo(lastPos, to)
 }
 
@@ -99,9 +97,7 @@ func (m *Friend) TakeDamage(g *Game, damage int) {
 
 func (m *Friend) Die(g *Game) {
 	m.isDead = true
-	g.Mux.Lock()
-	delete(g.Level.Friends, m.Pos)
-	g.Mux.Unlock()
+	g.Level.Friends[m.Y][m.X] = nil
 }
 
 func (m *Friend) CanSee(level *Level, pos Pos) bool {

@@ -33,13 +33,10 @@ func (wg *WorldGenerator) LoadMapTemplate(mapName string, levelType string, leve
 	}
 
 	level := NewLevel(levelType)
-	level.Map = make([][]Tile, len(levelLines))
+	level.InitMaps(len(levelLines), longestRow)
 	initialPos := Pos{X: 1, Y: 1}
 	houseNumber := 0
 	nbHouseTemplates := 1 // TODO load as much templates as there are
-	for i := range level.Map {
-		level.Map[i] = make([]Tile, longestRow)
-	}
 	for y := 0; y < len(level.Map); y++ {
 		line := levelLines[y]
 		// Re-compose line to handle utf8
@@ -61,15 +58,15 @@ func (wg *WorldGenerator) LoadMapTemplate(mapName string, levelType string, leve
 				t = Blank
 			case DirtFloor, GreenFloor:
 			case DoorOpened:
-				level.Objects[Pos{x, y}] = &Object{Rune: rune(DoorOpened)}
+				level.Objects[y][x] = &Object{Rune: rune(DoorOpened)}
 			case Upstairs:
-				level.Objects[Pos{x, y}] = &Object{Rune: rune(Upstairs)}
+				level.Objects[y][x] = &Object{Rune: rune(Upstairs)}
 				initialPos = Pos{X: x, Y: y}
 			case CityOut:
-				level.Objects[Pos{x, y}] = &Object{Rune: rune(CityOut)}
+				level.Objects[y][x] = &Object{Rune: rune(CityOut)}
 				initialPos = Pos{X: x, Y: y}
 			case HouseDoor:
-				level.Objects[Pos{x, y}] = &Object{Rune: rune(HouseDoor)}
+				level.Objects[y][x] = &Object{Rune: rune(HouseDoor)}
 				if levelType == LevelTypeHouse {
 					initialPos = Pos{X: x, Y: y}
 				} else {
@@ -81,7 +78,7 @@ func (wg *WorldGenerator) LoadMapTemplate(mapName string, levelType string, leve
 			default:
 				o := &Object{Rune: c, Blocking: true}
 				o.Pos = Pos{x, y}
-				level.Objects[Pos{x, y}] = o
+				level.Objects[y][x] = o
 			}
 			level.Map[y][x] = t
 		}

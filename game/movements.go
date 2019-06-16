@@ -1,28 +1,23 @@
 package game
 
 func isThereAMonster(level *Level, pos Pos) bool {
-	_, exists := level.Monsters[pos]
-	return exists
+	return level.Monsters[pos.Y][pos.X] != nil
 }
 
 func isThereAnEnemy(level *Level, pos Pos) bool {
-	_, exists := level.Enemies[pos]
-	return exists
+	return level.Enemies[pos.Y][pos.X] != nil
 }
 
 func isThereAPnj(level *Level, pos Pos) bool {
-	_, exists := level.Pnjs[pos]
-	return exists
+	return level.Pnjs[pos.Y][pos.X] != nil
 }
 
 func isThereAnInvocation(level *Level, pos Pos) bool {
-	_, exists := level.Invocations[pos]
-	return exists
+	return level.Invocations[pos.Y][pos.X] != nil
 }
 
 func isThereAFriend(level *Level, pos Pos) bool {
-	_, exists := level.Friends[pos]
-	return exists
+	return level.Friends[pos.Y][pos.X] != nil
 }
 
 func isThereAPlayerCharacter(level *Level, pos Pos) bool {
@@ -30,31 +25,30 @@ func isThereAPlayerCharacter(level *Level, pos Pos) bool {
 	if p != nil && p.X == pos.X && p.Y == pos.Y {
 		return true
 	}
-	if _, exists := level.Friends[pos]; exists {
+	if level.Friends[pos.Y][pos.X] != nil {
 		return true
 	}
-	if _, exists := level.Invocations[pos]; exists {
+	if level.Invocations[pos.Y][pos.X] != nil {
 		return true
 	}
 	return false
 }
 
 func isThereAnEnemyCharacter(level *Level, pos Pos) bool {
-	if _, exists := level.Monsters[pos]; exists {
+	if level.Monsters[pos.Y][pos.X] != nil {
 		return true
 	}
-	if _, exists := level.Enemies[pos]; exists {
+	if level.Enemies[pos.Y][pos.X] != nil {
 		return true
 	}
 	return false
 }
 
 func isThereABlockingObject(level *Level, pos Pos) bool {
-	if obj, ok := level.Objects[pos]; ok {
-		// There is an object !
-		return obj.Blocking
+	if level.Objects[pos.Y][pos.X] == nil {
+		return false
 	}
-	return false
+	return level.Objects[pos.Y][pos.X].Blocking
 }
 
 func canGo(level *Level, pos Pos) bool {
@@ -87,8 +81,8 @@ func isInsideMap(level *Level, pos Pos) bool {
 
 func openDoor(g *Game, pos Pos) {
 	level := g.Level
-	o, e := level.Objects[pos]
-	if e {
+	o := level.Objects[pos.Y][pos.X]
+	if o != nil {
 		switch Tile(o.Rune) {
 		case DoorClosed:
 			o.Rune = rune(DoorOpened)
@@ -100,8 +94,8 @@ func openDoor(g *Game, pos Pos) {
 
 func closeDoor(g *Game, pos Pos) {
 	level := g.Level
-	o, e := level.Objects[pos]
-	if e {
+	o := level.Objects[pos.Y][pos.X]
+	if o != nil {
 		switch Tile(o.Rune) {
 		case DoorOpened:
 			o.Rune = rune(DoorClosed)

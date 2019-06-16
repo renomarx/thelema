@@ -29,9 +29,7 @@ func (g *Game) MakeInvocation(p Pos, dir InputType, pp *PlayerPower) bool {
 	}
 	if canGo(level, np) {
 		m := NewFox(np, pp.Lifetime)
-		g.Mux.Lock()
-		level.Invocations[np] = m
-		g.Mux.Unlock()
+		level.Invocations[np.Y][np.X] = m
 		return true
 	}
 	return false
@@ -83,8 +81,11 @@ func (m *Invoked) Update(g *Game) {
 		if m.canMove(positions[1], level) {
 			m.Move(positions[1], g)
 		}
-		if m.canAttack(positions[1], level) {
-			m.Attack(level.Monsters[positions[1]], g)
+		if m.canAttackEnemy(positions[1], level) {
+			m.AttackEnemy(level.Enemies[positions[1].Y][positions[1].X], g)
+		}
+		if m.canAttackMonster(positions[1], level) {
+			m.AttackMonster(level.Monsters[positions[1].Y][positions[1].X], g)
 		}
 		m.ActionPoints = 0.0
 	}
@@ -101,13 +102,13 @@ func (m *Invoked) getTargetPos(l *Level) Pos {
 	}
 	for y := m.Y - m.VisionRange; y < m.Y+m.VisionRange; y++ {
 		for x := m.X - m.VisionRange; x < m.X+m.VisionRange; x++ {
-			mm, e := l.Monsters[Pos{X: x, Y: y}]
-			if e {
+			mm := l.Monsters[y][x]
+			if mm != nil {
 				m.target = &mm.Character
 				return Pos{X: x, Y: y}
 			}
-			n, en := l.Enemies[Pos{X: x, Y: y}]
-			if en && !n.IsDead() {
+			n := l.Enemies[y][x]
+			if n != nil && !n.IsDead() {
 				m.target = &n.Character
 				return Pos{X: x, Y: y}
 			}
@@ -127,26 +128,36 @@ func (m *Invoked) canMove(to Pos, level *Level) bool {
 }
 
 func (m *Invoked) Move(to Pos, g *Game) {
-	level := g.Level
 	lastPos := Pos{X: m.Pos.X, Y: m.Pos.Y}
-	g.Mux.Lock()
-	delete(level.Invocations, m.Pos)
-	level.Invocations[to] = m
-	g.Mux.Unlock()
+	g.Level.Invocations[m.Y][m.X] = nil
+	g.Level.Invocations[to.Y][to.X] = m
 	m.moveFromTo(lastPos, to)
 }
 
-func (m *Invoked) canAttack(to Pos, level *Level) bool {
-	return isThereAnEnemyCharacter(level, to)
+func (m *Invoked) canAttackMonster(to Pos, level *Level) bool {
+	return isThereAMonster(level, to)
 }
 
-func (m *Invoked) Attack(mm *Monster, g *Game) {
+func (m *Invoked) canAttackEnemy(to Pos, level *Level) bool {
+	return isThereAnEnemy(level, to)
+}
+
+func (m *Invoked) AttackMonster(mm *Monster, g *Game) {
 	m.IsAttacking = true
 	for i := 0; i < CaseLen; i++ {
 		m.adaptSpeed()
 	}
 	m.IsAttacking = false
 	mm.TakeDamage(g, m.CalculateAttackScore(), &m.Character)
+}
+
+func (m *Invoked) AttackEnemy(mm *Enemy, g *Game) {
+	m.IsAttacking = true
+	for i := 0; i < CaseLen; i++ {
+		m.adaptSpeed()
+	}
+	m.IsAttacking = false
+	mm.TakeDamage(g, m.CalculateAttackScore())
 }
 
 func (m *Invoked) TakeDamage(g *Game, damage int) {
@@ -160,9 +171,7 @@ func (m *Invoked) TakeDamage(g *Game, damage int) {
 
 func (m *Invoked) Die(g *Game) {
 	m.isDead = true
-	g.Mux.Lock()
-	delete(g.Level.Invocations, m.Pos)
-	g.Mux.Unlock()
+	g.Level.Invocations[m.Y][m.X] = nil
 }
 
 func (m *Invoked) CanSee(level *Level, pos Pos) bool {

@@ -75,7 +75,7 @@ func (g *Game) loadPnjsVIP() {
 			log.Fatal("No place left on level " + pnj.Dialog.Level)
 		}
 		pnj.Pos = *pos
-		l.Pnjs[*pos] = pnj
+		l.Pnjs[pos.Y][pos.X] = pnj
 	}
 }
 
@@ -121,9 +121,8 @@ func (wg *WorldGenerator) generateTrees(level *Level, nbTrees int) {
 		pos := Pos{X: x, Y: y}
 		o := &Object{Rune: rune(Tree), Blocking: true}
 		o.Pos = pos
-		_, oe := level.Objects[pos]
-		if !oe {
-			level.Objects[pos] = o
+		if level.Objects[pos.Y][pos.X] == nil {
+			level.Objects[pos.Y][pos.X] = o
 		}
 	}
 }
@@ -143,7 +142,7 @@ func (wg *WorldGenerator) generateMonsters(level *Level, bestiary []*MonsterType
 			mt = bestiary[m]
 		}
 		if canGo(level, pos) {
-			level.Monsters[pos] = NewMonster(mt, pos)
+			level.Monsters[pos.Y][pos.X] = NewMonster(mt, pos)
 		}
 	}
 }
@@ -159,7 +158,7 @@ func (wg *WorldGenerator) generateUsables(level *Level, objects []Tile, nb int) 
 		if canGo(level, pos) {
 			b := &Object{Rune: rune(mt), Blocking: true}
 			b.Pos = pos
-			level.Objects[pos] = b
+			level.Objects[pos.Y][pos.X] = b
 		}
 	}
 }
@@ -173,7 +172,7 @@ func (wg *WorldGenerator) generateBooks(level *Level, nbBooks int) {
 		if canGo(level, pos) {
 			b := &Object{Rune: rune(Book), Blocking: true}
 			b.Pos = pos
-			level.Objects[pos] = b
+			level.Objects[pos.Y][pos.X] = b
 		}
 	}
 }
@@ -206,7 +205,7 @@ func (g *Game) loadQuestsObjects() {
 			rune := rune(key[0])
 			physicalObj := &Object{Rune: rune, Blocking: true}
 			physicalObj.Pos = *pos
-			l.Objects[*pos] = physicalObj
+			l.Objects[pos.Y][pos.X] = physicalObj
 			objectsByRune[rune] = obj
 		} else {
 			log.Fatal("No place left on level " + obj.Level)
@@ -248,7 +247,7 @@ func (wg *WorldGenerator) generatePnjs(l *Level, nbPnjs int) {
 			pnj := NewPnj(*pos, pnjNames[j], pnjVoices[pnjNames[j]], pnjWeapons[pnjNames[j]])
 			filename := wg.g.GameDir + "/pnjs/common/" + pnj.Name + ".json"
 			pnj.LoadDialogs(filename)
-			l.Pnjs[*pos] = pnj
+			l.Pnjs[pos.Y][pos.X] = pnj
 		}
 	}
 }
@@ -268,7 +267,7 @@ func (wg *WorldGenerator) generateEnnemies(level *Level, bestiary []*MonsterType
 			mt = bestiary[m]
 		}
 		if canGo(level, pos) {
-			level.Enemies[pos] = NewEnemy(mt, pos)
+			level.Enemies[pos.Y][pos.X] = NewEnemy(mt, pos)
 		}
 	}
 }

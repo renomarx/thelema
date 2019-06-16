@@ -41,10 +41,8 @@ func (ui *UI) DrawMinimap() {
 		for y := minY; y < maxY; y++ {
 			for x := minX; x < maxX; x++ {
 				pos := game.Pos{X: x, Y: y}
-				ui.Game.Mux.Lock()
-				object, exists := level.Objects[pos]
-				ui.Game.Mux.Unlock()
-				if exists {
+				object := level.Objects[pos.Y][pos.X]
+				if object != nil {
 					ui.drawMapObject(game.Pos{X: pos.X + int(CamX), Y: pos.Y + int(CamY)}, game.Tile(object.Rune))
 				}
 			}

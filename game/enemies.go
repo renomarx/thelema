@@ -37,7 +37,7 @@ func (level *Level) MakeEnemy(pnj *Pnj) {
 	y.Character = pnj.Character
 	y.Speed.Init(y.Speed.Current * 2)
 	y.VisionRange = 12
-	level.Enemies[np] = y
+	level.Enemies[np.Y][np.X] = y
 }
 
 func (e *Enemy) Update(g *Game) {
@@ -75,15 +75,13 @@ func (e *Enemy) getTargetPos(g *Game) Pos {
 
 	for y := e.Y - e.VisionRange; y < e.Y+e.VisionRange; y++ {
 		for x := e.X - e.VisionRange; x < e.X+e.VisionRange; x++ {
-			g.Mux.Lock()
-			mm, ex := l.Invocations[Pos{X: x, Y: y}]
-			g.Mux.Unlock()
-			if ex {
+			mm := l.Invocations[y][x]
+			if mm != nil {
 				e.target = &mm.Character
 				return Pos{X: x, Y: y}
 			}
-			f, ef := l.Friends[Pos{X: x, Y: y}]
-			if ef && !f.IsDead() {
+			f := l.Friends[y][x]
+			if f != nil && !f.IsDead() {
 				e.target = &f.Character
 				return Pos{X: x, Y: y}
 			}
@@ -105,10 +103,8 @@ func (e *Enemy) canMove(to Pos, level *Level) bool {
 func (e *Enemy) Move(to Pos, g *Game) {
 	level := g.Level
 	lastPos := Pos{X: e.Pos.X, Y: e.Pos.Y}
-	g.Mux.Lock()
-	delete(level.Enemies, e.Pos)
-	level.Enemies[to] = e
-	g.Mux.Unlock()
+	level.Enemies[e.Y][e.X] = nil
+	level.Enemies[to.Y][to.X] = e
 	e.moveFromTo(lastPos, to)
 }
 
@@ -127,9 +123,7 @@ func (e *Enemy) TakeDamage(g *Game, damage int) {
 
 func (e *Enemy) Die(g *Game) {
 	e.isDead = true
-	g.Mux.Lock()
-	delete(g.Level.Enemies, e.Pos)
-	g.Mux.Unlock()
+	g.Level.Enemies[e.Y][e.X] = nil
 }
 
 func (e *Enemy) CanSee(level *Level, pos Pos) bool {

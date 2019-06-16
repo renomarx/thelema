@@ -9,17 +9,17 @@ const LevelTypeHouse = "HOUSE"
 
 type Level struct {
 	Type        string
-	Map         [][]Tile
-	Player      *Player
-	Monsters    map[Pos]*Monster
-	Objects     map[Pos]*Object
 	Portals     map[Pos]*Portal
-	Effects     map[Pos]*Effect
-	Projectiles map[Pos]*Projectile
-	Pnjs        map[Pos]*Pnj
-	Invocations map[Pos]*Invoked
-	Friends     map[Pos]*Friend
-	Enemies     map[Pos]*Enemy
+	Player      *Player
+	Map         [][]Tile
+	Monsters    [][]*Monster
+	Objects     [][]*Object
+	Effects     [][]*Effect
+	Projectiles [][]*Projectile
+	Pnjs        [][]*Pnj
+	Invocations [][]*Invoked
+	Friends     [][]*Friend
+	Enemies     [][]*Enemy
 	Paused      bool
 	PRay        int
 }
@@ -44,16 +44,31 @@ func (l *Level) GetRandomFreePos() *Pos {
 func NewLevel(levelType string) *Level {
 	level := &Level{}
 	level.Type = levelType
-	level.Monsters = make(map[Pos]*Monster)
-	level.Objects = make(map[Pos]*Object)
-	level.Effects = make(map[Pos]*Effect)
-	level.Projectiles = make(map[Pos]*Projectile)
-	level.Pnjs = make(map[Pos]*Pnj)
-	level.Invocations = make(map[Pos]*Invoked)
-	level.Friends = make(map[Pos]*Friend)
-	level.Enemies = make(map[Pos]*Enemy)
 	level.PRay = 100
 	return level
+}
+
+func (level *Level) InitMaps(height, width int) {
+	level.Map = make([][]Tile, height)
+	level.Monsters = make([][]*Monster, height)
+	level.Objects = make([][]*Object, height)
+	level.Effects = make([][]*Effect, height)
+	level.Projectiles = make([][]*Projectile, height)
+	level.Pnjs = make([][]*Pnj, height)
+	level.Invocations = make([][]*Invoked, height)
+	level.Friends = make([][]*Friend, height)
+	level.Enemies = make([][]*Enemy, height)
+	for i := range level.Map {
+		level.Map[i] = make([]Tile, width)
+		level.Monsters[i] = make([]*Monster, width)
+		level.Objects[i] = make([]*Object, width)
+		level.Effects[i] = make([]*Effect, width)
+		level.Projectiles[i] = make([]*Projectile, width)
+		level.Pnjs[i] = make([]*Pnj, width)
+		level.Invocations[i] = make([]*Invoked, width)
+		level.Friends[i] = make([]*Friend, width)
+		level.Enemies[i] = make([]*Enemy, width)
+	}
 }
 
 func (g *Game) UpdateLevel() {
@@ -94,8 +109,8 @@ func (g *Game) handleMonsters() {
 	l := g.Level
 	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
 		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
-			m, e := l.Monsters[Pos{X: x, Y: y}]
-			if e && !m.IsPlaying {
+			m := l.Monsters[y][x]
+			if m != nil && !m.IsPlaying {
 				go func(m *Monster) {
 					m.IsPlaying = true
 					m.Update(g)
@@ -107,37 +122,49 @@ func (g *Game) handleMonsters() {
 }
 
 func (g *Game) handleInvocations() {
-	for _, m := range g.Level.Invocations {
-		if !m.IsPlaying {
-			go func(m *Invoked) {
-				m.IsPlaying = true
-				m.Update(g)
-				m.IsPlaying = false
-			}(m)
+	l := g.Level
+	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
+		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
+			m := l.Invocations[y][x]
+			if m != nil && !m.IsPlaying {
+				go func(m *Invoked) {
+					m.IsPlaying = true
+					m.Update(g)
+					m.IsPlaying = false
+				}(m)
+			}
 		}
 	}
 }
 
 func (g *Game) handlePnjs() {
-	for _, pnj := range g.Level.Pnjs {
-		if !pnj.IsPlaying {
-			go func(pnj *Pnj) {
-				pnj.IsPlaying = true
-				pnj.Update(g)
-				pnj.IsPlaying = false
-			}(pnj)
+	l := g.Level
+	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
+		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
+			m := l.Pnjs[y][x]
+			if m != nil && !m.IsPlaying {
+				go func(m *Pnj) {
+					m.IsPlaying = true
+					m.Update(g)
+					m.IsPlaying = false
+				}(m)
+			}
 		}
 	}
 }
 
 func (g *Game) handleFriends() {
-	for _, m := range g.Level.Friends {
-		if !m.IsPlaying {
-			go func(m *Friend) {
-				m.IsPlaying = true
-				m.Update(g)
-				m.IsPlaying = false
-			}(m)
+	l := g.Level
+	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
+		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
+			m := l.Friends[y][x]
+			if m != nil && !m.IsPlaying {
+				go func(m *Friend) {
+					m.IsPlaying = true
+					m.Update(g)
+					m.IsPlaying = false
+				}(m)
+			}
 		}
 	}
 }
@@ -146,8 +173,8 @@ func (g *Game) handleEnemies() {
 	l := g.Level
 	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
 		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
-			m, e := l.Enemies[Pos{X: x, Y: y}]
-			if e && !m.IsPlaying {
+			m := l.Enemies[y][x]
+			if m != nil && !m.IsPlaying {
 				go func(m *Enemy) {
 					m.IsPlaying = true
 					m.Update(g)
@@ -159,25 +186,33 @@ func (g *Game) handleEnemies() {
 }
 
 func (g *Game) handleProjectiles() {
-	for _, projectile := range g.Level.Projectiles {
-		if !projectile.IsPlaying {
-			go func(projectile *Projectile) {
-				projectile.IsPlaying = true
-				projectile.Update(g)
-				projectile.IsPlaying = false
-			}(projectile)
+	l := g.Level
+	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
+		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
+			m := l.Projectiles[y][x]
+			if m != nil && !m.IsPlaying {
+				go func(m *Projectile) {
+					m.IsPlaying = true
+					m.Update(g)
+					m.IsPlaying = false
+				}(m)
+			}
 		}
 	}
 }
 
 func (g *Game) handleEffects() {
-	for _, eff := range g.Level.Effects {
-		if !eff.IsPlaying {
-			go func(eff *Effect) {
-				eff.IsPlaying = true
-				eff.Update(g)
-				eff.IsPlaying = false
-			}(eff)
+	l := g.Level
+	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
+		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
+			m := l.Effects[y][x]
+			if m != nil && !m.IsPlaying {
+				go func(m *Effect) {
+					m.IsPlaying = true
+					m.Update(g)
+					m.IsPlaying = false
+				}(m)
+			}
 		}
 	}
 }
@@ -188,16 +223,17 @@ func (level *Level) OpenPortal(g *Game, pos Pos) {
 		p := level.Player
 		p.X = port.PosTo.X
 		p.Y = port.PosTo.Y
-		levelFrom := *g.Level
+		//levelFrom := *g.Level
 		g.Level = g.Levels[port.LevelTo]
 		g.Level.Player = p
-		for oldP, f := range levelFrom.Friends {
-			f.Pos = port.PosTo
-			g.Level.Friends[port.PosTo] = f
-			g.Mux.Lock()
-			delete(levelFrom.Friends, oldP)
-			g.Mux.Unlock()
-		}
+		// TODO
+		// for oldP, f := range levelFrom.Friends {
+		// 	f.Pos = port.PosTo
+		// 	g.Level.Friends[port.PosTo] = f
+		// 	g.Mux.Lock()
+		// 	delete(levelFrom.Friends, oldP)
+		// 	g.Mux.Unlock()
+		// }
 
 		g.GetEventManager().Dispatch(&Event{
 			Action:  ActionChangeLevel,

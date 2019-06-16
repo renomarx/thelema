@@ -188,10 +188,8 @@ func (pnj *Pnj) canMove(to Pos, level *Level) bool {
 func (pnj *Pnj) Move(to Pos, g *Game) {
 	level := g.Level
 	lastPos := Pos{X: pnj.Pos.X, Y: pnj.Pos.Y}
-	g.Mux.Lock()
-	delete(level.Pnjs, pnj.Pos)
-	level.Pnjs[to] = pnj
-	g.Mux.Unlock()
+	level.Pnjs[pnj.Y][pnj.X] = nil
+	level.Pnjs[to.Y][to.X] = pnj
 	pnj.moveFromTo(lastPos, to)
 }
 
@@ -204,18 +202,14 @@ func (pnj *Pnj) Teleport(levelName string, g *Game) {
 		pnj.adaptSpeed()
 	}
 	pos := level.GetRandomFreePos()
-	g.Mux.Lock()
-	delete(g.Level.Pnjs, pnj.Pos)
+	g.Level.Pnjs[pnj.Y][pnj.X] = nil
 	pnj.Pos = *pos
-	level.Pnjs[*pos] = pnj
-	g.Mux.Unlock()
+	level.Pnjs[pos.Y][pos.X] = pnj
 	pnj.IsPowerAttacking = false
 	pnj.Talkable = true
 }
 
 func (pnj *Pnj) BecomeEnemy(g *Game) {
-	g.Mux.Lock()
-	delete(g.Level.Pnjs, pnj.Pos)
+	g.Level.Pnjs[pnj.Y][pnj.X] = nil
 	g.Level.MakeEnemy(pnj)
-	g.Mux.Unlock()
 }

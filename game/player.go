@@ -154,8 +154,8 @@ func (p *Player) openPortal(g *Game, pos Pos) {
 
 func (p *Player) Talk(g *Game, posTo Pos) {
 	level := g.Level
-	pnj, exists := level.Pnjs[posTo]
-	if exists && pnj.Talkable {
+	pnj := level.Pnjs[posTo.Y][posTo.X]
+	if pnj != nil && pnj.Talkable {
 		g.GetEventManager().Dispatch(&Event{Action: ActionTalk})
 		p.IsTalking = true
 		p.TalkingTo = pnj
@@ -199,8 +199,8 @@ func (p *Player) IsQuestOpenStepFinished(questID string, stepID string) bool {
 
 func (p *Player) Take(g *Game, posTo Pos) {
 	level := g.Level
-	o, exists := level.Objects[posTo]
-	if exists {
+	o := level.Objects[posTo.Y][posTo.X]
+	if o != nil {
 		p.IsTaking = true
 		p.TakeUsable(o, g)
 		p.TakeBook(o, g)
@@ -223,8 +223,8 @@ func (p *Player) TakeQuestObject(o *Object, g *Game) bool {
 	})
 	g.Mux.Lock()
 	p.Inventory.QuestObjects[o.Rune] = o
-	delete(g.Level.Objects, o.Pos)
 	g.Mux.Unlock()
+	g.Level.Objects[o.Y][o.X] = nil
 
 	for _, stepID := range qo.Quest.StepsFullfilling {
 		p.finishQuestStep(qo.Quest.ID, stepID, g)
@@ -237,9 +237,7 @@ func (p *Player) TakeUsable(o *Object, g *Game) bool {
 	taken := p.Inventory.TakeUsable(o)
 	if taken {
 		g.GetEventManager().Dispatch(&Event{Action: ActionTake})
-		g.Mux.Lock()
-		delete(g.Level.Objects, o.Pos)
-		g.Mux.Unlock()
+		g.Level.Objects[o.Y][o.X] = nil
 	}
 
 	return true
@@ -252,17 +250,13 @@ func (p *Player) TakeBook(o *Object, g *Game) bool {
 			Action:  ActionTake,
 			Message: "You got a new book!",
 		})
-		g.Mux.Lock()
-		delete(g.Level.Objects, o.Pos)
-		g.Mux.Unlock()
+		g.Level.Objects[o.Y][o.X] = nil
 	}
 
 	return true
 }
 
 func (p *Player) Recruit(pnj *Pnj, g *Game) {
-	g.Mux.Lock()
-	delete(g.Level.Pnjs, pnj.Pos)
+	g.Level.Pnjs[pnj.Y][pnj.X] = nil
 	g.Level.MakeFriend(pnj)
-	g.Mux.Unlock()
 }
