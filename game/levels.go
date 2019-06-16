@@ -143,13 +143,17 @@ func (g *Game) handleFriends() {
 }
 
 func (g *Game) handleEnemies() {
-	for _, m := range g.Level.Enemies {
-		if !m.IsPlaying {
-			go func(m *Enemy) {
-				m.IsPlaying = true
-				m.Update(g)
-				m.IsPlaying = false
-			}(m)
+	l := g.Level
+	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
+		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
+			m, e := l.Enemies[Pos{X: x, Y: y}]
+			if e && !m.IsPlaying {
+				go func(m *Enemy) {
+					m.IsPlaying = true
+					m.Update(g)
+					m.IsPlaying = false
+				}(m)
+			}
 		}
 	}
 }
