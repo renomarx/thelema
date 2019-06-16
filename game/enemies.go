@@ -75,12 +75,12 @@ func (e *Enemy) getTargetPos(g *Game) Pos {
 
 	for y := e.Y - e.VisionRange; y < e.Y+e.VisionRange; y++ {
 		for x := e.X - e.VisionRange; x < e.X+e.VisionRange; x++ {
-			mm := l.Invocations[y][x]
+			mm := l.GetInvocation(x, y)
 			if mm != nil {
 				e.target = &mm.Character
 				return Pos{X: x, Y: y}
 			}
-			f := l.Friends[y][x]
+			f := l.GetFriend(x, y)
 			if f != nil && !f.IsDead() {
 				e.target = &f.Character
 				return Pos{X: x, Y: y}

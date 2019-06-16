@@ -81,7 +81,7 @@ func isInsideMap(level *Level, pos Pos) bool {
 
 func openDoor(g *Game, pos Pos) {
 	level := g.Level
-	o := level.Objects[pos.Y][pos.X]
+	o := level.GetObject(pos.X, pos.Y)
 	if o != nil {
 		switch Tile(o.Rune) {
 		case DoorClosed:
@@ -94,7 +94,7 @@ func openDoor(g *Game, pos Pos) {
 
 func closeDoor(g *Game, pos Pos) {
 	level := g.Level
-	o := level.Objects[pos.Y][pos.X]
+	o := level.GetObject(pos.X, pos.Y)
 	if o != nil {
 		switch Tile(o.Rune) {
 		case DoorOpened:

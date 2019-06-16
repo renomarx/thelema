@@ -75,12 +75,12 @@ func (m *Monster) getTargetPos(g *Game) Pos {
 
 	for y := m.Y - m.VisionRange; y < m.Y+m.VisionRange; y++ {
 		for x := m.X - m.VisionRange; x < m.X+m.VisionRange; x++ {
-			mm := l.Invocations[y][x]
+			mm := l.GetInvocation(x, y)
 			if mm != nil {
 				m.target = &mm.Character
 				return Pos{X: x, Y: y}
 			}
-			f := l.Friends[y][x]
+			f := l.GetFriend(x, y)
 			if f != nil && !f.IsDead() {
 				m.target = &f.Character
 				return Pos{X: x, Y: y}

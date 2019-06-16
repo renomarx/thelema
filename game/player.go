@@ -221,9 +221,7 @@ func (p *Player) TakeQuestObject(o *Object, g *Game) bool {
 		Action:  ActionTake,
 		Message: "You got a special object!",
 	})
-	g.Mux.Lock()
 	p.Inventory.QuestObjects[o.Rune] = o
-	g.Mux.Unlock()
 	g.Level.Objects[o.Y][o.X] = nil
 
 	for _, stepID := range qo.Quest.StepsFullfilling {

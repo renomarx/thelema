@@ -50,12 +50,12 @@ func (m *Friend) getTargetPos(l *Level) Pos {
 	}
 	for y := m.Y - m.VisionRange; y < m.Y+m.VisionRange; y++ {
 		for x := m.X - m.VisionRange; x < m.X+m.VisionRange; x++ {
-			mm := l.Monsters[y][x]
+			mm := l.GetMonster(x, y)
 			if mm != nil {
 				m.target = &mm.Character
 				return Pos{X: x, Y: y}
 			}
-			n := l.Enemies[y][x]
+			n := l.GetEnemy(x, y)
 			if n != nil && !n.IsDead() {
 				m.target = &n.Character
 				return Pos{X: x, Y: y}
