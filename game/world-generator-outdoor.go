@@ -2,6 +2,7 @@ package game
 
 func (wg *WorldGenerator) generateOutdoor(levelName string) *Level {
 	level := NewLevel(LevelTypeOutdoor)
+	level.Name = levelName
 	level.InitMaps(WorldHeight, WorldWidth)
 
 	for y := 0; y < WorldHeight; y++ {

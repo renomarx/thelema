@@ -1,2 +1,4 @@
 /saves/*.gob
+/saves/*.json
+/saves/*.sav
 /config.json

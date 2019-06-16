@@ -8,10 +8,13 @@ const LevelTypeCity = "CITY"
 const LevelTypeHouse = "HOUSE"
 
 type Level struct {
+	Name        string
+	Width       int
+	Height      int
 	Type        string
-	Portals     map[Pos]*Portal
 	Player      *Player
 	Map         [][]Tile
+	Portals     [][]*Portal
 	Monsters    [][]*Monster
 	Objects     [][]*Object
 	Effects     [][]*Effect
@@ -121,7 +124,10 @@ func NewLevel(levelType string) *Level {
 }
 
 func (level *Level) InitMaps(height, width int) {
+	level.Width = width
+	level.Height = height
 	level.Map = make([][]Tile, height)
+	level.Portals = make([][]*Portal, height)
 	level.Monsters = make([][]*Monster, height)
 	level.Objects = make([][]*Object, height)
 	level.Effects = make([][]*Effect, height)
@@ -132,6 +138,7 @@ func (level *Level) InitMaps(height, width int) {
 	level.Enemies = make([][]*Enemy, height)
 	for i := range level.Map {
 		level.Map[i] = make([]Tile, width)
+		level.Portals[i] = make([]*Portal, width)
 		level.Monsters[i] = make([]*Monster, width)
 		level.Objects[i] = make([]*Object, width)
 		level.Effects[i] = make([]*Effect, width)
@@ -294,7 +301,7 @@ func (g *Game) handleEffects() {
 }
 
 func (level *Level) OpenPortal(g *Game, pos Pos) {
-	port := level.Portals[pos]
+	port := level.Portals[pos.Y][pos.X]
 	if port != nil {
 		p := level.Player
 		p.X = port.PosTo.X
@@ -319,8 +326,5 @@ func (level *Level) OpenPortal(g *Game, pos Pos) {
 }
 
 func (level *Level) AddPortal(posFrom Pos, portal *Portal) {
-	if len(level.Portals) == 0 {
-		level.Portals = make(map[Pos]*Portal)
-	}
-	level.Portals[posFrom] = portal
+	level.Portals[posFrom.Y][posFrom.X] = portal
 }

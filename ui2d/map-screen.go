@@ -56,18 +56,24 @@ func (ui *UI) DrawMap() {
 			}
 		}
 
-		for pos, portal := range level.Portals {
-			levelTo := g.Levels[portal.LevelTo]
-			if levelTo.Type == game.LevelTypeCity {
-				tex := ui.GetTexture(portal.LevelTo, TextSizeXS, ColorWhite)
-				_, _, w, h, _ := tex.Query()
-				for j := -2; j < int(h)+2; j++ {
-					for i := -2; i < int(w)+2; i++ {
-						ui.renderer.SetDrawColor(0, 0, 0, 255)
-						ui.renderer.DrawPoint(int32(pos.X+int(CamX)+i), int32(pos.Y+int(CamY)+j))
+		for y := 0; y < len(level.Portals); y++ {
+			row := level.Portals[y]
+			for x := 0; x < len(row); x++ {
+				portal := row[x]
+				if portal != nil {
+					levelTo := g.Levels[portal.LevelTo]
+					if levelTo.Type == game.LevelTypeCity {
+						tex := ui.GetTexture(portal.LevelTo, TextSizeXS, ColorWhite)
+						_, _, w, h, _ := tex.Query()
+						for j := -2; j < int(h)+2; j++ {
+							for i := -2; i < int(w)+2; i++ {
+								ui.renderer.SetDrawColor(0, 0, 0, 255)
+								ui.renderer.DrawPoint(int32(x+int(CamX)+i), int32(y+int(CamY)+j))
+							}
+						}
+						ui.renderer.Copy(tex, nil, &sdl.Rect{int32(x + int(CamX)), int32(y + int(CamY)), w, h})
 					}
 				}
-				ui.renderer.Copy(tex, nil, &sdl.Rect{int32(pos.X + int(CamX)), int32(pos.Y + int(CamY)), w, h})
 			}
 		}
 

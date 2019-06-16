@@ -25,6 +25,7 @@ func (wg *WorldGenerator) generateCities(level *Level, nbCities int) {
 func (wg *WorldGenerator) generateCity(level *Level, pos Pos, mapName string, cityNumber int) {
 	levelName := "City " + strconv.Itoa(cityNumber)
 	nl, npos := wg.LoadMapTemplate(mapName, LevelTypeCity, levelName)
+	nl.Name = levelName
 	wg.g.Levels[levelName] = nl
 	level.AddPortal(pos, &Portal{LevelTo: levelName, PosTo: npos})
 	nl.AddPortal(npos, &Portal{LevelTo: WorldName, PosTo: pos})
