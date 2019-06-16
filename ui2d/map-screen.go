@@ -46,10 +46,15 @@ func (ui *UI) DrawMap() {
 			}
 		}
 
-		// TODO
-		// for pos, object := range level.Objects {
-		// 	ui.drawMapObject(game.Pos{X: pos.X + int(CamX), Y: pos.Y + int(CamY)}, game.Tile(object.Rune))
-		// }
+		for y := 0; y < len(level.Objects); y++ {
+			row := level.Objects[y]
+			for x := 0; x < len(row); x++ {
+				object := row[x]
+				if object != nil {
+					ui.drawMapObject(game.Pos{X: x + int(CamX), Y: y + int(CamY)}, game.Tile(object.Rune))
+				}
+			}
+		}
 
 		for pos, portal := range level.Portals {
 			levelTo := g.Levels[portal.LevelTo]

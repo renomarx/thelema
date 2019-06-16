@@ -67,7 +67,7 @@ func (g *Game) MakeRangeStorm(p Pos, damages int, dir InputType, lifetime int, r
 		}
 	}
 	for _, pp := range poss {
-		g.MakeStorm(pp, damages, dir, lifetime)
+		go g.MakeStorm(pp, damages, dir, lifetime)
 	}
 }
 
@@ -100,7 +100,7 @@ func (g *Game) MakeFlames(p Pos, damages int, lifetime int, rg int) {
 	for y := p.Y - rg; y <= p.Y+rg; y++ {
 		for x := p.X - rg; x <= p.X+rg; x++ {
 			if x != p.X || y != p.Y {
-				g.MakeFlame(Pos{X: x, Y: y}, damages, lifetime)
+				go g.MakeFlame(Pos{X: x, Y: y}, damages, lifetime)
 			}
 		}
 	}
@@ -148,13 +148,13 @@ func (e *Effect) Update(g *Game) {
 
 func (e *Effect) MakeDamage(g *Game) {
 	level := g.Level
-	m := level.Monsters[e.Pos.Y][e.Pos.X]
+	m := level.GetMonster(e.X, e.Y)
 	if m != nil {
 		// There is a monster !
 		m.TakeDamage(g, e.Damages, nil)
 		e.Die(g)
 	}
-	en := level.Enemies[e.Pos.Y][e.Pos.X]
+	en := level.GetEnemy(e.X, e.Y)
 	if en != nil {
 		// There is an annemy !
 		en.TakeDamage(g, e.Damages)
