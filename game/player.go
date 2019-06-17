@@ -84,8 +84,8 @@ func (p *Player) Move(g *Game) {
 			posTo = Pos{p.X + 1, p.Y}
 		}
 		p.Talk(g, posTo)
-		p.Take(g, posTo)
-		if !p.IsTalking && !p.IsTaking {
+		taken := p.Take(g, posTo)
+		if !p.IsTalking && !taken {
 			if p.Attack(g, posTo) {
 				g.GetEventManager().Dispatch(&Event{Action: ActionAttack})
 			}
@@ -198,19 +198,24 @@ func (p *Player) IsQuestOpenStepFinished(questID string, stepID string) bool {
 	return p.Quests[questID].Steps[stepID].IsFinished
 }
 
-func (p *Player) Take(g *Game, posTo Pos) {
+func (p *Player) Take(g *Game, posTo Pos) bool {
 	level := g.Level
 	o := level.Objects[posTo.Y][posTo.X]
 	if o != nil {
 		p.IsTaking = true
-		p.TakeUsable(o, g)
-		p.TakeBook(o, g)
-		p.TakeQuestObject(o, g)
-		for i := CaseLen; i > 0; i = i - 2 {
-			p.adaptSpeed()
+		ut := p.TakeUsable(o, g)
+		bt := p.TakeBook(o, g)
+		qot := p.TakeQuestObject(o, g)
+		taken := ut || bt || qot
+		if taken {
+			for i := CaseLen; i > 0; i = i - 1 {
+				p.adaptSpeed()
+			}
 		}
 		p.IsTaking = false
+		return taken
 	}
+	return false
 }
 
 func (p *Player) TakeQuestObject(o *Object, g *Game) bool {
@@ -239,7 +244,7 @@ func (p *Player) TakeUsable(o *Object, g *Game) bool {
 		g.Level.Objects[o.Y][o.X] = nil
 	}
 
-	return true
+	return taken
 }
 
 func (p *Player) TakeBook(o *Object, g *Game) bool {
@@ -252,7 +257,7 @@ func (p *Player) TakeBook(o *Object, g *Game) bool {
 		g.Level.Objects[o.Y][o.X] = nil
 	}
 
-	return true
+	return taken
 }
 
 func (p *Player) Recruit(pnj *Pnj, g *Game) {
