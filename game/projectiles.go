@@ -92,14 +92,13 @@ func (p *Projectile) canMove(level *Level, pos Pos) bool {
 
 func (p *Projectile) Move(to Pos, g *Game) {
 	level := g.Level
-	level.Projectiles[p.Y][p.X] = nil
-	level.Projectiles[to.Y][to.X] = p
-	p.Pos = to
-
 	if !p.canMove(level, to) {
 		p.Die(g)
 		return
 	}
+	level.Projectiles[p.Y][p.X] = nil
+	level.Projectiles[to.Y][to.X] = p
+	p.Pos = to
 
 	p.MakeDamage(g)
 
