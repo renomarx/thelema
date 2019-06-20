@@ -13,7 +13,7 @@ func (wg *WorldGenerator) generateGrottos(level *Level, nbGrottos int) {
 		pos := Pos{X: x, Y: y}
 
 		o := level.Map[pos.Y][pos.X].Object
-		if o != nil {
+		if o == nil {
 			level.Map[pos.Y][pos.X].Object = &Object{Rune: rune(Downstairs)} // TODO : maybe use a different grotto entry
 			mapName := "grotto/grotto" + strconv.Itoa(m)
 			wg.generateGrotto(level, pos, mapName, grottoNumber)
