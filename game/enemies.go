@@ -37,7 +37,7 @@ func (level *Level) MakeEnemy(pnj *Pnj) {
 	y.Character = pnj.Character
 	y.Speed.Init(y.Speed.Current * 2)
 	y.VisionRange = 12
-	level.Enemies[np.Y][np.X] = y
+	level.Map[np.Y][np.X].Enemy = y
 }
 
 func (e *Enemy) Update(g *Game) {
@@ -103,8 +103,8 @@ func (e *Enemy) canMove(to Pos, level *Level) bool {
 func (e *Enemy) Move(to Pos, g *Game) {
 	level := g.Level
 	lastPos := Pos{X: e.Pos.X, Y: e.Pos.Y}
-	level.Enemies[e.Y][e.X] = nil
-	level.Enemies[to.Y][to.X] = e
+	level.Map[e.Y][e.X].Enemy = nil
+	level.Map[to.Y][to.X].Enemy = e
 	e.moveFromTo(lastPos, to)
 }
 
@@ -123,7 +123,7 @@ func (e *Enemy) TakeDamage(g *Game, damage int) {
 
 func (e *Enemy) Die(g *Game) {
 	e.isDead = true
-	g.Level.Enemies[e.Y][e.X] = nil
+	g.Level.Map[e.Y][e.X].Enemy = nil
 }
 
 func (e *Enemy) CanSee(level *Level, pos Pos) bool {

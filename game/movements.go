@@ -74,7 +74,7 @@ func canGo(level *Level, pos Pos) bool {
 func isInsideMap(level *Level, pos Pos) bool {
 	if pos.Y >= 0 && pos.Y < len(level.Map) {
 		if pos.X >= 0 && pos.X < len(level.Map[pos.Y]) {
-			return level.Map[pos.Y][pos.X] != Blank && level.Map[pos.Y][pos.X] != 0
+			return level.Map[pos.Y][pos.X].T != Blank && level.Map[pos.Y][pos.X].T != 0
 		}
 	}
 	return false

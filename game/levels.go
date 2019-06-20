@@ -8,92 +8,96 @@ const LevelTypeCity = "CITY"
 const LevelTypeHouse = "HOUSE"
 
 type Level struct {
-	Name        string
-	Width       int
-	Height      int
-	Type        string
-	Player      *Player
-	Map         [][]Tile
-	Portals     [][]*Portal
-	Monsters    [][]*Monster
-	Objects     [][]*Object
-	Effects     [][]*Effect
-	Projectiles [][]*Projectile
-	Pnjs        [][]*Pnj
-	Invocations [][]*Invoked
-	Friends     [][]*Friend
-	Enemies     [][]*Enemy
-	Paused      bool
-	PRay        int
+	Name   string
+	Width  int
+	Height int
+	Type   string
+	Player *Player
+	Map    [][]Case
+	Paused bool
+	PRay   int
+}
+
+type Case struct {
+	T          Tile
+	Portal     *Portal
+	Object     *Object
+	Monster    *Monster
+	Effect     *Effect
+	Projectile *Projectile
+	Pnj        *Pnj
+	Invoked    *Invoked
+	Friend     *Friend
+	Enemy      *Enemy
 }
 
 func (l *Level) GetMonster(x, y int) *Monster {
-	if y >= 0 && y < len(l.Monsters) {
-		if x >= 0 && x < len(l.Monsters[y]) {
-			return l.Monsters[y][x]
+	if y >= 0 && y < len(l.Map) {
+		if x >= 0 && x < len(l.Map[y]) {
+			return l.Map[y][x].Monster
 		}
 	}
 	return nil
 }
 
 func (l *Level) GetObject(x, y int) *Object {
-	if y >= 0 && y < len(l.Objects) {
-		if x >= 0 && x < len(l.Objects[y]) {
-			return l.Objects[y][x]
+	if y >= 0 && y < len(l.Map) {
+		if x >= 0 && x < len(l.Map[y]) {
+			return l.Map[y][x].Object
 		}
 	}
 	return nil
 }
 
 func (l *Level) GetEffect(x, y int) *Effect {
-	if y >= 0 && y < len(l.Effects) {
-		if x >= 0 && x < len(l.Effects[y]) {
-			return l.Effects[y][x]
+	if y >= 0 && y < len(l.Map) {
+		if x >= 0 && x < len(l.Map[y]) {
+			return l.Map[y][x].Effect
 		}
 	}
 	return nil
 }
 
 func (l *Level) GetProjectile(x, y int) *Projectile {
-	if y >= 0 && y < len(l.Projectiles) {
-		if x >= 0 && x < len(l.Projectiles[y]) {
-			return l.Projectiles[y][x]
+	if y >= 0 && y < len(l.Map) {
+		if x >= 0 && x < len(l.Map[y]) {
+			return l.Map[y][x].Projectile
 		}
 	}
 	return nil
 }
 
 func (l *Level) GetPnj(x, y int) *Pnj {
-	if y >= 0 && y < len(l.Pnjs) {
-		if x >= 0 && x < len(l.Pnjs[y]) {
-			return l.Pnjs[y][x]
+	if y >= 0 && y < len(l.Map) {
+		if x >= 0 && x < len(l.Map[y]) {
+			return l.Map[y][x].Pnj
 		}
 	}
 	return nil
 }
 
 func (l *Level) GetInvocation(x, y int) *Invoked {
-	if y >= 0 && y < len(l.Invocations) {
-		if x >= 0 && x < len(l.Invocations[y]) {
-			return l.Invocations[y][x]
+	if y >= 0 && y < len(l.Map) {
+		if x >= 0 && x < len(l.Map[y]) {
+			return l.Map[y][x].Invoked
 		}
 	}
 	return nil
 }
 
 func (l *Level) GetFriend(x, y int) *Friend {
-	if y >= 0 && y < len(l.Friends) {
-		if x >= 0 && x < len(l.Friends[y]) {
-			return l.Friends[y][x]
+	if y >= 0 && y < len(l.Map) {
+		if x >= 0 && x < len(l.Map[y]) {
+			return l.Map[y][x].Friend
 		}
 	}
 	return nil
 }
 
 func (l *Level) GetEnemy(x, y int) *Enemy {
-	if y >= 0 && y < len(l.Enemies) {
-		if x >= 0 && x < len(l.Enemies[y]) {
-			return l.Enemies[y][x]
+	if y >= 0 && y < len(l.Map) {
+		if x >= 0 && x < len(l.Map[y]) {
+			return l.Map[y][x].Enemy
 		}
 	}
 	return nil
@@ -126,27 +130,9 @@ func NewLevel(levelType string) *Level {
 func (level *Level) InitMaps(height, width int) {
 	level.Width = width
 	level.Height = height
-	level.Map = make([][]Tile, height)
-	level.Portals = make([][]*Portal, height)
-	level.Monsters = make([][]*Monster, height)
-	level.Objects = make([][]*Object, height)
-	level.Effects = make([][]*Effect, height)
-	level.Projectiles = make([][]*Projectile, height)
-	level.Pnjs = make([][]*Pnj, height)
-	level.Invocations = make([][]*Invoked, height)
-	level.Friends = make([][]*Friend, height)
-	level.Enemies = make([][]*Enemy, height)
+	level.Map = make([][]Case, height)
 	for i := range level.Map {
-		level.Map[i] = make([]Tile, width)
-		level.Portals[i] = make([]*Portal, width)
-		level.Monsters[i] = make([]*Monster, width)
-		level.Objects[i] = make([]*Object, width)
-		level.Effects[i] = make([]*Effect, width)
-		level.Projectiles[i] = make([]*Projectile, width)
-		level.Pnjs[i] = make([]*Pnj, width)
-		level.Invocations[i] = make([]*Invoked, width)
-		level.Friends[i] = make([]*Friend, width)
-		level.Enemies[i] = make([]*Enemy, width)
+		level.Map[i] = make([]Case, width)
 	}
 }
 
@@ -156,13 +142,7 @@ func (g *Game) UpdateLevel() {
 		g.HandleInputPlayerMenu()
 	} else {
 		g.handleInput()
-		g.handleMonsters()
-		g.handlePnjs()
-		g.handleInvocations()
-		g.handleFriends()
-		g.handleEnemies()
-		g.handleProjectiles()
-		g.handleEffects()
+		g.handleMap()
 		if input.Typ == Select {
 			g.OpenPlayerMenu()
 		}
@@ -184,124 +164,98 @@ func (g *Game) handleInput() {
 	}
 }
 
-func (g *Game) handleMonsters() {
+func (g *Game) handleMap() {
 	l := g.Level
 	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
 		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
-			if y >= 0 && y < len(l.Monsters) {
-				if x >= 0 && x < len(l.Monsters[y]) {
-					m := l.GetMonster(x, y)
-					if m != nil && !m.IsPlaying {
-						m.IsPlaying = true
-						go func(m *Monster) {
-							m.Update(g)
-							m.IsPlaying = false
-						}(m)
-					}
+			if y >= 0 && y < len(l.Map) {
+				if x >= 0 && x < len(l.Map[y]) {
+					c := l.Map[y][x]
+					g.handleMonster(c.Monster)
+					g.handleInvocation(c.Invoked)
+					g.handlePnj(c.Pnj)
+					g.handleFriend(c.Friend)
+					g.handleEnemy(c.Enemy)
+					g.handleProjectile(c.Projectile)
+					g.handleEffect(c.Effect)
 				}
 			}
 		}
 	}
 }
 
-func (g *Game) handleInvocations() {
-	l := g.Level
-	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
-		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
-			m := l.GetInvocation(x, y)
-			if m != nil && !m.IsPlaying {
-				m.IsPlaying = true
-				go func(m *Invoked) {
-					m.Update(g)
-					m.IsPlaying = false
-				}(m)
-			}
-		}
+func (g *Game) handleMonster(m *Monster) {
+	if m != nil && !m.IsPlaying {
+		m.IsPlaying = true
+		go func(m *Monster) {
+			m.Update(g)
+			m.IsPlaying = false
+		}(m)
 	}
 }
 
-func (g *Game) handlePnjs() {
-	l := g.Level
-	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
-		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
-			m := l.GetPnj(x, y)
-			if m != nil && !m.IsPlaying {
-				m.IsPlaying = true
-				go func(m *Pnj) {
-					m.Update(g)
-					m.IsPlaying = false
-				}(m)
-			}
-		}
+func (g *Game) handleInvocation(m *Invoked) {
+	if m != nil && !m.IsPlaying {
+		m.IsPlaying = true
+		go func(m *Invoked) {
+			m.Update(g)
+			m.IsPlaying = false
+		}(m)
 	}
 }
 
-func (g *Game) handleFriends() {
-	l := g.Level
-	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
-		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
-			m := l.GetFriend(x, y)
-			if m != nil && !m.IsPlaying {
-				m.IsPlaying = true
-				go func(m *Friend) {
-					m.Update(g)
-					m.IsPlaying = false
-				}(m)
-			}
-		}
+func (g *Game) handlePnj(m *Pnj) {
+	if m != nil && !m.IsPlaying {
+		m.IsPlaying = true
+		go func(m *Pnj) {
+			m.Update(g)
+			m.IsPlaying = false
+		}(m)
 	}
 }
 
-func (g *Game) handleEnemies() {
-	l := g.Level
-	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
-		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
-			m := l.GetEnemy(x, y)
-			if m != nil && !m.IsPlaying {
-				m.IsPlaying = true
-				go func(m *Enemy) {
-					m.Update(g)
-					m.IsPlaying = false
-				}(m)
-			}
-		}
+func (g *Game) handleFriend(m *Friend) {
+	if m != nil && !m.IsPlaying {
+		m.IsPlaying = true
+		go func(m *Friend) {
+			m.Update(g)
+			m.IsPlaying = false
+		}(m)
 	}
 }
 
-func (g *Game) handleProjectiles() {
-	l := g.Level
-	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
-		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
-			m := l.GetProjectile(x, y)
-			if m != nil && !m.IsPlaying {
-				m.IsPlaying = true
-				go func(m *Projectile) {
-					m.Update(g)
-					m.IsPlaying = false
-				}(m)
-			}
-		}
+func (g *Game) handleEnemy(m *Enemy) {
+	if m != nil && !m.IsPlaying {
+		m.IsPlaying = true
+		go func(m *Enemy) {
+			m.Update(g)
+			m.IsPlaying = false
+		}(m)
 	}
 }
 
-func (g *Game) handleEffects() {
-	l := g.Level
-	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
-		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
-			m := l.GetEffect(x, y)
-			if m != nil && !m.IsPlaying {
-				m.IsPlaying = true
-				go func(m *Effect) {
-					m.Update(g)
-					m.IsPlaying = false
-				}(m)
-			}
-		}
+func (g *Game) handleProjectile(m *Projectile) {
+	if m != nil && !m.IsPlaying {
+		m.IsPlaying = true
+		go func(m *Projectile) {
+			m.Update(g)
+			m.IsPlaying = false
+		}(m)
+	}
+}
+
+func (g *Game) handleEffect(m *Effect) {
+	if m != nil && !m.IsPlaying {
+		m.IsPlaying = true
+		go func(m *Effect) {
+			m.Update(g)
+			m.IsPlaying = false
+		}(m)
 	}
 }
 
 func (level *Level) OpenPortal(g *Game, pos Pos) {
-	port := level.Portals[pos.Y][pos.X]
+	port := level.Map[pos.Y][pos.X].Portal
 	if port != nil {
 		p := level.Player
 		p.X = port.PosTo.X
@@ -313,8 +267,8 @@ func (level *Level) OpenPortal(g *Game, pos Pos) {
 		if f != nil {
 			oldP := f.Pos
 			f.Pos = port.PosTo
-			g.Level.Friends[port.PosTo.Y][port.PosTo.X] = f
-			levelFrom.Friends[oldP.Y][oldP.X] = nil
+			g.Level.Map[port.PosTo.Y][port.PosTo.X].Friend = f
+			levelFrom.Map[oldP.Y][oldP.X].Friend = nil
 		}
 
 		g.GetEventManager().Dispatch(&Event{
@@ -325,5 +279,5 @@ func (level *Level) OpenPortal(g *Game, pos Pos) {
 }
 
 func (level *Level) AddPortal(posFrom Pos, portal *Portal) {
-	level.Portals[posFrom.Y][posFrom.X] = portal
+	level.Map[posFrom.Y][posFrom.X].Portal = portal
 }

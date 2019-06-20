@@ -8,7 +8,7 @@ func (wg *WorldGenerator) generateOutdoor(levelName string) *Level {
 	for y := 0; y < WorldHeight; y++ {
 		for x := 0; x < WorldWidth; x++ {
 			t := DirtFloor
-			level.Map[y][x] = t
+			level.Map[y][x].T = t
 		}
 	}
 
@@ -34,13 +34,13 @@ func (wg *WorldGenerator) generateOcean(level *Level) {
 		for x := 0; x < WorldWidth; x++ {
 			o := &Object{Rune: rune(Ocean), Blocking: true}
 			o.Pos = Pos{x, y}
-			level.Objects[y][x] = o
+			level.Map[y][x].Object = o
 		}
 	}
 	for x := OceanX - 1; x < WorldWidth-OceanX; x++ {
 		o := &Object{Rune: rune(OceanTopSide), Blocking: false}
 		o.Pos = Pos{x, OceanY - 1}
-		level.Objects[o.Y][o.X] = o
+		level.Map[o.Y][o.X].Object = o
 	}
 
 	// Ocean bottom
@@ -48,13 +48,13 @@ func (wg *WorldGenerator) generateOcean(level *Level) {
 		for x := 0; x < WorldWidth; x++ {
 			o := &Object{Rune: rune(Ocean), Blocking: true}
 			o.Pos = Pos{x, y}
-			level.Objects[y][x] = o
+			level.Map[y][x].Object = o
 		}
 	}
 	for x := OceanX - 1; x < WorldWidth-OceanX; x++ {
 		o := &Object{Rune: rune(OceanDownSide), Blocking: false}
 		o.Pos = Pos{x, WorldHeight - OceanY}
-		level.Objects[o.Y][o.X] = o
+		level.Map[o.Y][o.X].Object = o
 	}
 
 	// Ocean left
@@ -62,13 +62,13 @@ func (wg *WorldGenerator) generateOcean(level *Level) {
 		for x := 0; x < OceanX-1; x++ {
 			o := &Object{Rune: rune(Ocean), Blocking: true}
 			o.Pos = Pos{x, y}
-			level.Objects[y][x] = o
+			level.Map[y][x].Object = o
 		}
 	}
 	for y := OceanY - 1; y < WorldHeight-OceanY; y++ {
 		o := &Object{Rune: rune(OceanLeftSide), Blocking: false}
 		o.Pos = Pos{OceanX - 1, y}
-		level.Objects[o.Y][o.X] = o
+		level.Map[o.Y][o.X].Object = o
 	}
 
 	// Ocean right
@@ -76,12 +76,12 @@ func (wg *WorldGenerator) generateOcean(level *Level) {
 		for x := WorldWidth - OceanX; x < WorldWidth; x++ {
 			o := &Object{Rune: rune(Ocean), Blocking: true}
 			o.Pos = Pos{x, y}
-			level.Objects[y][x] = o
+			level.Map[y][x].Object = o
 		}
 	}
 	for y := OceanY - 1; y < WorldHeight-OceanY; y++ {
 		o := &Object{Rune: rune(OceanRightSide), Blocking: false}
 		o.Pos = Pos{WorldWidth - OceanX, y}
-		level.Objects[o.Y][o.X] = o
+		level.Map[o.Y][o.X].Object = o
 	}
 }

@@ -13,8 +13,8 @@ func (level *Level) MakeFriend(pnj *Pnj) *Friend {
 	f.Character = pnj.Character
 	f.Speed.Init(f.Speed.Current * 2)
 	f.VisionRange = 7
-	level.Pnjs[pnj.Y][pnj.X] = nil
-	level.Friends[pnj.Y][pnj.X] = f
+	level.Map[pnj.Y][pnj.X].Pnj = nil
+	level.Map[pnj.Y][pnj.X].Friend = f
 	return f
 }
 
@@ -78,8 +78,8 @@ func (m *Friend) canMove(to Pos, level *Level) bool {
 
 func (m *Friend) Move(to Pos, g *Game) {
 	lastPos := Pos{X: m.Pos.X, Y: m.Pos.Y}
-	g.Level.Friends[m.Y][m.X] = nil
-	g.Level.Friends[to.Y][to.X] = m
+	g.Level.Map[m.Y][m.X].Friend = nil
+	g.Level.Map[to.Y][to.X].Friend = m
 	m.moveFromTo(lastPos, to)
 }
 
@@ -98,7 +98,7 @@ func (m *Friend) TakeDamage(g *Game, damage int) {
 
 func (m *Friend) Die(g *Game) {
 	m.isDead = true
-	g.Level.Friends[m.Y][m.X] = nil
+	g.Level.Map[m.Y][m.X].Friend = nil
 	g.Level.Player.Friend = nil
 }
 

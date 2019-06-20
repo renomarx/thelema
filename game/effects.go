@@ -41,9 +41,9 @@ func (g *Game) MakeExplosion(p Pos, size int, lifetime int) {
 	}
 	eff.TileIdx = idx
 
-	level.Effects[p.Y][p.X] = eff
+	level.Map[p.Y][p.X].Effect = eff
 	time.Sleep(time.Duration(lifetime) * time.Millisecond)
-	level.Effects[p.Y][p.X] = nil
+	level.Map[p.Y][p.X].Effect = nil
 }
 
 func (g *Game) MakeRangeStorm(p Pos, damages int, dir InputType, lifetime int, rg int) {
@@ -91,7 +91,7 @@ func (g *Game) MakeStorm(p Pos, damages int, dir InputType, lifetime int) {
 	case Down:
 		eff.TileIdx = 0
 	}
-	level.Effects[p.Y][p.X] = eff
+	level.Map[p.Y][p.X].Effect = eff
 	time.Sleep(time.Duration(lifetime) * time.Second)
 	eff.Die(g)
 }
@@ -117,7 +117,7 @@ func (g *Game) MakeFlame(p Pos, damages int, lifetime int) {
 	eff.Blocking = false
 	eff.Damages = damages
 	eff.TileIdx = 0
-	level.Effects[p.Y][p.X] = eff
+	level.Map[p.Y][p.X].Effect = eff
 	time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
 	eff.TileIdx = 1
 	time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
@@ -135,9 +135,9 @@ func (g *Game) MakeEffect(p Pos, r rune, lifetime int) {
 	eff.Blocking = false
 	eff.TileIdx = 0
 
-	level.Effects[p.Y][p.X] = eff
+	level.Map[p.Y][p.X].Effect = eff
 	time.Sleep(time.Duration(lifetime) * time.Millisecond)
-	level.Effects[p.Y][p.X] = nil
+	level.Map[p.Y][p.X].Effect = nil
 }
 
 func (e *Effect) Update(g *Game) {
@@ -163,7 +163,7 @@ func (e *Effect) MakeDamage(g *Game) {
 }
 
 func (e *Effect) Die(g *Game) {
-	g.Level.Effects[e.Y][e.X] = nil
+	g.Level.Map[e.Y][e.X].Effect = nil
 }
 
 func (e *Effect) canBe(level *Level, pos Pos) bool {

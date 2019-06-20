@@ -155,7 +155,7 @@ func (p *Player) openPortal(g *Game, pos Pos) {
 
 func (p *Player) Talk(g *Game, posTo Pos) {
 	level := g.Level
-	pnj := level.Pnjs[posTo.Y][posTo.X]
+	pnj := level.Map[posTo.Y][posTo.X].Pnj
 	if pnj != nil && pnj.Talkable {
 		g.GetEventManager().Dispatch(&Event{Action: ActionTalk})
 		p.IsTalking = true
@@ -200,7 +200,7 @@ func (p *Player) IsQuestOpenStepFinished(questID string, stepID string) bool {
 
 func (p *Player) Take(g *Game, posTo Pos) bool {
 	level := g.Level
-	o := level.Objects[posTo.Y][posTo.X]
+	o := level.Map[posTo.Y][posTo.X].Object
 	if o != nil {
 		p.IsTaking = true
 		ut := p.TakeUsable(o, g)
@@ -228,7 +228,7 @@ func (p *Player) TakeQuestObject(o *Object, g *Game) bool {
 		Message: "You got a special object!",
 	})
 	p.Inventory.QuestObjects[o.Rune] = o
-	g.Level.Objects[o.Y][o.X] = nil
+	g.Level.Map[o.Y][o.X].Object = nil
 
 	for _, stepID := range qo.Quest.StepsFullfilling {
 		p.finishQuestStep(qo.Quest.ID, stepID, g)
@@ -241,7 +241,7 @@ func (p *Player) TakeUsable(o *Object, g *Game) bool {
 	taken := p.Inventory.TakeUsable(o)
 	if taken {
 		g.GetEventManager().Dispatch(&Event{Action: ActionTake})
-		g.Level.Objects[o.Y][o.X] = nil
+		g.Level.Map[o.Y][o.X].Object = nil
 	}
 
 	return taken
@@ -254,7 +254,7 @@ func (p *Player) TakeBook(o *Object, g *Game) bool {
 			Action:  ActionTake,
 			Message: "You got a new book!",
 		})
-		g.Level.Objects[o.Y][o.X] = nil
+		g.Level.Map[o.Y][o.X].Object = nil
 	}
 
 	return taken

@@ -29,7 +29,7 @@ func (ui *UI) DrawMap() {
 		for y := 0; y < len(level.Map); y++ {
 			row := level.Map[y]
 			for x := 0; x < len(row); x++ {
-				tile := row[x]
+				tile := row[x].T
 				r := 0
 				g := 0
 				b := 0
@@ -43,23 +43,18 @@ func (ui *UI) DrawMap() {
 				ui.renderer.SetDrawColor(uint8(r), uint8(g), uint8(b), 255)
 				ui.renderer.DrawPoint(int32(x)+CamX, int32(y)+CamY)
 				ui.renderer.SetDrawColor(0, 0, 0, 0)
-			}
-		}
 
-		for y := 0; y < len(level.Objects); y++ {
-			row := level.Objects[y]
-			for x := 0; x < len(row); x++ {
-				object := row[x]
+				object := row[x].Object
 				if object != nil {
 					ui.drawMapObject(game.Pos{X: x + int(CamX), Y: y + int(CamY)}, game.Tile(object.Rune))
 				}
 			}
 		}
 
-		for y := 0; y < len(level.Portals); y++ {
-			row := level.Portals[y]
+		for y := 0; y < len(level.Map); y++ {
+			row := level.Map[y]
 			for x := 0; x < len(row); x++ {
-				portal := row[x]
+				portal := row[x].Portal
 				if portal != nil {
 					levelTo := g.Levels[portal.LevelTo]
 					if levelTo.Type == game.LevelTypeCity {

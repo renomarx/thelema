@@ -22,7 +22,7 @@ func (ui *UI) DrawMinimap() {
 		for y := minY; y < maxY; y++ {
 			row := level.Map[y]
 			for x := minX; x < maxX; x++ {
-				tile := row[x]
+				tile := row[x].T
 				r := 0
 				g := 0
 				b := 0
@@ -35,15 +35,9 @@ func (ui *UI) DrawMinimap() {
 
 				ui.renderer.SetDrawColor(uint8(r), uint8(g), uint8(b), 255)
 				ui.renderer.DrawPoint(int32(x)+CamX, int32(y)+CamY)
-			}
-		}
-
-		for y := minY; y < maxY; y++ {
-			for x := minX; x < maxX; x++ {
-				pos := game.Pos{X: x, Y: y}
-				object := level.Objects[pos.Y][pos.X]
+				object := row[x].Object
 				if object != nil {
-					ui.drawMapObject(game.Pos{X: pos.X + int(CamX), Y: pos.Y + int(CamY)}, game.Tile(object.Rune))
+					ui.drawMapObject(game.Pos{X: x + int(CamX), Y: y + int(CamY)}, game.Tile(object.Rune))
 				}
 			}
 		}

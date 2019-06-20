@@ -58,15 +58,15 @@ func (wg *WorldGenerator) LoadMapTemplate(mapName string, levelType string, leve
 				t = Blank
 			case DirtFloor, GreenFloor:
 			case DoorOpened:
-				level.Objects[y][x] = &Object{Rune: rune(DoorOpened)}
+				level.Map[y][x].Object = &Object{Rune: rune(DoorOpened)}
 			case Upstairs:
-				level.Objects[y][x] = &Object{Rune: rune(Upstairs)}
+				level.Map[y][x].Object = &Object{Rune: rune(Upstairs)}
 				initialPos = Pos{X: x, Y: y}
 			case CityOut:
-				level.Objects[y][x] = &Object{Rune: rune(CityOut)}
+				level.Map[y][x].Object = &Object{Rune: rune(CityOut)}
 				initialPos = Pos{X: x, Y: y}
 			case HouseDoor:
-				level.Objects[y][x] = &Object{Rune: rune(HouseDoor)}
+				level.Map[y][x].Object = &Object{Rune: rune(HouseDoor)}
 				if levelType == LevelTypeHouse {
 					initialPos = Pos{X: x, Y: y}
 				} else {
@@ -78,9 +78,9 @@ func (wg *WorldGenerator) LoadMapTemplate(mapName string, levelType string, leve
 			default:
 				o := &Object{Rune: c, Blocking: true}
 				o.Pos = Pos{x, y}
-				level.Objects[y][x] = o
+				level.Map[y][x].Object = o
 			}
-			level.Map[y][x] = t
+			level.Map[y][x].T = t
 		}
 	}
 

@@ -22,7 +22,8 @@ func (ui *UI) DrawLevel() {
 		for y := minY; y < maxY; y++ {
 			row := level.Map[y]
 			for x := minX; x < maxX; x++ {
-				tile := row[x]
+				c := row[x]
+				tile := c.T
 				if len(ui.textureIndex[tile]) > 0 {
 					srcRect := ui.textureIndex[tile][(x*(y+1)+y*(x+3))%len(ui.textureIndex[tile])]
 					dstRect := sdl.Rect{X: int32(x*Res) + ui.Cam.X, Y: int32(y*Res) + ui.Cam.Y, W: Res, H: Res}
@@ -33,53 +34,30 @@ func (ui *UI) DrawLevel() {
 		}
 
 		for y := minY; y < maxY; y++ {
+			row := level.Map[y]
 			for x := minX; x < maxX; x++ {
-				object := level.Objects[y][x]
+				c := row[x]
+				object := c.Object
 				if object != nil {
 					ui.drawObject(game.Pos{X: x, Y: y}, game.Tile(object.Rune))
 				}
-			}
-		}
-
-		for y := minY; y < maxY; y++ {
-			for x := minX; x < maxX; x++ {
-				pnj := level.Pnjs[y][x]
+				pnj := c.Pnj
 				if pnj != nil {
 					ui.drawPnj(pnj)
 				}
-			}
-		}
-
-		for y := minY; y < maxY; y++ {
-			for x := minX; x < maxX; x++ {
-				monster := level.Monsters[y][x]
+				monster := c.Monster
 				if monster != nil {
 					ui.drawMonster(game.Pos{X: x, Y: y}, monster)
 				}
-			}
-		}
-
-		for y := minY; y < maxY; y++ {
-			for x := minX; x < maxX; x++ {
-				monster := level.Invocations[y][x]
-				if monster != nil {
-					ui.drawInvoked(game.Pos{X: x, Y: y}, monster)
+				invoked := c.Invoked
+				if invoked != nil {
+					ui.drawInvoked(game.Pos{X: x, Y: y}, invoked)
 				}
-			}
-		}
-
-		for y := minY; y < maxY; y++ {
-			for x := minX; x < maxX; x++ {
-				monster := level.Enemies[y][x]
-				if monster != nil {
-					ui.drawEnemy(monster)
+				enemy := c.Enemy
+				if enemy != nil {
+					ui.drawEnemy(enemy)
 				}
-			}
-		}
-
-		for y := minY; y < maxY; y++ {
-			for x := minX; x < maxX; x++ {
-				friend := level.Friends[y][x]
+				friend := c.Friend
 				if friend != nil {
 					ui.drawFriend(friend)
 				}
@@ -90,16 +68,12 @@ func (ui *UI) DrawLevel() {
 
 		for y := minY; y < maxY; y++ {
 			for x := minX; x < maxX; x++ {
-				projectile := level.Projectiles[y][x]
+				c := level.Map[y][x]
+				projectile := c.Projectile
 				if projectile != nil {
 					ui.drawProjectile(projectile, game.Tile(projectile.Rune))
 				}
-			}
-		}
-
-		for y := minY; y < maxY; y++ {
-			for x := minX; x < maxX; x++ {
-				effect := level.Effects[y][x]
+				effect := c.Effect
 				if effect != nil {
 					ui.drawEffect(game.Pos{X: x, Y: y}, effect)
 				}

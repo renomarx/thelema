@@ -34,7 +34,7 @@ func (level *Level) MakeEnergyball(p Pos, dir InputType, size int, from *Charact
 		eb.Yb = -32
 	}
 
-	level.Projectiles[p.Y][p.X] = eb
+	level.Map[p.Y][p.X].Projectile = eb
 }
 
 func (level *Level) MakeArrow(p Pos, dir InputType, size int, speed int, from *Character) {
@@ -59,7 +59,7 @@ func (level *Level) MakeArrow(p Pos, dir InputType, size int, speed int, from *C
 		eb.Yb = -32
 	}
 
-	level.Projectiles[p.Y][p.X] = eb
+	level.Map[p.Y][p.X].Projectile = eb
 }
 
 func (p *Projectile) Update(g *Game) {
@@ -96,8 +96,8 @@ func (p *Projectile) Move(to Pos, g *Game) {
 		p.Die(g)
 		return
 	}
-	level.Projectiles[p.Y][p.X] = nil
-	level.Projectiles[to.Y][to.X] = p
+	level.Map[p.Y][p.X].Projectile = nil
+	level.Map[to.Y][to.X].Projectile = p
 	p.Pos = to
 
 	p.MakeDamage(g)
@@ -130,13 +130,13 @@ func (p *Projectile) adaptSpeed() {
 
 func (p *Projectile) MakeDamage(g *Game) {
 	level := g.Level
-	m := level.Monsters[p.Y][p.X]
+	m := level.Map[p.Y][p.X].Monster
 	if m != nil {
 		// There is a monster !
 		m.TakeDamage(g, p.Size, p.From)
 		p.Die(g)
 	}
-	e := level.Enemies[p.Y][p.X]
+	e := level.Map[p.Y][p.X].Enemy
 	if e != nil {
 		// There is an annemy !
 		e.TakeDamage(g, p.Size)
@@ -145,6 +145,6 @@ func (p *Projectile) MakeDamage(g *Game) {
 }
 
 func (p *Projectile) Die(g *Game) {
-	g.Level.Projectiles[p.Y][p.X] = nil
+	g.Level.Map[p.Y][p.X].Projectile = nil
 	g.MakeExplosion(p.Pos, 100, 100)
 }

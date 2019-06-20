@@ -29,7 +29,7 @@ func (g *Game) MakeInvocation(p Pos, dir InputType, pp *PlayerPower) bool {
 	}
 	if canGo(level, np) {
 		m := NewFox(np, pp.Lifetime)
-		level.Invocations[np.Y][np.X] = m
+		level.Map[np.Y][np.X].Invoked = m
 		return true
 	}
 	return false
@@ -82,10 +82,10 @@ func (m *Invoked) Update(g *Game) {
 			m.Move(positions[1], g)
 		}
 		if m.canAttackEnemy(positions[1], level) {
-			m.AttackEnemy(level.Enemies[positions[1].Y][positions[1].X], g)
+			m.AttackEnemy(level.Map[positions[1].Y][positions[1].X].Enemy, g)
 		}
 		if m.canAttackMonster(positions[1], level) {
-			m.AttackMonster(level.Monsters[positions[1].Y][positions[1].X], g)
+			m.AttackMonster(level.Map[positions[1].Y][positions[1].X].Monster, g)
 		}
 		m.ActionPoints = 0.0
 	}
@@ -129,8 +129,8 @@ func (m *Invoked) canMove(to Pos, level *Level) bool {
 
 func (m *Invoked) Move(to Pos, g *Game) {
 	lastPos := Pos{X: m.Pos.X, Y: m.Pos.Y}
-	g.Level.Invocations[m.Y][m.X] = nil
-	g.Level.Invocations[to.Y][to.X] = m
+	g.Level.Map[m.Y][m.X].Invoked = nil
+	g.Level.Map[to.Y][to.X].Invoked = m
 	m.moveFromTo(lastPos, to)
 }
 
@@ -171,7 +171,7 @@ func (m *Invoked) TakeDamage(g *Game, damage int) {
 
 func (m *Invoked) Die(g *Game) {
 	m.isDead = true
-	g.Level.Invocations[m.Y][m.X] = nil
+	g.Level.Map[m.Y][m.X].Invoked = nil
 }
 
 func (m *Invoked) CanSee(level *Level, pos Pos) bool {

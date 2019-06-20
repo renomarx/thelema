@@ -48,11 +48,11 @@ func (m *Monster) Update(g *Game) {
 		}
 		if m.canAttackInvocation(positions[1], level) {
 			g.GetEventManager().Dispatch(&Event{Action: ActionRoar, Payload: map[string]string{"monster": string(m.Rune)}})
-			m.AttackInvocation(level.Invocations[positions[1].Y][positions[1].X], g)
+			m.AttackInvocation(level.Map[positions[1].Y][positions[1].X].Invoked, g)
 		}
 		if m.canAttackFriend(positions[1], level) {
 			g.GetEventManager().Dispatch(&Event{Action: ActionRoar, Payload: map[string]string{"monster": string(m.Rune)}})
-			m.AttackFriend(level.Friends[positions[1].Y][positions[1].X], g)
+			m.AttackFriend(level.Map[positions[1].Y][positions[1].X].Friend, g)
 		}
 		if m.canAttackPlayer(positions[1], level) {
 			g.GetEventManager().Dispatch(&Event{Action: ActionRoar, Payload: map[string]string{"monster": string(m.Rune)}})
@@ -102,8 +102,8 @@ func (m *Monster) canMove(to Pos, level *Level) bool {
 
 func (m *Monster) Move(to Pos, g *Game) {
 	lastPos := Pos{X: m.Pos.X, Y: m.Pos.Y}
-	g.Level.Monsters[m.Y][m.X] = nil
-	g.Level.Monsters[to.Y][to.X] = m
+	g.Level.Map[m.Y][m.X].Monster = nil
+	g.Level.Map[to.Y][to.X].Monster = m
 	m.moveFromTo(lastPos, to)
 }
 
@@ -164,10 +164,10 @@ func (m *Monster) TakeDamage(g *Game, damage int, c *Character) {
 
 func (m *Monster) Die(g *Game) {
 	m.isDead = true
-	g.Level.Monsters[m.Y][m.X] = nil
+	g.Level.Map[m.Y][m.X].Monster = nil
 	b := &Object{Rune: rune(Steak), Blocking: true}
 	b.Pos = m.Pos
-	g.Level.Objects[m.Y][m.X] = b
+	g.Level.Map[m.Y][m.X].Object = b
 }
 
 func (m *Monster) CanSee(level *Level, pos Pos) bool {
