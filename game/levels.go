@@ -1,6 +1,7 @@
 package game
 
 import "math/rand"
+import "time"
 
 const LevelTypeOutdoor = "OUTDOOR"
 const LevelTypeGrotto = "GROTTO"
@@ -8,14 +9,15 @@ const LevelTypeCity = "CITY"
 const LevelTypeHouse = "HOUSE"
 
 type Level struct {
-	Name   string
-	Width  int
-	Height int
-	Type   string
-	Player *Player
-	Map    [][]Case
-	Paused bool
-	PRay   int
+	Name         string
+	Width        int
+	Height       int
+	Type         string
+	Player       *Player
+	Map          [][]Case
+	Paused       bool
+	PRay         int
+	LastTimeTurn time.Time
 }
 
 type Case struct {
@@ -143,6 +145,7 @@ func (g *Game) UpdateLevel() {
 	} else {
 		g.handleInput()
 		g.handleMap()
+		g.handleTime()
 		if input.Typ == Select {
 			g.OpenPlayerMenu()
 		}
@@ -181,6 +184,24 @@ func (g *Game) handleMap() {
 				}
 			}
 		}
+	}
+}
+
+func (g *Game) handleTime() {
+	level := g.Level
+	t := time.Now()
+	deltaD := t.Sub(level.LastTimeTurn)
+	if deltaD > 120*time.Second {
+		wg := WorldGenerator{g: g}
+		bestiary := Bestiary()
+		creatures := Creatures()
+		if level.Type == LevelTypeGrotto {
+			bestiary = BestiaryUnderworld()
+			creatures = CreaturesUnderworld()
+		}
+		wg.generateMonsters(level, bestiary, 3)
+		wg.generateEnnemies(level, creatures, 1)
+		level.LastTimeTurn = time.Now()
 	}
 }
 
