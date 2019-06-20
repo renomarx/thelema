@@ -165,7 +165,7 @@ func (m *Monster) TakeDamage(g *Game, damage int, c *Character) {
 func (m *Monster) Die(g *Game) {
 	m.isDead = true
 	g.Level.Map[m.Y][m.X].Monster = nil
-	b := &Object{Rune: rune(Steak), Blocking: true}
+	b := &Object{Rune: rune(Steak), Blocking: false}
 	b.Pos = m.Pos
 	g.Level.Map[m.Y][m.X].Object = b
 }

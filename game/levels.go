@@ -123,7 +123,7 @@ func (l *Level) GetRandomFreePos() *Pos {
 func NewLevel(levelType string) *Level {
 	level := &Level{}
 	level.Type = levelType
-	level.PRay = 100
+	level.PRay = 20
 	return level
 }
 

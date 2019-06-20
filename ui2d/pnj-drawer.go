@@ -6,5 +6,4 @@ import (
 
 func (ui *UI) drawPnj(p *game.Pnj) {
 	ui.drawCharacter(&p.Character, ui.pnjTextures[p.Name])
-	ui.DrawDialog(p)
 }

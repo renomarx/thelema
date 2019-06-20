@@ -65,6 +65,9 @@ func (ui *UI) DrawLevel() {
 		}
 
 		ui.drawPlayer()
+		if player.TalkingTo != nil {
+			ui.DrawDialog(player.TalkingTo)
+		}
 
 		for y := minY; y < maxY; y++ {
 			for x := minX; x < maxX; x++ {
