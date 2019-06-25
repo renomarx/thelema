@@ -48,9 +48,98 @@
       "message": "Ravi de vous revoir.",
       "choices": [
         {
-          "cmd": "TODO"
+          "cmd": "Alors, de quoi vouliez-vous me parler ?",
+          "node": "learn_necromancy"
+        },
+        {
+          "cmd": "C'est moi qui vous ai vendu à la police.",
+          "node": "not_cool",
+          "quest": {
+            "steps_mandatory": ["nathaniel_free:sent_to_prison"]
+          }
+        }
+      ]
+    },
+    "not_cool": {
+      "message": "Ah ah ah! Vous me vendez, puis vous me libérez. Quelles sont vos raisons ?",
+      "choices": [
+        {
+          "cmd": "Je me suis trouvé une consience",
+          "node": "back_to_the_subject"
+        },
+        {
+          "cmd": "Je n'allais pas cracher sur 100§...",
+          "node": "back_to_the_subject2"
+        }
+      ]
+    },
+    "back_to_the_subject": {
+      "message": "Tant mieux pour moi. Et pour vous.",
+      "choices": [
+        {
+          "cmd": "Alors, de quoi vouliez-vous me parler ?",
+          "node": "learn_necromancy"
+        }
+      ]
+    },
+    "back_to_the_subject2": {
+      "message": "Grand bien vous fasse.",
+      "choices": [
+        {
+          "cmd": "Alors, de quoi vouliez-vous me parler ?",
+          "node": "learn_necromancy"
+        }
+      ]
+    },
+    "learn_necromancy": {
+      "message": "Vous me paraissez très capable. Je pourrai vous expliquer ce que je sais mais je n'ai pas de preuves à vous apporter, il faut donc que vous le découvriez par vous-même.",
+      "choices": [
+        {
+          "cmd": "Que dois-je faire ?",
+          "node": "learn_necromancy2"
+        }
+      ]
+    },
+    "learn_necromancy2": {
+      "message": "Tout d'abord, étudiez ce livre; cela vous apprendra à communiquer avec les morts.",
+      "choices": [
+        {
+          "cmd": "Ensuite ?",
+          "node": "talk_to_dead_body"
+        }
+      ],
+      "books_given": ["dead_speaking"]
+    },
+    "talk_to_dead_body": {
+      "message": "Ensuite, il se trouve une grotte où est enterrée une certaine personne. Allez dans cette grotte, trouvez le cadavre et rappelez son esprit. Il vous donnera les réponses.",
+      "choices": [
+        {
+          "cmd": "Les réponses à quoi ?",
+          "node": "final_answer"
+        }
+      ]
+    },
+    "final_answer": {
+      "message": "Aux questions que vous vous posez! Il est temps pour moi de partir. Cette fois, je ne crois pas que nous nous reverrons. Adieu...",
+      "choices": [
+        {
+          "cmd": "...",
+          "quest": {
+            "steps_fullfilling": ["great_priest_past:talk_to_nathaniel_about_dead_body", "nathaniel_revelation:talk_to_nathaniel2"]
+          },
+          "actions": ["teleport_to:City 21", "set_initial_node:greetings3"]
+        }
+      ]
+    },
+
+    "greetings3": {
+      "message": "Ravi de vous revoir.",
+      "choices": [
+        {
+          "cmd": "A la prochaine."
         }
       ]
     }
+
   }
 }

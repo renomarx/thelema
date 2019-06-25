@@ -53,5 +53,19 @@
         "description" : "Libérez Nathaniel (City 6 - Prison)"
       }
     }
+  },
+  "great_priest_past": {
+    "current_step": "talk_to_nathaniel_about_dead_body",
+    "name": "Le passé du Grand Prêtre",
+    "steps": {
+      "talk_to_nathaniel_about_dead_body": {
+        "order": 1,
+        "description" : "Parlez à Nathaniel"
+      },
+      "talk_to_dead_body": {
+        "order": 2,
+        "description" : "Parlez au cadavre de la grotte 6"
+      }
+    }
   }
 }
