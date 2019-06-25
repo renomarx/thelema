@@ -304,3 +304,33 @@ func (level *Level) OpenPortal(g *Game, pos Pos) {
 func (level *Level) AddPortal(posFrom Pos, portal *Portal) {
 	level.Map[posFrom.Y][posFrom.X].Portal = portal
 }
+
+func (g *Game) SendToLevel(fromName, pnjName, toName string) {
+	from, exists := g.Levels[fromName]
+	if !exists {
+		panic("Level " + fromName + " does not exist")
+	}
+	pnj := from.SearchPnj(pnjName)
+	if pnj == nil {
+		panic("Pnj " + pnjName + " on level " + fromName + " does not exist")
+	}
+	to, exists := g.Levels[toName]
+	if !exists {
+		panic("Level " + toName + " does not exist")
+	}
+	pnj.ChangeLevel(from, to)
+}
+
+func (l *Level) SearchPnj(pnjName string) *Pnj {
+	for y := 0; y < len(l.Map); y++ {
+		for x := 0; x < len(l.Map[y]); x++ {
+			if l.Map[y][x].Pnj != nil {
+				pnj := l.Map[y][x].Pnj
+				if pnj.Name == pnjName {
+					return pnj
+				}
+			}
+		}
+	}
+	return nil
+}

@@ -113,6 +113,9 @@ func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
 					pnj.BecomeEnemy(g)
 				case "set_initial_node":
 					pnj.Dialog.SetInitialNode(act[1])
+				case "send_to_level":
+					levelPnj := strings.Split(act[1], "|")
+					g.SendToLevel(levelPnj[0], levelPnj[1], levelPnj[2])
 				}
 			}
 			if choice.NodeId == "" {
@@ -206,12 +209,16 @@ func (pnj *Pnj) Teleport(levelName string, g *Game) {
 	for pnj.AttackPos = 0; pnj.AttackPos < CaseLen; pnj.AttackPos++ {
 		pnj.adaptSpeed()
 	}
-	pos := level.GetRandomFreePos()
-	g.Level.Map[pnj.Y][pnj.X].Pnj = nil
-	pnj.Pos = *pos
-	level.Map[pos.Y][pos.X].Pnj = pnj
+	pnj.ChangeLevel(g.Level, level)
 	pnj.IsPowerAttacking = false
 	pnj.Talkable = true
+}
+
+func (pnj *Pnj) ChangeLevel(from *Level, to *Level) {
+	from.Map[pnj.Y][pnj.X].Pnj = nil
+	pos := to.GetRandomFreePos()
+	pnj.Pos = *pos
+	to.Map[pos.Y][pos.X].Pnj = pnj
 }
 
 func (pnj *Pnj) BecomeEnemy(g *Game) {
