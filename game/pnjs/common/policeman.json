@@ -15,7 +15,8 @@
           "node": "thanks_for_collaboration",
           "quest": {
             "steps_mandatory": ["nathaniel_revelation:talk_to_nathaniel"],
-            "steps_fullfilling": ["nathaniel_free:sent_to_prison"]
+            "steps_fullfilling": ["nathaniel_free:sent_to_prison"],
+            "actions": ["send_to_prison:City 32|nathaniel", "set_initial_node:greetings2"],
           }
         },
         {

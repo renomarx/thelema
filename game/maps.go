@@ -3,7 +3,6 @@ package game
 import (
 	"bufio"
 	"log"
-	"math/rand"
 	"os"
 	"strconv"
 )
@@ -70,10 +69,18 @@ func (wg *WorldGenerator) LoadMapTemplate(mapName string, levelType string, leve
 				if levelType == LevelTypeHouse {
 					initialPos = Pos{X: x, Y: y}
 				} else {
-					m := rand.Intn(nbHouseTemplates) + 1
+					m := (houseNumber % nbHouseTemplates) + 1
 					mapName := "house/house" + strconv.Itoa(m)
 					wg.generateHouse(level, Pos{X: x, Y: y}, mapName, houseNumber, levelName)
 					houseNumber++
+				}
+			case PrisonDoor:
+				level.Map[y][x].Object = &Object{Rune: rune(PrisonDoor)}
+				if levelType == LevelTypeHouse {
+					initialPos = Pos{X: x, Y: y}
+				} else {
+					mapName := "house/prison"
+					wg.generatePrison(level, Pos{X: x, Y: y}, mapName, houseNumber, levelName)
 				}
 			default:
 				o := &Object{Rune: c, Blocking: true}

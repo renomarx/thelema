@@ -4,13 +4,13 @@ import "math/rand"
 import "strconv"
 
 func (wg *WorldGenerator) generateCities(level *Level, nbCities int) {
-	nbTemplates := 1 // TODO load as much templates as there are
-	cityNumber := 0
+	nbTemplates := 6 // TODO load as much templates as there are
+	cityNumber := 1
 	for i := 0; i < nbCities; i++ {
 		x := rand.Intn(WorldWidth)
 		y := rand.Intn(WorldHeight)
-		m := rand.Intn(nbTemplates) + 1
 		pos := Pos{X: x, Y: y}
+		m := ((cityNumber - 1) % nbTemplates) + 1
 
 		o := level.Map[pos.Y][pos.X].Object
 		if o == nil {

@@ -20,3 +20,12 @@ func (wg *WorldGenerator) generateHouse(level *Level, pos Pos, mapName string, h
 		wg.generateUsables(nl, objects, rand.Intn(3))
 	}
 }
+
+func (wg *WorldGenerator) generatePrison(level *Level, pos Pos, mapName string, houseNumber int, cityName string) {
+	levelName := cityName + " - Prison"
+	nl, npos := wg.LoadMapTemplate(mapName, LevelTypeHouse, levelName)
+	nl.Name = levelName
+	wg.g.Levels[levelName] = nl
+	level.AddPortal(pos, &Portal{LevelTo: levelName, PosTo: npos})
+	nl.AddPortal(npos, &Portal{LevelTo: cityName, PosTo: pos})
+}

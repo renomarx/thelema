@@ -24,6 +24,7 @@ const (
 	CityEntry      Tile = '>'
 	CityOut        Tile = '<'
 	HouseDoor      Tile = '='
+	PrisonDoor     Tile = '!'
 
 	// Monsters and invocations
 	Rat      Tile = 'R'
