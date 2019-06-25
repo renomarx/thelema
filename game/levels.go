@@ -192,15 +192,17 @@ func (g *Game) handleTime() {
 	t := time.Now()
 	deltaD := t.Sub(level.LastTimeTurn)
 	if deltaD > 120*time.Second {
-		wg := WorldGenerator{g: g}
-		bestiary := Bestiary()
-		creatures := Creatures()
-		if level.Type == LevelTypeGrotto {
-			bestiary = BestiaryUnderworld()
-			creatures = CreaturesUnderworld()
+		if level.Type == LevelTypeGrotto || level.Type == LevelTypeOutdoor {
+			wg := WorldGenerator{g: g}
+			bestiary := Bestiary()
+			creatures := Creatures()
+			if level.Type == LevelTypeGrotto {
+				bestiary = BestiaryUnderworld()
+				creatures = CreaturesUnderworld()
+			}
+			wg.generateMonsters(level, bestiary, 3)
+			wg.generateEnnemies(level, creatures, 1)
 		}
-		wg.generateMonsters(level, bestiary, 3)
-		wg.generateEnnemies(level, creatures, 1)
 		level.LastTimeTurn = time.Now()
 	}
 }

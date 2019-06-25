@@ -38,5 +38,20 @@
         "description" : "Retrouvez Nathaniel (City 32)"
       }
     }
+  },
+  "nathaniel_free": {
+    "current_step": "sent_to_prison",
+    "name": "La libération de Nahtaniel",
+    "steps": {
+      "sent_to_prison": {
+        "order": 1,
+        "description" : "Parlez de Nathaniel à la police",
+        "gold_given": 100
+      },
+      "free": {
+        "order": 2,
+        "description" : "Libérez Nathaniel (City32)"
+      }
+    }
   }
 }

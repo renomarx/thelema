@@ -8,11 +8,8 @@
       "choices": [
         {
           "quest": {
-            "id": "sarahs_gin",
-            "steps_mandatory": ["get_herbs", "get_alcohol"],
-            "steps_fullfilling": [
-              "talk_to_sarah"
-            ]
+            "steps_mandatory": ["sarahs_gin:get_herbs", "sarahs_gin:get_alcohol"],
+            "steps_fullfilling": ["sarahs_gin:talk_to_sarah"]
           },
           "cmd": "Here, I have your herbs and alcohol.",
           "node": "thanks"

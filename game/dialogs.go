@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -28,7 +29,6 @@ type StoryChoice struct {
 	NodeId      string `json:"node"`
 	Highlighted bool
 	Quest       struct {
-		ID               string   `json:"id"`
 		StepsMandatory   []string `json:"steps_mandatory"`
 		StepsFullfilling []string `json:"steps_fullfilling"`
 	} `json:"quest"`
@@ -127,12 +127,25 @@ func (n *StoryNode) filterPossibleChoices(p *Player) {
 	var res []*StoryChoice
 	for _, choice := range n.AllChoices {
 		isPossible := true
-		if choice.Quest.ID != "" {
-			if !p.IsQuestOpen(choice.Quest.ID) {
-				isPossible = false
+		for _, questStep := range choice.Quest.StepsMandatory {
+			arr := strings.Split(questStep, ":")
+			if len(arr) > 1 {
+				questID := arr[0]
+				stepID := arr[1]
+				if !p.IsQuestOpen(questID) {
+					isPossible = false
+				}
+				if !p.IsQuestOpenStepFinished(questID, stepID) {
+					isPossible = false
+				}
 			}
-			for _, stepID := range choice.Quest.StepsMandatory {
-				if !p.IsQuestOpenStepFinished(choice.Quest.ID, stepID) {
+		}
+		for _, questStep := range choice.Quest.StepsFullfilling {
+			arr := strings.Split(questStep, ":")
+			if len(arr) > 1 {
+				questID := arr[0]
+				stepID := arr[1]
+				if p.IsStepFinished(questID, stepID) {
 					isPossible = false
 				}
 			}

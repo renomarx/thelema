@@ -191,6 +191,13 @@ func (p *Player) IsQuestOpen(questID string) bool {
 	return !p.Quests[questID].IsFinished
 }
 
+func (p *Player) IsStepFinished(questID string, stepID string) bool {
+	if p.Quests[questID].IsFinished {
+		return true
+	}
+	return p.Quests[questID].Steps[stepID].IsFinished
+}
+
 func (p *Player) IsQuestOpenStepFinished(questID string, stepID string) bool {
 	if p.Quests[questID].IsFinished {
 		return false

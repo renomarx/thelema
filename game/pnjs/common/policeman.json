@@ -11,9 +11,25 @@
           "actions": ["recruit"]
         },
         {
+          "cmd": "Un hors-la-loi nommé Nathaniel se trouvait chez moi. Il m'a dit qu'il se rendait en City32.",
+          "node": "thanks_for_collaboration",
+          "quest": {
+            "steps_mandatory": ["nathaniel_revelation:talk_to_nathaniel"],
+            "steps_fullfilling": ["nathaniel_free:sent_to_prison"]
+          }
+        },
+        {
           "cmd": "Je vous pisse à la raie.",
           "actions": ["become_enemy"]
         },
+        {
+          "cmd": "Je dois y aller."
+        }
+      ]
+    },
+    "thanks_for_collaboration": {
+      "message": "C'est un fugitif très recherché! Nous allons faire le nécessaire. Je vous remercie pour votre collaboration. Voici votre prime de 100§.",
+      "choices": [
         {
           "cmd": "Je dois y aller."
         }

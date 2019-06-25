@@ -37,11 +37,8 @@
           "cmd": "...",
           "actions": ["teleport_to:City 32", "set_initial_node:greetings2"],
           "quest": {
-            "id": "nathaniel_revelation",
             "steps_mandatory": [],
-            "steps_fullfilling": [
-              "talk_to_nathaniel"
-            ]
+            "steps_fullfilling": ["nathaniel_revelation:talk_to_nathaniel"]
           }
         }
       ]

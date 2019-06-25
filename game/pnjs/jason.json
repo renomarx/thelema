@@ -20,10 +20,7 @@
         },
         {
           "cmd": "Tell me about Sarah.",
-          "node": "sarah_quest",
-          "quest": {
-            "id": "sarahs_gin"
-          }
+          "node": "sarah_quest"
         },
         {
           "cmd": "Ok, see ya"
@@ -62,11 +59,8 @@
       "choices": [
         {
           "quest": {
-            "id": "sarahs_gin",
             "steps_mandatory": [],
-            "steps_fullfilling": [
-              "talk_to_jason_about_sarah"
-            ]
+            "steps_fullfilling": ["sarahs_gin:talk_to_jason_about_sarah"]
           },
           "cmd": "Understood.",
           "node": "greetings"

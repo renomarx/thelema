@@ -94,8 +94,13 @@ func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
 	p := pnj.TalkingTo
 	for _, choice := range node.Choices {
 		if choice.Cmd == cmd {
-			for _, stepID := range choice.Quest.StepsFullfilling {
-				p.finishQuestStep(choice.Quest.ID, stepID, g)
+			for _, questStep := range choice.Quest.StepsFullfilling {
+				arr := strings.Split(questStep, ":")
+				if len(arr) > 1 {
+					questID := arr[0]
+					stepID := arr[1]
+					p.finishQuestStep(questID, stepID, g)
+				}
 			}
 			for _, action := range choice.Actions {
 				act := strings.Split(action, ":")
