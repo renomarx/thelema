@@ -45,18 +45,6 @@ func (ui *UI) DrawLevel() {
 				if pnj != nil {
 					ui.drawPnj(pnj)
 				}
-				monster := c.Monster
-				if monster != nil {
-					ui.drawMonster(game.Pos{X: x, Y: y}, monster)
-				}
-				invoked := c.Invoked
-				if invoked != nil {
-					ui.drawInvoked(game.Pos{X: x, Y: y}, invoked)
-				}
-				enemy := c.Enemy
-				if enemy != nil {
-					ui.drawEnemy(enemy)
-				}
 				friend := c.Friend
 				if friend != nil {
 					ui.drawFriend(friend)

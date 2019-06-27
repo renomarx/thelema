@@ -30,8 +30,6 @@ func (wg *WorldGenerator) generateGrotto(level *Level, pos Pos, mapName string, 
 	level.AddPortal(pos, &Portal{LevelTo: levelName, PosTo: npos})
 	nl.AddPortal(npos, &Portal{LevelTo: WorldName, PosTo: pos})
 
-	wg.generateMonsters(nl, BestiaryUnderworld(), rand.Intn(20)+1)
-	wg.generateEnnemies(nl, CreaturesUnderworld(), rand.Intn(10)+1)
 	objects := []Tile{
 		Senzu,
 	}

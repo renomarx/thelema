@@ -84,14 +84,9 @@ func (p *Player) Move(g *Game) {
 			posTo = Pos{p.X + 1, p.Y}
 		}
 		p.Talk(g, posTo)
-		taken := p.Take(g, posTo)
-		if !p.IsTalking && !taken {
-			if p.Attack(g, posTo) {
-				g.GetEventManager().Dispatch(&Event{Action: ActionAttack})
-			}
-		}
+		p.Take(g, posTo)
 	case Power:
-		p.PowerAttack(g)
+		// TODO
 	default:
 	}
 }

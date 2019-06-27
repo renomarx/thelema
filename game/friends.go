@@ -33,44 +33,17 @@ func (m *Friend) Update(g *Game) {
 		if m.canMove(positions[1], level) {
 			m.Move(positions[1], g)
 		}
-		if m.canAttack(positions[1], level) {
-			m.Attack(g, positions[1])
-		}
 		m.ActionPoints = 0.0
 	}
 	m.LastActionTime = time.Now()
 }
 
 func (m *Friend) getTargetPos(l *Level) Pos {
-	if m.target != nil {
-		if m.target.IsDead() {
-			m.target = nil
-		} else {
-			return m.target.Pos
-		}
-	}
-	for y := m.Y - m.VisionRange; y < m.Y+m.VisionRange; y++ {
-		for x := m.X - m.VisionRange; x < m.X+m.VisionRange; x++ {
-			mm := l.GetMonster(x, y)
-			if mm != nil {
-				m.target = &mm.Character
-				return Pos{X: x, Y: y}
-			}
-			n := l.GetEnemy(x, y)
-			if n != nil && !n.IsDead() {
-				m.target = &n.Character
-				return Pos{X: x, Y: y}
-			}
-		}
-	}
 	return l.Player.Pos
 }
 
 func (m *Friend) canMove(to Pos, level *Level) bool {
 	if to.X == level.Player.X && to.Y == level.Player.Y {
-		return false
-	}
-	if isThereAnEnemyCharacter(level, to) {
 		return false
 	}
 	return true
@@ -81,10 +54,6 @@ func (m *Friend) Move(to Pos, g *Game) {
 	g.Level.Map[m.Y][m.X].Friend = nil
 	g.Level.Map[to.Y][to.X].Friend = m
 	m.moveFromTo(lastPos, to)
-}
-
-func (m *Friend) canAttack(to Pos, level *Level) bool {
-	return isThereAnEnemyCharacter(level, to)
 }
 
 func (m *Friend) TakeDamage(g *Game, damage int) {

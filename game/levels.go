@@ -24,22 +24,10 @@ type Case struct {
 	T          Tile
 	Portal     *Portal
 	Object     *Object
-	Monster    *Monster
 	Effect     *Effect
 	Projectile *Projectile
 	Pnj        *Pnj
-	Invoked    *Invoked
 	Friend     *Friend
-	Enemy      *Enemy
-}
-
-func (l *Level) GetMonster(x, y int) *Monster {
-	if y >= 0 && y < len(l.Map) {
-		if x >= 0 && x < len(l.Map[y]) {
-			return l.Map[y][x].Monster
-		}
-	}
-	return nil
 }
 
 func (l *Level) GetObject(x, y int) *Object {
@@ -78,28 +66,10 @@ func (l *Level) GetPnj(x, y int) *Pnj {
 	return nil
 }
 
-func (l *Level) GetInvocation(x, y int) *Invoked {
-	if y >= 0 && y < len(l.Map) {
-		if x >= 0 && x < len(l.Map[y]) {
-			return l.Map[y][x].Invoked
-		}
-	}
-	return nil
-}
-
 func (l *Level) GetFriend(x, y int) *Friend {
 	if y >= 0 && y < len(l.Map) {
 		if x >= 0 && x < len(l.Map[y]) {
 			return l.Map[y][x].Friend
-		}
-	}
-	return nil
-}
-
-func (l *Level) GetEnemy(x, y int) *Enemy {
-	if y >= 0 && y < len(l.Map) {
-		if x >= 0 && x < len(l.Map[y]) {
-			return l.Map[y][x].Enemy
 		}
 	}
 	return nil
@@ -145,7 +115,6 @@ func (g *Game) UpdateLevel() {
 	} else {
 		g.handleInput()
 		g.handleMap()
-		g.handleTime()
 		if input.Typ == Select {
 			g.OpenPlayerMenu()
 		}
@@ -174,56 +143,12 @@ func (g *Game) handleMap() {
 			if y >= 0 && y < len(l.Map) {
 				if x >= 0 && x < len(l.Map[y]) {
 					c := l.Map[y][x]
-					g.handleMonster(c.Monster)
-					g.handleInvocation(c.Invoked)
 					g.handlePnj(c.Pnj)
 					g.handleFriend(c.Friend)
-					g.handleEnemy(c.Enemy)
 					g.handleProjectile(c.Projectile)
-					g.handleEffect(c.Effect)
 				}
 			}
 		}
-	}
-}
-
-func (g *Game) handleTime() {
-	level := g.Level
-	t := time.Now()
-	deltaD := t.Sub(level.LastTimeTurn)
-	if deltaD > 120*time.Second {
-		if level.Type == LevelTypeGrotto || level.Type == LevelTypeOutdoor {
-			wg := WorldGenerator{g: g}
-			bestiary := Bestiary()
-			creatures := Creatures()
-			if level.Type == LevelTypeGrotto {
-				bestiary = BestiaryUnderworld()
-				creatures = CreaturesUnderworld()
-			}
-			wg.generateMonsters(level, bestiary, 3)
-			wg.generateEnnemies(level, creatures, 1)
-		}
-		level.LastTimeTurn = time.Now()
-	}
-}
-
-func (g *Game) handleMonster(m *Monster) {
-	if m != nil && !m.IsPlaying {
-		m.IsPlaying = true
-		go func(m *Monster) {
-			m.Update(g)
-			m.IsPlaying = false
-		}(m)
-	}
-}
-
-func (g *Game) handleInvocation(m *Invoked) {
-	if m != nil && !m.IsPlaying {
-		m.IsPlaying = true
-		go func(m *Invoked) {
-			m.Update(g)
-			m.IsPlaying = false
-		}(m)
 	}
 }
 
@@ -247,30 +172,10 @@ func (g *Game) handleFriend(m *Friend) {
 	}
 }
 
-func (g *Game) handleEnemy(m *Enemy) {
-	if m != nil && !m.IsPlaying {
-		m.IsPlaying = true
-		go func(m *Enemy) {
-			m.Update(g)
-			m.IsPlaying = false
-		}(m)
-	}
-}
-
 func (g *Game) handleProjectile(m *Projectile) {
 	if m != nil && !m.IsPlaying {
 		m.IsPlaying = true
 		go func(m *Projectile) {
-			m.Update(g)
-			m.IsPlaying = false
-		}(m)
-	}
-}
-
-func (g *Game) handleEffect(m *Effect) {
-	if m != nil && !m.IsPlaying {
-		m.IsPlaying = true
-		go func(m *Effect) {
 			m.Update(g)
 			m.IsPlaying = false
 		}(m)

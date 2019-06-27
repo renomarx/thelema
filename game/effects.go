@@ -140,28 +140,6 @@ func (g *Game) MakeEffect(p Pos, r rune, lifetime int) {
 	level.Map[p.Y][p.X].Effect = nil
 }
 
-func (e *Effect) Update(g *Game) {
-	if e.Damages > 0 {
-		e.MakeDamage(g)
-	}
-}
-
-func (e *Effect) MakeDamage(g *Game) {
-	level := g.Level
-	m := level.GetMonster(e.X, e.Y)
-	if m != nil {
-		// There is a monster !
-		m.TakeDamage(g, e.Damages, nil)
-		e.Die(g)
-	}
-	en := level.GetEnemy(e.X, e.Y)
-	if en != nil {
-		// There is an annemy !
-		en.TakeDamage(g, e.Damages)
-		e.Die(g)
-	}
-}
-
 func (e *Effect) Die(g *Game) {
 	g.Level.Map[e.Y][e.X].Effect = nil
 }

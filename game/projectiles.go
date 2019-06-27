@@ -100,8 +100,6 @@ func (p *Projectile) Move(to Pos, g *Game) {
 	level.Map[to.Y][to.X].Projectile = p
 	p.Pos = to
 
-	p.MakeDamage(g)
-
 	if p.Direction == Right {
 		for p.Xb = CaseLen; p.Xb > 0; p.Xb-- {
 			p.adaptSpeed()
@@ -126,22 +124,6 @@ func (p *Projectile) Move(to Pos, g *Game) {
 
 func (p *Projectile) adaptSpeed() {
 	time.Sleep(time.Duration(ProjectileDeltaTime/p.Speed) * time.Millisecond)
-}
-
-func (p *Projectile) MakeDamage(g *Game) {
-	level := g.Level
-	m := level.Map[p.Y][p.X].Monster
-	if m != nil {
-		// There is a monster !
-		m.TakeDamage(g, p.Size, p.From)
-		p.Die(g)
-	}
-	e := level.Map[p.Y][p.X].Enemy
-	if e != nil {
-		// There is an annemy !
-		e.TakeDamage(g, p.Size)
-		p.Die(g)
-	}
 }
 
 func (p *Projectile) Die(g *Game) {

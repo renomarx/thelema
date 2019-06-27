@@ -127,26 +127,6 @@ func (wg *WorldGenerator) generateTrees(level *Level, nbTrees int) {
 	}
 }
 
-func (wg *WorldGenerator) generateMonsters(level *Level, bestiary []*MonsterType, nbMonsters int) {
-	for i := 0; i < nbMonsters; i++ {
-		x := rand.Intn(len(level.Map[0]))
-		y := rand.Intn(len(level.Map))
-		m := rand.Intn(len(bestiary))
-		pos := Pos{X: x, Y: y}
-
-		proba := rand.Intn(100)
-		mt := bestiary[m]
-		for proba > mt.Probability {
-			m := rand.Intn(len(bestiary))
-			proba = rand.Intn(100)
-			mt = bestiary[m]
-		}
-		if canGo(level, pos) {
-			level.Map[pos.Y][pos.X].Monster = NewMonster(mt, pos)
-		}
-	}
-}
-
 func (wg *WorldGenerator) generateUsables(level *Level, objects []Tile, nb int) {
 	for i := 0; i < nb; i++ {
 		x := rand.Intn(len(level.Map[0]))
@@ -248,26 +228,6 @@ func (wg *WorldGenerator) generatePnjs(l *Level, nbPnjs int) {
 			filename := wg.g.GameDir + "/pnjs/common/" + pnj.Name + ".json"
 			pnj.LoadDialogs(filename)
 			l.Map[pos.Y][pos.X].Pnj = pnj
-		}
-	}
-}
-
-func (wg *WorldGenerator) generateEnnemies(level *Level, bestiary []*MonsterType, nbMonsters int) {
-	for i := 0; i < nbMonsters; i++ {
-		x := rand.Intn(len(level.Map[0]))
-		y := rand.Intn(len(level.Map))
-		m := rand.Intn(len(bestiary))
-		pos := Pos{X: x, Y: y}
-
-		proba := rand.Intn(100)
-		mt := bestiary[m]
-		for proba > mt.Probability {
-			m := rand.Intn(len(bestiary))
-			proba = rand.Intn(100)
-			mt = bestiary[m]
-		}
-		if canGo(level, pos) {
-			level.Map[pos.Y][pos.X].Enemy = NewEnemy(mt, pos)
 		}
 	}
 }

@@ -1,19 +1,7 @@
 package game
 
-func isThereAMonster(level *Level, pos Pos) bool {
-	return level.GetMonster(pos.X, pos.Y) != nil
-}
-
-func isThereAnEnemy(level *Level, pos Pos) bool {
-	return level.GetEnemy(pos.X, pos.Y) != nil
-}
-
 func isThereAPnj(level *Level, pos Pos) bool {
 	return level.GetPnj(pos.X, pos.Y) != nil
-}
-
-func isThereAnInvocation(level *Level, pos Pos) bool {
-	return level.GetInvocation(pos.X, pos.Y) != nil
 }
 
 func isThereAFriend(level *Level, pos Pos) bool {
@@ -26,19 +14,6 @@ func isThereAPlayerCharacter(level *Level, pos Pos) bool {
 		return true
 	}
 	if level.GetFriend(pos.X, pos.Y) != nil {
-		return true
-	}
-	if level.GetInvocation(pos.X, pos.Y) != nil {
-		return true
-	}
-	return false
-}
-
-func isThereAnEnemyCharacter(level *Level, pos Pos) bool {
-	if level.GetMonster(pos.X, pos.Y) != nil {
-		return true
-	}
-	if level.GetEnemy(pos.X, pos.Y) != nil {
 		return true
 	}
 	return false
@@ -57,12 +32,6 @@ func canGo(level *Level, pos Pos) bool {
 		return false
 	}
 	if isThereABlockingObject(level, pos) {
-		return false
-	}
-	if isThereAMonster(level, pos) {
-		return false
-	}
-	if isThereAnEnemy(level, pos) {
 		return false
 	}
 	if isThereAPnj(level, pos) {

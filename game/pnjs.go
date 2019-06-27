@@ -222,6 +222,7 @@ func (pnj *Pnj) ChangeLevel(from *Level, to *Level) {
 }
 
 func (pnj *Pnj) BecomeEnemy(g *Game) {
-	g.Level.Map[pnj.Y][pnj.X].Pnj = nil
-	g.Level.MakeEnemy(pnj)
+	// TODO
+	// g.Level.Map[pnj.Y][pnj.X].Pnj = nil
+	// g.Level.MakeEnemy(pnj)
 }
