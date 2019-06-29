@@ -144,6 +144,7 @@ func (ui *UI) On(e *game.Event) {
 
 func (ui *UI) Draw() {
 	ui.DrawLevel()
+	ui.DrawFightingRing()
 	ui.DrawMenu()
 	ui.DrawGameGeneratorScreen()
 	ui.DrawEvents()
@@ -159,7 +160,7 @@ func (ui *UI) drawObject(pos game.Pos, tile game.Tile) {
 }
 
 func (ui *UI) Run() {
-	ui.Mp.PlayMusic()
+	ui.Mp.PlayMusic(32)
 	for {
 		ui.Draw()
 	}

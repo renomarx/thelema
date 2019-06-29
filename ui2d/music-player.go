@@ -77,7 +77,8 @@ func (mp *MusicPlayer) LoadSounds() {
 	}
 }
 
-func (mp *MusicPlayer) PlayMusic() {
+func (mp *MusicPlayer) PlayMusic(volume int) {
+	mix.VolumeMusic(volume)
 	mp.Musics[mp.CurrentMusicName].Play(-1)
 }
 
@@ -85,10 +86,10 @@ func (mp *MusicPlayer) StopMusic() {
 	mix.HaltMusic()
 }
 
-func (mp *MusicPlayer) ChangeMusic(musicName string) {
+func (mp *MusicPlayer) ChangeMusic(musicName string, volume int) {
 	mix.HaltMusic()
 	mp.CurrentMusicName = musicName
-	mp.PlayMusic()
+	mp.PlayMusic(volume)
 }
 
 func (mp *MusicPlayer) PlaySound(name string, volume int) {
@@ -136,17 +137,21 @@ func (mp *MusicPlayer) On(e *game.Event) {
 		mp.PlaySound("orchestra.wav", 64)
 	case game.ActionCharacteristicUp:
 		mp.PlaySound("piano.wav", 64)
+	case game.ActionFight:
+		mp.ChangeMusic("doomed.mp3", 24)
+	case game.ActionStopFight:
+		mp.PlayMusicForLevel(e.Payload["levelType"])
 	}
 }
 
 func (mp *MusicPlayer) PlayMusicForLevel(levelType string) {
 	switch levelType {
 	case game.LevelTypeGrotto:
-		mp.ChangeMusic("dark_fallout.ogg")
+		mp.ChangeMusic("dark_fallout.ogg", 32)
 	case game.LevelTypeOutdoor:
-		mp.ChangeMusic("forest.mp3")
+		mp.ChangeMusic("forest.mp3", 64)
 	case game.LevelTypeCity:
-		mp.ChangeMusic("warped.mp3")
+		mp.ChangeMusic("warped.mp3", 32)
 	case game.LevelTypeHouse:
 		mp.StopMusic()
 	}

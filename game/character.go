@@ -25,23 +25,13 @@ func (ch *Characteristic) Add(value int) {
 	}
 }
 
-func (ch *Characteristic) RaiseXp(value int, g *Game) {
+func (ch *Characteristic) RaiseXp(value int) {
 	ch.Xp += value
 	if ch.Xp >= ch.Initial*CharacteristicXpMultiplier {
-		g.GetEventManager().Dispatch(&Event{
-			Action:  ActionCharacteristicUp,
-			Message: "Characteristic up!",
-		})
 		ch.Initial += ch.Initial / 20
 		ch.Current = ch.Initial
 		ch.Xp = 0
 	}
-}
-
-type Fighter struct {
-	IsAttacking      bool
-	IsPowerAttacking bool
-	AttackPos        int
 }
 
 const VoiceMaleStandard = "MALE_STANDARD"
@@ -56,7 +46,6 @@ type Talker struct {
 
 type Character struct {
 	MovingObject
-	Fighter
 	LookAt               InputType
 	Name                 string
 	Health               Characteristic
@@ -78,8 +67,14 @@ type Character struct {
 	Weapon               *Weapon
 	Powers               map[string]*PlayerPower
 	CurrentPower         *PlayerPower
+	IsPowerUsing         bool
+	PowerPos             int
 	ParalyzedTime        int
 	LastRegenerationTime time.Time
+}
+
+func (c *Character) GetName() string {
+	return c.Name
 }
 
 func (c *Character) adaptSpeed() {

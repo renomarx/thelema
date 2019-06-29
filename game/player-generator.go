@@ -31,8 +31,7 @@ func newPlayer(speed, health, energy, stg, dex, bea, wil, intel, cha, rg int, we
 	player.Charisma.Init(cha)
 	player.RegenerationSpeed.Init(rg)
 	player.Luck.Init(20)
-	player.IsAttacking = false
-	player.IsPowerAttacking = false
+	player.IsPowerUsing = false
 	player.IsTalking = false
 	player.IsTaking = false
 	player.Inventory = NewInventory()

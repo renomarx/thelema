@@ -13,6 +13,7 @@ type Game struct {
 	Levels        map[string]*Level
 	Books         map[string]*OBook
 	QuestsObjects map[rune]*QuestObject
+	FightingRing  *FightingRing
 	Paused        bool
 	Running       bool
 	Playing       bool
@@ -79,6 +80,10 @@ type Object struct {
 	Rune      rune
 	Blocking  bool
 	IsPlaying bool
+}
+
+func (o *Object) GetTile() Tile {
+	return Tile(o.Rune)
 }
 
 type MovingObject struct {

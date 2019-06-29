@@ -28,30 +28,9 @@ func (ui *UI) drawCharacter(p *game.Character, texture *sdl.Texture) {
 		tileY = 10 * 64
 		tileX = 64 * ((-1*p.Yb + Res) / (Res / 8))
 	}
-	if p.IsAttacking {
-		if p.Weapon != nil {
-			switch p.Weapon.Typ {
-			case game.WeaponTypeDagger:
-				tileY = tileY + 4*64
-				tileX = 64 * (6 * p.AttackPos / 32)
-			case game.WeaponTypeWand:
-				tileY = tileY + 4*64
-				tileX = 64 * (6 * p.AttackPos / 32)
-			case game.WeaponTypeBow:
-				tileY = tileY + 8*64
-				tileX = 64 * (13 * p.AttackPos / 32)
-			case game.WeaponTypeSpear:
-				tileY = tileY - 4*64
-				tileX = 64 * (8 * p.AttackPos / 32)
-			}
-		} else {
-			tileY = tileY + 8*64
-			tileX = 64 * (p.AttackPos / 6)
-		}
-	}
-	if p.IsPowerAttacking {
+	if p.IsPowerUsing {
 		tileY = tileY - 8*64
-		tileX = 64 * (p.AttackPos / 6)
+		tileX = 64 * (p.PowerPos / 6)
 	}
 	if p.IsDead() {
 		tileY = 20 * 64

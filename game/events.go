@@ -7,7 +7,6 @@ const ActionDie = "DIE"
 const ActionChangeLevel = "CHANGE_LEVEL"
 const ActionOpenDoor = "OPEN_DOOR"
 const ActionCloseDoor = "CLOSE_DOOR"
-const ActionAttack = "ATTACK"
 const ActionPower = "POWER"
 const ActionTalk = "TALK"
 const ActionTake = "TAKE"
@@ -23,6 +22,10 @@ const ActionReadBook = "READ_BOOK"
 
 const ActionQuestFinished = "QUEST_FINISHED"
 const ActionCharacteristicUp = "CHARACTERISTIC_UP"
+
+const ActionFight = "FIGHT"
+const ActionAttack = "ATTACK"
+const ActionStopFight = "STOP_FIGHT"
 
 type Event struct {
 	Action  string

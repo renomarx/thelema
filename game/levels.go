@@ -1,7 +1,6 @@
 package game
 
 import "math/rand"
-import "time"
 
 const LevelTypeOutdoor = "OUTDOOR"
 const LevelTypeGrotto = "GROTTO"
@@ -9,15 +8,15 @@ const LevelTypeCity = "CITY"
 const LevelTypeHouse = "HOUSE"
 
 type Level struct {
-	Name         string
-	Width        int
-	Height       int
-	Type         string
-	Player       *Player
-	Map          [][]Case
-	Paused       bool
-	PRay         int
-	LastTimeTurn time.Time
+	Name                string
+	Width               int
+	Height              int
+	Type                string
+	Player              *Player
+	Map                 [][]Case
+	Paused              bool
+	PRay                int
+	MonstersProbability int
 }
 
 type Case struct {
@@ -96,6 +95,7 @@ func NewLevel(levelType string) *Level {
 	level := &Level{}
 	level.Type = levelType
 	level.PRay = 20
+	level.MonstersProbability = 0 // Default
 	return level
 }
 

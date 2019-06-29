@@ -1,6 +1,7 @@
 package game
 
 import "math/rand"
+import "time"
 
 type Player struct {
 	Character
@@ -46,30 +47,30 @@ func (p *Player) Move(g *Game) {
 	case Up:
 		openDoor(g, Pos{p.X, p.Y - 1})
 		if canGo(level, Pos{p.X, p.Y - 1}) {
-			p.DispatchWalkingEvent(g)
+			p.beforeMovingActions(g)
 			p.WalkUp()
-			p.openPortal(g, Pos{p.X, p.Y})
+			p.afterMovingActions(g)
 		}
 	case Down:
 		openDoor(g, Pos{p.X, p.Y + 1})
 		if canGo(level, Pos{p.X, p.Y + 1}) {
-			p.DispatchWalkingEvent(g)
+			p.beforeMovingActions(g)
 			p.WalkDown()
-			p.openPortal(g, Pos{p.X, p.Y})
+			p.afterMovingActions(g)
 		}
 	case Left:
 		openDoor(g, Pos{p.X - 1, p.Y})
 		if canGo(level, Pos{p.X - 1, p.Y}) {
-			p.DispatchWalkingEvent(g)
+			p.beforeMovingActions(g)
 			p.WalkLeft()
-			p.openPortal(g, Pos{p.X, p.Y})
+			p.afterMovingActions(g)
 		}
 	case Right:
 		openDoor(g, Pos{p.X + 1, p.Y})
 		if canGo(level, Pos{p.X + 1, p.Y}) {
-			p.DispatchWalkingEvent(g)
+			p.beforeMovingActions(g)
 			p.WalkRight()
-			p.openPortal(g, Pos{p.X, p.Y})
+			p.afterMovingActions(g)
 		}
 	case Action:
 		posTo := Pos{p.X, p.Y + 1}
@@ -89,6 +90,16 @@ func (p *Player) Move(g *Game) {
 		// TODO
 	default:
 	}
+}
+
+func (p *Player) beforeMovingActions(g *Game) {
+	p.DispatchWalkingEvent(g)
+}
+
+func (p *Player) afterMovingActions(g *Game) {
+	p.DispatchWalkingEvent(g)
+	p.openPortal(g, p.Pos)
+	p.MeetMonsters(g)
 }
 
 func (p *Player) DispatchWalkingEvent(g *Game) {
@@ -119,29 +130,13 @@ func (p *Player) WalkRight() {
 	p.moveRight()
 }
 
-func (p *Player) TakeDamage(g *Game, damage int) {
+func (p *Player) TakeDamages(damage int) {
 	if p.Health.Current <= 0 {
-		p.Die(g)
+		p.isDead = true
 		return
 	}
 	p.Health.Current -= damage
-	g.MakeExplosion(p.Pos, damage, 50)
-	p.Health.RaiseXp(damage, g)
-
-	g.GetEventManager().Dispatch(&Event{
-		Action: ActionHurt})
-	p.ParalyzedTime = rand.Intn(damage) * 10
-}
-
-func (p *Player) Die(g *Game) {
-	if p.isDead {
-		return
-	}
-	p.isDead = true
-	g.GetMenu().Choices[1].Disabled = true
-	g.GetEventManager().Dispatch(&Event{
-		Action:  ActionDie,
-		Message: "You're dead !"})
+	p.Health.RaiseXp(damage)
 }
 
 func (p *Player) openPortal(g *Game, pos Pos) {
@@ -271,4 +266,42 @@ func (p *Player) Recruit(pnj *Pnj, g *Game) {
 	}
 	f := g.Level.MakeFriend(pnj)
 	p.Friend = f
+}
+
+func (p *Player) MeetMonsters(g *Game) {
+	// TODO : handle monsters types by level case type
+	l := g.Level
+	r := rand.Intn(100)
+	if r > l.MonstersProbability {
+		return
+	}
+	switch l.Type {
+	case LevelTypeOutdoor:
+		bestiary := Bestiary()
+		g.FightMonsters(bestiary)
+	case LevelTypeGrotto:
+		bestiary := BestiaryUnderworld()
+		g.FightMonsters(bestiary)
+	}
+}
+
+func (p *Player) Fight(ring *FightingRing) AttackInterface {
+	// TODO
+	time.Sleep(1 * time.Second)
+	to := ring.Enemies[0]
+	i := 0
+	for to.IsDead() && i < len(ring.Enemies) {
+		to = ring.Enemies[i]
+		i++
+	}
+	if to.IsDead() {
+		return nil
+	}
+	att := &SwordAttack{
+		From:    p,
+		To:      to,
+		Speed:   p.Weapon.Speed,
+		Damages: p.CalculateAttackScore(),
+	}
+	return att
 }

@@ -205,12 +205,12 @@ func (pnj *Pnj) Teleport(levelName string, g *Game) {
 	level := g.Levels[levelName]
 	pnj.Talkable = false
 	g.MakeEffect(pnj.Pos, rune(Teleport), 200)
-	pnj.IsPowerAttacking = true
-	for pnj.AttackPos = 0; pnj.AttackPos < CaseLen; pnj.AttackPos++ {
+	pnj.IsPowerUsing = true
+	for pnj.PowerPos = 0; pnj.PowerPos < CaseLen; pnj.PowerPos++ {
 		pnj.adaptSpeed()
 	}
 	pnj.ChangeLevel(g.Level, level)
-	pnj.IsPowerAttacking = false
+	pnj.IsPowerUsing = false
 	pnj.Talkable = true
 }
 
