@@ -77,6 +77,14 @@ func (c *Character) GetName() string {
 	return c.Name
 }
 
+func (c *Character) GetHealth() Characteristic {
+	return c.Health
+}
+
+func (c *Character) GetEnergy() Characteristic {
+	return c.Energy
+}
+
 func (c *Character) adaptSpeed() {
 	if c.ParalyzedTime > 0 {
 		time.Sleep(time.Duration(c.ParalyzedTime) * time.Millisecond)

@@ -8,6 +8,8 @@ type FighterInterface interface {
 	IsDead() bool
 	TakeDamages(damages int)
 	GetTile() Tile
+	GetHealth() Characteristic
+	GetEnergy() Characteristic
 }
 
 type FightingRing struct {

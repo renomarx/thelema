@@ -2,7 +2,7 @@ package ui2d
 
 import (
 	"github.com/veandco/go-sdl2/sdl"
-	"strconv"
+	"thelema/game"
 )
 
 func (ui *UI) DrawPlayerStats() {
@@ -10,20 +10,9 @@ func (ui *UI) DrawPlayerStats() {
 	if !p.IsTalking && !ui.Game.Paused {
 		ui.drawPlayerStatsBox()
 		offsetH := ui.WindowHeight - Res
-		w, _ := ui.DrawText(
-			"Health : "+strconv.Itoa(p.Health.Current)+"/"+strconv.Itoa(p.Health.Initial),
-			TextSizeM,
-			ColorActive,
-			10,
-			int32(offsetH))
-		w += Res + 10
-		w2, _ := ui.DrawText(
-			"Energy : "+strconv.Itoa(p.Energy.Current)+"/"+strconv.Itoa(p.Energy.Initial),
-			TextSizeM,
-			ColorActive,
-			w,
-			int32(offsetH))
-		w += w2 + Res + 10
+		ui.drawHealthBar(10, int32(offsetH), p.Health)
+		ui.drawEnergyBar(100, int32(offsetH), p.Health)
+		w := 200
 
 		ui.renderer.Copy(ui.textureAtlas,
 			&ui.textureIndex[p.Weapon.Tile][0],
@@ -43,6 +32,42 @@ func (ui *UI) drawPlayerStatsBox() {
 			ui.renderer.Copy(ui.textureAtlas,
 				&ui.textureIndex['Ʈ'][0],
 				&sdl.Rect{X: int32(x * Res), Y: int32(y * Res), W: Res, H: Res})
+		}
+	}
+}
+
+func (ui *UI) drawHealthBar(x, y int32, health game.Characteristic) {
+	sizeY := 10
+	sizeX := 64
+	p := health.Current * sizeX / health.Initial
+
+	for i := 0; i < sizeX; i++ {
+		for j := 0; j < sizeY; j++ {
+			r := 77
+			if i < p {
+				r = 255
+			}
+			ui.renderer.SetDrawColor(uint8(r), 0, 0, 255)
+			ui.renderer.DrawPoint(x+int32(i), y+int32(j))
+			ui.renderer.SetDrawColor(0, 0, 0, 0)
+		}
+	}
+}
+
+func (ui *UI) drawEnergyBar(x, y int32, energy game.Characteristic) {
+	sizeY := 10
+	sizeX := 64
+	p := energy.Current * sizeX / energy.Initial
+
+	for i := 0; i < sizeX; i++ {
+		for j := 0; j < sizeY; j++ {
+			b := 77
+			if i < p {
+				b = 255
+			}
+			ui.renderer.SetDrawColor(0, 0, uint8(b), 255)
+			ui.renderer.DrawPoint(x+int32(i), y+int32(j))
+			ui.renderer.SetDrawColor(0, 0, 0, 0)
 		}
 	}
 }

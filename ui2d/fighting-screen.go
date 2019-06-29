@@ -29,6 +29,8 @@ func (ui *UI) drawFightingPlayer() {
 	ui.renderer.Copy(texture,
 		&sdl.Rect{X: int32(tileX), Y: int32(tileY), W: 64, H: 64},
 		&sdl.Rect{X: 100, Y: 100, W: 64, H: 64})
+	ui.drawHealthBar(100, 65, p.GetHealth())
+	ui.drawEnergyBar(100, 85, p.GetEnergy())
 }
 
 func (ui *UI) drawFightingEnemies() {
@@ -37,11 +39,14 @@ func (ui *UI) drawFightingEnemies() {
 		offsetX := int32(600)
 		offsetY := int32(100)
 		for _, e := range fr.Enemies {
-			ui.renderer.Copy(ui.textureAtlas,
-				&ui.textureIndex[e.GetTile()][0],
-				&sdl.Rect{X: offsetX, Y: offsetY, W: 32, H: 32})
-			offsetX += int32(16)
-			offsetY += int32(32)
+			if !e.IsDead() {
+				ui.renderer.Copy(ui.textureAtlas,
+					&ui.textureIndex[e.GetTile()][0],
+					&sdl.Rect{X: offsetX, Y: offsetY, W: 32, H: 32})
+				ui.drawHealthBar(offsetX, offsetY-15, e.GetHealth())
+				offsetX += int32(16)
+				offsetY += int32(50)
+			}
 		}
 	}
 }
