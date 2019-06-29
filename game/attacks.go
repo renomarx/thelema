@@ -54,10 +54,6 @@ func (att *SwordAttack) GetSpeed() int {
 	return att.Speed
 }
 
-func (att *SwordAttack) SetTo(f FighterInterface) {
-	att.To = f
-}
-
 func (att *SwordAttack) Play(ring *FightingRing) {
 	att.To.TakeDamages(att.Damages)
 }
