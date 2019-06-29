@@ -33,10 +33,13 @@ func (m *Monster) Fight(ring *FightingRing) AttackInterface {
 }
 
 func (m *Monster) TakeDamages(damage int) {
-	if m.Health.Current <= 0 {
-		m.isDead = true
+	if m.isDead {
 		return
 	}
 	m.Health.Current -= damage
 	m.Health.RaiseXp(damage)
+	if m.Health.Current <= 0 {
+		m.isDead = true
+		return
+	}
 }

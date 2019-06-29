@@ -11,7 +11,7 @@ func (ui *UI) DrawPlayerStats() {
 		ui.drawPlayerStatsBox()
 		offsetH := ui.WindowHeight - Res
 		ui.drawHealthBar(10, int32(offsetH), p.Health)
-		ui.drawEnergyBar(100, int32(offsetH), p.Health)
+		ui.drawEnergyBar(100, int32(offsetH), p.Energy)
 		w := 200
 
 		ui.renderer.Copy(ui.textureAtlas,

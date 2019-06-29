@@ -130,12 +130,15 @@ func (p *Player) WalkRight() {
 }
 
 func (p *Player) TakeDamages(damage int) {
-	if p.Health.Current <= 0 {
-		p.isDead = true
+	if p.isDead {
 		return
 	}
 	p.Health.Current -= damage
 	p.Health.RaiseXp(damage)
+	if p.Health.Current <= 0 {
+		p.isDead = true
+		return
+	}
 }
 
 func (p *Player) openPortal(g *Game, pos Pos) {
