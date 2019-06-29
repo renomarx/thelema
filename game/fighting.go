@@ -11,13 +11,14 @@ type FighterInterface interface {
 }
 
 type FightingRing struct {
-	IsOpen  bool
-	Round   int
-	Friends []FighterInterface
-	Enemies []FighterInterface
-	Player  FighterInterface
-	Stage   FightingStage
-	Attacks []AttackInterface
+	IsOpen               bool
+	Round                int
+	SelectedPlayerAction string
+	Player               FighterInterface
+	Friends              []FighterInterface
+	Enemies              []FighterInterface
+	Stage                FightingStage
+	Attacks              []AttackInterface
 }
 
 type AttackInterface interface {
@@ -78,6 +79,10 @@ func (ring *FightingRing) Start() {
 	ring.IsOpen = true
 }
 
+func (ring *FightingRing) End() {
+	ring.IsOpen = false
+}
+
 func (ring *FightingRing) IsFinished() bool {
 	if ring.Player.IsDead() {
 		return true
@@ -96,12 +101,20 @@ func (ring *FightingRing) PlayRound(g *Game) {
 		return
 	}
 	if ring.IsFinished() {
-		ring.IsOpen = false
+		ring.End()
 		return
 	}
 
 	ring.Stage = FightingChoice
+	g.OpenFightingMenu()
+	for g.FightingMenu.IsOpen {
+		g.HandleInputFightingMenu()
+	}
 	a := ring.Player.Fight(ring)
+	if a == nil {
+		ring.End()
+		return
+	}
 	ring.prepareAttack(a)
 	for _, e := range ring.Enemies {
 		if !e.IsDead() {

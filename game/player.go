@@ -1,7 +1,6 @@
 package game
 
 import "math/rand"
-import "time"
 
 type Player struct {
 	Character
@@ -287,21 +286,27 @@ func (p *Player) MeetMonsters(g *Game) {
 
 func (p *Player) Fight(ring *FightingRing) AttackInterface {
 	// TODO
-	time.Sleep(1 * time.Second)
-	to := ring.Enemies[0]
-	i := 0
-	for to.IsDead() && i < len(ring.Enemies) {
-		to = ring.Enemies[i]
-		i++
-	}
-	if to.IsDead() {
+	switch ring.SelectedPlayerAction {
+	case "run":
+		ring.End()
 		return nil
+	case "attack:sword":
+		to := ring.Enemies[0]
+		i := 0
+		for to.IsDead() && i < len(ring.Enemies) {
+			to = ring.Enemies[i]
+			i++
+		}
+		if to.IsDead() {
+			return nil
+		}
+		att := &SwordAttack{
+			From:    p,
+			To:      to,
+			Speed:   p.Weapon.Speed,
+			Damages: p.CalculateAttackScore(),
+		}
+		return att
 	}
-	att := &SwordAttack{
-		From:    p,
-		To:      to,
-		Speed:   p.Weapon.Speed,
-		Damages: p.CalculateAttackScore(),
-	}
-	return att
+	return nil
 }
