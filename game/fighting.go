@@ -21,11 +21,11 @@ type FightingRing struct {
 	Enemies              []FighterInterface
 	Stage                FightingStage
 	Attacks              []AttackInterface
-}
-
-type AttackInterface interface {
-	GetSpeed() int
-	Play(ring *FightingRing)
+	AttacksMenuOpen      bool
+	PossibleAttacks      struct {
+		List     []AttackInterface
+		Selected int
+	}
 }
 
 type FightingStage string
@@ -39,6 +39,8 @@ func (g *Game) FightMonsters(bestiary []*MonsterType) {
 		Message: "You're being attacked!",
 	})
 	g.FightingRing = NewFightingRing()
+	p := g.Level.Player
+	g.FightingRing.LoadPossibleAttacks(p)
 	nb := rand.Intn(2) + 1
 	for i := 0; i < nb; i++ {
 		m := rand.Intn(len(bestiary))
@@ -51,7 +53,7 @@ func (g *Game) FightMonsters(bestiary []*MonsterType) {
 		}
 		mo := NewMonster(mt)
 		g.FightingRing.AddEnemy(mo)
-		g.FightingRing.Player = g.Level.Player
+		g.FightingRing.Player = p
 	}
 	g.FightingRing.Start()
 	for g.FightingRing.IsOpen {
@@ -156,4 +158,33 @@ func (ring *FightingRing) prepareAttack(a AttackInterface) {
 		}
 	}
 	ring.Attacks = append(ring.Attacks[:pos], append([]AttackInterface{a}, ring.Attacks[pos:]...)...)
+}
+
+func (fr *FightingRing) LoadPossibleAttacks(p *Player) {
+	fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, &SwordAttack{
+		From:    p,
+		Speed:   p.Weapon.Speed,
+		Damages: p.CalculateAttackScore(),
+	})
+	fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, &BiteAttack{
+		From:    p,
+		Damages: 10,
+	})
+	fr.PossibleAttacks.Selected = 0
+}
+
+func (fr *FightingRing) NextPossibleAttack() {
+	i := fr.PossibleAttacks.Selected + 1
+	if i >= len(fr.PossibleAttacks.List) {
+		i = 0
+	}
+	fr.PossibleAttacks.Selected = i
+}
+
+func (fr *FightingRing) LastPossibleAttack() {
+	i := fr.PossibleAttacks.Selected - 1
+	if i <= 0 {
+		i = len(fr.PossibleAttacks.List) - 1
+	}
+	fr.PossibleAttacks.Selected = i
 }

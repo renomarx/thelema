@@ -13,6 +13,7 @@ func (ui *UI) DrawFightingRing() {
 	if fr != nil && fr.IsOpen {
 		ui.drawFightingScreen()
 		ui.drawFightingMenu()
+		ui.drawFightingAttacks()
 		ui.drawFightingPlayer()
 		ui.drawFightingEnemies()
 	}
@@ -78,5 +79,15 @@ func (ui *UI) drawFightingMenu() {
 			ui.renderer.Copy(tex, nil, &sdl.Rect{10, offsetH, w, h})
 			offsetH += h
 		}
+	}
+}
+
+func (ui *UI) drawFightingAttacks() {
+	fr := ui.Game.FightingRing
+	if fr != nil && fr.AttacksMenuOpen {
+		selectedAttack := fr.PossibleAttacks.List[fr.PossibleAttacks.Selected]
+		tex := ui.GetTexture(selectedAttack.GetName(), TextSizeXL, ColorActive)
+		_, _, w, h, _ := tex.Query()
+		ui.renderer.Copy(tex, nil, &sdl.Rect{10, 500, w, h})
 	}
 }

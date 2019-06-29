@@ -288,12 +288,11 @@ func (p *Player) MeetMonsters(g *Game) {
 }
 
 func (p *Player) Fight(ring *FightingRing) AttackInterface {
-	// TODO
 	switch ring.SelectedPlayerAction {
 	case "run":
 		ring.End()
 		return nil
-	case "attack:sword":
+	case "attack":
 		to := ring.Enemies[0]
 		i := 0
 		for to.IsDead() && i < len(ring.Enemies) {
@@ -303,12 +302,8 @@ func (p *Player) Fight(ring *FightingRing) AttackInterface {
 		if to.IsDead() {
 			return nil
 		}
-		att := &SwordAttack{
-			From:    p,
-			To:      to,
-			Speed:   p.Weapon.Speed,
-			Damages: p.CalculateAttackScore(),
-		}
+		att := ring.PossibleAttacks.List[ring.PossibleAttacks.Selected]
+		att.SetTo(to)
 		return att
 	}
 	return nil
