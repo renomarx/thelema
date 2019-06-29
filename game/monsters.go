@@ -25,10 +25,10 @@ func NewMonster(mt *MonsterType) *Monster {
 func (m *Monster) Fight(ring *FightingRing) AttackInterface {
 	// TODO : monster IA
 	bt := &BiteAttack{
-		From:    m,
-		To:      ring.Player,
 		Damages: m.CalculateAttackScore(),
 	}
+	bt.From = m
+	bt.To = ring.Player
 	return bt
 }
 

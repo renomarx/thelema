@@ -6,12 +6,25 @@ type AttackInterface interface {
 	GetSpeed() int
 	GetName() string
 	Play(ring *FightingRing)
+	SetFrom(f FighterInterface)
 	SetTo(f FighterInterface)
 }
 
+type Attack struct {
+	From FighterInterface
+	To   FighterInterface
+}
+
+func (att *Attack) SetFrom(f FighterInterface) {
+	att.From = f
+}
+
+func (att *Attack) SetTo(f FighterInterface) {
+	att.To = f
+}
+
 type BiteAttack struct {
-	From    FighterInterface
-	To      FighterInterface
+	Attack
 	Damages int
 }
 
@@ -23,17 +36,12 @@ func (att *BiteAttack) GetName() string {
 	return "Bite (10)"
 }
 
-func (att *BiteAttack) SetTo(f FighterInterface) {
-	att.To = f
-}
-
 func (att *BiteAttack) Play(ring *FightingRing) {
 	att.To.TakeDamages(att.Damages)
 }
 
 type SwordAttack struct {
-	From    FighterInterface
-	To      FighterInterface
+	Attack
 	Damages int
 	Speed   int
 }

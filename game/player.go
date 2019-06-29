@@ -303,6 +303,7 @@ func (p *Player) Fight(ring *FightingRing) AttackInterface {
 			return nil
 		}
 		att := ring.PossibleAttacks.List[ring.PossibleAttacks.Selected]
+		att.SetFrom(ring.Player)
 		att.SetTo(to)
 		return att
 	}

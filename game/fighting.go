@@ -162,12 +162,10 @@ func (ring *FightingRing) prepareAttack(a AttackInterface) {
 
 func (fr *FightingRing) LoadPossibleAttacks(p *Player) {
 	fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, &SwordAttack{
-		From:    p,
 		Speed:   p.Weapon.Speed,
 		Damages: p.CalculateAttackScore(),
 	})
 	fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, &BiteAttack{
-		From:    p,
 		Damages: 10,
 	})
 	fr.PossibleAttacks.Selected = 0
