@@ -1,7 +1,6 @@
 package game
 
 import "math/rand"
-import "fmt"
 
 type FighterInterface interface {
 	Fight(ring *FightingRing) AttackInterface
@@ -134,7 +133,6 @@ func (ring *FightingRing) PlayRound(g *Game) {
 	}
 
 	ring.Stage = FightingAttacks
-	fmt.Println(ring.Round, ring.Attacks)
 	for _, at := range ring.Attacks {
 		at.Play(ring)
 		g.GetEventManager().Dispatch(&Event{
@@ -165,9 +163,15 @@ func (fr *FightingRing) LoadPossibleAttacks(p *Player) {
 		Speed:   p.Weapon.Speed,
 		Damages: p.CalculateAttackScore(),
 	})
-	fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, &BiteAttack{
-		Damages: 10,
-	})
+	for _, pow := range p.Powers {
+		att := &PowerAttack{
+			Damages:    p.CalculatePowerAttackScore(),
+			Name:       pow.Name,
+			EnergyCost: pow.Energy,
+		}
+		att.Speed = pow.Speed
+		fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, att)
+	}
 	fr.PossibleAttacks.Selected = 0
 }
 

@@ -28,7 +28,8 @@ func (m *Monster) Fight(ring *FightingRing) AttackInterface {
 		Damages: m.CalculateAttackScore(),
 	}
 	bt.From = m
-	bt.To = ring.Player
+	bt.To = append(bt.To, ring.Player)
+	bt.Speed = 10
 	return bt
 }
 

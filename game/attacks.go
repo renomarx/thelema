@@ -7,20 +7,25 @@ type AttackInterface interface {
 	GetName() string
 	Play(ring *FightingRing)
 	SetFrom(f FighterInterface)
-	SetTo(f FighterInterface)
+	SetTo(fs []FighterInterface)
 }
 
 type Attack struct {
-	From FighterInterface
-	To   FighterInterface
+	From  FighterInterface
+	To    []FighterInterface
+	Speed int
 }
 
 func (att *Attack) SetFrom(f FighterInterface) {
 	att.From = f
 }
 
-func (att *Attack) SetTo(f FighterInterface) {
-	att.To = f
+func (att *Attack) SetTo(fs []FighterInterface) {
+	att.To = fs
+}
+
+func (att *Attack) GetSpeed() int {
+	return att.Speed
 }
 
 type BiteAttack struct {
@@ -28,16 +33,14 @@ type BiteAttack struct {
 	Damages int
 }
 
-func (att *BiteAttack) GetSpeed() int {
-	return 10
-}
-
 func (att *BiteAttack) GetName() string {
 	return "Bite (10)"
 }
 
 func (att *BiteAttack) Play(ring *FightingRing) {
-	att.To.TakeDamages(att.Damages)
+	for _, f := range att.To {
+		f.TakeDamages(att.Damages)
+	}
 }
 
 type SwordAttack struct {
@@ -55,5 +58,24 @@ func (att *SwordAttack) GetSpeed() int {
 }
 
 func (att *SwordAttack) Play(ring *FightingRing) {
-	att.To.TakeDamages(att.Damages)
+	for _, f := range att.To {
+		f.TakeDamages(att.Damages)
+	}
+}
+
+type PowerAttack struct {
+	Attack
+	Damages    int
+	Name       string
+	EnergyCost int
+}
+
+func (att *PowerAttack) GetName() string {
+	return fmt.Sprintf(att.Name+" : damages %d, energy cost %d", att.Damages, att.EnergyCost)
+}
+
+func (att *PowerAttack) Play(ring *FightingRing) {
+	for _, f := range att.To {
+		f.TakeDamages(att.Damages)
+	}
 }
