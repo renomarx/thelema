@@ -161,17 +161,21 @@ func (ring *FightingRing) prepareAttack(a AttackInterface) {
 }
 
 func (fr *FightingRing) LoadPossibleAttacks(p *Player) {
-	fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, &SwordAttack{
+	att := &SwordAttack{
 		Speed:   p.Weapon.Speed,
 		Damages: p.CalculateAttackScore(),
-	})
+	}
+	att.Range = 1
+	fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, att)
 	for _, pow := range p.Powers {
+		// TODO : switch by power type
 		att := &PowerAttack{
 			Damages:    p.CalculatePowerAttackScore(),
 			Name:       pow.Name,
 			EnergyCost: pow.Energy,
 		}
 		att.Speed = pow.Speed
+		att.Range = pow.Range
 		fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, att)
 	}
 	fr.PossibleAttacks.Selected = 0

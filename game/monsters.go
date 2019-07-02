@@ -30,6 +30,7 @@ func (m *Monster) Fight(ring *FightingRing) AttackInterface {
 	bt.From = m
 	bt.To = append(bt.To, ring.Player)
 	bt.Speed = 10
+	bt.Range = 1
 	return bt
 }
 

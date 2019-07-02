@@ -296,16 +296,16 @@ func (p *Player) Fight(ring *FightingRing) AttackInterface {
 		att := ring.PossibleAttacks.List[ring.PossibleAttacks.Selected]
 		att.SetFrom(ring.Player)
 		// TODO : select target with interface
-		to := ring.Enemies[0]
-		i := 0
-		for to.IsDead() && i < len(ring.Enemies) {
-			to = ring.Enemies[i]
-			i++
+		var to []FighterInterface
+		idx := 0
+		for i := 0; idx < att.GetRange() && i < len(ring.Enemies); i++ {
+			f := ring.Enemies[i]
+			if !f.IsDead() {
+				to = append(to, f)
+				idx++
+			}
 		}
-		if to.IsDead() {
-			return nil
-		}
-		att.SetTo([]FighterInterface{to})
+		att.SetTo(to)
 		return att
 	}
 	return nil

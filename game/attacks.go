@@ -8,12 +8,14 @@ type AttackInterface interface {
 	Play(ring *FightingRing)
 	SetFrom(f FighterInterface)
 	SetTo(fs []FighterInterface)
+	GetRange() int
 }
 
 type Attack struct {
 	From  FighterInterface
 	To    []FighterInterface
 	Speed int
+	Range int
 }
 
 func (att *Attack) SetFrom(f FighterInterface) {
@@ -26,6 +28,10 @@ func (att *Attack) SetTo(fs []FighterInterface) {
 
 func (att *Attack) GetSpeed() int {
 	return att.Speed
+}
+
+func (att *Attack) GetRange() int {
+	return att.Range
 }
 
 type BiteAttack struct {
