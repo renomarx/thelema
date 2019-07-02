@@ -6,6 +6,8 @@ type FighterInterface interface {
 	Fight(ring *FightingRing) AttackInterface
 	IsDead() bool
 	TakeDamages(damages int)
+	HasEnoughEnergy(cost int) bool
+	LooseEnergy(cost int)
 	GetTile() Tile
 	GetHealth() Characteristic
 	GetEnergy() Characteristic

@@ -201,3 +201,14 @@ func (p *Character) regenerate() {
 		p.LastRegenerationTime = time.Now()
 	}
 }
+
+func (c *Character) HasEnoughEnergy(cost int) bool {
+	return c.Energy.Current > cost
+}
+
+func (c *Character) LooseEnergy(cost int) {
+	c.Energy.Current -= cost
+	if c.Energy.Current < 0 {
+		c.Energy.Current = 0
+	}
+}

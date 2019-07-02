@@ -75,7 +75,11 @@ func (att *PowerAttack) GetName() string {
 }
 
 func (att *PowerAttack) Play(ring *FightingRing) {
+	if !att.From.HasEnoughEnergy(att.EnergyCost) {
+		return
+	}
 	for _, f := range att.To {
 		f.TakeDamages(att.Damages)
 	}
+	att.From.LooseEnergy(att.EnergyCost)
 }
