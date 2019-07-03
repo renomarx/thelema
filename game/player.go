@@ -130,18 +130,6 @@ func (p *Player) WalkRight() {
 	p.moveRight()
 }
 
-func (p *Player) TakeDamages(damage int) {
-	if p.isDead {
-		return
-	}
-	p.Health.Current -= damage
-	p.Health.RaiseXp(damage)
-	if p.Health.Current <= 0 {
-		p.isDead = true
-		return
-	}
-}
-
 func (p *Player) openPortal(g *Game, pos Pos) {
 	g.Level.OpenPortal(g, pos)
 }
@@ -316,9 +304,24 @@ func (p *Player) Fight(ring *FightingRing) {
 				idx++
 			}
 		}
+
+		p.IsPowerUsing = true
+		for p.PowerPos = 0; p.PowerPos < CaseLen; p.PowerPos++ {
+			p.adaptSpeed()
+		}
+		p.IsPowerUsing = false
+
 		for _, f := range to {
 			f.TakeDamages(att.Damages)
 		}
 		p.LooseEnergy(att.EnergyCost)
+		if att.EnergyCost > 0 {
+			p.Energy.RaiseXp(att.Damages)
+			p.Will.RaiseXp(1)
+			p.Intelligence.RaiseXp(1)
+		} else {
+			p.Strength.RaiseXp(1)
+			p.Dexterity.RaiseXp(1)
+		}
 	}
 }

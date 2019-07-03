@@ -3,6 +3,7 @@ package ui2d
 import (
 	"fmt"
 	"github.com/veandco/go-sdl2/sdl"
+	"math/rand"
 	// "github.com/veandco/go-sdl2/ttf"
 	// "log"
 	// "path/filepath"
@@ -28,9 +29,21 @@ func (ui *UI) drawFightingPlayer() {
 	}
 	tileY := 11 * 64
 	tileX := 64 * ((-1*p.Xb + Res) / (Res / 8))
+	if p.IsPowerUsing {
+		tileY = tileY - 8*64
+		tileX = 64 * (p.PowerPos / 6)
+	}
+	if p.IsDead() {
+		tileY = 20 * 64
+		tileX = 64 * 5
+	}
+	xb := 0
+	if p.IsHurt() > 0 {
+		xb = -8
+	}
 	ui.renderer.Copy(texture,
 		&sdl.Rect{X: int32(tileX), Y: int32(tileY), W: 64, H: 64},
-		&sdl.Rect{X: 100, Y: 100, W: 64, H: 64})
+		&sdl.Rect{X: 100 + int32(xb), Y: 100, W: 64, H: 64})
 	ui.drawHealthBar(100, 65, p.GetHealth())
 	ui.drawEnergyBar(100, 85, p.GetEnergy())
 }
@@ -42,9 +55,19 @@ func (ui *UI) drawFightingEnemies() {
 		offsetY := int32(100)
 		for _, e := range fr.Enemies {
 			if !e.IsDead() {
+				xb := 0
+				yb := 0
+				fieldLen := 4
+				if e.IsAttacking() {
+					xb = fieldLen * 4
+					yb = rand.Intn(fieldLen*2) - fieldLen
+				}
+				if e.IsHurt() > 0 {
+					xb = -8
+				}
 				ui.renderer.Copy(ui.textureAtlas,
 					&ui.textureIndex[e.GetTile()][0],
-					&sdl.Rect{X: offsetX, Y: offsetY, W: 32, H: 32})
+					&sdl.Rect{X: offsetX - int32(xb), Y: offsetY + int32(yb), W: 32, H: 32})
 				ui.drawHealthBar(offsetX, offsetY-15, e.GetHealth())
 				offsetX += int32(16)
 				offsetY += int32(50)

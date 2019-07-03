@@ -10,6 +10,8 @@ type FighterInterface interface {
 	GetTile() Tile
 	GetHealth() Characteristic
 	GetEnergy() Characteristic
+	IsHurt() int
+	IsAttacking() bool
 }
 
 type FightingRing struct {

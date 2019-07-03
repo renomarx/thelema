@@ -68,9 +68,12 @@ type Character struct {
 	Powers               map[string]*PlayerPower
 	CurrentPower         *PlayerPower
 	IsPowerUsing         bool
+	isAttacking          bool
+	AttackPos            int
 	PowerPos             int
 	ParalyzedTime        int
 	LastRegenerationTime time.Time
+	damagesTaken         int
 }
 
 func (c *Character) GetName() string {
@@ -211,4 +214,29 @@ func (c *Character) LooseEnergy(cost int) {
 	if c.Energy.Current < 0 {
 		c.Energy.Current = 0
 	}
+}
+
+func (c *Character) TakeDamages(damage int) {
+	if c.isDead {
+		return
+	}
+	c.damagesTaken = damage
+	for i := 0; i < damage; i++ {
+		c.adaptSpeed()
+	}
+	c.damagesTaken = 0
+	c.Health.Current -= damage
+	c.Health.RaiseXp(damage)
+	if c.Health.Current <= 0 {
+		c.isDead = true
+		return
+	}
+}
+
+func (c *Character) IsHurt() int {
+	return c.damagesTaken
+}
+
+func (c *Character) IsAttacking() bool {
+	return c.isAttacking
 }

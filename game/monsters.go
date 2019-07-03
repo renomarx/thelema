@@ -29,17 +29,10 @@ func (m *Monster) ChooseAction(ring *FightingRing) int {
 
 func (m *Monster) Fight(ring *FightingRing) {
 	// TODO : monster IA
+	m.isAttacking = true
+	for m.AttackPos = 0; m.AttackPos < CaseLen; m.AttackPos++ {
+		m.adaptSpeed()
+	}
+	m.isAttacking = false
 	ring.Player.TakeDamages(m.CalculateAttackScore())
-}
-
-func (m *Monster) TakeDamages(damage int) {
-	if m.isDead {
-		return
-	}
-	m.Health.Current -= damage
-	m.Health.RaiseXp(damage)
-	if m.Health.Current <= 0 {
-		m.isDead = true
-		return
-	}
 }
