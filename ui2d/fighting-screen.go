@@ -53,7 +53,7 @@ func (ui *UI) drawFightingEnemies() {
 	if fr != nil && len(fr.Enemies) > 0 {
 		offsetX := int32(600)
 		offsetY := int32(100)
-		for _, e := range fr.Enemies {
+		for i, e := range fr.Enemies {
 			if !e.IsDead() {
 				xb := 0
 				yb := 0
@@ -64,6 +64,11 @@ func (ui *UI) drawFightingEnemies() {
 				}
 				if e.IsHurt() > 0 {
 					xb = -8
+				}
+				if fr.AttackTargetSelectionOpen && fr.TargetSelected == i {
+					ui.renderer.Copy(ui.textureAtlas,
+						&ui.textureIndex['ʆ'][0],
+						&sdl.Rect{X: offsetX, Y: offsetY, W: 32, H: 32})
 				}
 				ui.renderer.Copy(ui.textureAtlas,
 					&ui.textureIndex[e.GetTile()][0],

@@ -296,8 +296,8 @@ func (p *Player) Fight(ring *FightingRing) {
 		att := p.currentAttack
 		// TODO : select target with interface
 		var to []FighterInterface
-		idx := 0
-		for i := 0; idx < att.Range && i < len(ring.Enemies); i++ {
+		idx := ring.TargetSelected
+		for i := ring.TargetSelected; idx < att.Range && i < len(ring.Enemies); i++ {
 			f := ring.Enemies[i]
 			if !f.IsDead() {
 				to = append(to, f)

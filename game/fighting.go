@@ -15,15 +15,17 @@ type FighterInterface interface {
 }
 
 type FightingRing struct {
-	IsOpen               bool
-	Round                int
-	SelectedPlayerAction string
-	Player               FighterInterface
-	Friends              []FighterInterface
-	Enemies              []FighterInterface
-	Stage                FightingStage
-	AttacksMenuOpen      bool
-	PossibleAttacks      struct {
+	IsOpen                    bool
+	Round                     int
+	SelectedPlayerAction      string
+	Player                    FighterInterface
+	Friends                   []FighterInterface
+	Enemies                   []FighterInterface
+	Stage                     FightingStage
+	AttacksMenuOpen           bool
+	AttackTargetSelectionOpen bool
+	TargetSelected            int
+	PossibleAttacks           struct {
 		List     []*Attack
 		Selected int
 	}
@@ -55,7 +57,6 @@ func (g *Game) FightMonsters(bestiary []*MonsterType) {
 	})
 	g.FightingRing = NewFightingRing()
 	p := g.Level.Player
-	g.FightingRing.LoadPossibleAttacks(p)
 	nb := rand.Intn(2) + 1
 	for i := 0; i < nb; i++ {
 		m := rand.Intn(len(bestiary))
@@ -125,6 +126,8 @@ func (ring *FightingRing) PlayRound(g *Game) {
 	}
 
 	ring.Stage = FightingChoice
+	p := g.Level.Player
+	ring.LoadPossibleAttacks(p)
 	g.OpenFightingMenu()
 	for g.FightingMenu.IsOpen {
 		g.HandleInputFightingMenu()
@@ -148,8 +151,20 @@ func (ring *FightingRing) PlayRound(g *Game) {
 			return
 		}
 	}
-	ring.roundFighters = nil
+	ring.clearRound()
 	ring.Round++
+}
+
+func (fr *FightingRing) clearRound() {
+	fr.roundFighters = nil
+	var enemies []FighterInterface
+	for _, e := range fr.Enemies {
+		if !e.IsDead() {
+			enemies = append(enemies, e)
+		}
+	}
+	fr.Enemies = enemies
+	fr.TargetSelected = 0
 }
 
 func (ring *FightingRing) prepareRoundFighter(f FighterInterface, speed int) {
@@ -207,4 +222,20 @@ func (fr *FightingRing) LastPossibleAttack() {
 		i = len(fr.PossibleAttacks.List) - 1
 	}
 	fr.PossibleAttacks.Selected = i
+}
+
+func (fr *FightingRing) NextTarget() {
+	i := fr.TargetSelected + 1
+	if i >= len(fr.Enemies) {
+		i = len(fr.Enemies) - 1
+	}
+	fr.TargetSelected = i
+}
+
+func (fr *FightingRing) LastTarget() {
+	i := fr.TargetSelected - 1
+	if i < 0 {
+		i = 0
+	}
+	fr.TargetSelected = i
 }

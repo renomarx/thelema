@@ -62,30 +62,50 @@ func (g *Game) HandleInputFightingMenu() {
 		sc := menu.Choices[sidx]
 		switch sc.Cmd {
 		case FightingMenuCmdAttack:
-			switch input.Typ {
-			case Right:
-				g.FightingRing.NextPossibleAttack()
-				g.DispatchEventMenu(ActionMenuSelect)
-				adaptMenuSpeed()
-			case Left:
-				g.FightingRing.LastPossibleAttack()
-				g.DispatchEventMenu(ActionMenuSelect)
-				adaptMenuSpeed()
-			case Power:
-				g.FightingRing.AttacksMenuOpen = false
-				g.DispatchEventMenu(ActionMenuClose)
-				menu.ClearSelected()
-				adaptMenuSpeed()
-			case Action:
-				g.FightingRing.SelectedPlayerAction = "attack"
-				g.FightingRing.AttacksMenuOpen = false
-				g.DispatchEventMenu(ActionMenuClose)
-				menu.ClearSelected()
-				g.CloseFightingMenu()
-				adaptMenuSpeed()
-			}
-			// TODO
 
+			if g.FightingRing.AttackTargetSelectionOpen {
+				switch input.Typ {
+				case Right:
+					g.FightingRing.NextTarget()
+					g.DispatchEventMenu(ActionMenuSelect)
+					adaptMenuSpeed()
+				case Left:
+					g.FightingRing.LastTarget()
+					g.DispatchEventMenu(ActionMenuSelect)
+					adaptMenuSpeed()
+				case Power:
+					g.FightingRing.AttackTargetSelectionOpen = false
+				case Action:
+					g.FightingRing.SelectedPlayerAction = "attack"
+					g.FightingRing.AttackTargetSelectionOpen = false
+					g.FightingRing.AttacksMenuOpen = false
+					g.DispatchEventMenu(ActionMenuClose)
+					menu.ClearSelected()
+					g.CloseFightingMenu()
+					adaptMenuSpeed()
+				}
+
+			} else {
+				switch input.Typ {
+				case Right:
+					g.FightingRing.NextPossibleAttack()
+					g.DispatchEventMenu(ActionMenuSelect)
+					adaptMenuSpeed()
+				case Left:
+					g.FightingRing.LastPossibleAttack()
+					g.DispatchEventMenu(ActionMenuSelect)
+					adaptMenuSpeed()
+				case Power:
+					g.FightingRing.AttacksMenuOpen = false
+					g.DispatchEventMenu(ActionMenuClose)
+					menu.ClearSelected()
+					adaptMenuSpeed()
+				case Action:
+					g.FightingRing.AttackTargetSelectionOpen = true
+					adaptMenuSpeed()
+				}
+
+			}
 		case FightingMenuCmdInventory:
 			// TODO
 			g.Level.Player.Inventory.HandleInput(g)
