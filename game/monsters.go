@@ -28,7 +28,6 @@ func (m *Monster) ChooseAction(ring *FightingRing) int {
 }
 
 func (m *Monster) Fight(ring *FightingRing) {
-	// TODO : monster IA
 	m.isAttacking = true
 	for m.AttackPos = 0; m.AttackPos < CaseLen; m.AttackPos++ {
 		m.adaptSpeed()

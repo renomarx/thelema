@@ -211,7 +211,7 @@ func (fr *FightingRing) LoadPossibleAttacks(p *Player) {
 func (fr *FightingRing) NextPossibleAttack() {
 	i := fr.PossibleAttacks.Selected + 1
 	if i >= len(fr.PossibleAttacks.List) {
-		i = 0
+		i = len(fr.PossibleAttacks.List) - 1
 	}
 	fr.PossibleAttacks.Selected = i
 }
@@ -219,7 +219,7 @@ func (fr *FightingRing) NextPossibleAttack() {
 func (fr *FightingRing) LastPossibleAttack() {
 	i := fr.PossibleAttacks.Selected - 1
 	if i <= 0 {
-		i = len(fr.PossibleAttacks.List) - 1
+		i = 0
 	}
 	fr.PossibleAttacks.Selected = i
 }

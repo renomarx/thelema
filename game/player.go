@@ -294,7 +294,6 @@ func (p *Player) Fight(ring *FightingRing) {
 		ring.End()
 	case "attack":
 		att := p.currentAttack
-		// TODO : select target with interface
 		var to []FighterInterface
 		idx := ring.TargetSelected
 		for i := ring.TargetSelected; idx < att.Range && i < len(ring.Enemies); i++ {
@@ -305,6 +304,7 @@ func (p *Player) Fight(ring *FightingRing) {
 			}
 		}
 
+		// TODO : handle attack types and animations
 		p.IsPowerUsing = true
 		for p.PowerPos = 0; p.PowerPos < CaseLen; p.PowerPos++ {
 			p.adaptSpeed()
