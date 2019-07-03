@@ -221,7 +221,7 @@ func (c *Character) TakeDamages(damage int) {
 		return
 	}
 	c.damagesTaken = damage
-	for i := 0; i < damage; i++ {
+	for i := 0; i < 10; i++ {
 		c.adaptSpeed()
 	}
 	c.damagesTaken = 0

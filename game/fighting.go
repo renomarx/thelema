@@ -38,7 +38,12 @@ type Attack struct {
 	EnergyCost int
 	Name       string
 	Range      int
+	Type       AttackType
 }
+type AttackType string
+
+const AttackTypePhysical AttackType = "PHYSICAL"
+const AttackTypeMagick AttackType = "MAGICK"
 
 type RoundFighter struct {
 	speed int
@@ -191,6 +196,7 @@ func (fr *FightingRing) LoadPossibleAttacks(p *Player) {
 		Speed:   p.Weapon.Speed,
 		Damages: p.CalculateAttackScore(),
 		Name:    "Sword attack",
+		Type:    AttackTypePhysical,
 	}
 	att.Range = 1
 	fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, att)
@@ -200,9 +206,10 @@ func (fr *FightingRing) LoadPossibleAttacks(p *Player) {
 			Damages:    p.CalculatePowerAttackScore(),
 			Name:       pow.Name,
 			EnergyCost: pow.Energy,
+			Speed:      pow.Speed,
+			Range:      pow.Range,
+			Type:       AttackTypeMagick,
 		}
-		att.Speed = pow.Speed
-		att.Range = pow.Range
 		fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, att)
 	}
 	fr.PossibleAttacks.Selected = 0

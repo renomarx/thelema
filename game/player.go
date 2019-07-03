@@ -305,17 +305,25 @@ func (p *Player) Fight(ring *FightingRing) {
 		}
 
 		// TODO : handle attack types and animations
-		p.IsPowerUsing = true
-		for p.PowerPos = 0; p.PowerPos < CaseLen; p.PowerPos++ {
-			p.adaptSpeed()
+		if att.Type == AttackTypeMagick {
+			p.IsPowerUsing = true
+			for p.PowerPos = 0; p.PowerPos < CaseLen; p.PowerPos++ {
+				p.adaptSpeed()
+			}
+			p.IsPowerUsing = false
+		} else {
+			p.isAttacking = true
+			for p.AttackPos = 0; p.AttackPos < CaseLen; p.AttackPos++ {
+				p.adaptSpeed()
+			}
+			p.isAttacking = false
 		}
-		p.IsPowerUsing = false
 
 		for _, f := range to {
 			f.TakeDamages(att.Damages)
 		}
 		p.LooseEnergy(att.EnergyCost)
-		if att.EnergyCost > 0 {
+		if att.Type == AttackTypeMagick {
 			p.Energy.RaiseXp(att.Damages)
 			p.Will.RaiseXp(1)
 			p.Intelligence.RaiseXp(1)

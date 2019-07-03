@@ -7,7 +7,7 @@ import (
 	// "github.com/veandco/go-sdl2/ttf"
 	// "log"
 	// "path/filepath"
-	// "thelema/game"
+	"thelema/game"
 )
 
 func (ui *UI) DrawFightingRing() {
@@ -27,8 +27,31 @@ func (ui *UI) drawFightingPlayer() {
 	if p.Weapon != nil {
 		texture = ui.playerTextures[p.Name+"_with_"+p.Weapon.Typ]
 	}
+	xb := 0
 	tileY := 11 * 64
 	tileX := 64 * ((-1*p.Xb + Res) / (Res / 8))
+	if p.IsAttacking() {
+		xb = 200 * p.AttackPos / 32
+		if p.Weapon != nil {
+			switch p.Weapon.Typ {
+			case game.WeaponTypeDagger:
+				tileY = tileY + 4*64
+				tileX = 64 * (6 * p.AttackPos / 32)
+			case game.WeaponTypeWand:
+				tileY = tileY + 4*64
+				tileX = 64 * (6 * p.AttackPos / 32)
+			case game.WeaponTypeBow:
+				tileY = tileY + 8*64
+				tileX = 64 * (13 * p.AttackPos / 32)
+			case game.WeaponTypeSpear:
+				tileY = tileY - 4*64
+				tileX = 64 * (8 * p.AttackPos / 32)
+			}
+		} else {
+			tileY = tileY + 8*64
+			tileX = 64 * (p.AttackPos / 6)
+		}
+	}
 	if p.IsPowerUsing {
 		tileY = tileY - 8*64
 		tileX = 64 * (p.PowerPos / 6)
@@ -37,15 +60,14 @@ func (ui *UI) drawFightingPlayer() {
 		tileY = 20 * 64
 		tileX = 64 * 5
 	}
-	xb := 0
 	if p.IsHurt() > 0 {
-		xb = -8
+		xb = -16
 	}
 	ui.renderer.Copy(texture,
 		&sdl.Rect{X: int32(tileX), Y: int32(tileY), W: 64, H: 64},
 		&sdl.Rect{X: 100 + int32(xb), Y: 100, W: 64, H: 64})
-	ui.drawHealthBar(100, 65, p.GetHealth())
-	ui.drawEnergyBar(100, 85, p.GetEnergy())
+	ui.drawHealthBar(100+int32(xb), 65, p.GetHealth())
+	ui.drawEnergyBar(100+int32(xb), 85, p.GetEnergy())
 }
 
 func (ui *UI) drawFightingEnemies() {
@@ -59,11 +81,11 @@ func (ui *UI) drawFightingEnemies() {
 				yb := 0
 				fieldLen := 4
 				if e.IsAttacking() {
-					xb = fieldLen * 4
+					xb = 200
 					yb = rand.Intn(fieldLen*2) - fieldLen
 				}
 				if e.IsHurt() > 0 {
-					xb = -8
+					xb = -16
 				}
 				if fr.AttackTargetSelectionOpen {
 					att := fr.PossibleAttacks.List[fr.PossibleAttacks.Selected]
@@ -76,7 +98,7 @@ func (ui *UI) drawFightingEnemies() {
 				ui.renderer.Copy(ui.textureAtlas,
 					&ui.textureIndex[e.GetTile()][0],
 					&sdl.Rect{X: offsetX - int32(xb), Y: offsetY + int32(yb), W: 32, H: 32})
-				ui.drawHealthBar(offsetX, offsetY-15, e.GetHealth())
+				ui.drawHealthBar(offsetX-int32(xb), offsetY-15, e.GetHealth())
 				offsetX += int32(16)
 				offsetY += int32(50)
 			}
