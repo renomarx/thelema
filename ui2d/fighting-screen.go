@@ -1,6 +1,7 @@
 package ui2d
 
 import (
+	"fmt"
 	"github.com/veandco/go-sdl2/sdl"
 	// "github.com/veandco/go-sdl2/ttf"
 	// "log"
@@ -86,7 +87,7 @@ func (ui *UI) drawFightingAttacks() {
 	fr := ui.Game.FightingRing
 	if fr != nil && fr.AttacksMenuOpen {
 		selectedAttack := fr.PossibleAttacks.List[fr.PossibleAttacks.Selected]
-		tex := ui.GetTexture(selectedAttack.GetName(), TextSizeXL, ColorActive)
+		tex := ui.GetTexture(fmt.Sprintf(selectedAttack.Name+" (%d)", selectedAttack.Damages), TextSizeXL, ColorActive)
 		_, _, w, h, _ := tex.Query()
 		ui.renderer.Copy(tex, nil, &sdl.Rect{10, 500, w, h})
 	}

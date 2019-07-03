@@ -16,6 +16,7 @@ type Player struct {
 	MapMenuOpen       bool
 	Weapons           []*Weapon
 	Friend            *Friend
+	currentAttack     *Attack
 }
 
 func (p *Player) Update(g *Game) {
@@ -287,26 +288,37 @@ func (p *Player) MeetMonsters(g *Game) {
 	}
 }
 
-func (p *Player) Fight(ring *FightingRing) AttackInterface {
+func (p *Player) ChooseAction(ring *FightingRing) int {
+	switch ring.SelectedPlayerAction {
+	case "run":
+		return p.Speed.Current
+	case "attack":
+		att := ring.PossibleAttacks.List[ring.PossibleAttacks.Selected]
+		p.currentAttack = att
+		return att.Speed
+	}
+	return 0
+}
+
+func (p *Player) Fight(ring *FightingRing) {
 	switch ring.SelectedPlayerAction {
 	case "run":
 		ring.End()
-		return nil
 	case "attack":
-		att := ring.PossibleAttacks.List[ring.PossibleAttacks.Selected]
-		att.SetFrom(ring.Player)
+		att := p.currentAttack
 		// TODO : select target with interface
 		var to []FighterInterface
 		idx := 0
-		for i := 0; idx < att.GetRange() && i < len(ring.Enemies); i++ {
+		for i := 0; idx < att.Range && i < len(ring.Enemies); i++ {
 			f := ring.Enemies[i]
 			if !f.IsDead() {
 				to = append(to, f)
 				idx++
 			}
 		}
-		att.SetTo(to)
-		return att
+		for _, f := range to {
+			f.TakeDamages(att.Damages)
+		}
+		p.LooseEnergy(att.EnergyCost)
 	}
-	return nil
 }

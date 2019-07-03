@@ -3,11 +3,10 @@ package game
 import "math/rand"
 
 type FighterInterface interface {
-	Fight(ring *FightingRing) AttackInterface
+	ChooseAction(ring *FightingRing) int
+	Fight(ring *FightingRing)
 	IsDead() bool
 	TakeDamages(damages int)
-	HasEnoughEnergy(cost int) bool
-	LooseEnergy(cost int)
 	GetTile() Tile
 	GetHealth() Characteristic
 	GetEnergy() Characteristic
@@ -21,12 +20,25 @@ type FightingRing struct {
 	Friends              []FighterInterface
 	Enemies              []FighterInterface
 	Stage                FightingStage
-	Attacks              []AttackInterface
 	AttacksMenuOpen      bool
 	PossibleAttacks      struct {
-		List     []AttackInterface
+		List     []*Attack
 		Selected int
 	}
+	roundFighters []RoundFighter
+}
+
+type Attack struct {
+	Damages    int
+	Speed      int
+	EnergyCost int
+	Name       string
+	Range      int
+}
+
+type RoundFighter struct {
+	speed int
+	f     FighterInterface
 }
 
 type FightingStage string
@@ -115,61 +127,59 @@ func (ring *FightingRing) PlayRound(g *Game) {
 	for g.FightingMenu.IsOpen {
 		g.HandleInputFightingMenu()
 	}
-	a := ring.Player.Fight(ring)
-	if a == nil {
-		ring.End()
-		return
-	}
-	ring.prepareAttack(a)
+	speed := ring.Player.ChooseAction(ring)
+	ring.prepareRoundFighter(ring.Player, speed)
 	for _, e := range ring.Enemies {
 		if !e.IsDead() {
-			a = e.Fight(ring)
-			ring.prepareAttack(a)
-		}
-	}
-	for _, f := range ring.Friends {
-		if !f.IsDead() {
-			a = f.Fight(ring)
-			ring.prepareAttack(a)
+			speed = e.ChooseAction(ring)
+			ring.prepareRoundFighter(e, speed)
 		}
 	}
 
 	ring.Stage = FightingAttacks
-	for _, at := range ring.Attacks {
-		at.Play(ring)
+	for _, rf := range ring.roundFighters {
+		rf.f.Fight(ring)
 		g.GetEventManager().Dispatch(&Event{
 			Action: ActionAttack,
 		})
+		if !ring.IsOpen {
+			return
+		}
 	}
-	ring.Attacks = nil
+	ring.roundFighters = nil
 	ring.Round++
 }
 
-func (ring *FightingRing) prepareAttack(a AttackInterface) {
-	if a == nil {
+func (ring *FightingRing) prepareRoundFighter(f FighterInterface, speed int) {
+	if f == nil {
 		return
 	}
-	//ring.Attacks = append(ring.Attacks, a)
-	pos := len(ring.Attacks)
-	for i, at := range ring.Attacks {
-		if a.GetSpeed() < at.GetSpeed() {
+	rf := RoundFighter{
+		speed: speed,
+		f:     f,
+	}
+	//ring.roundFighters = append(ring.roundFighters, f)
+	pos := len(ring.roundFighters)
+	for i, rff := range ring.roundFighters {
+		if rf.speed > rff.speed {
 			pos = i
 			break
 		}
 	}
-	ring.Attacks = append(ring.Attacks[:pos], append([]AttackInterface{a}, ring.Attacks[pos:]...)...)
+	ring.roundFighters = append(ring.roundFighters[:pos], append([]RoundFighter{rf}, ring.roundFighters[pos:]...)...)
 }
 
 func (fr *FightingRing) LoadPossibleAttacks(p *Player) {
-	att := &SwordAttack{
+	att := &Attack{
 		Speed:   p.Weapon.Speed,
 		Damages: p.CalculateAttackScore(),
+		Name:    "Sword attack",
 	}
 	att.Range = 1
 	fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, att)
 	for _, pow := range p.Powers {
 		// TODO : switch by power type
-		att := &PowerAttack{
+		att := &Attack{
 			Damages:    p.CalculatePowerAttackScore(),
 			Name:       pow.Name,
 			EnergyCost: pow.Energy,

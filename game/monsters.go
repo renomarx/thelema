@@ -22,16 +22,14 @@ func NewMonster(mt *MonsterType) *Monster {
 	return monster
 }
 
-func (m *Monster) Fight(ring *FightingRing) AttackInterface {
+func (m *Monster) ChooseAction(ring *FightingRing) int {
 	// TODO : monster IA
-	bt := &BiteAttack{
-		Damages: m.CalculateAttackScore(),
-	}
-	bt.From = m
-	bt.To = append(bt.To, ring.Player)
-	bt.Speed = 10
-	bt.Range = 1
-	return bt
+	return 10
+}
+
+func (m *Monster) Fight(ring *FightingRing) {
+	// TODO : monster IA
+	ring.Player.TakeDamages(m.CalculateAttackScore())
 }
 
 func (m *Monster) TakeDamages(damage int) {

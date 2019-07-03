@@ -11,7 +11,6 @@ type MonsterType struct {
 	VisionRange int
 	Probability int
 	Weapon      *Weapon
-	Attacks     []AttackInterface
 }
 
 func Bestiary() []*MonsterType {
