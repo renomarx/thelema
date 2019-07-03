@@ -65,10 +65,13 @@ func (ui *UI) drawFightingEnemies() {
 				if e.IsHurt() > 0 {
 					xb = -8
 				}
-				if fr.AttackTargetSelectionOpen && fr.TargetSelected == i {
-					ui.renderer.Copy(ui.textureAtlas,
-						&ui.textureIndex['ʆ'][0],
-						&sdl.Rect{X: offsetX, Y: offsetY, W: 32, H: 32})
+				if fr.AttackTargetSelectionOpen {
+					att := fr.PossibleAttacks.List[fr.PossibleAttacks.Selected]
+					if i >= fr.TargetSelected && i < fr.TargetSelected+att.Range {
+						ui.renderer.Copy(ui.textureAtlas,
+							&ui.textureIndex['ʆ'][0],
+							&sdl.Rect{X: offsetX, Y: offsetY, W: 32, H: 32})
+					}
 				}
 				ui.renderer.Copy(ui.textureAtlas,
 					&ui.textureIndex[e.GetTile()][0],
