@@ -22,39 +22,23 @@ func (ui *UI) DrawFightingRing() {
 }
 
 func (ui *UI) drawFightingPlayer() {
+	fr := ui.Game.FightingRing
 	p := ui.Game.Level.Player
 	texture := ui.playerTextures[p.Name]
-	if p.Weapon != nil {
-		texture = ui.playerTextures[p.Name+"_with_"+p.Weapon.Typ]
-	}
 	xb := 0
 	tileY := 11 * 64
 	tileX := 64 * ((-1*p.Xb + Res) / (Res / 8))
 	if p.IsAttacking() {
-		xb = 200 * p.AttackPos / 32
-		if p.Weapon != nil {
-			switch p.Weapon.Typ {
-			case game.WeaponTypeDagger:
-				tileY = tileY + 4*64
-				tileX = 64 * (6 * p.AttackPos / 32)
-			case game.WeaponTypeWand:
-				tileY = tileY + 4*64
-				tileX = 64 * (6 * p.AttackPos / 32)
-			case game.WeaponTypeBow:
-				tileY = tileY + 8*64
-				tileX = 64 * (13 * p.AttackPos / 32)
-			case game.WeaponTypeSpear:
-				tileY = tileY - 4*64
-				tileX = 64 * (8 * p.AttackPos / 32)
-			}
-		} else {
-			tileY = tileY + 8*64
+		att := fr.PossibleAttacks.List[fr.PossibleAttacks.Selected]
+		switch att.Type {
+		case game.AttackTypePhysical:
+			xb = 200 * p.AttackPos / 32
+			tileY = tileY + 4*64
+			tileX = 64 * (6 * p.AttackPos / 32)
+		case game.AttackTypeMagick:
+			tileY = tileY - 8*64
 			tileX = 64 * (p.AttackPos / 6)
 		}
-	}
-	if p.IsPowerUsing {
-		tileY = tileY - 8*64
-		tileX = 64 * (p.PowerPos / 6)
 	}
 	if p.IsDead() {
 		tileY = 20 * 64

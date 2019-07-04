@@ -64,7 +64,6 @@ type Character struct {
 	LastActionTime       time.Time
 	isDead               bool
 	VisionRange          int
-	Weapon               *Weapon
 	Powers               map[string]*PlayerPower
 	CurrentPower         *PlayerPower
 	IsPowerUsing         bool
@@ -164,6 +163,38 @@ func (c *Character) moveDown() {
 	}
 }
 
+func (c *Character) PowerUse(g *Game) {
+	if c.Energy.Current > 0 {
+		c.IsPowerUsing = true
+		for c.PowerPos = 0; c.PowerPos < CaseLen; c.PowerPos++ {
+			c.CurrentPower.adaptSpeed()
+		}
+		switch c.CurrentPower.Type {
+		case PowerEnergyBall:
+			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerEnergyBall}})
+			g.Level.MakeEnergyball(c.Pos, c.LookAt, c.CalculatePowerAttackScore(), c)
+			c.LooseEnergy(c.CurrentPower.Energy)
+		case PowerInvocation:
+			// TODO
+		case PowerStorm:
+			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerStorm}})
+			g.MakeRangeStorm(c.Pos, c.CalculatePowerAttackScore(), c.LookAt, c.CurrentPower.Lifetime, c.CurrentPower.Range)
+			c.LooseEnergy(c.CurrentPower.Energy)
+		case PowerFlames:
+			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerFlames}})
+			g.MakeFlames(c.Pos, c.CalculatePowerAttackScore(), c.CurrentPower.Lifetime, c.CurrentPower.Range)
+			c.LooseEnergy(c.CurrentPower.Energy)
+		case PowerHealing:
+			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
+			g.MakeEffect(c.Pos, rune(Healing), 200)
+			c.Health.Add(c.CalculatePowerAttackScore())
+			c.LooseEnergy(c.CurrentPower.Energy)
+		default:
+		}
+		c.IsPowerUsing = false
+	}
+}
+
 func (c *Character) IsDead() bool {
 	return c.isDead
 }
@@ -171,23 +202,12 @@ func (c *Character) IsDead() bool {
 func (c *Character) CalculateAttackScore() int {
 	score := float64((c.Strength.Current+c.Dexterity.Current)/2) * (1.0 + float64(c.Luck.Current)/100.0)
 	iscore := int(score)
-	if c.Weapon != nil {
-		iscore += c.Weapon.Damages
-	}
-	return iscore
-}
-
-func (c *Character) CalculateAttackBowScore() int {
-	score := float64(c.Dexterity.Current) * (1.0 + float64(c.Luck.Current)/100.0)
-	iscore := int(score)
-	iscore += c.Weapon.Damages
 	return iscore
 }
 
 func (c *Character) CalculatePowerAttackScore() int {
 	score := float64(c.Will.Current) * (1.0 + float64(c.Luck.Current)/100.0)
 	iscore := int(score)
-	iscore += c.Weapon.MagickalDamages
 	return iscore
 }
 

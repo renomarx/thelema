@@ -11,7 +11,7 @@ type Pnj struct {
 	IsPlayerFriend bool
 }
 
-func NewPnj(p Pos, name string, voice string, weaponType string) *Pnj {
+func NewPnj(p Pos, name string, voice string) *Pnj {
 	pnj := &Pnj{}
 	pnj.Name = name
 	pnj.Health.Init(200)
@@ -34,16 +34,6 @@ func NewPnj(p Pos, name string, voice string, weaponType string) *Pnj {
 	pnj.Talkable = true
 	pnj.IsTalking = false
 	pnj.Voice = voice
-	switch weaponType {
-	case WeaponTypeSpear:
-		pnj.Weapon = &Weapon{Tile: Spear, Name: "Lance", Typ: WeaponTypeSpear, Damages: 20, Speed: 12}
-	case WeaponTypeDagger:
-		pnj.Weapon = &Weapon{Tile: Dagger, Name: "Dague", Typ: WeaponTypeDagger, Damages: 7, Speed: 20}
-	case WeaponTypeWand:
-		pnj.Weapon = &Weapon{Tile: Wand, Name: "Sceptre", Typ: WeaponTypeWand, Speed: 10, MagickalDamages: 20}
-	case WeaponTypeBow:
-		pnj.Weapon = &Weapon{Tile: Bow, Name: "Arc", Typ: WeaponTypeBow, Damages: 10, Speed: 5}
-	}
 
 	return pnj
 }

@@ -1,6 +1,7 @@
 package game
 
 import "math/rand"
+import "time"
 
 type FighterInterface interface {
 	ChooseAction(ring *FightingRing) int
@@ -39,6 +40,7 @@ type Attack struct {
 	Name       string
 	Range      int
 	Type       AttackType
+	MagickType PowerType
 }
 type AttackType string
 
@@ -193,7 +195,7 @@ func (ring *FightingRing) prepareRoundFighter(f FighterInterface, speed int) {
 
 func (fr *FightingRing) LoadPossibleAttacks(p *Player) {
 	att := &Attack{
-		Speed:   p.Weapon.Speed,
+		Speed:   p.Dexterity.Current,
 		Damages: p.CalculateAttackScore(),
 		Name:    "Sword attack",
 		Type:    AttackTypePhysical,
@@ -209,6 +211,7 @@ func (fr *FightingRing) LoadPossibleAttacks(p *Player) {
 			Speed:      pow.Speed,
 			Range:      pow.Range,
 			Type:       AttackTypeMagick,
+			MagickType: pow.Type,
 		}
 		fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, att)
 	}
@@ -245,4 +248,8 @@ func (fr *FightingRing) LastTarget() {
 		i = 0
 	}
 	fr.TargetSelected = i
+}
+
+func (a *Attack) adaptSpeed() {
+	time.Sleep(time.Duration(CharacterDeltaTime/a.Speed) * time.Millisecond)
 }

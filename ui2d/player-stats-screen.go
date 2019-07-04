@@ -15,12 +15,6 @@ func (ui *UI) DrawPlayerStats() {
 		w := 200
 
 		ui.renderer.Copy(ui.textureAtlas,
-			&ui.textureIndex[p.Weapon.Tile][0],
-			&sdl.Rect{X: int32(w), Y: int32(offsetH - 10), W: Res, H: Res})
-
-		w += Res + 10
-
-		ui.renderer.Copy(ui.textureAtlas,
 			&ui.textureIndex[p.CurrentPower.Tile][0],
 			&sdl.Rect{X: int32(w), Y: int32(offsetH - 10), W: Res, H: Res})
 	}

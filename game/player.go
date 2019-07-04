@@ -14,7 +14,6 @@ type Player struct {
 	QuestMenuOpen     bool
 	CharacterMenuOpen bool
 	MapMenuOpen       bool
-	Weapons           []*Weapon
 	Friend            *Friend
 	currentAttack     *Attack
 }
@@ -87,7 +86,7 @@ func (p *Player) Move(g *Game) {
 		p.Talk(g, posTo)
 		p.Take(g, posTo)
 	case Power:
-		// TODO
+		p.PowerUse(g)
 	default:
 	}
 }
@@ -304,32 +303,34 @@ func (p *Player) Fight(ring *FightingRing) {
 			}
 		}
 
-		// TODO : handle attack types and animations
-		if att.Type == AttackTypeMagick {
-			p.IsPowerUsing = true
-			for p.PowerPos = 0; p.PowerPos < CaseLen; p.PowerPos++ {
-				p.adaptSpeed()
-			}
-			p.IsPowerUsing = false
-		} else {
-			p.isAttacking = true
-			for p.AttackPos = 0; p.AttackPos < CaseLen; p.AttackPos++ {
-				p.adaptSpeed()
-			}
-			p.isAttacking = false
+		p.isAttacking = true
+		for p.AttackPos = 0; p.AttackPos < CaseLen; p.AttackPos++ {
+			att.adaptSpeed()
 		}
+		p.isAttacking = false
 
-		for _, f := range to {
-			f.TakeDamages(att.Damages)
-		}
-		p.LooseEnergy(att.EnergyCost)
-		if att.Type == AttackTypeMagick {
-			p.Energy.RaiseXp(att.Damages)
-			p.Will.RaiseXp(1)
-			p.Intelligence.RaiseXp(1)
-		} else {
-			p.Strength.RaiseXp(1)
+		switch att.Type {
+		case AttackTypePhysical:
+			for _, f := range to {
+				f.TakeDamages(att.Damages)
+			}
+			p.Strength.RaiseXp(2)
 			p.Dexterity.RaiseXp(1)
+		case AttackTypeMagick:
+			switch att.MagickType {
+			case PowerHealing:
+				p.Health.Add(att.Damages)
+			case PowerInvocation:
+				// TODO
+			default:
+				for _, f := range to {
+					f.TakeDamages(att.Damages)
+				}
+			}
+			p.LooseEnergy(att.EnergyCost)
+			p.Energy.RaiseXp(att.Damages)
+			p.Will.RaiseXp(2)
+			p.Intelligence.RaiseXp(1)
 		}
 	}
 }

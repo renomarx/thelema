@@ -10,7 +10,6 @@ type MonsterType struct {
 	Luck        int
 	VisionRange int
 	Probability int
-	Weapon      *Weapon
 }
 
 func Bestiary() []*MonsterType {
@@ -33,25 +32,5 @@ func BestiaryUnderworld() []*MonsterType {
 		&MonsterType{Tile: Bat, Name: "Bat", Health: 50, Energy: 50, Stats: 10, Speed: 10, Luck: 10, VisionRange: 10, Probability: 80},
 		&MonsterType{Tile: Scorpion, Name: "Scorpion", Health: 100, Energy: 50, Stats: 5, Speed: 5, Luck: 10, VisionRange: 5, Probability: 50},
 		&MonsterType{Tile: Bear, Name: "Bear", Health: 500, Energy: 200, Stats: 40, Speed: 7, Luck: 20, VisionRange: 7, Probability: 20},
-	}
-}
-
-func Creatures() []*MonsterType {
-	return []*MonsterType{
-		&MonsterType{Name: "orc_thief", Health: 400, Energy: 100, Stats: 60, Speed: 10, Luck: 20, VisionRange: 12, Probability: 100,
-			Weapon: &Weapon{Tile: Dagger, Name: "Dague", Typ: WeaponTypeDagger, Damages: 7, Speed: 20}},
-		&MonsterType{Name: "orc_guard", Health: 800, Energy: 100, Stats: 80, Speed: 10, Luck: 20, VisionRange: 12, Probability: 20,
-			Weapon: &Weapon{Tile: Spear, Name: "Lance", Typ: WeaponTypeSpear, Damages: 20, Speed: 12}},
-	}
-}
-
-func CreaturesUnderworld() []*MonsterType {
-	return []*MonsterType{
-		&MonsterType{Name: "skeleton_warrior", Health: 400, Energy: 100, Stats: 60, Speed: 10, Luck: 20, VisionRange: 12, Probability: 100,
-			Weapon: &Weapon{Tile: Spear, Name: "Lance", Typ: WeaponTypeSpear, Damages: 20, Speed: 12}},
-		&MonsterType{Name: "skeleton_sorcerer", Health: 200, Energy: 1000, Stats: 60, Speed: 10, Luck: 10, VisionRange: 15, Probability: 40,
-			Weapon: &Weapon{Tile: Dagger, Name: "Dague", Typ: WeaponTypeDagger, Damages: 7, Speed: 20}},
-		&MonsterType{Name: "skeleton_lord", Health: 1000, Energy: 200, Stats: 80, Speed: 10, Luck: 10, VisionRange: 12, Probability: 20,
-			Weapon: &Weapon{Tile: Spear, Name: "Lance", Typ: WeaponTypeSpear, Damages: 20, Speed: 12}},
 	}
 }
