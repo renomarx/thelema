@@ -1,7 +1,6 @@
 package game
 
 import "math/rand"
-import "fmt"
 
 type Player struct {
 	Character
@@ -259,6 +258,11 @@ func (p *Player) Recruit(pnj *Pnj, g *Game) {
 	p.Friend = f
 }
 
+func (p *Player) TakeDamages(damage int) {
+	p.Character.TakeDamages(damage)
+	p.Health.RaiseXp(damage)
+}
+
 func (p *Player) MeetMonsters(g *Game) {
 	// TODO : handle monsters types by level case type
 	l := g.Level
@@ -303,7 +307,6 @@ func (p *Player) Fight(ring *FightingRing) {
 				idx++
 			}
 		}
-		fmt.Println(to)
 
 		p.isAttacking = true
 		for p.AttackPos = 0; p.AttackPos < CaseLen; p.AttackPos++ {

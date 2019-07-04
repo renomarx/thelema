@@ -246,7 +246,6 @@ func (c *Character) TakeDamages(damage int) {
 	}
 	c.damagesTaken = 0
 	c.Health.Current -= damage
-	c.Health.RaiseXp(damage)
 	if c.Health.Current <= 0 {
 		c.isDead = true
 		return
