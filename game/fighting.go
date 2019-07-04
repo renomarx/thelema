@@ -196,16 +196,15 @@ func (ring *FightingRing) prepareRoundFighter(f FighterInterface, speed int) {
 func (fr *FightingRing) LoadPossibleAttacks(p *Player) {
 	att := &Attack{
 		Speed:   p.Dexterity.Current,
-		Damages: p.CalculateAttackScore(),
+		Damages: 10,
 		Name:    "Sword attack",
 		Type:    AttackTypePhysical,
 	}
 	att.Range = 1
 	fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, att)
 	for _, pow := range p.Powers {
-		// TODO : switch by power type
 		att := &Attack{
-			Damages:    p.CalculatePowerAttackScore(),
+			Damages:    pow.Strength,
 			Name:       pow.Name,
 			EnergyCost: pow.Energy,
 			Speed:      pow.Speed,

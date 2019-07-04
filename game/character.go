@@ -178,11 +178,11 @@ func (c *Character) PowerUse(g *Game) {
 			// TODO
 		case PowerStorm:
 			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerStorm}})
-			g.MakeRangeStorm(c.Pos, c.CalculatePowerAttackScore(), c.LookAt, c.CurrentPower.Lifetime, c.CurrentPower.Range)
+			g.MakeRangeStorm(c.Pos, c.CalculatePowerAttackScore(), c.LookAt, 1, 10)
 			c.LooseEnergy(c.CurrentPower.Energy)
 		case PowerFlames:
 			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerFlames}})
-			g.MakeFlames(c.Pos, c.CalculatePowerAttackScore(), c.CurrentPower.Lifetime, c.CurrentPower.Range)
+			g.MakeFlames(c.Pos, c.CalculatePowerAttackScore(), 3, 5)
 			c.LooseEnergy(c.CurrentPower.Energy)
 		case PowerHealing:
 			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})

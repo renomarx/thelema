@@ -17,7 +17,6 @@ type PlayerPower struct {
 	Strength    int
 	Speed       int
 	Energy      int
-	Lifetime    int
 	Range       int
 	Description string
 	Name        string
@@ -41,19 +40,19 @@ func (p *Player) newPowerRaw(powername string) {
 	if !exists {
 		switch powername {
 		case PowerEnergyBall:
-			p.Powers[string(PowerEnergyBall)] = &PlayerPower{Type: PowerEnergyBall, Speed: 10, Energy: 10, Tile: Energyball, Range: 1,
+			p.Powers[string(PowerEnergyBall)] = &PlayerPower{Type: PowerEnergyBall, Speed: 10, Strength: 20, Energy: 10, Tile: Energyball, Range: 1,
 				Description: "Boule d'énergie. Explose quand recontre un obstacle ou un ennemi.", Name: "Energy ball"}
 		case PowerInvocation:
-			p.Powers[string(PowerInvocation)] = &PlayerPower{Type: PowerInvocation, Speed: 5, Energy: 50, Lifetime: 15, Tile: Fox,
+			p.Powers[string(PowerInvocation)] = &PlayerPower{Type: PowerInvocation, Speed: 5, Energy: 50, Tile: Fox,
 				Description: "Invoque un familier qui attaque vos ennemis et attire leur attention.", Name: "Invocation"}
 		case PowerStorm:
-			p.Powers[string(PowerStorm)] = &PlayerPower{Type: PowerStorm, Speed: 15, Energy: 30, Lifetime: 3, Tile: Storm, Range: 1,
+			p.Powers[string(PowerStorm)] = &PlayerPower{Type: PowerStorm, Speed: 15, Energy: 30, Strength: 30, Tile: Storm, Range: 1,
 				Description: "Crée un éclair devant vous qui blesse vos ennemis durant un court laps de temps.", Name: "Storm"}
 		case PowerFlames:
-			p.Powers[string(PowerFlames)] = &PlayerPower{Type: PowerFlames, Speed: 3, Energy: 100, Lifetime: 4, Tile: Flames, Range: 5,
+			p.Powers[string(PowerFlames)] = &PlayerPower{Type: PowerFlames, Speed: 3, Energy: 100, Strength: 60, Tile: Flames, Range: 5,
 				Description: "Crée un incendie tout autour de vous qui blesse vos ennemis durant un court laps de temps.", Name: "Flames"}
 		case PowerHealing:
-			p.Powers[string(PowerHealing)] = &PlayerPower{Type: PowerHealing, Speed: 4, Energy: 20, Tile: Healing,
+			p.Powers[string(PowerHealing)] = &PlayerPower{Type: PowerHealing, Speed: 4, Energy: 20, Strength: 20, Tile: Healing,
 				Description: "Régénère votre santé.", Name: "Healing"}
 		}
 	}

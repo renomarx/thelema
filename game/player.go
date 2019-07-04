@@ -1,6 +1,7 @@
 package game
 
 import "math/rand"
+import "fmt"
 
 type Player struct {
 	Character
@@ -294,7 +295,7 @@ func (p *Player) Fight(ring *FightingRing) {
 	case "attack":
 		att := p.currentAttack
 		var to []FighterInterface
-		idx := ring.TargetSelected
+		idx := 0
 		for i := ring.TargetSelected; idx < att.Range && i < len(ring.Enemies); i++ {
 			f := ring.Enemies[i]
 			if !f.IsDead() {
@@ -302,6 +303,7 @@ func (p *Player) Fight(ring *FightingRing) {
 				idx++
 			}
 		}
+		fmt.Println(to)
 
 		p.isAttacking = true
 		for p.AttackPos = 0; p.AttackPos < CaseLen; p.AttackPos++ {
@@ -312,19 +314,19 @@ func (p *Player) Fight(ring *FightingRing) {
 		switch att.Type {
 		case AttackTypePhysical:
 			for _, f := range to {
-				f.TakeDamages(att.Damages)
+				f.TakeDamages(att.Damages * p.CalculateAttackScore() / 10)
 			}
 			p.Strength.RaiseXp(2)
 			p.Dexterity.RaiseXp(1)
 		case AttackTypeMagick:
 			switch att.MagickType {
 			case PowerHealing:
-				p.Health.Add(att.Damages)
+				p.Health.Add(att.Damages * p.CalculatePowerAttackScore() / 10)
 			case PowerInvocation:
 				// TODO
 			default:
 				for _, f := range to {
-					f.TakeDamages(att.Damages)
+					f.TakeDamages(att.Damages * p.CalculatePowerAttackScore() / 10)
 				}
 			}
 			p.LooseEnergy(att.EnergyCost)
