@@ -91,13 +91,9 @@ func (ui *UI) drawFightingEnemies() {
 }
 
 func (ui *UI) drawFightingScreen() {
-	for x := 0; x < ui.WindowWidth/Res; x++ {
-		for y := 0; y <= ui.WindowHeight/Res; y++ {
-			ui.renderer.Copy(ui.textureAtlas,
-				&ui.textureIndex['ß'][0],
-				&sdl.Rect{X: int32(x * Res), Y: int32(y * Res), W: Res, H: Res})
-		}
-	}
+	ui.renderer.Copy(ui.backgroundTextures["outdoor"],
+		&sdl.Rect{X: 0, Y: 0, W: 1280, H: 832},
+		&sdl.Rect{X: 0, Y: 0, W: int32(ui.WindowWidth), H: int32(ui.WindowHeight)})
 }
 
 func (ui *UI) drawFightingMenu() {

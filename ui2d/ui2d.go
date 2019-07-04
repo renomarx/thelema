@@ -21,22 +21,23 @@ type Camera struct {
 }
 
 type UI struct {
-	WindowWidth    int
-	WindowHeight   int
-	window         *sdl.Window
-	renderer       *sdl.Renderer
-	textureAtlas   *sdl.Texture
-	textureIndex   map[game.Tile][]sdl.Rect
-	Cam            Camera
-	Game           *game.Game
-	playerTextures map[string]*sdl.Texture
-	pnjTextures    map[string]*sdl.Texture
-	Fonts          map[int]*ttf.Font
-	Texts          map[int]*TextCache
-	Keymap         map[string]sdl.Keycode
-	LastKeyDown    sdl.Keycode
-	Mp             *MusicPlayer
-	Event          *UIEvent
+	WindowWidth        int
+	WindowHeight       int
+	window             *sdl.Window
+	renderer           *sdl.Renderer
+	textureAtlas       *sdl.Texture
+	textureIndex       map[game.Tile][]sdl.Rect
+	Cam                Camera
+	Game               *game.Game
+	playerTextures     map[string]*sdl.Texture
+	pnjTextures        map[string]*sdl.Texture
+	backgroundTextures map[string]*sdl.Texture
+	Fonts              map[int]*ttf.Font
+	Texts              map[int]*TextCache
+	Keymap             map[string]sdl.Keycode
+	LastKeyDown        sdl.Keycode
+	Mp                 *MusicPlayer
+	Event              *UIEvent
 }
 
 func init() {
@@ -109,6 +110,9 @@ func NewUI(g *game.Game) *UI {
 	ui.pnjTextures["skeleton_warrior"] = ui.imgFileToTexture("ui2d/assets/pnjs/enemy/skeleton_warrior.png")
 	ui.pnjTextures["skeleton_sorcerer"] = ui.imgFileToTexture("ui2d/assets/pnjs/enemy/skeleton_sorcerer.png")
 	ui.pnjTextures["skeleton_lord"] = ui.imgFileToTexture("ui2d/assets/pnjs/enemy/skeleton_lord.png")
+
+	ui.backgroundTextures = make(map[string]*sdl.Texture)
+	ui.backgroundTextures["outdoor"] = ui.imgFileToTexture("ui2d/assets/backgrounds/battle-background-sunny-hillsx4.png")
 
 	if err := ttf.Init(); err != nil {
 		panic(err)

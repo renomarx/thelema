@@ -7,6 +7,9 @@ http://opengameart.org/content/dungeon-crawl-32x32-tiles
 
 Pnjs : http://gaurav.munjal.us/Universal-LPC-Spritesheet-Character-Generator/#
 
+Battle backgrounds:
+- ansimuz : made by ansimuz.com
+
 
 MUSICS:
 Alexhander Ehlers
