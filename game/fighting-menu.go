@@ -30,10 +30,10 @@ func (g *Game) HandleInputFightingMenu() {
 	sidx := menu.GetSelectedIndex()
 	if sidx < 0 {
 		switch input.Typ {
-		case Up:
+		case Left:
 			g.DispatchEventMenu(ActionMenuSelect)
 			menu.ChoiceUp()
-		case Down:
+		case Right:
 			g.DispatchEventMenu(ActionMenuSelect)
 			menu.ChoiceDown()
 		case Action:

@@ -99,7 +99,12 @@ func (ui *UI) drawFightingScreen() {
 func (ui *UI) drawFightingMenu() {
 	menu := ui.Game.FightingMenu
 	if menu != nil && menu.IsOpen {
-		var offsetH int32 = 0
+		ui.renderer.Copy(ui.uiTextures["downbox"],
+			&sdl.Rect{X: 0, Y: 0, W: 320, H: 64},
+			&sdl.Rect{X: 0, Y: int32(3 * ui.WindowHeight / 4), W: int32(ui.WindowWidth), H: int32(ui.WindowHeight / 4)})
+
+		var offsetH int32 = int32((3 * ui.WindowHeight / 4) + 15)
+		var offsetW int32 = 40
 		for _, choice := range menu.Choices {
 			tex := ui.GetTexture(choice.Cmd, TextSizeXL, ColorActive)
 			if choice.Highlighted {
@@ -110,8 +115,8 @@ func (ui *UI) drawFightingMenu() {
 				tex.SetColorMod(255, 255, 255)
 			}
 			_, _, w, h, _ := tex.Query()
-			ui.renderer.Copy(tex, nil, &sdl.Rect{10, offsetH, w, h})
-			offsetH += h
+			ui.renderer.Copy(tex, nil, &sdl.Rect{offsetW, offsetH, w, h})
+			offsetW += w + 20
 		}
 	}
 }
@@ -122,6 +127,6 @@ func (ui *UI) drawFightingAttacks() {
 		selectedAttack := fr.PossibleAttacks.List[fr.PossibleAttacks.Selected]
 		tex := ui.GetTexture(fmt.Sprintf(selectedAttack.Name+" (%d)", selectedAttack.Damages), TextSizeXL, ColorActive)
 		_, _, w, h, _ := tex.Query()
-		ui.renderer.Copy(tex, nil, &sdl.Rect{10, 500, w, h})
+		ui.renderer.Copy(tex, nil, &sdl.Rect{40, int32((3 * ui.WindowHeight / 4) + 50), w, h})
 	}
 }

@@ -32,6 +32,7 @@ type UI struct {
 	playerTextures     map[string]*sdl.Texture
 	pnjTextures        map[string]*sdl.Texture
 	backgroundTextures map[string]*sdl.Texture
+	uiTextures         map[string]*sdl.Texture
 	Fonts              map[int]*ttf.Font
 	Texts              map[int]*TextCache
 	Keymap             map[string]sdl.Keycode
@@ -113,6 +114,9 @@ func NewUI(g *game.Game) *UI {
 
 	ui.backgroundTextures = make(map[string]*sdl.Texture)
 	ui.backgroundTextures["outdoor"] = ui.imgFileToTexture("ui2d/assets/backgrounds/battle-background-sunny-hillsx4.png")
+
+	ui.uiTextures = make(map[string]*sdl.Texture)
+	ui.uiTextures["downbox"] = ui.imgFileToTexture("ui2d/assets/ui/HUD.png")
 
 	if err := ttf.Init(); err != nil {
 		panic(err)
