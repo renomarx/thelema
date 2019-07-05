@@ -12,16 +12,18 @@ import (
 
 func (ui *UI) DrawFightingRing() {
 	fr := ui.Game.FightingRing
+	offsetX := ui.WindowWidth / 3
+	offsetY := ui.WindowHeight / 3
 	if fr != nil && fr.IsOpen {
 		ui.drawFightingScreen()
 		ui.drawFightingMenu()
 		ui.drawFightingAttacks()
-		ui.drawFightingPlayer()
-		ui.drawFightingEnemies()
+		ui.drawFightingPlayer(offsetX, offsetY)
+		ui.drawFightingEnemies(offsetX*2, offsetY)
 	}
 }
 
-func (ui *UI) drawFightingPlayer() {
+func (ui *UI) drawFightingPlayer(offsetX, offsetY int) {
 	fr := ui.Game.FightingRing
 	p := ui.Game.Level.Player
 	texture := ui.playerTextures[p.Name]
@@ -32,7 +34,7 @@ func (ui *UI) drawFightingPlayer() {
 		att := fr.PossibleAttacks.List[fr.PossibleAttacks.Selected]
 		switch att.Type {
 		case game.AttackTypePhysical:
-			xb = 200 * p.AttackPos / 32
+			xb = (ui.WindowHeight / 3) * p.AttackPos / 32
 			tileY = tileY + 4*64
 			tileX = 64 * (6 * p.AttackPos / 32)
 		case game.AttackTypeMagick:
@@ -49,23 +51,21 @@ func (ui *UI) drawFightingPlayer() {
 	}
 	ui.renderer.Copy(texture,
 		&sdl.Rect{X: int32(tileX), Y: int32(tileY), W: 64, H: 64},
-		&sdl.Rect{X: 100 + int32(xb), Y: 100, W: 64, H: 64})
-	ui.drawHealthBar(100+int32(xb), 65, p.GetHealth())
-	ui.drawEnergyBar(100+int32(xb), 85, p.GetEnergy())
+		&sdl.Rect{X: int32(offsetX + xb), Y: int32(offsetY), W: 64, H: 64})
+	ui.drawHealthBar(int32(offsetX+xb), int32(offsetY-35), p.GetHealth())
+	ui.drawEnergyBar(int32(offsetX+xb), int32(offsetY-15), p.GetEnergy())
 }
 
-func (ui *UI) drawFightingEnemies() {
+func (ui *UI) drawFightingEnemies(offsetX, offsetY int) {
 	fr := ui.Game.FightingRing
 	if fr != nil && len(fr.Enemies) > 0 {
-		offsetX := int32(600)
-		offsetY := int32(100)
 		for i, e := range fr.Enemies {
 			if !e.IsDead() {
 				xb := 0
 				yb := 0
 				fieldLen := 4
 				if e.IsAttacking() {
-					xb = 200
+					xb = ui.WindowHeight / 3
 					yb = rand.Intn(fieldLen*2) - fieldLen
 				}
 				if e.IsHurt() > 0 {
@@ -76,15 +76,15 @@ func (ui *UI) drawFightingEnemies() {
 					if i >= fr.TargetSelected && i < fr.TargetSelected+att.Range {
 						ui.renderer.Copy(ui.textureAtlas,
 							&ui.textureIndex['ʆ'][0],
-							&sdl.Rect{X: offsetX, Y: offsetY, W: 32, H: 32})
+							&sdl.Rect{X: int32(offsetX), Y: int32(offsetY), W: 32, H: 32})
 					}
 				}
 				ui.renderer.Copy(ui.textureAtlas,
 					&ui.textureIndex[e.GetTile()][0],
-					&sdl.Rect{X: offsetX - int32(xb), Y: offsetY + int32(yb), W: 32, H: 32})
-				ui.drawHealthBar(offsetX-int32(xb), offsetY-15, e.GetHealth())
-				offsetX += int32(16)
-				offsetY += int32(50)
+					&sdl.Rect{X: int32(offsetX - xb), Y: int32(offsetY + yb), W: 32, H: 32})
+				ui.drawHealthBar(int32(offsetX-xb), int32(offsetY-15), e.GetHealth())
+				offsetX += 16
+				offsetY += 50
 			}
 		}
 	}
