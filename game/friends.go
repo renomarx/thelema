@@ -1,86 +1,30 @@
 package game
 
-import "time"
-import "math/rand"
-
 type Friend struct {
 	Character
-	target *Character
 }
 
 func (level *Level) MakeFriend(pnj *Pnj) *Friend {
 	f := &Friend{}
 	f.Character = pnj.Character
 	f.Speed.Init(f.Speed.Current * 2)
-	f.VisionRange = 7
 	level.Map[pnj.Y][pnj.X].Pnj = nil
-	level.Map[pnj.Y][pnj.X].Friend = f
 	return f
 }
 
-func (m *Friend) Update(g *Game) {
-	if m.IsDead() {
-		return
-	}
-	level := g.Level
-	t := time.Now()
-	deltaD := t.Sub(m.LastActionTime)
-	delta := 0.001 * float64(deltaD.Nanoseconds())
-	m.ActionPoints += float64(m.Speed.Current) * delta
-	monsterPos := m.getTargetPos(level)
-	positions := level.astar(m.Pos, monsterPos, m)
-	if len(positions) > 1 && m.ActionPoints >= 100000 { // 0.1 second
-		if m.canMove(positions[1], level) {
-			m.Move(positions[1], g)
-		}
-		m.ActionPoints = 0.0
-	}
-	m.LastActionTime = time.Now()
+func (m *Friend) ChooseAction(ring *FightingRing) int {
+	// TODO : friend IA
+	return m.Speed.Current
 }
 
-func (m *Friend) getTargetPos(l *Level) Pos {
-	return l.Player.Pos
-}
-
-func (m *Friend) canMove(to Pos, level *Level) bool {
-	if to.X == level.Player.X && to.Y == level.Player.Y {
-		return false
+func (m *Friend) Fight(ring *FightingRing) {
+	m.isAttacking = true
+	for m.AttackPos = 0; m.AttackPos < CaseLen; m.AttackPos++ {
+		m.adaptSpeed()
 	}
-	return true
-}
-
-func (m *Friend) Move(to Pos, g *Game) {
-	lastPos := Pos{X: m.Pos.X, Y: m.Pos.Y}
-	g.Level.Map[m.Y][m.X].Friend = nil
-	g.Level.Map[to.Y][to.X].Friend = m
-	m.moveFromTo(lastPos, to)
-}
-
-func (m *Friend) TakeDamage(g *Game, damage int) {
-	if m.Health.Current <= 0 {
-		m.Die(g)
+	m.isAttacking = false
+	e := ring.GetFirstEnemyNotDead()
+	if e != nil {
+		e.TakeDamages(m.CalculateAttackScore())
 	}
-	m.Health.Current -= damage
-	g.MakeExplosion(m.Pos, damage, 50)
-	m.ParalyzedTime = rand.Intn(damage) * 10
-}
-
-func (m *Friend) Die(g *Game) {
-	m.isDead = true
-	g.Level.Map[m.Y][m.X].Friend = nil
-	g.Level.Player.Friend = nil
-}
-
-func (m *Friend) CanSee(level *Level, pos Pos) bool {
-	if isThereABlockingObject(level, pos) {
-		return false
-	}
-	if isThereAPnj(level, pos) {
-		return false
-	}
-	if isThereAFriend(level, pos) {
-		return false
-	}
-
-	return isInsideMap(level, pos)
 }

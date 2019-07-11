@@ -4,16 +4,9 @@ func isThereAPnj(level *Level, pos Pos) bool {
 	return level.GetPnj(pos.X, pos.Y) != nil
 }
 
-func isThereAFriend(level *Level, pos Pos) bool {
-	return level.GetFriend(pos.X, pos.Y) != nil
-}
-
 func isThereAPlayerCharacter(level *Level, pos Pos) bool {
 	p := level.Player
 	if p != nil && p.X == pos.X && p.Y == pos.Y {
-		return true
-	}
-	if level.GetFriend(pos.X, pos.Y) != nil {
 		return true
 	}
 	return false

@@ -26,7 +26,6 @@ type Case struct {
 	Effect     *Effect
 	Projectile *Projectile
 	Pnj        *Pnj
-	Friend     *Friend
 }
 
 func (l *Level) GetObject(x, y int) *Object {
@@ -60,15 +59,6 @@ func (l *Level) GetPnj(x, y int) *Pnj {
 	if y >= 0 && y < len(l.Map) {
 		if x >= 0 && x < len(l.Map[y]) {
 			return l.Map[y][x].Pnj
-		}
-	}
-	return nil
-}
-
-func (l *Level) GetFriend(x, y int) *Friend {
-	if y >= 0 && y < len(l.Map) {
-		if x >= 0 && x < len(l.Map[y]) {
-			return l.Map[y][x].Friend
 		}
 	}
 	return nil
@@ -144,7 +134,6 @@ func (g *Game) handleMap() {
 				if x >= 0 && x < len(l.Map[y]) {
 					c := l.Map[y][x]
 					g.handlePnj(c.Pnj)
-					g.handleFriend(c.Friend)
 					g.handleProjectile(c.Projectile)
 				}
 			}
@@ -156,16 +145,6 @@ func (g *Game) handlePnj(m *Pnj) {
 	if m != nil && !m.IsPlaying {
 		m.IsPlaying = true
 		go func(m *Pnj) {
-			m.Update(g)
-			m.IsPlaying = false
-		}(m)
-	}
-}
-
-func (g *Game) handleFriend(m *Friend) {
-	if m != nil && !m.IsPlaying {
-		m.IsPlaying = true
-		go func(m *Friend) {
 			m.Update(g)
 			m.IsPlaying = false
 		}(m)
@@ -188,16 +167,8 @@ func (level *Level) OpenPortal(g *Game, pos Pos) {
 		p := level.Player
 		p.X = port.PosTo.X
 		p.Y = port.PosTo.Y
-		levelFrom := *g.Level
 		g.Level = g.Levels[port.LevelTo]
 		g.Level.Player = p
-		f := p.Friend
-		if f != nil {
-			oldP := f.Pos
-			f.Pos = port.PosTo
-			g.Level.Map[port.PosTo.Y][port.PosTo.X].Friend = f
-			levelFrom.Map[oldP.Y][oldP.X].Friend = nil
-		}
 
 		g.GetEventManager().Dispatch(&Event{
 			Action:  ActionChangeLevel,

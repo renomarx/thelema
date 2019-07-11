@@ -95,25 +95,57 @@ func (ui *UI) drawFightingFriends(offsetX, offsetY int) {
 	fr := ui.Game.FightingRing
 	if fr != nil && len(fr.Friends) > 0 {
 		for _, e := range fr.Friends {
-			if !e.IsDead() {
-				xb := 0
-				yb := 0
-				fieldLen := 4
-				if e.IsAttacking() {
-					xb = ui.WindowHeight / 3
-					yb = rand.Intn(fieldLen*2) - fieldLen
-				}
-				if e.IsHurt() > 0 {
-					xb = -16
-				}
-				ui.renderer.Copy(ui.textureAtlas,
-					&ui.textureIndex[e.GetTile()][0],
-					&sdl.Rect{X: int32(offsetX + xb), Y: int32(offsetY + yb), W: 32, H: 32})
-				ui.drawHealthBar(int32(offsetX+xb), int32(offsetY-15), e.GetHealth())
-				offsetX += 16
-				offsetY += 50
+			f, isFriend := e.(*game.Friend)
+			if isFriend {
+				ui.drawFightingFriend(f, offsetX, offsetY)
+			} else {
+				ui.drawFightingInvocation(e, offsetX, offsetY)
 			}
+			offsetX += 16
+			offsetY += 50
 		}
+	}
+}
+
+func (ui *UI) drawFightingFriend(f *game.Friend, offsetX, offsetY int) {
+	texture := ui.pnjTextures[f.Name]
+	xb := 0
+	tileY := 11 * 64
+	tileX := 64 * ((-1*f.Xb + Res) / (Res / 8))
+	if f.IsAttacking() {
+		xb = (ui.WindowHeight / 3) * f.AttackPos / 32
+		tileY = tileY + 4*64
+		tileX = 64 * (6 * f.AttackPos / 32)
+	}
+	if f.IsDead() {
+		tileY = 20 * 64
+		tileX = 64 * 5
+	}
+	if f.IsHurt() > 0 {
+		xb = -16
+	}
+	ui.renderer.Copy(texture,
+		&sdl.Rect{X: int32(tileX), Y: int32(tileY), W: 64, H: 64},
+		&sdl.Rect{X: int32(offsetX + xb), Y: int32(offsetY), W: 64, H: 64})
+	ui.drawHealthBar(int32(offsetX+xb), int32(offsetY-15), f.GetHealth())
+}
+
+func (ui *UI) drawFightingInvocation(e game.FighterInterface, offsetX, offsetY int) {
+	if !e.IsDead() {
+		xb := 0
+		yb := 0
+		fieldLen := 4
+		if e.IsAttacking() {
+			xb = ui.WindowHeight / 3
+			yb = rand.Intn(fieldLen*2) - fieldLen
+		}
+		if e.IsHurt() > 0 {
+			xb = -16
+		}
+		ui.renderer.Copy(ui.textureAtlas,
+			&ui.textureIndex[e.GetTile()][0],
+			&sdl.Rect{X: int32(offsetX + xb), Y: int32(offsetY + yb), W: 32, H: 32})
+		ui.drawHealthBar(int32(offsetX+xb), int32(offsetY-15), e.GetHealth())
 	}
 }
 

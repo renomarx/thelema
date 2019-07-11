@@ -328,7 +328,7 @@ func (p *Player) Fight(ring *FightingRing) {
 				p.Health.Add(att.Damages * p.CalculatePowerAttackScore() / 10)
 			case PowerInvocation:
 				monster := NewInvokedSpirit()
-				ring.Friends = append(ring.Friends, monster)
+				ring.AddFriend(monster)
 				p.Energy.RaiseXp(att.EnergyCost)
 				p.Will.RaiseXp(p.Will.Initial / 10)
 			default:

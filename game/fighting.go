@@ -76,7 +76,10 @@ func (g *Game) FightMonsters(bestiary []*MonsterType) {
 		}
 		mo := NewMonster(mt)
 		g.FightingRing.AddEnemy(mo)
-		g.FightingRing.Player = p
+	}
+	g.FightingRing.Player = p
+	if p.Friend != nil && !p.Friend.IsDead() {
+		g.FightingRing.AddFriend(p.Friend)
 	}
 	g.FightingRing.Start()
 	for g.FightingRing.IsOpen {
@@ -100,6 +103,10 @@ func NewFightingRing() *FightingRing {
 
 func (ring *FightingRing) AddEnemy(e FighterInterface) {
 	ring.Enemies = append(ring.Enemies, e)
+}
+
+func (ring *FightingRing) AddFriend(f FighterInterface) {
+	ring.Friends = append(ring.Friends, f)
 }
 
 func (ring *FightingRing) Start() {
@@ -176,7 +183,13 @@ func (fr *FightingRing) clearRound() {
 			enemies = append(enemies, e)
 		}
 	}
-	fr.Enemies = enemies
+	var friends []FighterInterface
+	for _, f := range fr.Friends {
+		if !f.IsDead() {
+			friends = append(friends, f)
+		}
+	}
+	fr.Friends = friends
 	fr.TargetSelected = 0
 }
 

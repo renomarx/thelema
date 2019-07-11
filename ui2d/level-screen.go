@@ -45,10 +45,6 @@ func (ui *UI) DrawLevel() {
 				if pnj != nil {
 					ui.drawPnj(pnj)
 				}
-				friend := c.Friend
-				if friend != nil {
-					ui.drawFriend(friend)
-				}
 			}
 		}
 
