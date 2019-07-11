@@ -188,6 +188,7 @@ func (pnj *Pnj) Move(to Pos, g *Game) {
 	lastPos := Pos{X: pnj.Pos.X, Y: pnj.Pos.Y}
 	level.Map[pnj.Y][pnj.X].Pnj = nil
 	level.Map[to.Y][to.X].Pnj = pnj
+	pnj.Pos = to
 	pnj.moveFromTo(lastPos, to)
 }
 

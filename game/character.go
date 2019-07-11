@@ -70,7 +70,6 @@ type Character struct {
 	isAttacking          bool
 	AttackPos            int
 	PowerPos             int
-	ParalyzedTime        int
 	LastRegenerationTime time.Time
 	damagesTaken         int
 }
@@ -88,10 +87,6 @@ func (c *Character) GetEnergy() Characteristic {
 }
 
 func (c *Character) adaptSpeed() {
-	if c.ParalyzedTime > 0 {
-		time.Sleep(time.Duration(c.ParalyzedTime) * time.Millisecond)
-		c.ParalyzedTime = 0
-	}
 	time.Sleep(time.Duration(CharacterDeltaTime/c.Speed.Current) * time.Millisecond)
 }
 
