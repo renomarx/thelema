@@ -141,6 +141,12 @@ func (ring *FightingRing) PlayRound(g *Game) {
 	}
 	speed := ring.Player.ChooseAction(ring)
 	ring.prepareRoundFighter(ring.Player, speed)
+	for _, e := range ring.Friends {
+		if !e.IsDead() {
+			speed = e.ChooseAction(ring)
+			ring.prepareRoundFighter(e, speed)
+		}
+	}
 	for _, e := range ring.Enemies {
 		if !e.IsDead() {
 			speed = e.ChooseAction(ring)
@@ -247,6 +253,15 @@ func (fr *FightingRing) LastTarget() {
 		i = 0
 	}
 	fr.TargetSelected = i
+}
+
+func (fr *FightingRing) GetFirstEnemyNotDead() FighterInterface {
+	for _, e := range fr.Enemies {
+		if !e.IsDead() {
+			return e
+		}
+	}
+	return nil
 }
 
 func (a *Attack) adaptSpeed() {

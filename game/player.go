@@ -327,7 +327,20 @@ func (p *Player) Fight(ring *FightingRing) {
 			case PowerHealing:
 				p.Health.Add(att.Damages * p.CalculatePowerAttackScore() / 10)
 			case PowerInvocation:
-				// TODO
+				monster := &Monster{}
+				monster.Rune = rune(Fox)
+				monster.Name = "Invoked Fox"
+				monster.Health.Init(200)
+				monster.Energy.Init(200)
+				monster.Strength.Init(30)
+				monster.Dexterity.Init(30)
+				monster.Will.Init(20)
+				monster.Intelligence.Init(20)
+				monster.Luck.Init(20)
+				monster.Beauty.Init(0)
+				monster.Speed.Init(10)
+				monster.IsFriend = true
+				ring.Friends = append(ring.Friends, monster)
 			default:
 				damages := att.Damages * p.CalculatePowerAttackScore() / 10
 				for _, f := range to {

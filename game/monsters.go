@@ -4,6 +4,7 @@ import "math/rand"
 
 type Monster struct {
 	Character
+	IsFriend bool
 }
 
 func NewMonster(mt *MonsterType) *Monster {
@@ -24,7 +25,7 @@ func NewMonster(mt *MonsterType) *Monster {
 
 func (m *Monster) ChooseAction(ring *FightingRing) int {
 	// TODO : monster IA
-	return 10
+	return m.Speed.Current
 }
 
 func (m *Monster) Fight(ring *FightingRing) {
@@ -33,5 +34,12 @@ func (m *Monster) Fight(ring *FightingRing) {
 		m.adaptSpeed()
 	}
 	m.isAttacking = false
-	ring.Player.TakeDamages(m.CalculateAttackScore())
+	if m.IsFriend {
+		e := ring.GetFirstEnemyNotDead()
+		if e != nil {
+			e.TakeDamages(m.CalculateAttackScore())
+		}
+	} else {
+		ring.Player.TakeDamages(m.CalculateAttackScore())
+	}
 }
