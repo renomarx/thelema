@@ -239,6 +239,10 @@ func (fr *FightingRing) LastPossibleAttack() {
 	fr.PossibleAttacks.Selected = i
 }
 
+func (fr *FightingRing) GetSelectedAttack() *Attack {
+	return fr.PossibleAttacks.List[fr.PossibleAttacks.Selected]
+}
+
 func (fr *FightingRing) NextTarget() {
 	i := fr.TargetSelected + 1
 	if i >= len(fr.Enemies) {

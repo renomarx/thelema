@@ -19,7 +19,7 @@ func (ui *UI) DrawFightingRing() {
 		ui.drawFightingMenu()
 		ui.drawFightingAttacks()
 		ui.drawFightingPlayer(offsetX, offsetY)
-		ui.drawFightingFriends(offsetX+16, offsetY+50)
+		ui.drawFightingFriends(offsetX+32, offsetY+100)
 		ui.drawFightingEnemies(offsetX*2, offsetY)
 	}
 }
@@ -151,9 +151,19 @@ func (ui *UI) drawFightingMenu() {
 func (ui *UI) drawFightingAttacks() {
 	fr := ui.Game.FightingRing
 	if fr != nil && fr.AttacksMenuOpen {
-		selectedAttack := fr.PossibleAttacks.List[fr.PossibleAttacks.Selected]
-		tex := ui.GetTexture(fmt.Sprintf(selectedAttack.Name+" (%d)", selectedAttack.Damages), TextSizeXL, ColorActive)
+		offsetY := (3 * ui.WindowHeight / 4) + 50
+		selectedAttack := fr.GetSelectedAttack()
+		tex := ui.GetTexture(selectedAttack.Name, TextSizeXL, ColorWhite)
 		_, _, w, h, _ := tex.Query()
-		ui.renderer.Copy(tex, nil, &sdl.Rect{40, int32((3 * ui.WindowHeight / 4) + 50), w, h})
+		ui.renderer.Copy(tex, nil, &sdl.Rect{40, int32(offsetY), w, h})
+
+		offsetX := ui.WindowWidth / 2
+		tex = ui.GetTexture(fmt.Sprintf("Damages: %d", selectedAttack.Damages), TextSizeXL, ColorWhite)
+		_, _, w, h, _ = tex.Query()
+		ui.renderer.Copy(tex, nil, &sdl.Rect{int32(offsetX), int32(offsetY), w, h})
+		tex = ui.GetTexture(fmt.Sprintf("Energy cost: %d", selectedAttack.EnergyCost), TextSizeXL, ColorWhite)
+		_, _, w, h, _ = tex.Query()
+		ui.renderer.Copy(tex, nil, &sdl.Rect{int32(offsetX), int32(offsetY + 32), w, h})
+
 	}
 }

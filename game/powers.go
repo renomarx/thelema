@@ -43,8 +43,8 @@ func (p *Player) newPowerRaw(powername string) {
 			p.Powers[string(PowerEnergyBall)] = &PlayerPower{Type: PowerEnergyBall, Speed: 10, Strength: 20, Energy: 10, Tile: Energyball, Range: 1,
 				Description: "Boule d'énergie. Explose quand recontre un obstacle ou un ennemi.", Name: "Energy ball"}
 		case PowerInvocation:
-			p.Powers[string(PowerInvocation)] = &PlayerPower{Type: PowerInvocation, Speed: 5, Energy: 50, Tile: Fox,
-				Description: "Invoque un familier qui attaque vos ennemis et attire leur attention.", Name: "Invocation"}
+			p.Powers[string(PowerInvocation)] = &PlayerPower{Type: PowerInvocation, Speed: 5, Energy: 50, Tile: Spirit,
+				Description: "Invoque un esprit qui attaque vos ennemis et attire leur attention.", Name: "Invocation"}
 		case PowerStorm:
 			p.Powers[string(PowerStorm)] = &PlayerPower{Type: PowerStorm, Speed: 15, Energy: 30, Strength: 30, Tile: Storm, Range: 1,
 				Description: "Crée un éclair devant vous qui blesse vos ennemis durant un court laps de temps.", Name: "Storm"}

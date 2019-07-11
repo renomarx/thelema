@@ -101,8 +101,17 @@ func (g *Game) HandleInputFightingMenu() {
 					menu.ClearSelected()
 					adaptMenuSpeed()
 				case Action:
-					g.FightingRing.AttackTargetSelectionOpen = true
-					adaptMenuSpeed()
+					if g.FightingRing.GetSelectedAttack().Range == 0 {
+						g.FightingRing.SelectedPlayerAction = "attack"
+						g.FightingRing.AttacksMenuOpen = false
+						g.DispatchEventMenu(ActionMenuClose)
+						menu.ClearSelected()
+						g.CloseFightingMenu()
+						adaptMenuSpeed()
+					} else {
+						g.FightingRing.AttackTargetSelectionOpen = true
+						adaptMenuSpeed()
+					}
 				}
 
 			}
