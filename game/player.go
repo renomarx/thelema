@@ -316,10 +316,11 @@ func (p *Player) Fight(ring *FightingRing) {
 
 		switch att.Type {
 		case AttackTypePhysical:
+			damages := att.Damages * p.CalculateAttackScore() / 10
 			for _, f := range to {
-				f.TakeDamages(att.Damages * p.CalculateAttackScore() / 10)
+				f.TakeDamages(damages)
 			}
-			p.Strength.RaiseXp(2)
+			p.Strength.RaiseXp(damages * len(to) / 10)
 			p.Dexterity.RaiseXp(1)
 		case AttackTypeMagick:
 			switch att.MagickType {
@@ -328,13 +329,14 @@ func (p *Player) Fight(ring *FightingRing) {
 			case PowerInvocation:
 				// TODO
 			default:
+				damages := att.Damages * p.CalculatePowerAttackScore() / 10
 				for _, f := range to {
-					f.TakeDamages(att.Damages * p.CalculatePowerAttackScore() / 10)
+					f.TakeDamages(damages)
 				}
+				p.Energy.RaiseXp(damages)
+				p.Will.RaiseXp(damages * len(to) / 10)
 			}
 			p.LooseEnergy(att.EnergyCost)
-			p.Energy.RaiseXp(att.Damages)
-			p.Will.RaiseXp(2)
 			p.Intelligence.RaiseXp(1)
 		}
 	}

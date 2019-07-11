@@ -4,7 +4,7 @@ func (wg *WorldGenerator) generateOutdoor(levelName string) *Level {
 	level := NewLevel(LevelTypeOutdoor)
 	level.Name = levelName
 	level.InitMaps(WorldHeight, WorldWidth)
-	level.MonstersProbability = 10
+	level.MonstersProbability = 8
 
 	for y := 0; y < WorldHeight; y++ {
 		for x := 0; x < WorldWidth; x++ {
