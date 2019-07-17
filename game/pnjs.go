@@ -134,6 +134,9 @@ func (pnj *Pnj) StopTalking() {
 }
 
 func (pnj *Pnj) Update(g *Game) {
+	if pnj.isDead {
+		return
+	}
 	if pnj.IsTalking {
 		return
 	}
@@ -213,7 +216,9 @@ func (pnj *Pnj) ChangeLevel(from *Level, to *Level) {
 }
 
 func (pnj *Pnj) BecomeEnemy(g *Game) {
-	// TODO
-	// g.Level.Map[pnj.Y][pnj.X].Pnj = nil
-	// g.Level.MakeEnemy(pnj)
+	e := g.Level.MakeEnemy(pnj)
+	g.Fight([]FighterInterface{e})
+	if e.IsDead() {
+		pnj.isDead = true
+	}
 }

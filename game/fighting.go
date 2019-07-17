@@ -58,12 +58,7 @@ const FightingChoice FightingStage = "CHOICE"
 const FightingAttacks FightingStage = "ATTACKS"
 
 func (g *Game) FightMonsters(bestiary []*MonsterType) {
-	g.GetEventManager().Dispatch(&Event{
-		Action:  ActionFight,
-		Message: "You're being attacked!",
-	})
-	g.FightingRing = NewFightingRing()
-	p := g.Level.Player
+	var enemies []FighterInterface
 	nb := rand.Intn(2) + 1
 	for i := 0; i < nb; i++ {
 		m := rand.Intn(len(bestiary))
@@ -75,7 +70,20 @@ func (g *Game) FightMonsters(bestiary []*MonsterType) {
 			mt = bestiary[m]
 		}
 		mo := NewMonster(mt)
-		g.FightingRing.AddEnemy(mo)
+		enemies = append(enemies, mo)
+	}
+	g.Fight(enemies)
+}
+
+func (g *Game) Fight(enemies []FighterInterface) {
+	g.GetEventManager().Dispatch(&Event{
+		Action:  ActionFight,
+		Message: "You're being attacked!",
+	})
+	g.FightingRing = NewFightingRing()
+	p := g.Level.Player
+	for _, e := range enemies {
+		g.FightingRing.AddEnemy(e)
 	}
 	g.FightingRing.Player = p
 	if p.Friend != nil && !p.Friend.IsDead() {
@@ -163,10 +171,12 @@ func (ring *FightingRing) PlayRound(g *Game) {
 
 	ring.Stage = FightingAttacks
 	for _, rf := range ring.roundFighters {
-		rf.f.Fight(ring)
-		g.GetEventManager().Dispatch(&Event{
-			Action: ActionAttack,
-		})
+		if !rf.f.IsDead() {
+			rf.f.Fight(ring)
+			g.GetEventManager().Dispatch(&Event{
+				Action: ActionAttack,
+			})
+		}
 		if !ring.IsOpen {
 			return
 		}

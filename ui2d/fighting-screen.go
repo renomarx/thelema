@@ -61,33 +61,65 @@ func (ui *UI) drawFightingEnemies(offsetX, offsetY int) {
 	fr := ui.Game.FightingRing
 	if fr != nil && len(fr.Enemies) > 0 {
 		for i, e := range fr.Enemies {
-			if !e.IsDead() {
-				xb := 0
-				yb := 0
-				fieldLen := 4
-				if e.IsAttacking() {
-					xb = ui.WindowHeight / 3
-					yb = rand.Intn(fieldLen*2) - fieldLen
+			if fr.AttackTargetSelectionOpen {
+				att := fr.PossibleAttacks.List[fr.PossibleAttacks.Selected]
+				if i >= fr.TargetSelected && i < fr.TargetSelected+att.Range {
+					ui.renderer.Copy(ui.textureAtlas,
+						&ui.textureIndex['ʆ'][0],
+						&sdl.Rect{X: int32(offsetX), Y: int32(offsetY), W: 32, H: 32})
 				}
-				if e.IsHurt() > 0 {
-					xb = -16
-				}
-				if fr.AttackTargetSelectionOpen {
-					att := fr.PossibleAttacks.List[fr.PossibleAttacks.Selected]
-					if i >= fr.TargetSelected && i < fr.TargetSelected+att.Range {
-						ui.renderer.Copy(ui.textureAtlas,
-							&ui.textureIndex['ʆ'][0],
-							&sdl.Rect{X: int32(offsetX), Y: int32(offsetY), W: 32, H: 32})
-					}
-				}
-				ui.renderer.Copy(ui.textureAtlas,
-					&ui.textureIndex[e.GetTile()][0],
-					&sdl.Rect{X: int32(offsetX - xb), Y: int32(offsetY + yb), W: 32, H: 32})
-				ui.drawHealthBar(int32(offsetX-xb), int32(offsetY-15), e.GetHealth())
-				offsetX += 16
-				offsetY += 50
 			}
+			enemy, isPnj := e.(*game.Enemy)
+			if isPnj {
+				ui.drawFightingEnemy(enemy, offsetX, offsetY)
+			} else {
+				ui.drawFightingMonster(e, offsetX, offsetY)
+			}
+			offsetX += 16
+			offsetY += 50
 		}
+	}
+}
+
+func (ui *UI) drawFightingEnemy(e *game.Enemy, offsetX, offsetY int) {
+	texture := ui.pnjTextures[e.Name]
+	xb := 0
+	tileY := 9 * 64
+	tileX := 64 * ((-1*e.Xb + Res) / (Res / 8))
+	if e.IsAttacking() {
+		xb = (ui.WindowHeight / 3) * e.AttackPos / 32
+		tileY = tileY + 4*64
+		tileX = 64 * (6 * e.AttackPos / 32)
+	}
+	if e.IsDead() {
+		tileY = 20 * 64
+		tileX = 64 * 5
+	}
+	if e.IsHurt() > 0 {
+		xb = -16
+	}
+	ui.renderer.Copy(texture,
+		&sdl.Rect{X: int32(tileX), Y: int32(tileY), W: 64, H: 64},
+		&sdl.Rect{X: int32(offsetX - xb), Y: int32(offsetY), W: 64, H: 64})
+	ui.drawHealthBar(int32(offsetX-xb), int32(offsetY-15), e.GetHealth())
+}
+
+func (ui *UI) drawFightingMonster(e game.FighterInterface, offsetX, offsetY int) {
+	if !e.IsDead() {
+		xb := 0
+		yb := 0
+		fieldLen := 4
+		if e.IsAttacking() {
+			xb = ui.WindowHeight / 3
+			yb = rand.Intn(fieldLen*2) - fieldLen
+		}
+		if e.IsHurt() > 0 {
+			xb = -16
+		}
+		ui.renderer.Copy(ui.textureAtlas,
+			&ui.textureIndex[e.GetTile()][0],
+			&sdl.Rect{X: int32(offsetX - xb), Y: int32(offsetY + yb), W: 32, H: 32})
+		ui.drawHealthBar(int32(offsetX-xb), int32(offsetY-15), e.GetHealth())
 	}
 }
 

@@ -136,7 +136,7 @@ func (p *Player) openPortal(g *Game, pos Pos) {
 func (p *Player) Talk(g *Game, posTo Pos) {
 	level := g.Level
 	pnj := level.Map[posTo.Y][posTo.X].Pnj
-	if pnj != nil && pnj.Talkable {
+	if pnj != nil && pnj.Talkable && !pnj.IsDead() {
 		g.GetEventManager().Dispatch(&Event{Action: ActionTalk})
 		p.IsTalking = true
 		p.TalkingTo = pnj
