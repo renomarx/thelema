@@ -41,7 +41,6 @@ func (g *Game) HandleInputFightingMenu() {
 			c := menu.ConfirmChoice()
 			switch c.Cmd {
 			case FightingMenuCmdAttack:
-				// TODO
 				g.FightingRing.AttacksMenuOpen = true
 				adaptMenuSpeed()
 			case FightingMenuCmdInventory:
@@ -49,7 +48,6 @@ func (g *Game) HandleInputFightingMenu() {
 				g.CloseFightingMenu()
 				adaptMenuSpeed()
 			case PlayerMenuCmdRun:
-				// TODO
 				g.FightingRing.SelectedPlayerAction = "run"
 				g.DispatchEventMenu(ActionMenuClose)
 				g.CloseFightingMenu()
