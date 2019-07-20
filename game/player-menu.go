@@ -17,7 +17,7 @@ func (p *Player) LoadPlayerMenu() {
 }
 
 func (g *Game) OpenPlayerMenu() {
-	g.DispatchEventMenu(ActionMenuOpen)
+	DispatchEventMenu(ActionMenuOpen)
 	g.Level.Player.Menu.IsOpen = true
 	g.Level.Paused = true
 	adaptMenuSpeed()
@@ -37,13 +37,13 @@ func (g *Game) HandleInputPlayerMenu() {
 	if sidx < 0 {
 		switch input.Typ {
 		case Up:
-			g.DispatchEventMenu(ActionMenuSelect)
+			DispatchEventMenu(ActionMenuSelect)
 			menu.ChoiceUp()
 		case Down:
-			g.DispatchEventMenu(ActionMenuSelect)
+			DispatchEventMenu(ActionMenuSelect)
 			menu.ChoiceDown()
 		case Action:
-			g.DispatchEventMenu(ActionMenuOpen)
+			DispatchEventMenu(ActionMenuOpen)
 			c := menu.ConfirmChoice()
 			switch c.Cmd {
 			case PlayerMenuCmdInventory:
@@ -59,7 +59,7 @@ func (g *Game) HandleInputPlayerMenu() {
 			}
 			adaptMenuSpeed()
 		case Select:
-			g.DispatchEventMenu(ActionMenuClose)
+			DispatchEventMenu(ActionMenuClose)
 			g.ClosePlayerMenu()
 			adaptMenuSpeed()
 		default:
@@ -75,7 +75,7 @@ func (g *Game) HandleInputPlayerMenu() {
 			switch input.Typ {
 			case Select:
 				g.Level.Player.QuestMenuOpen = false
-				g.DispatchEventMenu(ActionMenuClose)
+				DispatchEventMenu(ActionMenuClose)
 				menu.ClearSelected()
 				adaptMenuSpeed()
 			default:
@@ -84,15 +84,15 @@ func (g *Game) HandleInputPlayerMenu() {
 			switch input.Typ {
 			case Right:
 				g.Level.Player.NextPower()
-				g.DispatchEventMenu(ActionMenuSelect)
+				DispatchEventMenu(ActionMenuSelect)
 				adaptMenuSpeed()
 			case Left:
 				g.Level.Player.LastPower()
-				g.DispatchEventMenu(ActionMenuSelect)
+				DispatchEventMenu(ActionMenuSelect)
 				adaptMenuSpeed()
 			case Select:
 				g.Level.Player.CharacterMenuOpen = false
-				g.DispatchEventMenu(ActionMenuClose)
+				DispatchEventMenu(ActionMenuClose)
 				menu.ClearSelected()
 				adaptMenuSpeed()
 			}
@@ -100,7 +100,7 @@ func (g *Game) HandleInputPlayerMenu() {
 			switch input.Typ {
 			case Select:
 				g.Level.Player.MapMenuOpen = false
-				g.DispatchEventMenu(ActionMenuClose)
+				DispatchEventMenu(ActionMenuClose)
 				menu.ClearSelected()
 				adaptMenuSpeed()
 			default:

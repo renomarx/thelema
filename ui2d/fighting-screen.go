@@ -188,7 +188,7 @@ func (ui *UI) drawFightingScreen() {
 }
 
 func (ui *UI) drawFightingMenu() {
-	menu := ui.Game.FightingMenu
+	menu := ui.Game.FightingRing.Menu
 	if menu != nil && menu.IsOpen {
 		ui.renderer.Copy(ui.uiTextures["downbox"],
 			&sdl.Rect{X: 0, Y: 0, W: 320, H: 64},

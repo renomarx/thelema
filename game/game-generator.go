@@ -57,19 +57,19 @@ func (gg *GameGenerator) HandleInput(g *Game) {
 	input := g.GetInput()
 	switch input.Typ {
 	case Right:
-		g.DispatchEventMenu(ActionMenuSelect)
+		DispatchEventMenu(ActionMenuSelect)
 		gg.ChoiceRight()
 		adaptMenuSpeed()
 	case Left:
-		g.DispatchEventMenu(ActionMenuSelect)
+		DispatchEventMenu(ActionMenuSelect)
 		gg.ChoiceLeft()
 		adaptMenuSpeed()
 	case Action:
-		g.DispatchEventMenu(ActionMenuConfirm)
+		DispatchEventMenu(ActionMenuConfirm)
 		gg.ConfirmChoice(g)
 		adaptMenuSpeed()
 	case Escape:
-		g.DispatchEventMenu(ActionMenuClose)
+		DispatchEventMenu(ActionMenuClose)
 		gg.Close()
 		adaptMenuSpeed()
 	default:

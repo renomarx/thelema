@@ -23,6 +23,7 @@ type FightingRing struct {
 	Friends                   []FighterInterface
 	Enemies                   []FighterInterface
 	Stage                     FightingStage
+	Menu                      *Menu
 	AttacksMenuOpen           bool
 	AttackTargetSelectionOpen bool
 	TargetSelected            int
@@ -106,6 +107,7 @@ func NewFightingRing() *FightingRing {
 		Round:  0,
 		Stage:  FightingChoice,
 	}
+	fr.LoadFightingMenu()
 	return fr
 }
 
@@ -150,9 +152,9 @@ func (ring *FightingRing) PlayRound(g *Game) {
 	ring.Stage = FightingChoice
 	p := g.Level.Player
 	ring.LoadPossibleAttacks(p)
-	g.OpenFightingMenu()
-	for g.FightingMenu.IsOpen {
-		g.HandleInputFightingMenu()
+	ring.OpenFightingMenu()
+	for ring.Menu.IsOpen {
+		ring.HandleInputFightingMenu(g.input)
 	}
 	speed := ring.Player.ChooseAction(ring)
 	ring.prepareRoundFighter(ring.Player, speed)

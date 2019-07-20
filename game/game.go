@@ -22,7 +22,6 @@ type Game struct {
 	input         *Input
 	input2        *Input
 	menu          *Menu
-	FightingMenu  *Menu
 	GG            *GameGenerator
 	Config        *Config
 }
@@ -91,7 +90,6 @@ func NewGame(gameDir string) *Game {
 	game.LoadConfig()
 	game.LoadMenu()
 	game.menu.IsOpen = true
-	game.LoadFightingMenu()
 	game.input = &Input{Typ: StayStill}
 	game.input2 = &Input{Typ: None}
 	return game

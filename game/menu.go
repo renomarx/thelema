@@ -114,7 +114,7 @@ func (g *Game) OpenMenu() {
 	g.menu.Choices[1].Disabled = !g.Playing || g.Level.Player.IsDead()
 	g.menu.IsOpen = true
 	g.Paused = true
-	g.DispatchEventMenu(ActionMenuOpen)
+	DispatchEventMenu(ActionMenuOpen)
 	adaptMenuSpeed()
 }
 
@@ -122,7 +122,7 @@ func (g *Game) CloseMenu() {
 	if g.Playing {
 		g.menu.IsOpen = false
 		g.Paused = false
-		g.DispatchEventMenu(ActionMenuClose)
+		DispatchEventMenu(ActionMenuClose)
 		adaptMenuSpeed()
 	}
 }
@@ -134,14 +134,14 @@ func (g *Game) HandleInputMenu() {
 		input := g.input
 		switch input.Typ {
 		case Up:
-			g.DispatchEventMenu(ActionMenuSelect)
+			DispatchEventMenu(ActionMenuSelect)
 			g.menu.ChoiceUp()
 		case Down:
-			g.DispatchEventMenu(ActionMenuSelect)
+			DispatchEventMenu(ActionMenuSelect)
 			g.menu.ChoiceDown()
 		case Action:
 			c := g.menu.ConfirmChoice()
-			g.DispatchEventMenu(ActionMenuConfirm)
+			DispatchEventMenu(ActionMenuConfirm)
 			switch c.Cmd {
 			case MenuCmdNew:
 				g.GG = NewGameGenerator()
@@ -171,6 +171,6 @@ func (g *Game) HandleInputMenu() {
 	}
 }
 
-func (g *Game) DispatchEventMenu(action string) {
+func DispatchEventMenu(action string) {
 	EM.Dispatch(&Event{Action: action})
 }
