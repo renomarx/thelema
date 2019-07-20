@@ -7,6 +7,7 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"strings"
 )
 
 const (
@@ -54,7 +55,7 @@ func (g *Game) loadPnjsVIP() {
 		"jason",
 		"sarah",
 		"nathaniel",
-	} // TODO : load automatically from pnjs directory
+	}
 	pnjVoices := map[string]string{
 		"jason":     VoiceMaleStandard,
 		"sarah":     VoiceFemaleStandard,
@@ -81,10 +82,18 @@ func (g *Game) loadPnjsVIP() {
 
 func (g *Game) loadBooks() {
 	g.Books = make(map[string]*OBook)
-	g.Books["cats"] = g.loadBookFromFile("cats", []string{})
-	g.Books["invocat"] = g.loadBookFromFile("invocat", []string{PowerInvocation})
-	g.Books["rats"] = g.loadBookFromFile("rats", []string{})
-	g.Books["spiders"] = g.loadBookFromFile("spiders", []string{})
+
+	books := LoadFilenames(g.GameDir + "/books")
+	for _, bookFile := range books {
+		book := strings.Split(bookFile, ".")
+		bookName := book[0]
+		powers := []string{}
+		switch bookName {
+		case "invocat":
+			powers = append(powers, PowerInvocation)
+		}
+		g.Books[bookName] = g.loadBookFromFile(bookName, powers)
+	}
 }
 
 func (g *Game) loadBookFromFile(filename string, powers []string) *OBook {

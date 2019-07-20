@@ -4,7 +4,8 @@ import "math/rand"
 import "strconv"
 
 func (wg *WorldGenerator) generateCities(level *Level, nbCities int) {
-	nbTemplates := 6 // TODO load as much templates as there are
+	templates := LoadFilenames(wg.g.GameDir + "/maps/city")
+	nbTemplates := len(templates)
 	cityNumber := 1
 	for i := 0; i < nbCities; i++ {
 		x := rand.Intn(WorldWidth)

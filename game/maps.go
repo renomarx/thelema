@@ -34,8 +34,9 @@ func (wg *WorldGenerator) LoadMapTemplate(mapName string, levelType string, leve
 	level := NewLevel(levelType)
 	level.InitMaps(len(levelLines), longestRow)
 	initialPos := Pos{X: 1, Y: 1}
+	houseTemplates := LoadFilenames(wg.g.GameDir + "/maps/house")
+	nbHouseTemplates := len(houseTemplates)
 	houseNumber := 0
-	nbHouseTemplates := 1 // TODO load as much templates as there are
 	for y := 0; y < len(level.Map); y++ {
 		line := levelLines[y]
 		// Re-compose line to handle utf8
@@ -79,7 +80,7 @@ func (wg *WorldGenerator) LoadMapTemplate(mapName string, levelType string, leve
 				if levelType == LevelTypeHouse {
 					initialPos = Pos{X: x, Y: y}
 				} else {
-					mapName := "house/prison"
+					mapName := "place/prison"
 					wg.generatePrison(level, Pos{X: x, Y: y}, mapName, houseNumber, levelName)
 				}
 			default:

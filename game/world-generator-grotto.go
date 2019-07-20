@@ -4,7 +4,8 @@ import "math/rand"
 import "strconv"
 
 func (wg *WorldGenerator) generateGrottos(level *Level, nbGrottos int) {
-	nbTemplates := 2 // TODO load as much templates as there are
+	templates := LoadFilenames(wg.g.GameDir + "/maps/grotto")
+	nbTemplates := len(templates)
 	grottoNumber := 0
 	for i := 0; i < nbGrottos; i++ {
 		x := rand.Intn(WorldWidth)
