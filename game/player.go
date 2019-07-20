@@ -1,7 +1,5 @@
 package game
 
-import "math/rand"
-
 type Player struct {
 	Character
 	Talker
@@ -258,109 +256,30 @@ func (p *Player) Recruit(pnj *Pnj, g *Game) {
 	p.Friend = f
 }
 
-func (p *Player) TakeDamages(damage int) {
-	p.Character.TakeDamages(damage)
-	p.Health.RaiseXp(damage)
-}
-
-func (p *Player) MeetMonsters(g *Game) {
-	// TODO : handle monsters types by level case type
-	l := g.Level
-	r := rand.Intn(100)
-	if r > l.MonstersProbability {
-		return
-	}
-	switch l.Type {
-	case LevelTypeOutdoor:
-		bestiary := Bestiary()
-		g.FightMonsters(bestiary)
-	case LevelTypeGrotto:
-		bestiary := BestiaryUnderworld()
-		g.FightMonsters(bestiary)
-	}
-}
-
-func (p *Player) ChooseAction(ring *FightingRing) int {
-	switch ring.SelectedPlayerAction {
-	case "run":
-		return p.Speed.Current
-	case "attack":
-		att := ring.PossibleAttacks.List[ring.PossibleAttacks.Selected]
-		p.currentAttack = att
-		return att.Speed
-	}
-	return 0
-}
-
-func (p *Player) Fight(ring *FightingRing) {
-	switch ring.SelectedPlayerAction {
-	case "run":
-		ring.End()
-	case "attack":
-		att := p.currentAttack
-		var to []FighterInterface
-		idx := 0
-		for i := ring.TargetSelected; idx < att.Range && i < len(ring.Enemies); i++ {
-			f := ring.Enemies[i]
-			if !f.IsDead() {
-				to = append(to, f)
-				idx++
-			}
+func (c *Player) PowerUse(g *Game) {
+	if c.Energy.Current > 0 {
+		c.IsPowerUsing = true
+		for c.PowerPos = 0; c.PowerPos < CaseLen; c.PowerPos++ {
+			c.CurrentPower.adaptSpeed()
 		}
-
-		p.isAttacking = true
-		for p.AttackPos = 0; p.AttackPos < CaseLen; p.AttackPos++ {
-			att.adaptSpeed()
+		switch c.CurrentPower.Type {
+		case PowerInvocation:
+			// TODO : make input control invocation for lifetime
+		case PowerStorm:
+			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerStorm}})
+			g.Level.MakeRangeStorm(c.Pos, c.CalculatePowerAttackScore(), c.LookAt, 1, 10)
+			c.LooseEnergy(c.CurrentPower.Energy)
+		case PowerFlames:
+			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerFlames}})
+			g.Level.MakeFlames(c.Pos, c.CalculatePowerAttackScore(), 1, 5)
+			c.LooseEnergy(c.CurrentPower.Energy)
+		case PowerHealing:
+			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
+			g.Level.MakeEffect(c.Pos, rune(Healing), 200)
+			c.Health.Add(c.CalculatePowerAttackScore())
+			c.LooseEnergy(c.CurrentPower.Energy)
+		default:
 		}
-		p.isAttacking = false
-
-		switch att.Type {
-		case AttackTypePhysical:
-			damages := att.Damages * p.CalculateAttackScore() / 10
-			for _, f := range to {
-				f.TakeDamages(damages)
-			}
-			p.Strength.RaiseXp(damages * len(to) / 10)
-			p.Dexterity.RaiseXp(1)
-		case AttackTypeMagick:
-			switch att.MagickType {
-			case PowerHealing:
-				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
-				ring.MakeEffect(Pos{X: 0, Y: 0}, rune(Healing), 400)
-				p.Health.Add(att.Damages * p.CalculatePowerAttackScore() / 10)
-			case PowerInvocation:
-				monster := NewInvokedSpirit()
-				ring.AddFriend(monster)
-				p.Energy.RaiseXp(att.EnergyCost)
-				p.Will.RaiseXp(p.Will.Initial / 10)
-			case PowerFlames:
-				damages := att.Damages * p.CalculatePowerAttackScore() / 10
-				for i, f := range to {
-					y := ring.TargetSelected + i
-					ring.MakeFlame(Pos{X: 1, Y: y}, damages, 400)
-					f.TakeDamages(damages)
-				}
-				p.Energy.RaiseXp(damages)
-				p.Will.RaiseXp(damages * len(to) / 10)
-			case PowerStorm:
-				damages := att.Damages * p.CalculatePowerAttackScore() / 10
-				for i, f := range to {
-					y := ring.TargetSelected + i
-					ring.MakeStorm(Pos{X: 1, Y: y}, damages, Right, 200)
-					f.TakeDamages(damages)
-				}
-				p.Energy.RaiseXp(damages)
-				p.Will.RaiseXp(damages * len(to) / 10)
-			default:
-				damages := att.Damages * p.CalculatePowerAttackScore() / 10
-				for _, f := range to {
-					f.TakeDamages(damages)
-				}
-				p.Energy.RaiseXp(damages)
-				p.Will.RaiseXp(damages * len(to) / 10)
-			}
-			p.LooseEnergy(att.EnergyCost)
-			p.Intelligence.RaiseXp(1)
-		}
+		c.IsPowerUsing = false
 	}
 }

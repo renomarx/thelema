@@ -158,34 +158,6 @@ func (c *Character) moveDown() {
 	}
 }
 
-func (c *Character) PowerUse(g *Game) {
-	if c.Energy.Current > 0 {
-		c.IsPowerUsing = true
-		for c.PowerPos = 0; c.PowerPos < CaseLen; c.PowerPos++ {
-			c.CurrentPower.adaptSpeed()
-		}
-		switch c.CurrentPower.Type {
-		case PowerInvocation:
-			// TODO
-		case PowerStorm:
-			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerStorm}})
-			g.Level.MakeRangeStorm(c.Pos, c.CalculatePowerAttackScore(), c.LookAt, 1, 10)
-			c.LooseEnergy(c.CurrentPower.Energy)
-		case PowerFlames:
-			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerFlames}})
-			g.Level.MakeFlames(c.Pos, c.CalculatePowerAttackScore(), 1, 5)
-			c.LooseEnergy(c.CurrentPower.Energy)
-		case PowerHealing:
-			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
-			g.Level.MakeEffect(c.Pos, rune(Healing), 200)
-			c.Health.Add(c.CalculatePowerAttackScore())
-			c.LooseEnergy(c.CurrentPower.Energy)
-		default:
-		}
-		c.IsPowerUsing = false
-	}
-}
-
 func (c *Character) IsDead() bool {
 	return c.isDead
 }
