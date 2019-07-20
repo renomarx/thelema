@@ -95,7 +95,7 @@ func NewFlame(p Pos, damages int) *Effect {
 	return eff
 }
 
-func NewEffect(p Pos, r rune, lifetime int) *Effect {
+func NewEffect(p Pos, r rune) *Effect {
 	eff := &Effect{}
 	eff.Rune = r
 	eff.Blocking = false

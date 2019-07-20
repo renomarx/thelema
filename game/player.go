@@ -325,6 +325,8 @@ func (p *Player) Fight(ring *FightingRing) {
 		case AttackTypeMagick:
 			switch att.MagickType {
 			case PowerHealing:
+				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
+				ring.MakeEffect(Pos{X: 0, Y: 0}, rune(Healing), 400)
 				p.Health.Add(att.Damages * p.CalculatePowerAttackScore() / 10)
 			case PowerInvocation:
 				monster := NewInvokedSpirit()

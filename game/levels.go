@@ -204,7 +204,7 @@ func (l *Level) MakeFlame(p Pos, damages int, lifetime int) {
 }
 
 func (l *Level) MakeEffect(p Pos, r rune, lifetime int) {
-	eff := NewEffect(p, r, lifetime)
+	eff := NewEffect(p, r)
 
 	l.Map[p.Y][p.X].Effect = eff
 	time.Sleep(time.Duration(lifetime) * time.Millisecond)
