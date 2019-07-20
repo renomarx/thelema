@@ -13,7 +13,9 @@ func LoadFilenames(dir string) []string {
 
 	var res []string
 	for _, f := range files {
-		res = append(res, f.Name())
+		if !f.IsDir() {
+			res = append(res, f.Name())
+		}
 	}
 	return res
 }

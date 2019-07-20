@@ -24,17 +24,7 @@ func NewMusicPlayer() *MusicPlayer {
 }
 
 func (mp *MusicPlayer) LoadMusics() {
-	var musics []string = []string{
-		"doomed.mp3",
-		"flags.mp3",
-		"great_mission.mp3",
-		"spacetime.mp3",
-		"twists.mp3",
-		"waking_the_devil.mp3",
-		"warped.mp3",
-		"dark_fallout.ogg",
-		"forest.mp3",
-	}
+	musics := game.LoadFilenames("ui2d/assets/musics/")
 	for _, name := range musics {
 		music, err := mix.LoadMUS("ui2d/assets/musics/" + name)
 		if err != nil {
@@ -46,26 +36,14 @@ func (mp *MusicPlayer) LoadMusics() {
 }
 
 func (mp *MusicPlayer) LoadSounds() {
-	var sounds []string = []string{
-		"footstep00.ogg",
-		"footstep01.ogg",
-		"footstep08.ogg",
-		"magic1.wav",
-		"spell.wav",
-		"doorOpen_1.ogg",
-		"doorClose_1.ogg",
-		"interface1.wav",
-		"interface2.wav",
-		"explodemini.wav",
-		"explode.wav",
-		"bookFlip2.ogg",
-		"coin3.wav",
-		"piano.wav",
-		"orchestra.wav",
-		"voices/male_standard_1.ogg",
-		"voices/female_standard_1.ogg",
-		"monsters/rat.wav",
-		"monsters/spider.wav",
+	sounds := game.LoadFilenames("ui2d/assets/sounds/")
+	voices := game.LoadFilenames("ui2d/assets/sounds/voices/")
+	for _, voice := range voices {
+		sounds = append(sounds, "voices/"+voice)
+	}
+	monsters := game.LoadFilenames("ui2d/assets/sounds/monsters/")
+	for _, monster := range monsters {
+		monsters = append(monsters, "monsters/"+monster)
 	}
 	for _, name := range sounds {
 		sound, err := mix.LoadWAV("ui2d/assets/sounds/" + name)
@@ -204,7 +182,7 @@ func (mp *MusicPlayer) PlayVoice(e *game.Event) {
 }
 
 func (mp *MusicPlayer) PlayMonsterRoar(e *game.Event) {
-	sound := "interface1.wav"
+	sound := "monsters/rat.wav"
 	monsterName, exists := e.Payload["monster"]
 	if exists {
 		monsterRune := game.Tile(monsterName[0])

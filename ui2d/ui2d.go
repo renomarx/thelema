@@ -5,6 +5,7 @@ import (
 	"github.com/veandco/go-sdl2/ttf"
 	"log"
 	"path/filepath"
+	"strings"
 	"thelema/game"
 )
 
@@ -76,41 +77,32 @@ func NewUI(g *game.Game) *UI {
 	ui.Cam.Y = 0
 
 	ui.playerTextures = make(map[string]*sdl.Texture)
-	playerNames := []string{
-		"asmodeus",
-		"kali",
-		"baal",
-		"lilith",
-		"dagon",
-		"lucifer",
-		"hecate",
-	}
-	for _, n := range playerNames {
-		ui.playerTextures[n] = ui.imgFileToTexture("ui2d/assets/player/" + n + ".png")
-		ui.playerTextures[n+"_with_knife"] = ui.imgFileToTexture("ui2d/assets/player/" + n + "_with_knife.png")
-		ui.playerTextures[n+"_with_bow"] = ui.imgFileToTexture("ui2d/assets/player/" + n + "_with_bow.png")
-		ui.playerTextures[n+"_with_spear"] = ui.imgFileToTexture("ui2d/assets/player/" + n + "_with_spear.png")
-		ui.playerTextures[n+"_with_wand"] = ui.imgFileToTexture("ui2d/assets/player/" + n + "_with_wand.png")
+	playerFiles := game.LoadFilenames("ui2d/assets/player/")
+	for _, playerFile := range playerFiles {
+		player := strings.Split(playerFile, ".")
+		playerName := player[0]
+		ui.playerTextures[playerName] = ui.imgFileToTexture("ui2d/assets/player/" + playerFile)
 	}
 
 	ui.pnjTextures = make(map[string]*sdl.Texture)
-	// VIPs
-	ui.pnjTextures["jason"] = ui.imgFileToTexture("ui2d/assets/pnjs/jason.png")
-	ui.pnjTextures["sarah"] = ui.imgFileToTexture("ui2d/assets/pnjs/sarah.png")
-	ui.pnjTextures["nathaniel"] = ui.imgFileToTexture("ui2d/assets/pnjs/nathaniel.png")
-	// Common
-	ui.pnjTextures["monk"] = ui.imgFileToTexture("ui2d/assets/pnjs/common/monk.png")
-	ui.pnjTextures["lord"] = ui.imgFileToTexture("ui2d/assets/pnjs/common/lord.png")
-	ui.pnjTextures["warrior"] = ui.imgFileToTexture("ui2d/assets/pnjs/common/warrior.png")
-	ui.pnjTextures["policeman"] = ui.imgFileToTexture("ui2d/assets/pnjs/common/policeman.png")
-	ui.pnjTextures["doctor"] = ui.imgFileToTexture("ui2d/assets/pnjs/common/doctor.png")
-	ui.pnjTextures["artist"] = ui.imgFileToTexture("ui2d/assets/pnjs/common/artist.png")
-	// Enemies
-	ui.pnjTextures["orc_thief"] = ui.imgFileToTexture("ui2d/assets/pnjs/enemy/orc_thief.png")
-	ui.pnjTextures["orc_guard"] = ui.imgFileToTexture("ui2d/assets/pnjs/enemy/orc_guard.png")
-	ui.pnjTextures["skeleton_warrior"] = ui.imgFileToTexture("ui2d/assets/pnjs/enemy/skeleton_warrior.png")
-	ui.pnjTextures["skeleton_sorcerer"] = ui.imgFileToTexture("ui2d/assets/pnjs/enemy/skeleton_sorcerer.png")
-	ui.pnjTextures["skeleton_lord"] = ui.imgFileToTexture("ui2d/assets/pnjs/enemy/skeleton_lord.png")
+	pnjFiles := game.LoadFilenames("ui2d/assets/pnjs/")
+	for _, pnjFile := range pnjFiles {
+		pnj := strings.Split(pnjFile, ".")
+		pnjName := pnj[0]
+		ui.pnjTextures[pnjName] = ui.imgFileToTexture("ui2d/assets/pnjs/" + pnjFile)
+	}
+	commonPnjFiles := game.LoadFilenames("ui2d/assets/pnjs/common/")
+	for _, pnjFile := range commonPnjFiles {
+		pnj := strings.Split(pnjFile, ".")
+		pnjName := pnj[0]
+		ui.pnjTextures[pnjName] = ui.imgFileToTexture("ui2d/assets/pnjs/common/" + pnjFile)
+	}
+	enemyPnjFiles := game.LoadFilenames("ui2d/assets/pnjs/enemy/")
+	for _, pnjFile := range enemyPnjFiles {
+		pnj := strings.Split(pnjFile, ".")
+		pnjName := pnj[0]
+		ui.pnjTextures[pnjName] = ui.imgFileToTexture("ui2d/assets/pnjs/enemy/" + pnjFile)
+	}
 
 	ui.backgroundTextures = make(map[string]*sdl.Texture)
 	ui.backgroundTextures["outdoor"] = ui.imgFileToTexture("ui2d/assets/backgrounds/battle-background-sunny-hillsx4.png")
