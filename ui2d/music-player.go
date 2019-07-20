@@ -163,9 +163,6 @@ func (mp *MusicPlayer) PlayPowerSound(e *game.Event) {
 	typ, exists := e.Payload["type"]
 	if exists {
 		switch typ {
-		case game.PowerEnergyBall:
-			sound = "magic1.wav"
-			volume = 32
 		case game.PowerInvocation:
 			sound = "spell.wav"
 			volume = 64

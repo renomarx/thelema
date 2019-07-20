@@ -32,6 +32,7 @@ type FightingRing struct {
 		Selected int
 	}
 	roundFighters []RoundFighter
+	CurrentEffect *Effect
 }
 
 type Attack struct {

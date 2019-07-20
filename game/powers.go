@@ -5,7 +5,6 @@ import "time"
 
 type PowerType string
 
-const PowerEnergyBall = "energy_ball"
 const PowerInvocation = "invocation"
 const PowerFlames = "flames"
 const PowerStorm = "storm"
@@ -39,9 +38,6 @@ func (p *Player) newPowerRaw(powername string) {
 	_, exists := p.Powers[powername]
 	if !exists {
 		switch powername {
-		case PowerEnergyBall:
-			p.Powers[string(PowerEnergyBall)] = &PlayerPower{Type: PowerEnergyBall, Speed: 10, Strength: 20, Energy: 10, Tile: Energyball, Range: 1,
-				Description: "Boule d'énergie. Explose quand recontre un obstacle ou un ennemi.", Name: "Energy ball"}
 		case PowerInvocation:
 			p.Powers[string(PowerInvocation)] = &PlayerPower{Type: PowerInvocation, Speed: 5, Energy: 50, Tile: Spirit,
 				Description: "Invoque un esprit qui attaque vos ennemis et attire leur attention.", Name: "Invocation"}

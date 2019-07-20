@@ -45,26 +45,16 @@ func (ui *UI) DrawLevel() {
 				if pnj != nil {
 					ui.drawPnj(pnj)
 				}
+				effect := c.Effect
+				if effect != nil {
+					ui.drawEffect(game.Pos{X: x, Y: y}, effect)
+				}
 			}
 		}
 
 		ui.drawPlayer()
 		if player.TalkingTo != nil {
 			ui.DrawDialog(player.TalkingTo)
-		}
-
-		for y := minY; y < maxY; y++ {
-			for x := minX; x < maxX; x++ {
-				c := level.Map[y][x]
-				projectile := c.Projectile
-				if projectile != nil {
-					ui.drawProjectile(projectile, game.Tile(projectile.Rune))
-				}
-				effect := c.Effect
-				if effect != nil {
-					ui.drawEffect(game.Pos{X: x, Y: y}, effect)
-				}
-			}
 		}
 
 		ui.DrawMinimap()

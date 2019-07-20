@@ -39,7 +39,6 @@ func newPlayer(speed, health, energy, stg, dex, bea, wil, intel, cha, rg int) *P
 	player.Powers = make(map[string]*PlayerPower)
 	// FIXME
 	player.newPowerRaw(PowerHealing)
-	player.newPowerRaw(PowerEnergyBall)
 	player.newPowerRaw(PowerFlames)
 	player.newPowerRaw(PowerStorm)
 	player.newPowerRaw(PowerInvocation)

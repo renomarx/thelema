@@ -21,6 +21,9 @@ func (ui *UI) DrawFightingRing() {
 		ui.drawFightingPlayer(offsetX, offsetY)
 		ui.drawFightingFriends(offsetX+32, offsetY+100)
 		ui.drawFightingEnemies(offsetX*2, offsetY)
+		if fr.CurrentEffect != nil {
+			ui.drawFightingEffect(fr.CurrentEffect, offsetX, offsetY)
+		}
 	}
 }
 
@@ -229,5 +232,17 @@ func (ui *UI) drawFightingAttacks() {
 		_, _, w, h, _ = tex.Query()
 		ui.renderer.Copy(tex, nil, &sdl.Rect{int32(offsetX), int32(offsetY + 32), w, h})
 
+	}
+}
+
+func (ui *UI) drawFightingEffect(effect *game.Effect, offsetX, offsetY int) {
+	fp := effect.Pos
+	x := offsetX * (fp.X + 1)
+	y := offsetY + 50*fp.Y
+	tile := game.Tile(effect.Rune)
+	if len(ui.textureIndex[tile]) > 0 {
+		ui.renderer.Copy(ui.textureAtlas,
+			&ui.textureIndex[tile][effect.TileIdx%len(ui.textureIndex[tile])],
+			&sdl.Rect{X: int32(x), Y: int32(y), W: Res, H: Res})
 	}
 }

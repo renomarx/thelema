@@ -1,7 +1,13 @@
 package ui2d
 
 func (ui *UI) drawPlayer() {
-	p := ui.Game.Level.Player
+	l := ui.Game.Level
+	p := l.Player
 	texture := ui.playerTextures[p.Name]
 	ui.drawCharacter(&p.Character, texture)
+	c := l.Map[p.Y][p.X]
+	effect := c.Effect
+	if effect != nil {
+		ui.drawEffect(p.Pos, effect)
+	}
 }

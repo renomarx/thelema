@@ -21,36 +21,17 @@ type Level struct {
 }
 
 type Case struct {
-	T          Tile
-	Portal     *Portal
-	Object     *Object
-	Effect     *Effect
-	Projectile *Projectile
-	Pnj        *Pnj
+	T      Tile
+	Portal *Portal
+	Object *Object
+	Effect *Effect
+	Pnj    *Pnj
 }
 
 func (l *Level) GetObject(x, y int) *Object {
 	if y >= 0 && y < len(l.Map) {
 		if x >= 0 && x < len(l.Map[y]) {
 			return l.Map[y][x].Object
-		}
-	}
-	return nil
-}
-
-func (l *Level) GetEffect(x, y int) *Effect {
-	if y >= 0 && y < len(l.Map) {
-		if x >= 0 && x < len(l.Map[y]) {
-			return l.Map[y][x].Effect
-		}
-	}
-	return nil
-}
-
-func (l *Level) GetProjectile(x, y int) *Projectile {
-	if y >= 0 && y < len(l.Map) {
-		if x >= 0 && x < len(l.Map[y]) {
-			return l.Map[y][x].Projectile
 		}
 	}
 	return nil
@@ -106,7 +87,6 @@ func (l *Level) handleMap() {
 				if x >= 0 && x < len(l.Map[y]) {
 					c := l.Map[y][x]
 					l.handlePnj(c.Pnj)
-					l.handleProjectile(c.Projectile)
 				}
 			}
 		}
@@ -117,16 +97,6 @@ func (l *Level) handlePnj(m *Pnj) {
 	if m != nil && !m.IsPlaying {
 		m.IsPlaying = true
 		go func(m *Pnj) {
-			m.Update(l)
-			m.IsPlaying = false
-		}(m)
-	}
-}
-
-func (l *Level) handleProjectile(m *Projectile) {
-	if m != nil && !m.IsPlaying {
-		m.IsPlaying = true
-		go func(m *Projectile) {
 			m.Update(l)
 			m.IsPlaying = false
 		}(m)
@@ -221,10 +191,6 @@ func (l *Level) MakeFlame(p Pos, damages int, lifetime int) {
 	if !eff.canBe(l, p) {
 		return
 	}
-	eff.Pos = p
-	eff.Rune = rune(Flames)
-	eff.Blocking = false
-	eff.Damages = damages
 	eff.TileIdx = 0
 	l.Map[p.Y][p.X].Effect = eff
 	time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)

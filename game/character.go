@@ -165,10 +165,6 @@ func (c *Character) PowerUse(g *Game) {
 			c.CurrentPower.adaptSpeed()
 		}
 		switch c.CurrentPower.Type {
-		case PowerEnergyBall:
-			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerEnergyBall}})
-			g.Level.MakeEnergyball(c.Pos, c.LookAt, c.CalculatePowerAttackScore(), c)
-			c.LooseEnergy(c.CurrentPower.Energy)
 		case PowerInvocation:
 			// TODO
 		case PowerStorm:
@@ -177,7 +173,7 @@ func (c *Character) PowerUse(g *Game) {
 			c.LooseEnergy(c.CurrentPower.Energy)
 		case PowerFlames:
 			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerFlames}})
-			g.Level.MakeFlames(c.Pos, c.CalculatePowerAttackScore(), 3, 5)
+			g.Level.MakeFlames(c.Pos, c.CalculatePowerAttackScore(), 1, 5)
 			c.LooseEnergy(c.CurrentPower.Energy)
 		case PowerHealing:
 			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})

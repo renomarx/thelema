@@ -331,6 +331,24 @@ func (p *Player) Fight(ring *FightingRing) {
 				ring.AddFriend(monster)
 				p.Energy.RaiseXp(att.EnergyCost)
 				p.Will.RaiseXp(p.Will.Initial / 10)
+			case PowerFlames:
+				damages := att.Damages * p.CalculatePowerAttackScore() / 10
+				for i, f := range to {
+					y := ring.TargetSelected + i
+					ring.MakeFlame(Pos{X: 1, Y: y}, damages, 400)
+					f.TakeDamages(damages)
+				}
+				p.Energy.RaiseXp(damages)
+				p.Will.RaiseXp(damages * len(to) / 10)
+			case PowerStorm:
+				damages := att.Damages * p.CalculatePowerAttackScore() / 10
+				for i, f := range to {
+					y := ring.TargetSelected + i
+					ring.MakeStorm(Pos{X: 1, Y: y}, damages, Right, 200)
+					f.TakeDamages(damages)
+				}
+				p.Energy.RaiseXp(damages)
+				p.Will.RaiseXp(damages * len(to) / 10)
 			default:
 				damages := att.Damages * p.CalculatePowerAttackScore() / 10
 				for _, f := range to {
