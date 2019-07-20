@@ -62,7 +62,7 @@ func (level *Level) MakeArrow(p Pos, dir InputType, size int, speed int, from *C
 	level.Map[p.Y][p.X].Projectile = eb
 }
 
-func (p *Projectile) Update(g *Game) {
+func (p *Projectile) Update(l *Level) {
 	to := p.Pos
 	if p.Direction == Left {
 		to.X--
@@ -77,7 +77,7 @@ func (p *Projectile) Update(g *Game) {
 		to.Y++
 	}
 
-	p.Move(to, g)
+	p.Move(to, l)
 }
 
 func (p *Projectile) canMove(level *Level, pos Pos) bool {
@@ -90,14 +90,13 @@ func (p *Projectile) canMove(level *Level, pos Pos) bool {
 	return true
 }
 
-func (p *Projectile) Move(to Pos, g *Game) {
-	level := g.Level
-	if !p.canMove(level, to) {
-		p.Die(g)
+func (p *Projectile) Move(to Pos, l *Level) {
+	if !p.canMove(l, to) {
+		p.Die(l)
 		return
 	}
-	level.Map[p.Y][p.X].Projectile = nil
-	level.Map[to.Y][to.X].Projectile = p
+	l.Map[p.Y][p.X].Projectile = nil
+	l.Map[to.Y][to.X].Projectile = p
 	p.Pos = to
 
 	if p.Direction == Right {
@@ -126,7 +125,7 @@ func (p *Projectile) adaptSpeed() {
 	time.Sleep(time.Duration(ProjectileDeltaTime/p.Speed) * time.Millisecond)
 }
 
-func (p *Projectile) Die(g *Game) {
-	g.Level.Map[p.Y][p.X].Projectile = nil
-	g.MakeExplosion(p.Pos, 100, 100)
+func (p *Projectile) Die(l *Level) {
+	l.Map[p.Y][p.X].Projectile = nil
+	l.MakeExplosion(p.Pos, 100, 100)
 }

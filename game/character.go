@@ -173,15 +173,15 @@ func (c *Character) PowerUse(g *Game) {
 			// TODO
 		case PowerStorm:
 			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerStorm}})
-			g.MakeRangeStorm(c.Pos, c.CalculatePowerAttackScore(), c.LookAt, 1, 10)
+			g.Level.MakeRangeStorm(c.Pos, c.CalculatePowerAttackScore(), c.LookAt, 1, 10)
 			c.LooseEnergy(c.CurrentPower.Energy)
 		case PowerFlames:
 			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerFlames}})
-			g.MakeFlames(c.Pos, c.CalculatePowerAttackScore(), 3, 5)
+			g.Level.MakeFlames(c.Pos, c.CalculatePowerAttackScore(), 3, 5)
 			c.LooseEnergy(c.CurrentPower.Energy)
 		case PowerHealing:
 			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
-			g.MakeEffect(c.Pos, rune(Healing), 200)
+			g.Level.MakeEffect(c.Pos, rune(Healing), 200)
 			c.Health.Add(c.CalculatePowerAttackScore())
 			c.LooseEnergy(c.CurrentPower.Energy)
 		default:

@@ -110,3 +110,31 @@ func (g *Game) Run() {
 		}
 	}
 }
+
+func (g *Game) UpdateLevel() {
+	input := g.input
+	if g.Level.Paused {
+		g.HandleInputPlayerMenu()
+	} else {
+		g.handleInput()
+		g.Level.handleMap()
+		if input.Typ == Select {
+			g.OpenPlayerMenu()
+		}
+	}
+	if input.Typ == Escape {
+		g.OpenMenu()
+	}
+}
+
+func (g *Game) handleInput() {
+	level := g.Level
+	p := level.Player
+	if !p.IsPlaying {
+		p.IsPlaying = true
+		go func(p *Player) {
+			p.Update(g)
+			p.IsPlaying = false
+		}(p)
+	}
+}

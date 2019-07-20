@@ -133,22 +133,21 @@ func (pnj *Pnj) StopTalking() {
 	}
 }
 
-func (pnj *Pnj) Update(g *Game) {
+func (pnj *Pnj) Update(l *Level) {
 	if pnj.isDead {
 		return
 	}
 	if pnj.IsTalking {
 		return
 	}
-	level := g.Level
 	t := time.Now()
 	deltaD := t.Sub(pnj.LastActionTime)
 	delta := 0.001 * float64(deltaD.Nanoseconds())
 	pnj.ActionPoints += float64(pnj.Speed.Current) * delta
 	pos := pnj.getWantedPosition()
 	if pnj.ActionPoints >= 1000000 { // 1 second
-		if pnj.canMove(pos, level) {
-			pnj.Move(pos, g)
+		if pnj.canMove(pos, l) {
+			pnj.Move(pos, l)
 		}
 		pnj.ActionPoints = 0.0
 	}
@@ -186,19 +185,18 @@ func (pnj *Pnj) canMove(to Pos, level *Level) bool {
 	return true
 }
 
-func (pnj *Pnj) Move(to Pos, g *Game) {
-	level := g.Level
+func (pnj *Pnj) Move(to Pos, l *Level) {
 	lastPos := Pos{X: pnj.Pos.X, Y: pnj.Pos.Y}
-	level.Map[pnj.Y][pnj.X].Pnj = nil
-	level.Map[to.Y][to.X].Pnj = pnj
+	l.Map[pnj.Y][pnj.X].Pnj = nil
+	l.Map[to.Y][to.X].Pnj = pnj
 	pnj.Pos = to
 	pnj.moveFromTo(lastPos, to)
 }
 
 func (pnj *Pnj) Teleport(levelName string, g *Game) {
+	g.Level.MakeEffect(pnj.Pos, rune(Teleport), 200)
 	level := g.Levels[levelName]
 	pnj.Talkable = false
-	g.MakeEffect(pnj.Pos, rune(Teleport), 200)
 	pnj.IsPowerUsing = true
 	for pnj.PowerPos = 0; pnj.PowerPos < CaseLen; pnj.PowerPos++ {
 		pnj.adaptSpeed()

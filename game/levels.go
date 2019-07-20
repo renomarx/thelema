@@ -1,6 +1,7 @@
 package game
 
 import "math/rand"
+import "time"
 
 const LevelTypeOutdoor = "OUTDOOR"
 const LevelTypeGrotto = "GROTTO"
@@ -98,64 +99,35 @@ func (level *Level) InitMaps(height, width int) {
 	}
 }
 
-func (g *Game) UpdateLevel() {
-	input := g.input
-	if g.Level.Paused {
-		g.HandleInputPlayerMenu()
-	} else {
-		g.handleInput()
-		g.handleMap()
-		if input.Typ == Select {
-			g.OpenPlayerMenu()
-		}
-	}
-	if input.Typ == Escape {
-		g.OpenMenu()
-	}
-}
-
-func (g *Game) handleInput() {
-	level := g.Level
-	p := level.Player
-	if !p.IsPlaying {
-		p.IsPlaying = true
-		go func(p *Player) {
-			p.Update(g)
-			p.IsPlaying = false
-		}(p)
-	}
-}
-
-func (g *Game) handleMap() {
-	l := g.Level
+func (l *Level) handleMap() {
 	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
 		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
 			if y >= 0 && y < len(l.Map) {
 				if x >= 0 && x < len(l.Map[y]) {
 					c := l.Map[y][x]
-					g.handlePnj(c.Pnj)
-					g.handleProjectile(c.Projectile)
+					l.handlePnj(c.Pnj)
+					l.handleProjectile(c.Projectile)
 				}
 			}
 		}
 	}
 }
 
-func (g *Game) handlePnj(m *Pnj) {
+func (l *Level) handlePnj(m *Pnj) {
 	if m != nil && !m.IsPlaying {
 		m.IsPlaying = true
 		go func(m *Pnj) {
-			m.Update(g)
+			m.Update(l)
 			m.IsPlaying = false
 		}(m)
 	}
 }
 
-func (g *Game) handleProjectile(m *Projectile) {
+func (l *Level) handleProjectile(m *Projectile) {
 	if m != nil && !m.IsPlaying {
 		m.IsPlaying = true
 		go func(m *Projectile) {
-			m.Update(g)
+			m.Update(l)
 			m.IsPlaying = false
 		}(m)
 	}
@@ -209,4 +181,66 @@ func (l *Level) SearchPnj(pnjName string) *Pnj {
 		}
 	}
 	return nil
+}
+
+func (l *Level) MakeExplosion(p Pos, size int, lifetime int) {
+	eff := NewExplosion(p, size, lifetime)
+	l.Map[p.Y][p.X].Effect = eff
+	time.Sleep(time.Duration(lifetime) * time.Millisecond)
+	l.Map[p.Y][p.X].Effect = nil
+}
+
+func (l *Level) MakeRangeStorm(p Pos, damages int, dir InputType, lifetime int, rg int) {
+	storms := NewRangeStorm(p, damages, dir, rg)
+	for _, storm := range storms {
+		go l.MakeStorm(storm, lifetime)
+	}
+}
+
+func (l *Level) MakeStorm(storm *Effect, lifetime int) {
+	if !storm.canBe(l, storm.Pos) {
+		return
+	}
+	l.Map[storm.Pos.Y][storm.Pos.X].Effect = storm
+	time.Sleep(time.Duration(lifetime) * time.Second)
+	storm.Die(l)
+}
+
+func (l *Level) MakeFlames(p Pos, damages int, lifetime int, rg int) {
+	for y := p.Y - rg; y <= p.Y+rg; y++ {
+		for x := p.X - rg; x <= p.X+rg; x++ {
+			if x != p.X || y != p.Y {
+				go l.MakeFlame(Pos{X: x, Y: y}, damages, lifetime)
+			}
+		}
+	}
+}
+
+func (l *Level) MakeFlame(p Pos, damages int, lifetime int) {
+	eff := NewFlame(p, damages)
+	if !eff.canBe(l, p) {
+		return
+	}
+	eff.Pos = p
+	eff.Rune = rune(Flames)
+	eff.Blocking = false
+	eff.Damages = damages
+	eff.TileIdx = 0
+	l.Map[p.Y][p.X].Effect = eff
+	time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
+	eff.TileIdx = 1
+	time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
+	eff.TileIdx = 2
+	time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
+	eff.TileIdx = 3
+	time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
+	eff.Die(l)
+}
+
+func (l *Level) MakeEffect(p Pos, r rune, lifetime int) {
+	eff := NewEffect(p, r, lifetime)
+
+	l.Map[p.Y][p.X].Effect = eff
+	time.Sleep(time.Duration(lifetime) * time.Millisecond)
+	l.Map[p.Y][p.X].Effect = nil
 }

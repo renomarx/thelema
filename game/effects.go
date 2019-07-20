@@ -1,7 +1,5 @@
 package game
 
-import "time"
-
 type Effect struct {
 	Object
 	TileIdx int
@@ -12,12 +10,7 @@ const ExplosionSizeSmall = "SMALL"
 const ExplosionSizeMedium = "MEDIUM"
 const ExplosionSizeLarge = "LARGE"
 
-func (g *Game) MakeExplosion(p Pos, size int, lifetime int) {
-	level := g.Level
-	// _, alreadyExists := level.Effects[p]
-	// if alreadyExists {
-	// 	return
-	// }
+func NewExplosion(p Pos, size int, lifetime int) *Effect {
 	esize := ExplosionSizeSmall
 	if size >= 50 {
 		esize = ExplosionSizeMedium
@@ -27,6 +20,7 @@ func (g *Game) MakeExplosion(p Pos, size int, lifetime int) {
 	}
 	EM.Dispatch(&Event{Action: ActionExplode, Payload: map[string]string{"size": esize}})
 	eff := &Effect{}
+	eff.Pos = p
 	eff.Rune = rune(Explosion)
 	eff.Blocking = false
 	idx := 0
@@ -41,12 +35,10 @@ func (g *Game) MakeExplosion(p Pos, size int, lifetime int) {
 	}
 	eff.TileIdx = idx
 
-	level.Map[p.Y][p.X].Effect = eff
-	time.Sleep(time.Duration(lifetime) * time.Millisecond)
-	level.Map[p.Y][p.X].Effect = nil
+	return eff
 }
 
-func (g *Game) MakeRangeStorm(p Pos, damages int, dir InputType, lifetime int, rg int) {
+func NewRangeStorm(p Pos, damages int, dir InputType, rg int) []*Effect {
 	poss := []Pos{}
 	switch dir {
 	case Left:
@@ -66,17 +58,16 @@ func (g *Game) MakeRangeStorm(p Pos, damages int, dir InputType, lifetime int, r
 			poss = append(poss, Pos{X: p.X, Y: p.Y + i})
 		}
 	}
+	var res []*Effect
 	for _, pp := range poss {
-		go g.MakeStorm(pp, damages, dir, lifetime)
+		eff := NewStorm(pp, damages, dir)
+		res = append(res, eff)
 	}
+	return res
 }
 
-func (g *Game) MakeStorm(p Pos, damages int, dir InputType, lifetime int) {
-	level := g.Level
+func NewStorm(p Pos, damages int, dir InputType) *Effect {
 	eff := &Effect{}
-	if !eff.canBe(level, p) {
-		return
-	}
 	eff.Pos = p
 	eff.Rune = rune(Storm)
 	eff.Blocking = false
@@ -91,57 +82,29 @@ func (g *Game) MakeStorm(p Pos, damages int, dir InputType, lifetime int) {
 	case Down:
 		eff.TileIdx = 0
 	}
-	level.Map[p.Y][p.X].Effect = eff
-	time.Sleep(time.Duration(lifetime) * time.Second)
-	eff.Die(g)
+	return eff
 }
 
-func (g *Game) MakeFlames(p Pos, damages int, lifetime int, rg int) {
-	for y := p.Y - rg; y <= p.Y+rg; y++ {
-		for x := p.X - rg; x <= p.X+rg; x++ {
-			if x != p.X || y != p.Y {
-				go g.MakeFlame(Pos{X: x, Y: y}, damages, lifetime)
-			}
-		}
-	}
-}
-
-func (g *Game) MakeFlame(p Pos, damages int, lifetime int) {
-	level := g.Level
+func NewFlame(p Pos, damages int) *Effect {
 	eff := &Effect{}
-	if !eff.canBe(level, p) {
-		return
-	}
 	eff.Pos = p
 	eff.Rune = rune(Flames)
 	eff.Blocking = false
 	eff.Damages = damages
 	eff.TileIdx = 0
-	level.Map[p.Y][p.X].Effect = eff
-	time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
-	eff.TileIdx = 1
-	time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
-	eff.TileIdx = 2
-	time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
-	eff.TileIdx = 3
-	time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
-	eff.Die(g)
+	return eff
 }
 
-func (g *Game) MakeEffect(p Pos, r rune, lifetime int) {
-	level := g.Level
+func NewEffect(p Pos, r rune, lifetime int) *Effect {
 	eff := &Effect{}
 	eff.Rune = r
 	eff.Blocking = false
 	eff.TileIdx = 0
-
-	level.Map[p.Y][p.X].Effect = eff
-	time.Sleep(time.Duration(lifetime) * time.Millisecond)
-	level.Map[p.Y][p.X].Effect = nil
+	return eff
 }
 
-func (e *Effect) Die(g *Game) {
-	g.Level.Map[e.Y][e.X].Effect = nil
+func (e *Effect) Die(l *Level) {
+	l.Map[e.Y][e.X].Effect = nil
 }
 
 func (e *Effect) canBe(level *Level, pos Pos) bool {
