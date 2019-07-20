@@ -64,22 +64,22 @@ func (ui *UI) drawFightingEnemies(offsetX, offsetY int) {
 	fr := ui.Game.FightingRing
 	if fr != nil && len(fr.Enemies) > 0 {
 		for i, e := range fr.Enemies {
+			enemy, isPnj := e.(*game.Enemy)
 			if fr.AttackTargetSelectionOpen {
 				att := fr.PossibleAttacks.List[fr.PossibleAttacks.Selected]
 				if i >= fr.TargetSelected && i < fr.TargetSelected+att.Range {
 					ui.renderer.Copy(ui.textureAtlas,
 						&ui.textureIndex['ʆ'][0],
-						&sdl.Rect{X: int32(offsetX), Y: int32(offsetY), W: 32, H: 32})
+						&sdl.Rect{X: int32(offsetX), Y: int32(offsetY), W: 64, H: 64})
 				}
 			}
-			enemy, isPnj := e.(*game.Enemy)
 			if isPnj {
 				ui.drawFightingEnemy(enemy, offsetX, offsetY)
 			} else {
 				ui.drawFightingMonster(e, offsetX, offsetY)
 			}
-			offsetX += 16
-			offsetY += 50
+			offsetX += 20
+			offsetY += 70
 		}
 	}
 }
@@ -121,7 +121,7 @@ func (ui *UI) drawFightingMonster(e game.FighterInterface, offsetX, offsetY int)
 		}
 		ui.renderer.Copy(ui.textureAtlas,
 			&ui.textureIndex[e.GetTile()][0],
-			&sdl.Rect{X: int32(offsetX - xb), Y: int32(offsetY + yb), W: 32, H: 32})
+			&sdl.Rect{X: int32(offsetX - xb), Y: int32(offsetY + yb), W: 64, H: 64})
 		ui.drawHealthBar(int32(offsetX-xb), int32(offsetY-15), e.GetHealth())
 	}
 }
@@ -136,8 +136,8 @@ func (ui *UI) drawFightingFriends(offsetX, offsetY int) {
 			} else {
 				ui.drawFightingInvocation(e, offsetX, offsetY)
 			}
-			offsetX += 16
-			offsetY += 50
+			offsetX += 20
+			offsetY += 70
 		}
 	}
 }
@@ -179,7 +179,7 @@ func (ui *UI) drawFightingInvocation(e game.FighterInterface, offsetX, offsetY i
 		}
 		ui.renderer.Copy(ui.textureAtlas,
 			&ui.textureIndex[e.GetTile()][0],
-			&sdl.Rect{X: int32(offsetX + xb), Y: int32(offsetY + yb), W: 32, H: 32})
+			&sdl.Rect{X: int32(offsetX + xb), Y: int32(offsetY + yb), W: 64, H: 64})
 		ui.drawHealthBar(int32(offsetX+xb), int32(offsetY-15), e.GetHealth())
 	}
 }
@@ -243,6 +243,6 @@ func (ui *UI) drawFightingEffect(effect *game.Effect, offsetX, offsetY int) {
 	if len(ui.textureIndex[tile]) > 0 {
 		ui.renderer.Copy(ui.textureAtlas,
 			&ui.textureIndex[tile][effect.TileIdx%len(ui.textureIndex[tile])],
-			&sdl.Rect{X: int32(x), Y: int32(y), W: Res, H: Res})
+			&sdl.Rect{X: int32(x), Y: int32(y), W: 64, H: 64})
 	}
 }

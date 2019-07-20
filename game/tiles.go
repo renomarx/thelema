@@ -59,11 +59,10 @@ const (
 	Steak     Tile = 'k'
 
 	// Powers
-	Energyball Tile = 'p'
-	Flames     Tile = 'f'
-	Storm      Tile = 't'
-	Healing    Tile = 'e'
-	Teleport   Tile = 'y'
+	Flames   Tile = 'f'
+	Storm    Tile = 't'
+	Healing  Tile = 'e'
+	Teleport Tile = 'y'
 
 	// Weapons
 	Dagger Tile = 'd'
