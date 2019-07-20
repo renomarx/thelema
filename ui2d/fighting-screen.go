@@ -237,8 +237,8 @@ func (ui *UI) drawFightingAttacks() {
 
 func (ui *UI) drawFightingEffect(effect *game.Effect, offsetX, offsetY int) {
 	fp := effect.Pos
-	x := offsetX * (fp.X + 1)
-	y := offsetY + 50*fp.Y
+	x := offsetX*(fp.X+1) + rand.Intn(6)
+	y := offsetY + 50*fp.Y + rand.Intn(6)
 	tile := game.Tile(effect.Rune)
 	if len(ui.textureIndex[tile]) > 0 {
 		ui.renderer.Copy(ui.textureAtlas,
