@@ -39,7 +39,7 @@ func NewPnj(p Pos, name string, voice string) *Pnj {
 }
 
 func (pnj *Pnj) Talk(p *Player, g *Game) {
-	g.GetEventManager().Dispatch(&Event{Action: ActionTalk, Payload: map[string]string{"voice": pnj.Voice}})
+	EM.Dispatch(&Event{Action: ActionTalk, Payload: map[string]string{"voice": pnj.Voice}})
 	pnj.Dialog.Init(p)
 	node := pnj.Dialog.GetCurrentNode()
 	node.ClearHighlight()
@@ -116,7 +116,7 @@ func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
 		}
 	}
 	pnj.Dialog.CurrentNode = nodeTo
-	g.GetEventManager().Dispatch(&Event{Action: ActionTalk, Payload: map[string]string{"voice": pnj.Voice}})
+	EM.Dispatch(&Event{Action: ActionTalk, Payload: map[string]string{"voice": pnj.Voice}})
 }
 
 func (pnj *Pnj) StopTalking() {

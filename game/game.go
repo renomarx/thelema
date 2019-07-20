@@ -7,6 +7,8 @@ import (
 // Length of a map case (in pixels)
 const CaseLen = 32
 
+var EM *EventManager
+
 type Game struct {
 	GameDir       string
 	Level         *Level
@@ -19,7 +21,6 @@ type Game struct {
 	Playing       bool
 	input         *Input
 	input2        *Input
-	eventManager  *EventManager
 	menu          *Menu
 	FightingMenu  *Menu
 	GG            *GameGenerator
@@ -32,14 +33,6 @@ func (g *Game) GetInput() *Input {
 
 func (g *Game) GetInput2() *Input {
 	return g.input2
-}
-
-func (g *Game) GetEventManager() *EventManager {
-	return g.eventManager
-}
-
-func (g *Game) SetEventManager(em *EventManager) {
-	g.eventManager = em
 }
 
 func (g *Game) GetMenu() *Menu {
@@ -101,7 +94,6 @@ func NewGame(gameDir string) *Game {
 	game.LoadFightingMenu()
 	game.input = &Input{Typ: StayStill}
 	game.input2 = &Input{Typ: None}
-	game.eventManager = NewEventManager()
 	return game
 }
 

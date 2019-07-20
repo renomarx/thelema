@@ -102,7 +102,7 @@ func (p *Player) afterMovingActions(g *Game) {
 }
 
 func (p *Player) DispatchWalkingEvent(g *Game) {
-	g.GetEventManager().Dispatch(&Event{Action: ActionWalk})
+	EM.Dispatch(&Event{Action: ActionWalk})
 }
 
 func (p *Player) WalkDown() {
@@ -137,7 +137,7 @@ func (p *Player) Talk(g *Game, posTo Pos) {
 	level := g.Level
 	pnj := level.Map[posTo.Y][posTo.X].Pnj
 	if pnj != nil && pnj.Talkable && !pnj.IsDead() {
-		g.GetEventManager().Dispatch(&Event{Action: ActionTalk})
+		EM.Dispatch(&Event{Action: ActionTalk})
 		p.IsTalking = true
 		p.TalkingTo = pnj
 		pnj.Talk(p, g)
@@ -160,7 +160,7 @@ func (p *Player) Discuss(g *Game) {
 		pnj.TalkChoiceDown()
 		adaptDialogSpeed()
 	case Action:
-		g.GetEventManager().Dispatch(&Event{Action: ActionTalk})
+		EM.Dispatch(&Event{Action: ActionTalk})
 		pnj.TalkConfirmChoice(g)
 		adaptDialogSpeed()
 	default:
@@ -210,7 +210,7 @@ func (p *Player) TakeQuestObject(o *Object, g *Game) bool {
 	if !isQuestObject {
 		return false
 	}
-	g.GetEventManager().Dispatch(&Event{
+	EM.Dispatch(&Event{
 		Action:  ActionTake,
 		Message: "You got a special object!",
 	})
@@ -227,7 +227,7 @@ func (p *Player) TakeQuestObject(o *Object, g *Game) bool {
 func (p *Player) TakeUsable(o *Object, g *Game) bool {
 	taken := p.Inventory.TakeUsable(o)
 	if taken {
-		g.GetEventManager().Dispatch(&Event{Action: ActionTake})
+		EM.Dispatch(&Event{Action: ActionTake})
 		g.Level.Map[o.Y][o.X].Object = nil
 	}
 
@@ -237,7 +237,7 @@ func (p *Player) TakeUsable(o *Object, g *Game) bool {
 func (p *Player) TakeBook(o *Object, g *Game) bool {
 	taken := p.AddBook(o, g)
 	if taken {
-		g.GetEventManager().Dispatch(&Event{
+		EM.Dispatch(&Event{
 			Action:  ActionTake,
 			Message: "You got a new book!",
 		})
@@ -249,7 +249,7 @@ func (p *Player) TakeBook(o *Object, g *Game) bool {
 
 func (p *Player) Recruit(pnj *Pnj, g *Game) {
 	if p.Friend != nil {
-		g.GetEventManager().Dispatch(&Event{
+		EM.Dispatch(&Event{
 			Message: "You already have a friend, you can't recruit.",
 		})
 		return

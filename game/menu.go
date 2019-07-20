@@ -156,7 +156,7 @@ func (g *Game) HandleInputMenu() {
 				g.menu.Choices[1].Disabled = false
 				g.CloseMenu()
 
-				g.GetEventManager().Dispatch(&Event{
+				EM.Dispatch(&Event{
 					Action:  ActionChangeLevel,
 					Payload: map[string]string{"levelType": g.Level.Type},
 					Message: "Loaded level"})
@@ -172,5 +172,5 @@ func (g *Game) HandleInputMenu() {
 }
 
 func (g *Game) DispatchEventMenu(action string) {
-	g.GetEventManager().Dispatch(&Event{Action: action})
+	EM.Dispatch(&Event{Action: action})
 }

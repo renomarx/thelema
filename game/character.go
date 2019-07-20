@@ -166,21 +166,21 @@ func (c *Character) PowerUse(g *Game) {
 		}
 		switch c.CurrentPower.Type {
 		case PowerEnergyBall:
-			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerEnergyBall}})
+			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerEnergyBall}})
 			g.Level.MakeEnergyball(c.Pos, c.LookAt, c.CalculatePowerAttackScore(), c)
 			c.LooseEnergy(c.CurrentPower.Energy)
 		case PowerInvocation:
 			// TODO
 		case PowerStorm:
-			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerStorm}})
+			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerStorm}})
 			g.MakeRangeStorm(c.Pos, c.CalculatePowerAttackScore(), c.LookAt, 1, 10)
 			c.LooseEnergy(c.CurrentPower.Energy)
 		case PowerFlames:
-			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerFlames}})
+			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerFlames}})
 			g.MakeFlames(c.Pos, c.CalculatePowerAttackScore(), 3, 5)
 			c.LooseEnergy(c.CurrentPower.Energy)
 		case PowerHealing:
-			g.GetEventManager().Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
+			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
 			g.MakeEffect(c.Pos, rune(Healing), 200)
 			c.Health.Add(c.CalculatePowerAttackScore())
 			c.LooseEnergy(c.CurrentPower.Energy)

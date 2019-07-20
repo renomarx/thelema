@@ -9,12 +9,16 @@ import (
 func main() {
 	absPath, _ := filepath.Abs("game")
 
-	game := game.NewGame(absPath)
-	game.InitSlots()
+	game.EM = game.NewEventManager()
 
-	ui := ui2d.NewUI(game)
+	g := game.NewGame(absPath)
+	g.InitSlots()
+
+	ui := ui2d.NewUI(g)
+	game.EM.Subscribe(ui)
+
 	go ui.WatchInput()
 	go ui.Run()
 
-	game.Run()
+	g.Run()
 }

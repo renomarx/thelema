@@ -170,7 +170,7 @@ func (level *Level) OpenPortal(g *Game, pos Pos) {
 		g.Level = g.Levels[port.LevelTo]
 		g.Level.Player = p
 
-		g.GetEventManager().Dispatch(&Event{
+		EM.Dispatch(&Event{
 			Action:  ActionChangeLevel,
 			Payload: map[string]string{"levelType": g.Level.Type},
 			Message: "Going to " + port.LevelTo})

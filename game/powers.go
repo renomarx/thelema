@@ -29,7 +29,7 @@ func (pow *PlayerPower) adaptSpeed() {
 func (p *Player) NewPower(powername string, g *Game) {
 	p.newPowerRaw(powername)
 	pp := p.Powers[powername]
-	g.GetEventManager().Dispatch(&Event{
+	EM.Dispatch(&Event{
 		Message: "You learned power: '" + string(pp.Type) + "' with this book!",
 		Action:  ActionPower,
 		Payload: map[string]string{"type": string(pp.Type)}})

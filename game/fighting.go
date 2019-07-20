@@ -76,7 +76,7 @@ func (g *Game) FightMonsters(bestiary []*MonsterType) {
 }
 
 func (g *Game) Fight(enemies []FighterInterface) {
-	g.GetEventManager().Dispatch(&Event{
+	EM.Dispatch(&Event{
 		Action:  ActionFight,
 		Message: "You're being attacked!",
 	})
@@ -94,7 +94,7 @@ func (g *Game) Fight(enemies []FighterInterface) {
 		g.FightingRing.PlayRound(g)
 	}
 	g.FightingRing = nil
-	g.GetEventManager().Dispatch(&Event{
+	EM.Dispatch(&Event{
 		Action:  ActionStopFight,
 		Payload: map[string]string{"levelType": g.Level.Type},
 	})
@@ -173,7 +173,7 @@ func (ring *FightingRing) PlayRound(g *Game) {
 	for _, rf := range ring.roundFighters {
 		if !rf.f.IsDead() {
 			rf.f.Fight(ring)
-			g.GetEventManager().Dispatch(&Event{
+			EM.Dispatch(&Event{
 				Action: ActionAttack,
 			})
 		}

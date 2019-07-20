@@ -50,7 +50,7 @@ func openDoor(g *Game, pos Pos) {
 		case DoorClosed:
 			o.Rune = rune(DoorOpened)
 			o.Blocking = false
-			g.GetEventManager().Dispatch(&Event{Action: ActionOpenDoor})
+			EM.Dispatch(&Event{Action: ActionOpenDoor})
 		}
 	}
 }
@@ -63,7 +63,7 @@ func closeDoor(g *Game, pos Pos) {
 		case DoorOpened:
 			o.Rune = rune(DoorClosed)
 			o.Blocking = true
-			g.GetEventManager().Dispatch(&Event{Action: ActionCloseDoor})
+			EM.Dispatch(&Event{Action: ActionCloseDoor})
 		}
 	}
 }

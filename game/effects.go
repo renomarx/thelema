@@ -25,7 +25,7 @@ func (g *Game) MakeExplosion(p Pos, size int, lifetime int) {
 			esize = ExplosionSizeLarge
 		}
 	}
-	g.GetEventManager().Dispatch(&Event{Action: ActionExplode, Payload: map[string]string{"size": esize}})
+	EM.Dispatch(&Event{Action: ActionExplode, Payload: map[string]string{"size": esize}})
 	eff := &Effect{}
 	eff.Rune = rune(Explosion)
 	eff.Blocking = false

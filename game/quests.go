@@ -62,13 +62,13 @@ func (p *Player) finishQuestStep(questID string, stepID string, g *Game) {
 	st.IsFinished = true
 	if st.Final {
 		q.IsFinished = true
-		g.GetEventManager().Dispatch(&Event{
+		EM.Dispatch(&Event{
 			Action:  ActionQuestFinished,
 			Message: "You finished " + q.Name + " quest !",
 		})
 	}
 	for _, s := range st.ObjectsTaken {
-		g.GetEventManager().Dispatch(&Event{
+		EM.Dispatch(&Event{
 			Message: "Quest object taken",
 			Action:  ActionTake})
 		r := rune(s[0])
@@ -78,7 +78,7 @@ func (p *Player) finishQuestStep(questID string, stepID string, g *Game) {
 		}
 	}
 	for _, s := range st.ObjectsGiven {
-		g.GetEventManager().Dispatch(&Event{
+		EM.Dispatch(&Event{
 			Message: "Quest object given!",
 			Action:  ActionTake})
 		r := rune(s[0])
@@ -89,7 +89,7 @@ func (p *Player) finishQuestStep(questID string, stepID string, g *Game) {
 		p.Inventory.QuestObjects[r] = &Object{Rune: r}
 	}
 	if st.GoldGiven > 0 {
-		g.GetEventManager().Dispatch(&Event{Action: ActionTakeGold})
+		EM.Dispatch(&Event{Action: ActionTakeGold})
 		p.Inventory.Gold += st.GoldGiven
 	}
 }

@@ -35,7 +35,7 @@ func (gg *GameGenerator) ConfirmChoice(g *Game) {
 	g.GG = nil
 	g.CloseMenu()
 
-	g.GetEventManager().Dispatch(&Event{
+	EM.Dispatch(&Event{
 		Action:  ActionChangeLevel,
 		Payload: map[string]string{"levelType": g.Level.Type},
 		Message: "First level loaded"})

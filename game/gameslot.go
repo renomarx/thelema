@@ -17,22 +17,21 @@ func SaveGame(g *Game, slot string) {
 		return
 	}
 	filepath := g.generateSlotFilepath(slot)
-	g.GetEventManager().Dispatch(&Event{
+	EM.Dispatch(&Event{
 		Action:  ActionMenuConfirm,
 		Message: "Saving game..."})
 	err := writeGob(filepath, g)
 	if err != nil {
 		panic(err)
 	}
-	g.GetEventManager().Dispatch(&Event{
+	EM.Dispatch(&Event{
 		Action:  ActionMenuConfirm,
 		Message: "Saved!"})
 }
 
 func LoadGame(g *Game, slot string) {
-	eventManager := g.GetEventManager()
 	filepath := g.generateSlotFilepath(slot)
-	g.GetEventManager().Dispatch(&Event{
+	EM.Dispatch(&Event{
 		Action:  ActionMenuConfirm,
 		Message: "Loading game..."})
 	lg := NewGame(g.GameDir)
@@ -41,8 +40,7 @@ func LoadGame(g *Game, slot string) {
 	if err != nil {
 		panic(err)
 	}
-	g.SetEventManager(eventManager)
-	g.GetEventManager().Dispatch(&Event{
+	EM.Dispatch(&Event{
 		Action:  ActionMenuConfirm,
 		Message: "Loaded."})
 }
