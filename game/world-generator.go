@@ -14,10 +14,10 @@ const (
 	FirstLevelName = "City 1 - House 1"
 	PlayerInitialX = 7
 	PlayerInitialY = 5
-	WorldHeight    = 500  //500
-	WorldWidth     = 1000 //1000
-	OceanX         = 2    //20
-	OceanY         = 1    //10
+	WorldHeight    = 50  //500
+	WorldWidth     = 100 //1000
+	OceanX         = 2   //20
+	OceanY         = 1   //10
 	WorldName      = "world"
 )
 
@@ -91,6 +91,8 @@ func (g *Game) loadBooks() {
 		switch bookName {
 		case "invocat":
 			powers = append(powers, PowerInvocation)
+		case "dead_speaking":
+			powers = append(powers, PowerDeadSpeaking)
 		}
 		g.Books[bookName] = g.loadBookFromFile(bookName, powers)
 	}

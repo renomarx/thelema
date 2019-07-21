@@ -265,6 +265,8 @@ func (c *Player) PowerUse(g *Game) {
 		switch c.CurrentPower.Type {
 		case PowerInvocation:
 			// TODO : make input control invocation for lifetime
+		case PowerDeadSpeaking:
+			// TODO : if dead pnj, talk to it
 		case PowerStorm:
 			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerStorm}})
 			g.Level.MakeRangeStorm(c.Pos, c.CalculatePowerAttackScore(), c.LookAt, 1, 10)

@@ -105,10 +105,10 @@
       "choices": [
         {
           "cmd": "Ensuite ?",
-          "node": "talk_to_dead_body"
+          "node": "talk_to_dead_body",
+          "books_given": ["dead_speaking"]
         }
-      ],
-      "books_given": ["dead_speaking"]
+      ]
     },
     "talk_to_dead_body": {
       "message": "Ensuite, il se trouve une grotte où est enterrée une certaine personne. Allez dans cette grotte, trouvez le cadavre et rappelez son esprit. Il vous donnera les réponses.",

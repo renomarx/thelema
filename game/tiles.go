@@ -64,6 +64,7 @@ const (
 	Storm    Tile = 't'
 	Healing  Tile = 'e'
 	Teleport Tile = 'y'
+	Skull    Tile = 'q'
 
 	// Weapons
 	Dagger Tile = 'd'

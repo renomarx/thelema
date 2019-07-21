@@ -108,6 +108,13 @@ func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
 					g.SendToLevel(levelPnj[0], levelPnj[1], levelPnj[2])
 				}
 			}
+			for _, book := range choice.BooksGiven {
+				p.Library.AddBook(g.Books[book])
+				EM.Dispatch(&Event{
+					Action:  ActionTake,
+					Message: "You got a new book!",
+				})
+			}
 			if choice.NodeId == "" {
 				pnj.StopTalking()
 				return
