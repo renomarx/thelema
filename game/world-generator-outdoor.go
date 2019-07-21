@@ -1,14 +1,26 @@
 package game
 
+import "math/rand"
+
 func (wg *WorldGenerator) generateOutdoor(levelName string) *Level {
 	level := NewLevel(LevelTypeOutdoor)
 	level.Name = levelName
 	level.InitMaps(WorldHeight, WorldWidth)
-	level.MonstersProbability = 8
 
+	initialMagnitude := 300
+	magnitude := initialMagnitude
 	for y := 0; y < WorldHeight; y++ {
 		for x := 0; x < WorldWidth; x++ {
 			t := DirtFloor
+			p := rand.Intn(magnitude)
+			if p < 50 {
+				t = HerbFloor
+				level.Map[y][x].MonstersProbability = 6
+				magnitude -= initialMagnitude / 50
+				if magnitude <= 0 {
+					magnitude = initialMagnitude
+				}
+			}
 			level.Map[y][x].T = t
 		}
 	}

@@ -26,7 +26,6 @@ func (wg *WorldGenerator) generateGrottos(level *Level, nbGrottos int) {
 func (wg *WorldGenerator) generateGrotto(level *Level, pos Pos, mapName string, grottoNumber int) {
 	levelName := "Grotto " + strconv.Itoa(grottoNumber)
 	nl, npos := wg.LoadMapTemplate(mapName, LevelTypeGrotto, levelName)
-	nl.MonstersProbability = 13
 	nl.Name = levelName
 	wg.g.Levels[levelName] = nl
 	level.AddPortal(pos, &Portal{LevelTo: levelName, PosTo: npos})

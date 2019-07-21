@@ -8,10 +8,10 @@ func (p *Player) TakeDamages(damage int) {
 }
 
 func (p *Player) MeetMonsters(g *Game) {
-	// TODO : handle monsters types by level case type
 	l := g.Level
 	r := rand.Intn(100)
-	if r > l.MonstersProbability {
+	cc := l.Map[p.Y][p.X]
+	if r >= cc.MonstersProbability {
 		return
 	}
 	switch l.Type {

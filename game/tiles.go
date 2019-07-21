@@ -5,6 +5,7 @@ type Tile rune
 const (
 	StoneWall      Tile = '#'
 	DirtFloor      Tile = '.'
+	HerbFloor      Tile = ':'
 	GreenFloor     Tile = '*'
 	DoorClosed     Tile = '|'
 	DoorOpened     Tile = '/'

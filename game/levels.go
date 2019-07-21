@@ -9,23 +9,23 @@ const LevelTypeCity = "CITY"
 const LevelTypeHouse = "HOUSE"
 
 type Level struct {
-	Name                string
-	Width               int
-	Height              int
-	Type                string
-	Player              *Player
-	Map                 [][]Case
-	Paused              bool
-	PRay                int
-	MonstersProbability int
+	Name   string
+	Width  int
+	Height int
+	Type   string
+	Player *Player
+	Map    [][]Case
+	Paused bool
+	PRay   int
 }
 
 type Case struct {
-	T      Tile
-	Portal *Portal
-	Object *Object
-	Effect *Effect
-	Pnj    *Pnj
+	T                   Tile
+	Portal              *Portal
+	Object              *Object
+	Effect              *Effect
+	Pnj                 *Pnj
+	MonstersProbability int
 }
 
 func (l *Level) GetObject(x, y int) *Object {
@@ -67,7 +67,6 @@ func NewLevel(levelType string) *Level {
 	level := &Level{}
 	level.Type = levelType
 	level.PRay = 20
-	level.MonstersProbability = 0 // Default
 	return level
 }
 

@@ -52,6 +52,7 @@ func (wg *WorldGenerator) LoadMapTemplate(mapName string, levelType string, leve
 				t = GreenFloor
 			case LevelTypeGrotto:
 				t = DirtFloor
+				level.Map[y][x].MonstersProbability = 10
 			}
 			switch Tile(c) {
 			case ' ', '\t', '\n', '\r':
