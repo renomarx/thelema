@@ -60,11 +60,12 @@ const (
 	Steak     Tile = 'k'
 
 	// Powers
-	Flames   Tile = 'f'
-	Storm    Tile = 't'
-	Healing  Tile = 'e'
-	Teleport Tile = 'y'
-	Skull    Tile = 'q'
+	Flames     Tile = 'f'
+	Storm      Tile = 't'
+	Healing    Tile = 'e'
+	Teleport   Tile = 'y'
+	Skull      Tile = 'q'
+	Necromancy Tile = 'ç'
 
 	// Weapons
 	Dagger Tile = 'd'

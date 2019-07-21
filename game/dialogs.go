@@ -82,7 +82,8 @@ func (d *Dialog) GetNode(key string) *StoryNode {
 func (d *Dialog) SetInitialNode(key string) *StoryNode {
 	node, exists := d.Nodes[key]
 	if !exists {
-		panic("Dialog node " + key + " does not exist")
+		log.Printf("Node %s does not exist", key)
+		return nil
 	}
 	for _, n := range d.Nodes {
 		n.Initial = false

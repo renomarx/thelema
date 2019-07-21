@@ -35,6 +35,14 @@
           "cmd": "Je dois y aller."
         }
       ]
+    },
+    "dead_greetings": {
+      "message": "Aaaaggghhh... Partez... Laissez-moi en paix...",
+      "choices": [
+        {
+          "cmd": "Je vous libère."
+        }
+      ]
     }
   }
 }

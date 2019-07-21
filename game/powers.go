@@ -20,6 +20,7 @@ type PlayerPower struct {
 	Range       int
 	Description string
 	Name        string
+	IsAttack    bool
 }
 
 func (pow *PlayerPower) adaptSpeed() {
@@ -41,16 +42,16 @@ func (p *Player) newPowerRaw(powername string) {
 		switch powername {
 		case PowerInvocation:
 			p.Powers[string(PowerInvocation)] = &PlayerPower{Type: PowerInvocation, Speed: 5, Energy: 50, Tile: Spirit,
-				Description: "Invoque un esprit.", Name: "Invocation"}
+				Description: "Invoque un esprit.", Name: "Invocation", IsAttack: true}
 		case PowerStorm:
 			p.Powers[string(PowerStorm)] = &PlayerPower{Type: PowerStorm, Speed: 15, Energy: 30, Strength: 30, Tile: Storm, Range: 1,
-				Description: "Lance un éclair devant vous.", Name: "Storm"}
+				Description: "Lance un éclair devant vous.", Name: "Storm", IsAttack: true}
 		case PowerFlames:
 			p.Powers[string(PowerFlames)] = &PlayerPower{Type: PowerFlames, Speed: 3, Energy: 100, Strength: 60, Tile: Flames, Range: 5,
-				Description: "Crée un incendie tout autour de vous.", Name: "Flames"}
+				Description: "Crée un incendie tout autour de vous.", Name: "Flames", IsAttack: true}
 		case PowerHealing:
 			p.Powers[string(PowerHealing)] = &PlayerPower{Type: PowerHealing, Speed: 4, Energy: 20, Strength: 20, Tile: Healing,
-				Description: "Régénère votre santé.", Name: "Healing"}
+				Description: "Régénère votre santé.", Name: "Healing", IsAttack: true}
 		case PowerDeadSpeaking:
 			p.Powers[string(PowerDeadSpeaking)] = &PlayerPower{Type: PowerDeadSpeaking, Tile: Skull, Speed: 5, Energy: 20,
 				Description: "Parle avec l'esprit d'un mort.", Name: "Dead speaking"}

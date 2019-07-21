@@ -17,7 +17,7 @@ type Player struct {
 }
 
 func (p *Player) Update(g *Game) {
-	if p.isDead {
+	if p.Dead {
 		return
 	}
 	input := g.GetInput()
@@ -40,6 +40,17 @@ func (p *Player) Update(g *Game) {
 func (p *Player) Move(g *Game) {
 	input := g.GetInput()
 	level := g.Level
+	posTo := Pos{p.X, p.Y + 1}
+	switch p.LookAt {
+	case Up:
+		posTo = Pos{p.X, p.Y - 1}
+	case Down:
+		posTo = Pos{p.X, p.Y + 1}
+	case Left:
+		posTo = Pos{p.X - 1, p.Y}
+	case Right:
+		posTo = Pos{p.X + 1, p.Y}
+	}
 	switch input.Typ {
 	case Up:
 		openDoor(g, Pos{p.X, p.Y - 1})
@@ -70,21 +81,10 @@ func (p *Player) Move(g *Game) {
 			p.afterMovingActions(g)
 		}
 	case Action:
-		posTo := Pos{p.X, p.Y + 1}
-		switch p.LookAt {
-		case Up:
-			posTo = Pos{p.X, p.Y - 1}
-		case Down:
-			posTo = Pos{p.X, p.Y + 1}
-		case Left:
-			posTo = Pos{p.X - 1, p.Y}
-		case Right:
-			posTo = Pos{p.X + 1, p.Y}
-		}
 		p.Talk(g, posTo)
 		p.Take(g, posTo)
 	case Power:
-		p.PowerUse(g)
+		p.PowerUse(g, posTo)
 	default:
 	}
 }
@@ -256,7 +256,7 @@ func (p *Player) Recruit(pnj *Pnj, g *Game) {
 	p.Friend = f
 }
 
-func (c *Player) PowerUse(g *Game) {
+func (c *Player) PowerUse(g *Game, posTo Pos) {
 	if c.Energy.Current > 0 {
 		c.IsPowerUsing = true
 		for c.PowerPos = 0; c.PowerPos < CaseLen; c.PowerPos++ {
@@ -266,7 +266,8 @@ func (c *Player) PowerUse(g *Game) {
 		case PowerInvocation:
 			// TODO : make input control invocation for lifetime
 		case PowerDeadSpeaking:
-			// TODO : if dead pnj, talk to it
+			g.Level.MakeEffect(posTo, rune(Necromancy), 200)
+			c.TalkToDead(g, posTo)
 		case PowerStorm:
 			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerStorm}})
 			g.Level.MakeRangeStorm(c.Pos, c.CalculatePowerAttackScore(), c.LookAt, 1, 10)
@@ -283,5 +284,17 @@ func (c *Player) PowerUse(g *Game) {
 		default:
 		}
 		c.IsPowerUsing = false
+	}
+}
+
+func (p *Player) TalkToDead(g *Game, posTo Pos) {
+	level := g.Level
+	pnj := level.Map[posTo.Y][posTo.X].Pnj
+	if pnj != nil && pnj.Talkable && pnj.IsDead() {
+		EM.Dispatch(&Event{Action: ActionTalk})
+		p.IsTalking = true
+		p.TalkingTo = pnj
+		pnj.Talk(p, g)
+		adaptDialogSpeed()
 	}
 }

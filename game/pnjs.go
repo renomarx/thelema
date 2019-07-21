@@ -141,7 +141,7 @@ func (pnj *Pnj) StopTalking() {
 }
 
 func (pnj *Pnj) Update(l *Level) {
-	if pnj.isDead {
+	if pnj.Dead {
 		return
 	}
 	if pnj.IsTalking {
@@ -224,6 +224,11 @@ func (pnj *Pnj) BecomeEnemy(g *Game) {
 	e := g.Level.MakeEnemy(pnj)
 	g.Fight([]FighterInterface{e})
 	if e.IsDead() {
-		pnj.isDead = true
+		pnj.Die(g)
 	}
+}
+
+func (pnj *Pnj) Die(g *Game) {
+	pnj.Dead = true
+	pnj.Dialog.SetInitialNode("dead_greetings")
 }

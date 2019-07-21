@@ -62,7 +62,7 @@ type Character struct {
 	Affinity             string
 	ActionPoints         float64
 	LastActionTime       time.Time
-	isDead               bool
+	Dead                 bool
 	VisionRange          int
 	Powers               map[string]*PlayerPower
 	CurrentPower         *PlayerPower
@@ -159,7 +159,7 @@ func (c *Character) moveDown() {
 }
 
 func (c *Character) IsDead() bool {
-	return c.isDead
+	return c.Dead
 }
 
 func (c *Character) CalculateAttackScore() int {
@@ -200,7 +200,7 @@ func (c *Character) LooseEnergy(cost int) {
 }
 
 func (c *Character) TakeDamages(damage int) {
-	if c.isDead {
+	if c.Dead {
 		return
 	}
 	c.damagesTaken = damage
@@ -210,7 +210,7 @@ func (c *Character) TakeDamages(damage int) {
 	c.damagesTaken = 0
 	c.Health.Current -= damage
 	if c.Health.Current <= 0 {
-		c.isDead = true
+		c.Dead = true
 		return
 	}
 }

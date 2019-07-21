@@ -196,6 +196,7 @@ func (fr *FightingRing) clearRound() {
 			enemies = append(enemies, e)
 		}
 	}
+	fr.Enemies = enemies
 	var friends []FighterInterface
 	for _, f := range fr.Friends {
 		if !f.IsDead() {
@@ -235,16 +236,18 @@ func (fr *FightingRing) LoadPossibleAttacks(p *Player) {
 	att.Range = 1
 	fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, att)
 	for _, pow := range p.Powers {
-		att := &Attack{
-			Damages:    pow.Strength,
-			Name:       pow.Name,
-			EnergyCost: pow.Energy,
-			Speed:      pow.Speed,
-			Range:      pow.Range,
-			Type:       AttackTypeMagick,
-			MagickType: pow.Type,
+		if pow.IsAttack {
+			att := &Attack{
+				Damages:    pow.Strength,
+				Name:       pow.Name,
+				EnergyCost: pow.Energy,
+				Speed:      pow.Speed,
+				Range:      pow.Range,
+				Type:       AttackTypeMagick,
+				MagickType: pow.Type,
+			}
+			fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, att)
 		}
-		fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, att)
 	}
 	fr.PossibleAttacks.Selected = 0
 }
