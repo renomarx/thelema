@@ -22,58 +22,63 @@ func (ui *UI) DrawMap() {
 	if player.MapMenuOpen {
 		ui.drawMapBox()
 
-		// Working only because game world width < screen width && game world height < screen height
-		CamX := int32((ui.WindowWidth - len(level.Map[0])) / 2)
-		CamY := int32((ui.WindowHeight - len(level.Map)) / 2)
+		mapHeight := ui.WindowHeight / 2
+		mapWidth := ui.WindowWidth / 2
+		offsetX := ui.WindowWidth / 4
+		offsetY := ui.WindowHeight / 4
 
-		for y := 0; y < len(level.Map); y++ {
-			row := level.Map[y]
-			for x := 0; x < len(row); x++ {
-				tile := row[x].T
-				r := 0
-				g := 0
-				b := 0
-				switch tile {
-				case game.DirtFloor:
-					r = 255
-					g = 219
-					b = 182
-				}
+		for y := 0; y < mapHeight; y++ {
+			for x := 0; x < mapWidth; x++ {
+				r := 255
+				g := 219
+				b := 182
 
 				ui.renderer.SetDrawColor(uint8(r), uint8(g), uint8(b), 255)
-				ui.renderer.DrawPoint(int32(x)+CamX, int32(y)+CamY)
+				ui.renderer.DrawPoint(int32(x+offsetX), int32(y+offsetY))
 				ui.renderer.SetDrawColor(0, 0, 0, 0)
-
-				object := row[x].Object
-				if object != nil {
-					ui.drawMapObject(game.Pos{X: x + int(CamX), Y: y + int(CamY)}, game.Tile(object.Rune))
-				}
 			}
 		}
 
+		portals := make(map[game.Pos]*game.Portal)
 		for y := 0; y < len(level.Map); y++ {
 			row := level.Map[y]
 			for x := 0; x < len(row); x++ {
+				mapX := x * mapWidth / len(row)
+				mapY := y * mapHeight / len(level.Map)
+
+				object := row[x].Object
+				if object != nil {
+					ui.drawMapObject(game.Pos{X: mapX + offsetX, Y: mapY + offsetY}, game.Tile(object.Rune))
+				}
+
 				portal := row[x].Portal
 				if portal != nil {
 					levelTo := g.Levels[portal.LevelTo]
 					if levelTo.Type == game.LevelTypeCity {
-						tex := ui.GetTexture(portal.LevelTo, TextSizeXS, ColorWhite)
-						_, _, w, h, _ := tex.Query()
-						for j := -2; j < int(h)+2; j++ {
-							for i := -2; i < int(w)+2; i++ {
-								ui.renderer.SetDrawColor(0, 0, 0, 255)
-								ui.renderer.DrawPoint(int32(x+int(CamX)+i), int32(y+int(CamY)+j))
-							}
-						}
-						ui.renderer.Copy(tex, nil, &sdl.Rect{int32(x + int(CamX)), int32(y + int(CamY)), w, h})
+						portals[game.Pos{X: mapX, Y: mapY}] = portal
 					}
 				}
 			}
 		}
 
+		// Cities names
+		for pos, portal := range portals {
+			tex := ui.GetTexture(portal.LevelTo, TextSizeXS, ColorWhite)
+			_, _, w, h, _ := tex.Query()
+			for j := -2; j < int(h)+2; j++ {
+				for i := -2; i < int(w)+2; i++ {
+					ui.renderer.SetDrawColor(0, 0, 0, 255)
+					ui.renderer.DrawPoint(int32(pos.X+offsetX+i), int32(pos.Y+offsetY+j))
+				}
+			}
+			ui.renderer.Copy(tex, nil, &sdl.Rect{X: int32(pos.X + offsetX), Y: int32(pos.Y + offsetY), W: w, H: h})
+
+		}
+
 		// Player
-		ui.drawMapPlayer(game.Pos{X: player.X + int(CamX), Y: player.Y + int(CamY)}, 3)
+		mapX := player.X * mapWidth / len(level.Map[0])
+		mapY := player.Y * mapHeight / len(level.Map)
+		ui.drawMapPlayer(game.Pos{X: mapX + offsetX, Y: mapY + offsetY}, 3)
 	}
 }
 

@@ -14,10 +14,10 @@ const (
 	FirstLevelName = "City 1 - House 1"
 	PlayerInitialX = 7
 	PlayerInitialY = 5
-	WorldHeight    = 500
-	WorldWidth     = 1000
-	OceanX         = 20
-	OceanY         = 10
+	WorldHeight    = 500  //500
+	WorldWidth     = 1000 //1000
+	OceanX         = 2    //20
+	OceanY         = 1    //10
 	WorldName      = "world"
 )
 

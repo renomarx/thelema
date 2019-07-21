@@ -26,9 +26,9 @@ func (wg *WorldGenerator) generateOutdoor(levelName string) *Level {
 	}
 
 	wg.generateOcean(level)
-	wg.generateTrees(level, 20000)
+	wg.generateTrees(level, WorldWidth*WorldHeight/20)
 	wg.generateBooks(level, 100)
-	wg.generateGrottos(level, 1000)
+	wg.generateGrottos(level, WorldWidth*WorldHeight/500)
 	wg.generateCities(level, 50)
 	objects := []Tile{
 		Fruits,
