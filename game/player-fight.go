@@ -14,11 +14,12 @@ func (p *Player) MeetMonsters(g *Game) {
 	if r >= cc.MonstersProbability {
 		return
 	}
-	switch l.Type {
-	case LevelTypeOutdoor:
+	switch cc.T {
+	// TODO : other floor types
+	case HerbFloor:
 		bestiary := Bestiary()
 		g.FightMonsters(bestiary)
-	case LevelTypeGrotto:
+	case DirtFloor:
 		bestiary := BestiaryUnderworld()
 		g.FightMonsters(bestiary)
 	}

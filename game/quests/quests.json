@@ -5,11 +5,11 @@
     "steps": {
       "talk_to_jason_about_sarah": {
         "order": 1,
-        "description" : "Ask Jason about Sarah"
+        "description" : "Ask Jason about Sarah (Arcanea)"
       },
       "get_alcohol": {
         "order": 2,
-        "description" : "Get a bottle of alcohol in City 8"
+        "description" : "Get a bottle of alcohol in Dresde"
       },
       "get_herbs": {
         "order": 2,
@@ -17,7 +17,7 @@
       },
       "talk_to_sarah": {
         "order": 3,
-        "description" : "Bring alcohol and herbs to Sarah in City 32",
+        "description" : "Bring alcohol and herbs to Sarah in Neoroma",
         "objects_taken": ["c","v"],
         "gold_given": 30,
         "objects_given": [],
@@ -31,11 +31,11 @@
     "steps": {
       "talk_to_nathaniel": {
         "order": 1,
-        "description" : "Parlez à Nathaniel (City 1 - House 1)"
+        "description" : "Parlez à Nathaniel (Arcanea - Home)"
       },
       "talk_to_nathaniel2": {
         "order": 2,
-        "description" : "Retrouvez Nathaniel (City 32)"
+        "description" : "Retrouvez Nathaniel (Neoroma)"
       }
     }
   },
@@ -50,7 +50,7 @@
       },
       "free": {
         "order": 2,
-        "description" : "Libérez Nathaniel (City 6 - Prison)"
+        "description" : "Libérez Nathaniel (Dresde)"
       }
     }
   },

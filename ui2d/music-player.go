@@ -78,7 +78,7 @@ func (mp *MusicPlayer) PlaySound(name string, volume int) {
 func (mp *MusicPlayer) On(e *game.Event) {
 	switch e.Action {
 	case game.ActionChangeLevel:
-		mp.PlayMusicForLevel(e.Payload["levelType"])
+		mp.PlayMusicForLevel(e.Payload["levelName"])
 	// case game.ActionWalk:
 	// 	mp.PlaySound("footstep00.ogg")
 	case game.ActionOpenDoor:
@@ -118,19 +118,19 @@ func (mp *MusicPlayer) On(e *game.Event) {
 	case game.ActionFight:
 		mp.ChangeMusic("doomed.mp3", 24)
 	case game.ActionStopFight:
-		mp.PlayMusicForLevel(e.Payload["levelType"])
+		mp.PlayMusicForLevel(e.Payload["levelName"])
 	}
 }
 
-func (mp *MusicPlayer) PlayMusicForLevel(levelType string) {
-	switch levelType {
-	case game.LevelTypeGrotto:
+func (mp *MusicPlayer) PlayMusicForLevel(levelName string) {
+	switch levelName {
+	case "grotto1", "grotto2":
 		mp.ChangeMusic("dark_fallout.ogg", 32)
-	case game.LevelTypeOutdoor:
+	case "world":
 		mp.ChangeMusic("forest.mp3", 64)
-	case game.LevelTypeCity:
+	case "neoroma":
 		mp.ChangeMusic("warped.mp3", 32)
-	case game.LevelTypeHouse:
+	default:
 		mp.StopMusic()
 	}
 }

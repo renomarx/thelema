@@ -1,5 +1,5 @@
 {
-  "level": "City 1 - House 1",
+  "level": "arcanea/home",
   "current_node": "greetings",
   "nodes" : {
     "greetings": {
@@ -35,7 +35,7 @@
       "choices": [
         {
           "cmd": "...",
-          "actions": ["teleport_to:City 32", "set_initial_node:greetings2"],
+          "actions": ["teleport_to:neoroma", "set_initial_node:greetings2"],
           "quest": {
             "steps_mandatory": [],
             "steps_fullfilling": ["nathaniel_revelation:talk_to_nathaniel"]
@@ -127,7 +127,7 @@
           "quest": {
             "steps_fullfilling": ["great_priest_past:talk_to_nathaniel_about_dead_body", "nathaniel_revelation:talk_to_nathaniel2"]
           },
-          "actions": ["teleport_to:City 21", "set_initial_node:greetings3"]
+          "actions": ["teleport_to:nil", "set_initial_node:greetings3"]
         }
       ]
     },

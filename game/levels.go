@@ -3,16 +3,10 @@ package game
 import "math/rand"
 import "time"
 
-const LevelTypeOutdoor = "OUTDOOR"
-const LevelTypeGrotto = "GROTTO"
-const LevelTypeCity = "CITY"
-const LevelTypeHouse = "HOUSE"
-
 type Level struct {
 	Name   string
 	Width  int
 	Height int
-	Type   string
 	Player *Player
 	Map    [][]Case
 	Paused bool
@@ -63,9 +57,8 @@ func (l *Level) GetRandomFreePos() *Pos {
 	return &pos
 }
 
-func NewLevel(levelType string) *Level {
+func NewLevel() *Level {
 	level := &Level{}
-	level.Type = levelType
 	level.PRay = 20
 	return level
 }
@@ -113,7 +106,7 @@ func (level *Level) OpenPortal(g *Game, pos Pos) {
 
 		EM.Dispatch(&Event{
 			Action:  ActionChangeLevel,
-			Payload: map[string]string{"levelType": g.Level.Type},
+			Payload: map[string]string{"levelName": g.Level.Name},
 			Message: "Going to " + port.LevelTo})
 	}
 }

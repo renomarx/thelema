@@ -4,11 +4,10 @@ import (
 	"bufio"
 	"log"
 	"os"
-	"strconv"
 )
 
-func (wg *WorldGenerator) LoadMapTemplate(mapName string, levelType string, levelName string) (*Level, Pos) {
-	dirpath := wg.g.GameDir
+func (g *Game) LoadMapTemplate(mapName string, levelName string) *Level {
+	dirpath := g.GameDir
 	filename := dirpath + "/maps/" + mapName + ".map"
 	file, err := os.Open(filename)
 	if err != nil {
@@ -31,12 +30,8 @@ func (wg *WorldGenerator) LoadMapTemplate(mapName string, levelType string, leve
 		log.Fatal(err)
 	}
 
-	level := NewLevel(levelType)
+	level := NewLevel()
 	level.InitMaps(len(levelLines), longestRow)
-	initialPos := Pos{X: 1, Y: 1}
-	houseTemplates := LoadFilenames(wg.g.GameDir + "/maps/house")
-	nbHouseTemplates := len(houseTemplates)
-	houseNumber := 0
 	for y := 0; y < len(level.Map); y++ {
 		line := levelLines[y]
 		// Re-compose line to handle utf8
@@ -44,46 +39,33 @@ func (wg *WorldGenerator) LoadMapTemplate(mapName string, levelType string, leve
 		for _, c := range line {
 			utf8line = append(utf8line, c)
 		}
+		var t Tile
+		t = DirtFloor
 		for x, c := range utf8line {
-			var t Tile
-			t = DirtFloor
-			switch levelType {
-			case LevelTypeHouse, LevelTypeCity:
-				t = GreenFloor
-			case LevelTypeGrotto:
-				t = DirtFloor
-				level.Map[y][x].MonstersProbability = 10
-			}
 			switch Tile(c) {
 			case ' ', '\t', '\n', '\r':
 				t = Blank
-			case DirtFloor, GreenFloor:
+			case DirtFloor:
+				t = DirtFloor
+			case CityFloor:
+				t = CityFloor
+			case HerbFloor:
+				level.Map[y][x].MonstersProbability = 6
+				t = HerbFloor
 			case DoorOpened:
 				level.Map[y][x].Object = &Object{Rune: rune(DoorOpened)}
 			case Upstairs:
 				level.Map[y][x].Object = &Object{Rune: rune(Upstairs)}
-				initialPos = Pos{X: x, Y: y}
+			case Downstairs:
+				level.Map[y][x].Object = &Object{Rune: rune(Downstairs)}
+			case CityEntry:
+				level.Map[y][x].Object = &Object{Rune: rune(CityEntry)}
 			case CityOut:
 				level.Map[y][x].Object = &Object{Rune: rune(CityOut)}
-				initialPos = Pos{X: x, Y: y}
 			case HouseDoor:
 				level.Map[y][x].Object = &Object{Rune: rune(HouseDoor)}
-				if levelType == LevelTypeHouse {
-					initialPos = Pos{X: x, Y: y}
-				} else {
-					m := (houseNumber % nbHouseTemplates) + 1
-					mapName := "house/house" + strconv.Itoa(m)
-					wg.generateHouse(level, Pos{X: x, Y: y}, mapName, houseNumber, levelName)
-					houseNumber++
-				}
 			case PrisonDoor:
 				level.Map[y][x].Object = &Object{Rune: rune(PrisonDoor)}
-				if levelType == LevelTypeHouse {
-					initialPos = Pos{X: x, Y: y}
-				} else {
-					mapName := "place/prison"
-					wg.generatePrison(level, Pos{X: x, Y: y}, mapName, houseNumber, levelName)
-				}
 			default:
 				o := &Object{Rune: c, Blocking: true}
 				o.Pos = Pos{x, y}
@@ -93,5 +75,5 @@ func (wg *WorldGenerator) LoadMapTemplate(mapName string, levelType string, leve
 		}
 	}
 
-	return level, initialPos
+	return level
 }

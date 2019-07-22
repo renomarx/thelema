@@ -4,13 +4,13 @@
       "id": "sarahs_gin",
       "steps_fullfilling": ["get_alcohol"]
     },
-    "level": "City 8"
+    "level": "dresde"
   },
   "v": {
     "quest": {
       "id": "sarahs_gin",
       "steps_fullfilling": ["get_herbs"]
     },
-    "level": "City 21"
+    "level": "neoroma"
   }
 }

@@ -53,10 +53,7 @@ func (ui *UI) DrawMap() {
 
 				portal := row[x].Portal
 				if portal != nil {
-					levelTo := g.Levels[portal.LevelTo]
-					if levelTo.Type == game.LevelTypeCity {
-						portals[game.Pos{X: mapX, Y: mapY}] = portal
-					}
+					portals[game.Pos{X: mapX, Y: mapY}] = portal
 				}
 			}
 		}

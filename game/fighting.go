@@ -98,7 +98,7 @@ func (g *Game) Fight(enemies []FighterInterface) {
 	g.FightingRing = nil
 	EM.Dispatch(&Event{
 		Action:  ActionStopFight,
-		Payload: map[string]string{"levelType": g.Level.Type},
+		Payload: map[string]string{"levelName": g.Level.Name},
 	})
 }
 
