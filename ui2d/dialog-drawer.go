@@ -1,14 +1,14 @@
 package ui2d
 
 import (
-	"thelema/game"
 	"github.com/veandco/go-sdl2/sdl"
+	"thelema/game"
 )
 
 type Color sdl.Color
 
-const DialogScreenOffsetX = 10
-const DialogScreenOffsetY = 4
+const DialogScreenOffsetX = 30
+const DialogScreenOffsetY = 20
 
 type TextCache struct {
 	Textures map[string]*sdl.Texture
@@ -39,14 +39,14 @@ func (ui *UI) DrawDialog(p *game.Pnj) {
 
 		text := node.Message
 
-		offsetH := (ui.WindowHeight/Res - DialogScreenOffsetY) * Res
-		tex := ui.GetTexture(text, TextSizeM, ColorDisabled)
+		offsetH := (3 * ui.WindowHeight / 4) + DialogScreenOffsetY
+		tex := ui.GetTexture(text, TextSizeL, ColorDisabled)
 		_, _, w, h, _ := tex.Query()
 		ui.renderer.Copy(tex, nil, &sdl.Rect{DialogScreenOffsetX, int32(offsetH), w, h})
 
 		offsetH += int(h)
 		for _, choice := range node.Choices {
-			tex := ui.GetTexture(choice.Cmd, TextSizeS, ColorActive)
+			tex := ui.GetTexture(choice.Cmd, TextSizeM, ColorActive)
 			if choice.Highlighted {
 				tex.SetColorMod(0, 255, 0)
 			} else {
@@ -60,11 +60,7 @@ func (ui *UI) DrawDialog(p *game.Pnj) {
 }
 
 func (ui *UI) drawDialogBox() {
-	for x := 0; x <= ui.WindowWidth/Res; x++ {
-		for y := ui.WindowHeight/Res - DialogScreenOffsetY; y <= ui.WindowHeight/Res; y++ {
-			ui.renderer.Copy(ui.textureAtlas,
-				&ui.textureIndex['Ʈ'][0],
-				&sdl.Rect{X: int32(x * Res), Y: int32(y * Res), W: Res, H: Res})
-		}
-	}
+	ui.renderer.Copy(ui.uiTextures["downbox"],
+		&sdl.Rect{X: 0, Y: 0, W: 320, H: 64},
+		&sdl.Rect{X: 0, Y: int32(3 * ui.WindowHeight / 4), W: int32(ui.WindowWidth), H: int32(ui.WindowHeight / 4)})
 }

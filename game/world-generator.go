@@ -217,36 +217,6 @@ func (g *Game) loadBookFromFile(filename string, powers []string) *OBook {
 	return &OBook{Title: title, Text: lines, Powers: powers, Rune: rune(Book)}
 }
 
-func (g *Game) generateUsables(level *Level, objects []Tile, nb int) {
-	for i := 0; i < nb; i++ {
-		x := rand.Intn(len(level.Map[0]))
-		y := rand.Intn(len(level.Map))
-		m := rand.Intn(len(objects))
-		pos := Pos{X: x, Y: y}
-
-		mt := objects[m]
-		if canGo(level, pos) {
-			b := &Object{Rune: rune(mt), Blocking: true}
-			b.Pos = pos
-			level.Map[pos.Y][pos.X].Object = b
-		}
-	}
-}
-
-func (g *Game) generateBooks(level *Level, nbBooks int) {
-	for i := 0; i < nbBooks; i++ {
-		x := rand.Intn(len(level.Map[0]))
-		y := rand.Intn(len(level.Map))
-		pos := Pos{X: x, Y: y}
-
-		if canGo(level, pos) {
-			b := &Object{Rune: rune(Book), Blocking: true}
-			b.Pos = pos
-			level.Map[pos.Y][pos.X].Object = b
-		}
-	}
-}
-
 func (g *Game) loadQuestsObjects() {
 	filename := g.GameDir + "/quests/objects.json"
 	jsonFile, err := os.Open(filename)

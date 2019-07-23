@@ -62,11 +62,4 @@ const (
 	Teleport   Tile = 'y'
 	Skull      Tile = 'q'
 	Necromancy Tile = 'ç'
-
-	// Weapons
-	Dagger Tile = 'd'
-	Bow    Tile = 'a'
-	Wand   Tile = 'w'
-	Spear  Tile = 's'
-	Arrow  Tile = 'r'
 )

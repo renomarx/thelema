@@ -22,7 +22,7 @@
       ]
     },
     "what_are_you": {
-      "message": "Je fuis la police. J'aimerais vous expliquer plus en détail mais je dois partir. Si vous voulez en savoir plus, retrouvez-moi en City 32.",
+      "message": "Je fuis la police. J'aimerais vous expliquer plus en détail mais je dois partir. Si vous voulez en savoir plus, retrouvez-moi à Neoroma.",
       "choices": [
         {
           "cmd": "Attendez!",
@@ -31,7 +31,7 @@
       ]
     },
     "bye": {
-      "message": "Notre rencontre n'est peut-être pas dû au hasard. Peut-être êtes-vous la seule personne capable de m'aider. Nous nous reverrons...",
+      "message": "Notre rencontre n'est peut-être pas dû au hasard. Nous nous reverrons...",
       "choices": [
         {
           "cmd": "...",
@@ -111,7 +111,7 @@
       ]
     },
     "talk_to_dead_body": {
-      "message": "Ensuite, il se trouve une grotte où est enterrée une certaine personne. Allez dans cette grotte, trouvez le cadavre et rappelez son esprit. Il vous donnera les réponses.",
+      "message": "Ensuite, il se trouve une crypte où est enterrée une certaine personne. Allez dans cette crypte, trouvez le cadavre et rappelez son esprit. Il vous donnera les réponses.",
       "choices": [
         {
           "cmd": "Les réponses à quoi ?",

@@ -32,7 +32,7 @@ func (ui *UI) DrawQuests() {
 		for _, qid := range runningIds {
 			q := p.Quests[qid]
 			h = ui.DrawQuest(q, offsetH, ColorActive)
-			offsetH += h
+			offsetH = h
 			i++
 		}
 		offsetH += Res
@@ -42,14 +42,14 @@ func (ui *UI) DrawQuests() {
 		for _, qid := range finishedIds {
 			q := p.Quests[qid]
 			h = ui.DrawFinishedQuest(q, offsetH, ColorDisabled)
-			offsetH += h
+			offsetH = h
 			i++
 		}
 	}
 }
 
 func (ui *UI) DrawQuest(q *game.Quest, offsetH int32, color sdl.Color) int32 {
-	_, h := ui.DrawText(q.Name, TextSizeS, color, PlayerMenuOffsetX*32+10, offsetH)
+	_, h := ui.DrawText(q.Name, TextSizeM, color, PlayerMenuOffsetX*32+10, offsetH)
 	offsetH += h
 
 	steps := q.GetOrderedSteps()
@@ -58,14 +58,15 @@ func (ui *UI) DrawQuest(q *game.Quest, offsetH int32, color sdl.Color) int32 {
 		if st.IsFinished {
 			stColor = ColorDisabled
 		}
-		_, h := ui.DrawText("- "+st.Description, TextSizeXS, stColor, PlayerMenuOffsetX*32+10+10, offsetH)
+		_, h := ui.DrawText("- "+st.Description, TextSizeS, stColor, PlayerMenuOffsetX*32+10+10, offsetH)
 		offsetH += h
 	}
+	offsetH += 10
 	return offsetH
 }
 
 func (ui *UI) DrawFinishedQuest(q *game.Quest, offsetH int32, color sdl.Color) int32 {
-	_, h := ui.DrawText(q.Name, TextSizeS, color, PlayerMenuOffsetX*32+10, offsetH)
+	_, h := ui.DrawText(q.Name, TextSizeM, color, PlayerMenuOffsetX*32+10, offsetH)
 	offsetH += h
 	return offsetH
 }
