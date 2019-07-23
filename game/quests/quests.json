@@ -35,7 +35,8 @@
       },
       "talk_to_nathaniel2": {
         "order": 2,
-        "description" : "Retrouvez Nathaniel (Neoroma)"
+        "description" : "Retrouvez Nathaniel (Neoroma)",
+        "final": true
       }
     }
   },
@@ -50,7 +51,8 @@
       },
       "free": {
         "order": 2,
-        "description" : "Libérez Nathaniel (Dresde)"
+        "description" : "Libérez Nathaniel (Dresde - Prison)",
+        "final": true
       }
     }
   },
@@ -64,7 +66,7 @@
       },
       "talk_to_dead_body": {
         "order": 2,
-        "description" : "Parlez au cadavre de la grotte 6"
+        "description" : "Parlez à Abigail dans la crypte."
       }
     }
   }

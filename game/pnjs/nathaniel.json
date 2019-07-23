@@ -56,7 +56,10 @@
       "choices": [
         {
           "cmd": "Alors, de quoi vouliez-vous me parler ?",
-          "node": "learn_necromancy"
+          "node": "learn_necromancy",
+          "quest": {
+            "steps_fullfilling": ["nathaniel_free:free"]
+          }
         },
         {
           "cmd": "C'est moi qui vous ai vendu à la police.",
