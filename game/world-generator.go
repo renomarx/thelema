@@ -91,7 +91,6 @@ func (g *Game) loadDungeons() {
 			if fileArr[1] == "map" {
 				mapName := "dungeons/" + levelName
 				l := g.LoadMapTemplate(mapName, levelName)
-				g.generatePnjs(l, rand.Intn(20)+1)
 				g.Levels[fileArr[0]] = l
 			}
 		}
@@ -143,32 +142,22 @@ func (g *Game) addBidirectionalPortal(srcName string, srcPos Pos, dstName string
 }
 
 func (g *Game) loadPnjsVIP() {
-	pnjNames := []string{
-		"jason",
-		"sarah",
-		"nathaniel",
-	}
-	pnjVoices := map[string]string{
-		"jason":     VoiceMaleStandard,
-		"sarah":     VoiceFemaleStandard,
-		"nathaniel": VoiceMaleStandard,
-	}
-	for _, name := range pnjNames {
-		p := Pos{}
-		pnj := NewPnj(p, name, pnjVoices[name])
-		filename := g.GameDir + "/pnjs/" + pnj.Name + ".json"
-		pnj.LoadDialogs(filename)
+	pnjNames := LoadFilenames(g.GameDir + "/pnjs")
+	for _, filename := range pnjNames {
+		fileArr := strings.Split(filename, ".")
+		if len(fileArr) == 2 && fileArr[1] == "json" {
+			p := Pos{}
+			pnj := NewPnj(p, fileArr[0])
+			filename := g.GameDir + "/pnjs/" + pnj.Name + ".json"
+			level, pos := pnj.LoadPnj(filename)
 
-		l, exists := g.Levels[pnj.Dialog.Level]
-		if !exists {
-			log.Fatal("Level " + pnj.Dialog.Level + " does not exist")
+			l, exists := g.Levels[level]
+			if !exists {
+				panic("Level " + level + " does not exist")
+			}
+			pnj.Pos = pos
+			l.Map[pos.Y][pos.X].Pnj = pnj
 		}
-		pos := l.GetRandomFreePos()
-		if pos == nil {
-			log.Fatal("No place left on level " + pnj.Dialog.Level)
-		}
-		pnj.Pos = *pos
-		l.Map[pos.Y][pos.X].Pnj = pnj
 	}
 }
 
@@ -276,9 +265,10 @@ func (g *Game) generatePnjs(l *Level, nbPnjs int) {
 		j := i % len(pnjNames)
 		pos := l.GetRandomFreePos()
 		if pos != nil {
-			pnj := NewPnj(*pos, pnjNames[j], pnjVoices[pnjNames[j]])
+			pnj := NewPnj(*pos, pnjNames[j])
+			pnj.Voice = pnjVoices[pnjNames[j]]
 			filename := g.GameDir + "/pnjs/common/" + pnj.Name + ".json"
-			pnj.LoadDialogs(filename)
+			pnj.LoadPnj(filename)
 			l.Map[pos.Y][pos.X].Pnj = pnj
 		}
 	}

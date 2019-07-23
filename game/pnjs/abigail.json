@@ -1,0 +1,35 @@
+{
+  "level": "abigail_crypt",
+  "posx": 75,
+  "posY": 14,
+  "dead": true,
+  "voice": "FEMALE_STANDARD",
+  "current_node": "dead_greetings",
+  "nodes" : {
+    "dead_greetings": {
+      "initial": true,
+      "message": "Qui me rappelle ?",
+      "choices": [
+        {
+          "quest": {
+            "steps_mandatory": ["great_priest_past:talk_to_nathaniel_about_dead_body"],
+            "steps_fullfilling": ["great_priest_past:talk_to_dead_body"]
+          },
+          "cmd": "Nathaniel m'envoie vous parler.",
+          "node": "nathaniel_sent_me"
+        },
+        {
+          "cmd": "Je vous libère."
+        }
+      ]
+    },
+      "nathaniel_sent_me": {
+        "message": "TODO",
+        "choices": [
+          {
+            "cmd": "Je vous libère."
+          }
+        ]
+      }
+  }
+}

@@ -4,11 +4,13 @@ import (
 	"bufio"
 	"log"
 	"os"
+	"strings"
 )
 
-func (g *Game) LoadMapTemplate(mapName string, levelName string) *Level {
+func (g *Game) LoadMapTemplate(mapName, levelName string) *Level {
 	dirpath := g.GameDir
 	filename := dirpath + "/maps/" + mapName + ".map"
+	isDungeon := strings.Contains(filename, "/dungeons/")
 	file, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
@@ -39,9 +41,12 @@ func (g *Game) LoadMapTemplate(mapName string, levelName string) *Level {
 		for _, c := range line {
 			utf8line = append(utf8line, c)
 		}
-		var t Tile
-		t = DirtFloor
 		for x, c := range utf8line {
+			if isDungeon {
+				level.Map[y][x].MonstersProbability = 4
+			}
+			var t Tile
+			t = DirtFloor
 			switch Tile(c) {
 			case ' ', '\t', '\n', '\r':
 				t = Blank
@@ -50,22 +55,10 @@ func (g *Game) LoadMapTemplate(mapName string, levelName string) *Level {
 			case CityFloor:
 				t = CityFloor
 			case HerbFloor:
-				level.Map[y][x].MonstersProbability = 6
+				level.Map[y][x].MonstersProbability = 5
 				t = HerbFloor
-			case DoorOpened:
-				level.Map[y][x].Object = &Object{Rune: rune(DoorOpened)}
-			case Upstairs:
-				level.Map[y][x].Object = &Object{Rune: rune(Upstairs)}
-			case Downstairs:
-				level.Map[y][x].Object = &Object{Rune: rune(Downstairs)}
-			case CityEntry:
-				level.Map[y][x].Object = &Object{Rune: rune(CityEntry)}
-			case CityOut:
-				level.Map[y][x].Object = &Object{Rune: rune(CityOut)}
-			case HouseDoor:
-				level.Map[y][x].Object = &Object{Rune: rune(HouseDoor)}
-			case PrisonDoor:
-				level.Map[y][x].Object = &Object{Rune: rune(PrisonDoor)}
+			case DoorOpened, Upstairs, Downstairs, CityEntry, CityOut, HouseDoor, PrisonDoor, DungeonEntry, DungeonOut:
+				level.Map[y][x].Object = &Object{Rune: c}
 			default:
 				o := &Object{Rune: c, Blocking: true}
 				o.Pos = Pos{x, y}

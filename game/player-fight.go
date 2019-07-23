@@ -9,7 +9,7 @@ func (p *Player) TakeDamages(damage int) {
 
 func (p *Player) MeetMonsters(g *Game) {
 	l := g.Level
-	r := rand.Intn(100)
+	r := rand.Intn(100000) % 100
 	cc := l.Map[p.Y][p.X]
 	if r >= cc.MonstersProbability {
 		return

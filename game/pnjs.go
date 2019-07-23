@@ -1,8 +1,14 @@
 package game
 
-import "time"
-import "math/rand"
-import "strings"
+import (
+	"encoding/json"
+	"io/ioutil"
+	"log"
+	"math/rand"
+	"os"
+	"strings"
+	"time"
+)
 
 type Pnj struct {
 	Character
@@ -11,7 +17,17 @@ type Pnj struct {
 	IsPlayerFriend bool
 }
 
-func NewPnj(p Pos, name string, voice string) *Pnj {
+type PnjConf struct {
+	Level       string                `json:"level"`
+	PosX        int                   `json:"posx"`
+	PosY        int                   `json:"posy"`
+	Dead        bool                  `json:"dead"`
+	Voice       string                `json:"voice"`
+	CurrentNode string                `json:"current_node"`
+	Nodes       map[string]*StoryNode `json:"nodes"`
+}
+
+func NewPnj(p Pos, name string) *Pnj {
 	pnj := &Pnj{}
 	pnj.Name = name
 	pnj.Health.Init(200)
@@ -33,9 +49,30 @@ func NewPnj(p Pos, name string, voice string) *Pnj {
 	pnj.LookAt = Left
 	pnj.Talkable = true
 	pnj.IsTalking = false
-	pnj.Voice = voice
 
 	return pnj
+}
+
+func (p *Pnj) LoadPnj(filename string) (string, Pos) {
+	jsonFile, err := os.Open(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer jsonFile.Close()
+
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+
+	conf := PnjConf{}
+	json.Unmarshal(byteValue, &conf)
+
+	p.Dead = conf.Dead
+
+	p.Dialog = &Dialog{
+		CurrentNode: conf.CurrentNode,
+		Nodes:       conf.Nodes,
+	}
+
+	return conf.Level, Pos{X: conf.PosX, Y: conf.PosY}
 }
 
 func (pnj *Pnj) Talk(p *Player, g *Game) {

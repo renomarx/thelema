@@ -1,4 +1,5 @@
 world,20,9>arcanea,25,0
 world,30,15>dresde,25,0
 world,44,21>neoroma,25,0
+world,36,7>abigail_crypt,3,0
 arcanea,8,6>arcanea/home,9,7

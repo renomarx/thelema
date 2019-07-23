@@ -1,10 +1,7 @@
 package game
 
 import (
-	"encoding/json"
-	"io/ioutil"
 	"log"
-	"os"
 	"strings"
 	"time"
 )
@@ -12,7 +9,6 @@ import (
 const DialogDeltaTime = 200
 
 type Dialog struct {
-	Level       string                `json:"level"`
 	CurrentNode string                `json:"current_node"`
 	Nodes       map[string]*StoryNode `json:"nodes"`
 }
@@ -35,22 +31,6 @@ type StoryChoice struct {
 	Required   map[string]int `json:"required"`
 	Actions    []string       `json:"actions"`
 	BooksGiven []string       `json:"books_given"`
-}
-
-func (p *Pnj) LoadDialogs(filename string) {
-	jsonFile, err := os.Open(filename)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer jsonFile.Close()
-
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-
-	dialog := &Dialog{}
-
-	json.Unmarshal(byteValue, &dialog)
-
-	p.Dialog = dialog
 }
 
 func adaptDialogSpeed() {

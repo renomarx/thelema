@@ -1,5 +1,8 @@
 {
   "level": "neoroma",
+  "posx": 24,
+  "posY": 14,
+  "voice": "FEMALE_STANDARD",
   "current_node": "greetings",
   "nodes" : {
     "greetings": {

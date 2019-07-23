@@ -1,5 +1,8 @@
 {
   "level": "arcanea/home",
+  "posx": 9,
+  "posY": 6,
+  "voice": "MALE_STANDARD",
   "current_node": "greetings",
   "nodes" : {
     "greetings": {
