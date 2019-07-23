@@ -3,7 +3,7 @@
   "nodes" : {
     "greetings": {
       "initial": true,
-      "message": "Hello, I'm a Monk.",
+      "messages": ["Hello, I'm a Monk."],
       "choices": [
         {
           "cmd": "Namaste"

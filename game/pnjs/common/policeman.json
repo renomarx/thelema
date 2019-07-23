@@ -3,7 +3,7 @@
   "nodes" : {
     "greetings": {
       "initial": true,
-      "message": "Circulez.",
+      "messages": ["Circulez."],
       "choices": [
         {
           "cmd": "J'ai besoin de votre aide (recruter)",
@@ -11,13 +11,13 @@
           "actions": ["recruit"]
         },
         {
-          "cmd": "Un hors-la-loi nommé Nathaniel se trouvait chez moi. Il m'a dit qu'il se rendait en City32.",
+          "cmd": "Un hors-la-loi nommé Nathaniel se trouvait chez moi. Il m'a dit qu'il se rendait à Neoroma.",
           "node": "thanks_for_collaboration",
           "quest": {
             "steps_mandatory": ["nathaniel_revelation:talk_to_nathaniel"],
             "steps_fullfilling": ["nathaniel_free:sent_to_prison"]
           },
-          "actions": ["send_to_level:City 32|nathaniel|City 6 - Prison"]
+          "actions": ["send_to_level:neoroma|nathaniel|dresde/prison"]
         },
         {
           "cmd": "Je vous pisse à la raie.",
@@ -29,7 +29,10 @@
       ]
     },
     "thanks_for_collaboration": {
-      "message": "C'est un fugitif très recherché! Nous allons faire le nécessaire. Je vous remercie pour votre collaboration. Voici votre prime de 100§.",
+      "messages": [
+        "C'est un fugitif très recherché! Nous allons faire le nécessaire.",
+        "Je vous remercie pour votre collaboration. Voici votre prime de 100§."
+      ],
       "choices": [
         {
           "cmd": "Je dois y aller."
@@ -37,7 +40,7 @@
       ]
     },
     "dead_greetings": {
-      "message": "Aaaaggghhh... Partez... Laissez-moi en paix...",
+      "messages": ["Aaaaggghhh... Partez... Laissez-moi en paix..."],
       "choices": [
         {
           "cmd": "Je vous libère."

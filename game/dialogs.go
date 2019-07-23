@@ -15,7 +15,7 @@ type Dialog struct {
 
 type StoryNode struct {
 	Initial    bool           `json:"initial"`
-	Message    string         `json:"message"`
+	Messages   []string       `json:"messages"`
 	AllChoices []*StoryChoice `json:"choices"`
 	Choices    []*StoryChoice
 }

@@ -7,66 +7,29 @@
   "nodes" : {
     "greetings": {
       "initial": true,
-      "message": "Hello, I'm Jason. What do you want to know ?",
+      "messages": ["Salut ! Sarah te cherche."],
       "choices": [
         {
-          "cmd": "I want combat training.",
-          "node": "combat_training"
-        },
-        {
-          "cmd": "I want to learn about energy balls.",
-          "node": "energy_balls_training"
-        },
-        {
-          "cmd": "What am I supposed to know ?",
-          "node": "others_training"
-        },
-        {
-          "cmd": "Tell me about Sarah.",
+          "cmd": "Que veut-elle ?",
           "node": "sarah_quest"
         },
         {
-          "cmd": "Ok, see ya"
-        }
-      ]
-    },
-    "combat_training": {
-      "message": "To fight a monster, when you're near it, press 'A'. You can either maintain A down, or press it multiple times to enchain attacks.",
-      "choices": [
-        {
-          "cmd": "Understood.",
-          "node": "greetings"
-        }
-      ]
-    },
-    "energy_balls_training": {
-      "message": "To launch an energy ball, press 'F'. You can maintain F down to launch in combo.",
-      "choices": [
-        {
-          "cmd": "Understood.",
-          "node": "greetings"
-        }
-      ]
-    },
-    "others_training": {
-      "message": "A little tip: you can press E and launch enerby balls and attack at the same time, it will speed up !",
-      "choices": [
-        {
-          "cmd": "Thanks!",
-          "node": "greetings"
+          "cmd": "Ok, à plus."
         }
       ]
     },
     "sarah_quest": {
-      "message": "Sarah is looking for you, in City 32. She wants you to bring her alcohol and herbs to make gin for tonight.",
+      "messages": [
+        "Sarah t'attends à Neoroma.",
+        "Elle veut que tu lui ramènes de l'alcool et des épices pour faire du Gin pour ce soir"
+      ],
       "choices": [
         {
           "quest": {
             "steps_mandatory": [],
             "steps_fullfilling": ["sarahs_gin:talk_to_jason_about_sarah"]
           },
-          "cmd": "Understood.",
-          "node": "greetings"
+          "cmd": "Ok merci."
         }
       ]
     }

@@ -3,7 +3,7 @@
   "nodes" : {
     "greetings": {
       "initial": true,
-      "message": "Bonjour.",
+      "messages": ["Bonjour."],
       "choices": [
         {
           "cmd": "J'ai besoin de votre aide (recruter)",

@@ -37,14 +37,13 @@ func (ui *UI) DrawDialog(p *game.Pnj) {
 		ui.drawDialogBox()
 		node := p.Dialog.GetCurrentNode()
 
-		text := node.Message
-
 		offsetH := (3 * ui.WindowHeight / 4) + DialogScreenOffsetY
-		tex := ui.GetTexture(text, TextSizeL, ColorDisabled)
-		_, _, w, h, _ := tex.Query()
-		ui.renderer.Copy(tex, nil, &sdl.Rect{DialogScreenOffsetX, int32(offsetH), w, h})
-
-		offsetH += int(h)
+		for _, text := range node.Messages {
+			tex := ui.GetTexture(text, TextSizeL, ColorDisabled)
+			_, _, w, h, _ := tex.Query()
+			ui.renderer.Copy(tex, nil, &sdl.Rect{DialogScreenOffsetX, int32(offsetH), w, h})
+			offsetH += int(h)
+		}
 		for _, choice := range node.Choices {
 			tex := ui.GetTexture(choice.Cmd, TextSizeM, ColorActive)
 			if choice.Highlighted {
@@ -52,7 +51,7 @@ func (ui *UI) DrawDialog(p *game.Pnj) {
 			} else {
 				tex.SetColorMod(255, 255, 255)
 			}
-			_, _, w, h, _ = tex.Query()
+			_, _, w, h, _ := tex.Query()
 			ui.renderer.Copy(tex, nil, &sdl.Rect{DialogScreenOffsetX + 10, int32(offsetH), w, h})
 			offsetH += int(h)
 		}

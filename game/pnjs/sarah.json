@@ -7,28 +7,28 @@
   "nodes" : {
     "greetings": {
       "initial": true,
-      "message": "Hi honey.",
+      "messages": ["Salut BB."],
       "choices": [
         {
           "quest": {
             "steps_mandatory": ["sarahs_gin:get_herbs", "sarahs_gin:get_alcohol"],
             "steps_fullfilling": ["sarahs_gin:talk_to_sarah"]
           },
-          "cmd": "Here, I have your herbs and alcohol.",
+          "cmd": "Tiens, voici les ingrédients que tu voulais.",
           "node": "thanks"
         },
         {
-          "cmd": "Bye."
+          "cmd": "A plus."
         }
       ]
     },
-      "thanks": {
-        "message": "Thanks my love ! You can have these 30$.",
-        "choices": [
-          {
-            "cmd": "Bye."
-          }
-        ]
-      }
+    "thanks": {
+      "messages": ["Merci ! Tiens, voilà tes 30$ !"],
+      "choices": [
+        {
+          "cmd": "A plus."
+        }
+      ]
+    }
   }
 }

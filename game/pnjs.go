@@ -252,9 +252,11 @@ func (pnj *Pnj) Teleport(levelName string, g *Game) {
 
 func (pnj *Pnj) ChangeLevel(from *Level, to *Level) {
 	from.Map[pnj.Y][pnj.X].Pnj = nil
-	pos := to.GetRandomFreePos()
-	pnj.Pos = *pos
-	to.Map[pos.Y][pos.X].Pnj = pnj
+	if to != nil {
+		pos := to.GetRandomFreePos()
+		pnj.Pos = *pos
+		to.Map[pos.Y][pos.X].Pnj = pnj
+	}
 }
 
 func (pnj *Pnj) BecomeEnemy(g *Game) {

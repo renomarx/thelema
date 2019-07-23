@@ -3,7 +3,7 @@
   "nodes" : {
     "greetings": {
       "initial": true,
-      "message": "Hello, I'm a Lord.",
+      "messages": ["Hello, I'm a Lord."],
       "choices": [
         {
           "cmd": "After you."

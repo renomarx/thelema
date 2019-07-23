@@ -7,7 +7,7 @@
   "nodes" : {
     "greetings": {
       "initial": true,
-      "message": "Je pensais que cette maison n'appartenait encore à personne...",
+      "messages": ["Je pensais que cette maison n'appartenait encore à personne..."],
       "choices": [
         {
           "cmd": "Qui êtes-vous ?",
@@ -16,7 +16,7 @@
       ]
     },
     "who_are_you": {
-      "message": "Je m'appelle Nathaniel. Vous êtes le nouveau propriétaire de cette maison ?",
+      "messages": ["Je m'appelle Nathaniel. Vous êtes le nouveau propriétaire de cette maison ?"],
       "choices": [
         {
           "cmd": "Oui. Que faites-vous chez moi ?",
@@ -25,7 +25,11 @@
       ]
     },
     "what_are_you": {
-      "message": "Je fuis la police. J'aimerais vous expliquer plus en détail mais je dois partir. Si vous voulez en savoir plus, retrouvez-moi à Neoroma.",
+      "messages": [
+        "Je fuis la police.",
+        "J'aimerais vous expliquer plus en détail mais je dois partir.",
+        "Si vous voulez en savoir plus, retrouvez-moi à Neoroma."
+      ],
       "choices": [
         {
           "cmd": "Attendez!",
@@ -34,7 +38,7 @@
       ]
     },
     "bye": {
-      "message": "Notre rencontre n'est peut-être pas dû au hasard. Nous nous reverrons...",
+      "messages": ["Notre rencontre n'est peut-être pas dû au hasard. Nous nous reverrons..."],
       "choices": [
         {
           "cmd": "...",
@@ -48,7 +52,7 @@
     },
 
     "greetings2": {
-      "message": "Ravi de vous revoir.",
+      "messages": ["Ravi de vous revoir."],
       "choices": [
         {
           "cmd": "Alors, de quoi vouliez-vous me parler ?",
@@ -64,7 +68,10 @@
       ]
     },
     "not_cool": {
-      "message": "Ah ah ah! Vous me vendez, puis vous me libérez. Quelles sont vos raisons ?",
+      "messages": [
+        "Ah ah ah! Vous me vendez, puis vous me libérez.",
+        "Quelles sont vos raisons ?"
+      ],
       "choices": [
         {
           "cmd": "Je me suis trouvé une consience",
@@ -77,7 +84,7 @@
       ]
     },
     "back_to_the_subject": {
-      "message": "Tant mieux pour moi. Et pour vous.",
+      "messages": ["En effet, la conscience se trouve plus facilement avec de l'argent"],
       "choices": [
         {
           "cmd": "Alors, de quoi vouliez-vous me parler ?",
@@ -86,7 +93,7 @@
       ]
     },
     "back_to_the_subject2": {
-      "message": "Grand bien vous fasse.",
+      "messages": ["C'est pas faux."],
       "choices": [
         {
           "cmd": "Alors, de quoi vouliez-vous me parler ?",
@@ -95,7 +102,11 @@
       ]
     },
     "learn_necromancy": {
-      "message": "Vous me paraissez très capable. Je pourrai vous expliquer ce que je sais mais je n'ai pas de preuves à vous apporter, il faut donc que vous le découvriez par vous-même.",
+      "messages": [
+        "Vous me paraissez très capable.",
+        "Je pourrai vous expliquer ce que je sais mais je n'ai pas de preuves à vous apporter,",
+        "il faut donc que vous le découvriez par vous-même."
+      ],
       "choices": [
         {
           "cmd": "Que dois-je faire ?",
@@ -104,7 +115,11 @@
       ]
     },
     "learn_necromancy2": {
-      "message": "Tout d'abord, étudiez ce livre; cela vous apprendra à communiquer avec les morts.",
+      "messages": [
+        "D'abord, vous devez apprendre à communiquer avec les morts.",
+        "Lorsque j'étais à l'école de magie du Grand Prêtre, j'ai pu subtiliser quelques manuels interdits;",
+        "En voici un exemplaire."
+      ],
       "choices": [
         {
           "cmd": "Ensuite ?",
@@ -114,7 +129,10 @@
       ]
     },
     "talk_to_dead_body": {
-      "message": "Ensuite, il se trouve une crypte où est enterrée une certaine personne. Allez dans cette crypte, trouvez le cadavre et rappelez son esprit. Il vous donnera les réponses.",
+      "messages": [
+        "Ensuite, il se trouve une crypte où est enterrée une certaine personne.",
+        "Allez dans cette crypte, trouvez le cadavre et rappelez son esprit. Il vous donnera les réponses."
+      ],
       "choices": [
         {
           "cmd": "Les réponses à quoi ?",
@@ -123,26 +141,20 @@
       ]
     },
     "final_answer": {
-      "message": "Aux questions que vous vous posez! Il est temps pour moi de partir. Cette fois, je ne crois pas que nous nous reverrons. Adieu...",
+      "messages": [
+        "Aux questions que vous vous posez, ou que vous finirez par vous poser!",
+        "Il est temps pour moi de partir. Cette fois, je ne crois pas que nous nous reverrons.",
+        "Adieu..."
+      ],
       "choices": [
         {
           "cmd": "...",
           "quest": {
             "steps_fullfilling": ["great_priest_past:talk_to_nathaniel_about_dead_body", "nathaniel_revelation:talk_to_nathaniel2"]
           },
-          "actions": ["teleport_to:nil", "set_initial_node:greetings3"]
-        }
-      ]
-    },
-
-    "greetings3": {
-      "message": "Ravi de vous revoir.",
-      "choices": [
-        {
-          "cmd": "A la prochaine."
+          "actions": ["teleport_to:nil"]
         }
       ]
     }
-
   }
 }

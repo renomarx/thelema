@@ -8,7 +8,7 @@
   "nodes" : {
     "dead_greetings": {
       "initial": true,
-      "message": "Qui me rappelle ?",
+      "messages": ["Qui me rappelle ?"],
       "choices": [
         {
           "quest": {
@@ -24,7 +24,7 @@
       ]
     },
       "nathaniel_sent_me": {
-        "message": "TODO",
+        "messages": ["TODO"],
         "choices": [
           {
             "cmd": "Je vous libère."
