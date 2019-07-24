@@ -76,6 +76,10 @@ func (p *Pnj) LoadPnj(filename string) (string, Pos) {
 }
 
 func (pnj *Pnj) Talk(p *Player, g *Game) {
+	// Wait for finish move
+	for pnj.Xb != 0 || pnj.Yb != 0 {
+		pnj.adaptSpeed()
+	}
 	EM.Dispatch(&Event{Action: ActionTalk, Payload: map[string]string{"voice": pnj.Voice}})
 	pnj.Dialog.Init(p)
 	node := pnj.Dialog.GetCurrentNode()
