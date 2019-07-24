@@ -225,12 +225,20 @@ func (ui *UI) drawFightingAttacks() {
 		ui.renderer.Copy(tex, nil, &sdl.Rect{40, int32(offsetY), w, h})
 
 		offsetX := ui.WindowWidth / 2
-		tex = ui.GetTexture(fmt.Sprintf("Damages: %d", selectedAttack.Damages), TextSizeXL, ColorWhite)
+		tex = ui.GetTexture(fmt.Sprintf("Power: %d", selectedAttack.Damages), TextSizeXL, ColorWhite)
 		_, _, w, h, _ = tex.Query()
 		ui.renderer.Copy(tex, nil, &sdl.Rect{int32(offsetX), int32(offsetY), w, h})
 		tex = ui.GetTexture(fmt.Sprintf("Energy cost: %d", selectedAttack.EnergyCost), TextSizeXL, ColorWhite)
 		_, _, w, h, _ = tex.Query()
 		ui.renderer.Copy(tex, nil, &sdl.Rect{int32(offsetX), int32(offsetY + 32), w, h})
+
+		offsetX = 3 * ui.WindowWidth / 4
+		tex = ui.GetTexture(fmt.Sprintf("Speed: %d", selectedAttack.Speed), TextSizeXL, ColorWhite)
+		_, _, w, h, _ = tex.Query()
+		ui.renderer.Copy(tex, nil, &sdl.Rect{int32(offsetX), int32(offsetY), w, h})
+		// tex = ui.GetTexture(fmt.Sprintf("Accuracy: %d", selectedAttack.Accuracy), TextSizeXL, ColorWhite)
+		// _, _, w, h, _ = tex.Query()
+		// ui.renderer.Copy(tex, nil, &sdl.Rect{int32(offsetX), int32(offsetY + 32), w, h})
 
 	}
 }

@@ -298,3 +298,19 @@ func (p *Player) TalkToDead(g *Game, posTo Pos) {
 		adaptDialogSpeed()
 	}
 }
+
+func (p *Player) LearnAttack(attackName string) {
+	for _, att := range p.Attacks {
+		if att.Name == attackName {
+			return
+		}
+	}
+	for _, att := range Attacks() {
+		if att.Name == attackName {
+			p.Attacks = append(p.Attacks, att)
+			EM.Dispatch(&Event{
+				Message: "You learned a new attack: " + att.Name + "!",
+			})
+		}
+	}
+}

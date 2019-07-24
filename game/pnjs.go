@@ -147,6 +147,8 @@ func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
 				case "send_to_level":
 					levelPnj := strings.Split(act[1], "|")
 					g.SendToLevel(levelPnj[0], levelPnj[1], levelPnj[2])
+				case "learn_attack":
+					p.LearnAttack(act[1])
 				}
 			}
 			for _, book := range choice.BooksGiven {

@@ -11,7 +11,24 @@
           "actions": ["recruit"]
         },
         {
+          "cmd": "Pouvez-vous m'entrainer au combat ?",
+          "required": {"strength": 25},
+          "actions": ["learn_attack:Bear Assault"],
+          "node": "training_done"
+        },
+        {
           "cmd": "Je dois y aller."
+        }
+      ]
+    },
+    "training_done": {
+      "messages": [
+        "[Il vous montre quelques mouvements d'épée]",
+        "Votre entrainement est terminé."
+      ],
+      "choices": [
+        {
+          "cmd": "Merci!"
         }
       ]
     }
