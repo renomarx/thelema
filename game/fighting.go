@@ -35,20 +35,6 @@ type FightingRing struct {
 	CurrentEffect *Effect
 }
 
-type Attack struct {
-	Damages    int
-	Speed      int
-	EnergyCost int
-	Name       string
-	Range      int
-	Type       AttackType
-	MagickType PowerType
-}
-type AttackType string
-
-const AttackTypePhysical AttackType = "PHYSICAL"
-const AttackTypeMagick AttackType = "MAGICK"
-
 type RoundFighter struct {
 	speed int
 	f     FighterInterface
@@ -227,14 +213,9 @@ func (ring *FightingRing) prepareRoundFighter(f FighterInterface, speed int) {
 }
 
 func (fr *FightingRing) LoadPossibleAttacks(p *Player) {
-	att := &Attack{
-		Speed:   p.Dexterity.Current,
-		Damages: 10,
-		Name:    "Sword attack",
-		Type:    AttackTypePhysical,
+	for _, att := range p.Attacks {
+		fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, att)
 	}
-	att.Range = 1
-	fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, att)
 	for _, pow := range p.Powers {
 		if pow.IsAttack {
 			att := &Attack{

@@ -36,8 +36,10 @@ func newPlayer(speed, health, energy, stg, dex, bea, wil, intel, cha, rg int) *P
 	player.IsTaking = false
 	player.Inventory = NewInventory()
 	player.Library = NewLibrary()
+	// TODO : load only first Attacks
+	player.Attacks = Attacks()
 	player.Powers = make(map[string]*PlayerPower)
-	// FIXME
+	// TODO : load only first powers
 	player.newPowerRaw(PowerHealing)
 	player.newPowerRaw(PowerFlames)
 	player.newPowerRaw(PowerStorm)

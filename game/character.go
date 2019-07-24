@@ -66,6 +66,7 @@ type Character struct {
 	VisionRange          int
 	Powers               map[string]*PlayerPower
 	CurrentPower         *PlayerPower
+	Attacks              []*Attack
 	IsPowerUsing         bool
 	isAttacking          bool
 	AttackPos            int
