@@ -4,13 +4,14 @@ import "math/rand"
 import "time"
 
 type Level struct {
-	Name   string
-	Width  int
-	Height int
-	Player *Player
-	Map    [][]Case
-	Paused bool
-	PRay   int
+	Name       string
+	Width      int
+	Height     int
+	Player     *Player
+	Map        [][]Case
+	Paused     bool
+	PRay       int
+	Discovered bool
 }
 
 type Case struct {
@@ -108,6 +109,7 @@ func (level *Level) OpenPortal(g *Game, pos Pos) {
 		p.X = port.PosTo.X
 		p.Y = port.PosTo.Y
 		g.Level = g.Levels[port.LevelTo]
+		g.Level.Discovered = true
 		g.Level.Player = p
 
 		EM.Dispatch(&Event{
@@ -207,4 +209,11 @@ func (l *Level) MakeEffect(p Pos, r rune, lifetime int) {
 	l.Map[p.Y][p.X].Effect = eff
 	time.Sleep(time.Duration(lifetime) * time.Millisecond)
 	l.Map[p.Y][p.X].Effect = nil
+}
+
+func (g *Game) DiscoverLevel(levelName string) {
+	level, e := g.Levels[levelName]
+	if e {
+		level.Discovered = true
+	}
 }

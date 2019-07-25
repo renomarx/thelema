@@ -42,7 +42,7 @@
       "choices": [
         {
           "cmd": "...",
-          "actions": ["teleport_to:neoroma", "set_initial_node:greetings2"],
+          "actions": ["teleport_to:neoroma", "set_initial_node:greetings2", "discover:neoroma"],
           "quest": {
             "steps_mandatory": [],
             "steps_fullfilling": ["nathaniel_revelation:talk_to_nathaniel"]

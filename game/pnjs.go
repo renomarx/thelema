@@ -157,6 +157,8 @@ func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
 					if err == nil {
 						p.LooseGold(v)
 					}
+				case "discover":
+					g.DiscoverLevel(act[1])
 				}
 			}
 			for _, book := range choice.BooksGiven {
