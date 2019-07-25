@@ -31,6 +31,7 @@ type PnjConf struct {
 func NewPnj(p Pos, name string) *Pnj {
 	pnj := &Pnj{}
 	pnj.Name = name
+	pnj.Speed.Init(5)
 	pnj.Health.Init(200)
 	pnj.Energy.Init(200)
 	pnj.Strength.Init(20)
@@ -41,7 +42,6 @@ func NewPnj(p Pos, name string) *Pnj {
 	pnj.Charisma.Init(20)
 	pnj.RegenerationSpeed.Init(1)
 	pnj.Luck.Init(10)
-	pnj.Speed.Init(4)
 	pnj.ActionPoints = 0.0
 	pnj.Pos = p
 	pnj.Xb = 0

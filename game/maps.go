@@ -43,7 +43,7 @@ func (g *Game) LoadMapTemplate(mapName, levelName string) *Level {
 		}
 		for x, c := range utf8line {
 			if isDungeon {
-				level.Map[y][x].MonstersProbability = 4
+				level.Map[y][x].MonstersProbability = 10
 			}
 			var t Tile
 			t = DirtFloor
@@ -55,7 +55,7 @@ func (g *Game) LoadMapTemplate(mapName, levelName string) *Level {
 			case CityFloor:
 				t = CityFloor
 			case HerbFloor:
-				level.Map[y][x].MonstersProbability = 5
+				level.Map[y][x].MonstersProbability = 10
 				t = HerbFloor
 			case DoorOpened, Upstairs, Downstairs, CityEntry, CityOut, HouseDoor, PrisonDoor, DungeonEntry, DungeonOut:
 				level.Map[y][x].Object = &Object{Rune: c}

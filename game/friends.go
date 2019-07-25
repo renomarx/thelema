@@ -7,14 +7,13 @@ type Friend struct {
 func (level *Level) MakeFriend(pnj *Pnj) *Friend {
 	f := &Friend{}
 	f.Character = pnj.Character
-	f.Speed.Init(f.Speed.Current * 2)
 	level.Map[pnj.Y][pnj.X].Pnj = nil
 	return f
 }
 
 func (m *Friend) ChooseAction(ring *FightingRing) int {
 	// TODO : friend IA
-	return m.Speed.Current
+	return m.Dexterity.Current
 }
 
 func (m *Friend) Fight(ring *FightingRing) {

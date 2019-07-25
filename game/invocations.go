@@ -16,13 +16,12 @@ func NewInvokedSpirit() *Invocation {
 	monster.Intelligence.Init(20)
 	monster.Luck.Init(20)
 	monster.Beauty.Init(0)
-	monster.Speed.Init(10)
 	return monster
 }
 
 func (m *Invocation) ChooseAction(ring *FightingRing) int {
 	// TODO : invocation IA
-	return m.Speed.Current
+	return m.Dexterity.Current
 }
 
 func (m *Invocation) Fight(ring *FightingRing) {

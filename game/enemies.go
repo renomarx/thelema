@@ -7,13 +7,12 @@ type Enemy struct {
 func (level *Level) MakeEnemy(pnj *Pnj) *Enemy {
 	e := &Enemy{}
 	e.Character = pnj.Character
-	e.Speed.Init(e.Speed.Current * 2)
 	return e
 }
 
 func (m *Enemy) ChooseAction(ring *FightingRing) int {
 	// TODO : enemy IA
-	return m.Speed.Current
+	return m.Dexterity.Current
 }
 
 func (m *Enemy) Fight(ring *FightingRing) {

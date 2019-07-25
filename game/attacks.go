@@ -67,3 +67,25 @@ func Attacks() []*Attack {
 		},
 	}
 }
+
+func (att *Attack) GetPower(p *Player) int {
+	power := 0
+	switch att.Type {
+	case AttackTypePhysical:
+		power = att.Damages * p.CalculateAttackScore() / 10
+	case AttackTypeMagick:
+		power = att.Damages * p.CalculatePowerAttackScore() / 10
+	}
+	return power
+}
+
+func (att *Attack) GetSpeed(p *Player) int {
+	power := 0
+	switch att.Type {
+	case AttackTypePhysical:
+		power = att.Speed * p.Dexterity.Current / 10
+	case AttackTypeMagick:
+		power = att.Speed * p.Intelligence.Current / 10
+	}
+	return power
+}

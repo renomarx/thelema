@@ -8,15 +8,15 @@ type Monster struct {
 
 func NewMonster(mt *MonsterType) *Monster {
 	monster := &Monster{}
+	monster.Speed.Init(10)
 	monster.Rune = rune(mt.Tile)
 	monster.Name = mt.Name
 	monster.Health.Init(mt.Health)
 	monster.Energy.Init(mt.Energy)
-	monster.Speed.Init(mt.Speed)
-	monster.Strength.Init(mt.Stats)
-	monster.Dexterity.Init(mt.Stats)
-	monster.Will.Init(mt.Stats)
-	monster.Intelligence.Init(mt.Stats)
+	monster.Strength.Init(mt.Strength)
+	monster.Dexterity.Init(mt.Speed)
+	monster.Will.Init(mt.Strength)
+	monster.Intelligence.Init(mt.Speed)
 	monster.Luck.Init(mt.Luck)
 	monster.Beauty.Init(rand.Intn(20))
 	return monster
@@ -24,7 +24,7 @@ func NewMonster(mt *MonsterType) *Monster {
 
 func (m *Monster) ChooseAction(ring *FightingRing) int {
 	// TODO : monster IA
-	return m.Speed.Current
+	return m.Dexterity.Current * 2
 }
 
 func (m *Monster) Fight(ring *FightingRing) {

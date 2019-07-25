@@ -164,7 +164,7 @@ func (c *Character) IsDead() bool {
 }
 
 func (c *Character) CalculateAttackScore() int {
-	score := float64((c.Strength.Current+c.Dexterity.Current)/2) * (1.0 + float64(c.Luck.Current)/100.0)
+	score := float64(c.Strength.Current) * (1.0 + float64(c.Luck.Current)/100.0)
 	iscore := int(score)
 	return iscore
 }
