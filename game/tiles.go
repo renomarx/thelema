@@ -48,19 +48,19 @@ const (
 	Herbs   Tile = 'v'
 
 	// Usables
-	Gold      Tile = 'g'
-	Explosion Tile = 'x'
-	Book      Tile = 'b'
-	Senzu     Tile = 'z'
-	Bread     Tile = 'i'
-	Fruits    Tile = 'u'
-	Water     Tile = 'l'
-	Steak     Tile = 'k'
+	Gold   Tile = 'g'
+	Book   Tile = 'b'
+	Senzu  Tile = 'z'
+	Bread  Tile = 'p'
+	Fruits Tile = 'u'
+	Water  Tile = 'w'
+	Steak  Tile = 's'
 
-	// Powers
+	// Powers & effects
+	Explosion  Tile = 'x'
 	Flames     Tile = 'f'
 	Storm      Tile = 't'
-	Healing    Tile = 'e'
+	Healing    Tile = 'h'
 	Teleport   Tile = 'y'
 	Skull      Tile = 'q'
 	Necromancy Tile = 'ç'

@@ -309,8 +309,21 @@ func (p *Player) LearnAttack(attackName string) {
 		if att.Name == attackName {
 			p.Attacks = append(p.Attacks, att)
 			EM.Dispatch(&Event{
-				Message: "You learned a new attack: " + att.Name + "!",
+				Message: "You learned a new attack: " + att.Name + " !",
 			})
 		}
 	}
+}
+
+func (p *Player) AddKey(key string) {
+	new := p.Inventory.AddKey(key)
+	if new {
+		EM.Dispatch(&Event{
+			Message: "You got a new key: " + key + " !",
+		})
+	}
+}
+
+func (p *Player) LooseGold(value int) {
+	p.Inventory.Gold -= value
 }

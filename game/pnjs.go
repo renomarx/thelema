@@ -6,6 +6,7 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -149,6 +150,13 @@ func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
 					g.SendToLevel(levelPnj[0], levelPnj[1], levelPnj[2])
 				case "learn_attack":
 					p.LearnAttack(act[1])
+				case "add_key":
+					p.AddKey(act[1])
+				case "gold_taken":
+					v, err := strconv.Atoi(act[1])
+					if err == nil {
+						p.LooseGold(v)
+					}
 				}
 			}
 			for _, book := range choice.BooksGiven {

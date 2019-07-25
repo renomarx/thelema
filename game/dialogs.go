@@ -151,6 +151,10 @@ func (n *StoryNode) filterPossibleChoices(p *Player) {
 					if p.Beauty.Current < val {
 						isPossible = false
 					}
+				case "gold":
+					if p.Inventory.Gold < val {
+						isPossible = false
+					}
 				}
 			}
 		}

@@ -13,11 +13,30 @@
         {
           "cmd": "Pouvez-vous m'entrainer au combat ?",
           "required": {"strength": 25},
-          "actions": ["learn_attack:Bear Assault"],
-          "node": "training_done"
+          "node": "get_training"
         },
         {
           "cmd": "Je dois y aller."
+        }
+      ]
+    },
+    "get_training": {
+      "messages": ["Je peux vous apprendre la technique Bear Assault, mais il vous en coutera 100§"],
+      "choices": [
+        {
+          "cmd": "C'est d'accord",
+          "required": {"strength": 25, "gold": 100},
+          "actions": ["learn_attack:Bear Assault","gold_taken:100"],
+          "node": "training_done"
+        },
+        {
+          "cmd": "Je la connais déjà."
+        },
+        {
+          "cmd": "Je n'ai pas assez d'argent sur moi."
+        },
+        {
+          "cmd": "Non merci, ça ne m'intéresse pas."
         }
       ]
     },

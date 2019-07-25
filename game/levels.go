@@ -99,6 +99,12 @@ func (level *Level) OpenPortal(g *Game, pos Pos) {
 	port := level.Map[pos.Y][pos.X].Portal
 	if port != nil {
 		p := level.Player
+		if port.Key != "" {
+			if !p.Inventory.HasKey(port.Key) {
+				EM.Dispatch(&Event{Message: "You need the key " + port.Key + " to open this portal."})
+				return
+			}
+		}
 		p.X = port.PosTo.X
 		p.Y = port.PosTo.Y
 		g.Level = g.Levels[port.LevelTo]

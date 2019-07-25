@@ -11,6 +11,7 @@ const InitialGoldAmount = 400
 type Inventory struct {
 	Usables      []InventoryUsable
 	QuestObjects map[rune]*Object
+	keys         []string
 	Gold         int
 	IsOpen       bool
 }
@@ -96,6 +97,25 @@ func (iv *Inventory) UseUsable(i int, g *Game) {
 
 func (iv *Inventory) deleteUsable(i int) {
 	iv.Usables = append(iv.Usables[:i], iv.Usables[i+1:]...)
+}
+
+func (iv *Inventory) HasKey(key string) bool {
+	for _, k := range iv.keys {
+		if k == key {
+			return true
+		}
+	}
+	return false
+}
+
+func (iv *Inventory) AddKey(key string) bool {
+	for _, k := range iv.keys {
+		if k == key {
+			return false
+		}
+	}
+	iv.keys = append(iv.keys, key)
+	return true
 }
 
 func (iv *Inventory) Open() {

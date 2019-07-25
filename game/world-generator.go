@@ -124,11 +124,15 @@ func (g *Game) loadPortals() {
 		}
 		x1, _ := strconv.Atoi(level1Arr[1])
 		y1, _ := strconv.Atoi(level1Arr[2])
-		g.addBidirectionalPortal(level0Arr[0], Pos{X: x0, Y: y0}, level1Arr[0], Pos{X: x1, Y: y1})
+		key := ""
+		if len(levels) >= 3 && levels[2] != "" {
+			key = levels[2]
+		}
+		g.addBidirectionalPortal(level0Arr[0], Pos{X: x0, Y: y0}, level1Arr[0], Pos{X: x1, Y: y1}, key)
 	}
 }
 
-func (g *Game) addBidirectionalPortal(srcName string, srcPos Pos, dstName string, dstPos Pos) {
+func (g *Game) addBidirectionalPortal(srcName string, srcPos Pos, dstName string, dstPos Pos, key string) {
 	srcLevel, e := g.Levels[srcName]
 	if !e {
 		panic("Level " + srcName + " does not exist.")
@@ -137,8 +141,8 @@ func (g *Game) addBidirectionalPortal(srcName string, srcPos Pos, dstName string
 	if !e {
 		panic("Level " + dstName + " does not exist.")
 	}
-	srcLevel.AddPortal(srcPos, &Portal{LevelTo: dstName, PosTo: dstPos})
-	dstLevel.AddPortal(dstPos, &Portal{LevelTo: srcName, PosTo: srcPos})
+	srcLevel.AddPortal(srcPos, &Portal{LevelTo: dstName, PosTo: dstPos, Key: key})
+	dstLevel.AddPortal(dstPos, &Portal{LevelTo: srcName, PosTo: srcPos, Key: key})
 }
 
 func (g *Game) loadPnjsVIP() {
