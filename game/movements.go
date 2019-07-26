@@ -42,6 +42,33 @@ func isInsideMap(level *Level, pos Pos) bool {
 	return false
 }
 
+func isThereAPortalAround(level *Level, pos Pos) bool {
+	if level.Map[pos.Y][pos.X].Portal != nil {
+		return true
+	}
+	if isInsideMap(level, Pos{X: pos.X - 1, Y: pos.Y}) {
+		if level.Map[pos.Y][pos.X-1].Portal != nil {
+			return true
+		}
+	}
+	if isInsideMap(level, Pos{X: pos.X + 1, Y: pos.Y}) {
+		if level.Map[pos.Y][pos.X+1].Portal != nil {
+			return true
+		}
+	}
+	if isInsideMap(level, Pos{X: pos.X, Y: pos.Y - 1}) {
+		if level.Map[pos.Y-1][pos.X].Portal != nil {
+			return true
+		}
+	}
+	if isInsideMap(level, Pos{X: pos.X, Y: pos.Y + 1}) {
+		if level.Map[pos.Y+1][pos.X].Portal != nil {
+			return true
+		}
+	}
+	return false
+}
+
 func openDoor(g *Game, pos Pos) {
 	level := g.Level
 	o := level.GetObject(pos.X, pos.Y)

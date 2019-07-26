@@ -19,16 +19,26 @@ func (ui *UI) DrawLevel() {
 		maxY := int(math.Floor(math.Min(float64(len(level.Map)), float64(player.Y+(ui.WindowHeight/2/Res)+2))))
 		minX := int(math.Floor(math.Max(0, float64(player.X-(ui.WindowWidth/2/Res)-2))))
 		maxX := int(math.Floor(math.Min(float64(len(level.Map[0])), float64(player.X+(ui.WindowWidth/2/Res)+2))))
-		for y := minY; y < maxY; y++ {
-			row := level.Map[y]
-			for x := minX; x < maxX; x++ {
-				c := row[x]
-				tile := c.T
-				if len(ui.textureIndex[tile]) > 0 {
-					srcRect := ui.textureIndex[tile][(x*(y+1)+y*(x+3))%len(ui.textureIndex[tile])]
-					dstRect := sdl.Rect{X: int32(x*Res) + ui.Cam.X, Y: int32(y*Res) + ui.Cam.Y, W: Res, H: Res}
+		levelMap, mapExists := ui.mapTextures[level.Name]
+		if mapExists {
+			_, _, mapWidth, mapHeight, _ := levelMap.Query()
+			x := player.X*Res - player.Xb
+			y := player.Y*Res - player.Yb
+			ui.renderer.Copy(levelMap,
+				&sdl.Rect{X: 0, Y: 0, W: int32(mapWidth), H: int32(mapHeight)},
+				&sdl.Rect{X: int32(ui.WindowWidth/2 - x), Y: int32(ui.WindowHeight/2 - y), W: int32(mapWidth), H: int32(mapHeight)})
+		} else {
+			for y := minY; y < maxY; y++ {
+				row := level.Map[y]
+				for x := minX; x < maxX; x++ {
+					c := row[x]
+					tile := c.T
+					if len(ui.textureIndex[tile]) > 0 {
+						srcRect := ui.textureIndex[tile][(x*(y+1)+y*(x+3))%len(ui.textureIndex[tile])]
+						dstRect := sdl.Rect{X: int32(x*Res) + ui.Cam.X, Y: int32(y*Res) + ui.Cam.Y, W: Res, H: Res}
 
-					ui.renderer.Copy(ui.textureAtlas, &srcRect, &dstRect)
+						ui.renderer.Copy(ui.textureAtlas, &srcRect, &dstRect)
+					}
 				}
 			}
 		}

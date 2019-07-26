@@ -33,6 +33,7 @@ func (g *Game) LoadMapTemplate(mapName, levelName string) *Level {
 	}
 
 	level := NewLevel()
+	level.Name = levelName
 	level.InitMaps(len(levelLines), longestRow)
 	for y := 0; y < len(level.Map); y++ {
 		line := levelLines[y]

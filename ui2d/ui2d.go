@@ -34,6 +34,7 @@ type UI struct {
 	pnjTextures        map[string]*sdl.Texture
 	backgroundTextures map[string]*sdl.Texture
 	uiTextures         map[string]*sdl.Texture
+	mapTextures        map[string]*sdl.Texture
 	Fonts              map[int]*ttf.Font
 	Texts              map[int]*TextCache
 	Keymap             map[string]sdl.Keycode
@@ -109,6 +110,14 @@ func NewUI(g *game.Game) *UI {
 
 	ui.uiTextures = make(map[string]*sdl.Texture)
 	ui.uiTextures["downbox"] = ui.imgFileToTexture("ui2d/assets/ui/HUD.png")
+
+	ui.mapTextures = make(map[string]*sdl.Texture)
+	mapFiles := game.LoadFilenames("ui2d/assets/maps")
+	for _, mapFile := range mapFiles {
+		ma := strings.Split(mapFile, ".")
+		mapName := strings.ReplaceAll(ma[0], "-", "/")
+		ui.mapTextures[mapName] = ui.imgFileToTexture("ui2d/assets/maps/" + mapFile)
+	}
 
 	if err := ttf.Init(); err != nil {
 		panic(err)
