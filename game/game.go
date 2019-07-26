@@ -71,6 +71,7 @@ type Entity struct {
 type Object struct {
 	Entity
 	Rune      rune
+	Static    bool
 	Blocking  bool
 	IsPlaying bool
 }

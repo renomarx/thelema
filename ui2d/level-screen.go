@@ -49,7 +49,9 @@ func (ui *UI) DrawLevel() {
 				c := row[x]
 				object := c.Object
 				if object != nil {
-					ui.drawObject(game.Pos{X: x, Y: y}, game.Tile(object.Rune))
+					if !mapExists || !object.Static {
+						ui.drawObject(game.Pos{X: x, Y: y}, game.Tile(object.Rune))
+					}
 				}
 				pnj := c.Pnj
 				if pnj != nil {
