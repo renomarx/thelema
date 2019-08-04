@@ -91,13 +91,13 @@ func (mp *MusicPlayer) On(e *game.Event) {
 	case game.ActionCloseDoor:
 		mp.PlaySound("doorClose_1.ogg", 32)
 	case game.ActionMenuOpen:
-		mp.PlaySound("ui/2bip.wav", 64)
+		mp.PlaySound("ui/1bip.wav", 48)
 	case game.ActionMenuClose:
-		mp.PlaySound("ui/2bip.wav", 64)
+		mp.PlaySound("ui/1bip.wav", 48)
 	case game.ActionMenuSelect:
 		mp.PlaySound("ui/1bip.wav", 48)
 	case game.ActionMenuConfirm:
-		mp.PlaySound("ui/2bip.wav", 64)
+		mp.PlaySound("ui/2bip.wav", 48)
 	case game.ActionAttack:
 		mp.PlaySound("footstep08.ogg", 48)
 	case game.ActionPower:
@@ -121,7 +121,7 @@ func (mp *MusicPlayer) On(e *game.Event) {
 	case game.ActionCharacteristicUp:
 		mp.PlaySound("piano.wav", 64)
 	case game.ActionFight:
-		mp.ChangeMusic("doomed.mp3", 24)
+		mp.ChangeMusic("stress.wav", 64)
 	case game.ActionStopFight:
 		mp.PlayMusicForLevel(e.Payload["levelName"])
 	}
@@ -129,12 +129,16 @@ func (mp *MusicPlayer) On(e *game.Event) {
 
 func (mp *MusicPlayer) PlayMusicForLevel(levelName string) {
 	switch levelName {
-	case "grotto1", "grotto2":
+	case "abigail_crypt", "prison_underground":
 		mp.ChangeMusic("dark_fallout.ogg", 32)
 	case "world":
 		mp.ChangeMusic("forest.mp3", 64)
 	case "neoroma":
 		mp.ChangeMusic("warped.mp3", 32)
+	case "arcanea":
+		mp.ChangeMusic("quick-melody.wav", 32)
+	case "dresde":
+		mp.ChangeMusic("ketamine.wav", 32)
 	default:
 		mp.StopMusic()
 	}
