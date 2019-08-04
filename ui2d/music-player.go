@@ -1,8 +1,9 @@
 package ui2d
 
 import (
-	"github.com/veandco/go-sdl2/mix"
 	"thelema/game"
+
+	"github.com/veandco/go-sdl2/mix"
 )
 
 type MusicPlayer struct {
@@ -43,7 +44,11 @@ func (mp *MusicPlayer) LoadSounds() {
 	}
 	monsters := game.LoadFilenames("ui2d/assets/sounds/monsters/")
 	for _, monster := range monsters {
-		monsters = append(monsters, "monsters/"+monster)
+		sounds = append(sounds, "monsters/"+monster)
+	}
+	uis := game.LoadFilenames("ui2d/assets/sounds/ui/")
+	for _, ui := range uis {
+		sounds = append(sounds, "ui/"+ui)
 	}
 	for _, name := range sounds {
 		sound, err := mix.LoadWAV("ui2d/assets/sounds/" + name)
@@ -86,13 +91,13 @@ func (mp *MusicPlayer) On(e *game.Event) {
 	case game.ActionCloseDoor:
 		mp.PlaySound("doorClose_1.ogg", 32)
 	case game.ActionMenuOpen:
-		mp.PlaySound("interface2.wav", 64)
+		mp.PlaySound("ui/2bip.wav", 64)
 	case game.ActionMenuClose:
-		mp.PlaySound("interface2.wav", 64)
+		mp.PlaySound("ui/2bip.wav", 64)
 	case game.ActionMenuSelect:
-		mp.PlaySound("interface1.wav", 48)
+		mp.PlaySound("ui/1bip.wav", 48)
 	case game.ActionMenuConfirm:
-		mp.PlaySound("interface2.wav", 64)
+		mp.PlaySound("ui/2bip.wav", 64)
 	case game.ActionAttack:
 		mp.PlaySound("footstep08.ogg", 48)
 	case game.ActionPower:
@@ -104,7 +109,7 @@ func (mp *MusicPlayer) On(e *game.Event) {
 	case game.ActionTalk:
 		mp.PlayVoice(e)
 	case game.ActionTake:
-		mp.PlaySound("interface1.wav", 48)
+		mp.PlaySound("ui/1bip.wav", 48)
 	case game.ActionReadBook:
 		mp.PlaySound("bookFlip2.ogg", 64)
 	case game.ActionRoar:
@@ -168,7 +173,7 @@ func (mp *MusicPlayer) PlayExplosion(e *game.Event) {
 }
 
 func (mp *MusicPlayer) PlayVoice(e *game.Event) {
-	sound := "interface1.wav"
+	sound := "voices/male_standard_1.ogg"
 	voice, exists := e.Payload["voice"]
 	if exists {
 		switch voice {
