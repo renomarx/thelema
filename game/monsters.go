@@ -19,6 +19,7 @@ func NewMonster(mt *MonsterType) *Monster {
 	monster.Intelligence.Init(mt.Speed)
 	monster.Luck.Init(mt.Luck)
 	monster.Beauty.Init(rand.Intn(20))
+	monster.Aggressiveness.Init(mt.Aggressiveness)
 	return monster
 }
 
@@ -28,6 +29,12 @@ func (m *Monster) ChooseAction(ring *FightingRing) int {
 }
 
 func (m *Monster) Fight(ring *FightingRing) {
+	if m.GetAggressiveness() <= 0 {
+		EM.Dispatch(&Event{
+			Message: m.Name + " is calmed, not attacking.",
+		})
+		return
+	}
 	m.isAttacking = true
 	for m.AttackPos = 0; m.AttackPos < CaseLen; m.AttackPos++ {
 		m.adaptSpeed()

@@ -6,6 +6,7 @@ type Enemy struct {
 
 func (level *Level) MakeEnemy(pnj *Pnj) *Enemy {
 	e := &Enemy{}
+	e.Aggressiveness.Init(20)
 	e.Character = pnj.Character
 	return e
 }
@@ -16,6 +17,12 @@ func (m *Enemy) ChooseAction(ring *FightingRing) int {
 }
 
 func (m *Enemy) Fight(ring *FightingRing) {
+	if m.GetAggressiveness() <= 0 {
+		EM.Dispatch(&Event{
+			Message: m.Name + " is calmed, not attacking.",
+		})
+		return
+	}
 	m.isAttacking = true
 	for m.AttackPos = 0; m.AttackPos < CaseLen; m.AttackPos++ {
 		m.adaptSpeed()

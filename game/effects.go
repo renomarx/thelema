@@ -97,6 +97,7 @@ func NewFlame(p Pos, damages int) *Effect {
 
 func NewEffect(p Pos, r rune) *Effect {
 	eff := &Effect{}
+	eff.Pos = p
 	eff.Rune = r
 	eff.Blocking = false
 	eff.TileIdx = 0

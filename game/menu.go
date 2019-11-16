@@ -14,10 +14,10 @@ type MenuChoice struct {
 	Disabled    bool
 }
 
-const MenuCmdNew = "Nouvelle partie"
-const MenuCmdSave = "Sauvegarder"
-const MenuCmdLoad = "Charger"
-const MenuCmdQuit = "Quitter"
+const MenuCmdNew = "New game"
+const MenuCmdSave = "Save"
+const MenuCmdLoad = "Load"
+const MenuCmdQuit = "Quit"
 
 func (menu *Menu) GetHighlightedIndex() int {
 	for i := 0; i < len(menu.Choices); i++ {

@@ -10,6 +10,7 @@ const PowerFlames = "flames"
 const PowerStorm = "storm"
 const PowerHealing = "healing"
 const PowerDeadSpeaking = "dead_speaking"
+const PowerCalm = "calm"
 
 type PlayerPower struct {
 	Type        PowerType
@@ -42,19 +43,22 @@ func (p *Player) newPowerRaw(powername string) {
 		switch powername {
 		case PowerInvocation:
 			p.Powers[string(PowerInvocation)] = &PlayerPower{Type: PowerInvocation, Speed: 5, Energy: 50, Tile: Spirit,
-				Description: "Invoque un esprit.", Name: "Invocation", IsAttack: true}
+				Description: "Summon an astral creature.", Name: "Invocation", IsAttack: true}
 		case PowerStorm:
 			p.Powers[string(PowerStorm)] = &PlayerPower{Type: PowerStorm, Speed: 15, Energy: 30, Strength: 30, Tile: Storm, Range: 1,
-				Description: "Lance un éclair devant vous.", Name: "Storm", IsAttack: true}
+				Description: "Create a lighting storm in front of you.", Name: "Storm", IsAttack: true}
 		case PowerFlames:
 			p.Powers[string(PowerFlames)] = &PlayerPower{Type: PowerFlames, Speed: 3, Energy: 100, Strength: 60, Tile: Flames, Range: 5,
-				Description: "Crée un incendie tout autour de vous.", Name: "Flames", IsAttack: true}
+				Description: "Create a big fire storm all around you.", Name: "Flames", IsAttack: true}
 		case PowerHealing:
 			p.Powers[string(PowerHealing)] = &PlayerPower{Type: PowerHealing, Speed: 4, Energy: 20, Strength: 20, Tile: Healing,
-				Description: "Régénère votre santé.", Name: "Healing", IsAttack: true}
+				Description: "Heal yourself.", Name: "Healing", IsAttack: true}
 		case PowerDeadSpeaking:
 			p.Powers[string(PowerDeadSpeaking)] = &PlayerPower{Type: PowerDeadSpeaking, Tile: Skull, Speed: 5, Energy: 20,
-				Description: "Parle avec l'esprit d'un mort.", Name: "Dead speaking"}
+				Description: "Speak with the spirit of a dead.", Name: "Dead speaking"}
+		case PowerCalm:
+			p.Powers[string(PowerCalm)] = &PlayerPower{Type: PowerCalm, Tile: Calm, Speed: 10, Energy: 20, Strength: 20, Range: 1,
+				Description: "Calm down a living being.", Name: "Calm", IsAttack: true}
 		}
 	}
 }

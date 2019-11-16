@@ -64,4 +64,5 @@ const (
 	Teleport   Tile = 'y'
 	Skull      Tile = 'q'
 	Necromancy Tile = 'ç'
+	Calm       Tile = 'm'
 )

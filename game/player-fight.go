@@ -1,6 +1,9 @@
 package game
 
-import "math/rand"
+import (
+	"log"
+	"math/rand"
+)
 
 func (p *Player) TakeDamages(damage int) {
 	p.Character.TakeDamages(damage)
@@ -89,7 +92,14 @@ func (p *Player) Fight(ring *FightingRing) {
 					ring.MakeStorm(Pos{X: 1, Y: y}, damages, Right, 200)
 					f.TakeDamages(damages)
 				}
+			case PowerCalm:
+				for i, f := range to {
+					y := ring.TargetSelected + i
+					ring.MakeEffect(Pos{X: 1, Y: y}, rune(Calm), 400)
+					f.SetAggressiveness(f.GetAggressiveness() - damages)
+				}
 			default:
+				log.Println("power default : ", att.MagickType)
 				for _, f := range to {
 					f.TakeDamages(damages)
 				}

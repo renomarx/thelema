@@ -265,6 +265,9 @@ func (c *Player) PowerUse(g *Game, posTo Pos) {
 		switch c.CurrentPower.Type {
 		case PowerInvocation:
 			// TODO : make input control invocation for lifetime
+		case PowerCalm:
+			g.Level.MakeEffect(posTo, rune(Calm), 200)
+			// TODO
 		case PowerDeadSpeaking:
 			g.Level.MakeEffect(posTo, rune(Necromancy), 200)
 			c.TalkToDead(g, posTo)

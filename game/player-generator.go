@@ -44,6 +44,7 @@ func newPlayer(health, energy, stg, dex, bea, wil, intel, cha, rg int) *Player {
 	player.newPowerRaw(PowerFlames)
 	player.newPowerRaw(PowerStorm)
 	player.newPowerRaw(PowerInvocation)
+	player.newPowerRaw(PowerCalm)
 	player.CurrentPower = player.Powers[PowerHealing]
 	player.LastRegenerationTime = time.Now()
 	player.LoadPlayerMenu()

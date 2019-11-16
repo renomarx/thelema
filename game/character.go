@@ -59,6 +59,7 @@ type Character struct {
 	Intelligence         Characteristic
 	Charisma             Characteristic
 	Luck                 Characteristic
+	Aggressiveness       Characteristic
 	Affinity             string
 	ActionPoints         float64
 	LastActionTime       time.Time
@@ -222,4 +223,12 @@ func (c *Character) IsHurt() int {
 
 func (c *Character) IsAttacking() bool {
 	return c.isAttacking
+}
+
+func (c *Character) SetAggressiveness(ag int) {
+	c.Aggressiveness.Current = ag
+}
+
+func (c *Character) GetAggressiveness() int {
+	return c.Aggressiveness.Current
 }

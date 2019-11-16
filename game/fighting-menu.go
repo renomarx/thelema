@@ -1,8 +1,8 @@
 package game
 
-const FightingMenuCmdAttack = "Attaquer"
-const FightingMenuCmdInventory = "Inventaire"
-const PlayerMenuCmdRun = "Fuir"
+const FightingMenuCmdAttack = "Attack"
+const FightingMenuCmdInventory = "Inventory"
+const PlayerMenuCmdRun = "Run"
 
 func (fr *FightingRing) LoadFightingMenu() {
 	menu := &Menu{IsOpen: false}

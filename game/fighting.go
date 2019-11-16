@@ -13,6 +13,8 @@ type FighterInterface interface {
 	GetEnergy() Characteristic
 	IsHurt() int
 	IsAttacking() bool
+	GetAggressiveness() int
+	SetAggressiveness(ag int)
 }
 
 type FightingRing struct {
@@ -119,7 +121,7 @@ func (ring *FightingRing) IsFinished() bool {
 		return true
 	}
 	for _, e := range ring.Enemies {
-		if !e.IsDead() {
+		if !e.IsDead() && e.GetAggressiveness() > 0 {
 			return false
 		}
 	}
