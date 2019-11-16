@@ -207,7 +207,7 @@ func (g *Game) loadBookFromFile(filename string, powers []string) *OBook {
 		title = lines[0]
 	}
 
-	return &OBook{Title: title, Text: lines, Powers: powers, Rune: rune(Book)}
+	return &OBook{Title: title, Text: lines, Powers: powers, Rune: string(Book)}
 }
 
 func (g *Game) loadQuestsObjects() {
@@ -227,7 +227,7 @@ func (g *Game) loadQuestsObjects() {
 		log.Fatal(err)
 	}
 
-	objectsByRune := make(map[rune]*QuestObject)
+	objectsByRune := make(map[string]*QuestObject)
 	for key, obj := range objects {
 		l, exists := g.Levels[obj.Level]
 		if !exists {
@@ -235,11 +235,10 @@ func (g *Game) loadQuestsObjects() {
 		}
 		pos := l.GetRandomFreePos()
 		if pos != nil {
-			rune := rune(key[0])
-			physicalObj := &Object{Rune: rune, Blocking: true}
+			physicalObj := &Object{Rune: key, Blocking: true}
 			physicalObj.Pos = *pos
 			l.Map[pos.Y][pos.X].Object = physicalObj
-			objectsByRune[rune] = obj
+			objectsByRune[key] = obj
 		} else {
 			log.Fatal("No place left on level " + obj.Level)
 		}

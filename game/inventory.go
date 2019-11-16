@@ -10,7 +10,7 @@ const InitialGoldAmount = 400
 
 type Inventory struct {
 	Usables      []InventoryUsable
-	QuestObjects map[rune]*Object
+	QuestObjects map[string]*Object
 	keys         []string
 	Gold         int
 	IsOpen       bool
@@ -18,7 +18,7 @@ type Inventory struct {
 
 func NewInventory() *Inventory {
 	iv := &Inventory{IsOpen: false}
-	iv.QuestObjects = make(map[rune]*Object)
+	iv.QuestObjects = make(map[string]*Object)
 	iv.Gold = InitialGoldAmount
 	return iv
 }

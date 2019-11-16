@@ -16,7 +16,7 @@ func (ui *UI) DrawGameGeneratorScreen() {
 			x := GGScreenOffsetX*Res + int32(i*64)
 			if gg.IsHighlighted(i) {
 				ui.renderer.Copy(ui.textureAtlas,
-					&ui.textureIndex['ʆ'][0],
+					&ui.textureIndex["ʆ"][0],
 					&sdl.Rect{X: x, Y: offsetH, W: 64, H: 64})
 			}
 			ui.renderer.Copy(ui.playerTextures[player.Name],

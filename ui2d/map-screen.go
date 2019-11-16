@@ -9,7 +9,7 @@ func (ui *UI) drawMapBox() {
 	for x := PlayerMenuOffsetX; x <= ui.WindowWidth/Res; x++ {
 		for y := 0; y <= ui.WindowHeight/Res; y++ {
 			ui.renderer.Copy(ui.textureAtlas,
-				&ui.textureIndex['Ʈ'][0],
+				&ui.textureIndex["Ʈ"][0],
 				&sdl.Rect{X: int32(x * Res), Y: int32(y * Res), W: Res, H: Res})
 		}
 	}

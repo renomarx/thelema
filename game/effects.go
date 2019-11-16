@@ -21,7 +21,7 @@ func NewExplosion(p Pos, size int, lifetime int) *Effect {
 	EM.Dispatch(&Event{Action: ActionExplode, Payload: map[string]string{"size": esize}})
 	eff := &Effect{}
 	eff.Pos = p
-	eff.Rune = rune(Explosion)
+	eff.Rune = string(Explosion)
 	eff.Blocking = false
 	idx := 0
 	if size%2 == 1 {
@@ -69,7 +69,7 @@ func NewRangeStorm(p Pos, damages int, dir InputType, rg int) []*Effect {
 func NewStorm(p Pos, damages int, dir InputType) *Effect {
 	eff := &Effect{}
 	eff.Pos = p
-	eff.Rune = rune(Storm)
+	eff.Rune = string(Storm)
 	eff.Blocking = false
 	eff.Damages = damages
 	switch dir {
@@ -88,14 +88,14 @@ func NewStorm(p Pos, damages int, dir InputType) *Effect {
 func NewFlame(p Pos, damages int) *Effect {
 	eff := &Effect{}
 	eff.Pos = p
-	eff.Rune = rune(Flames)
+	eff.Rune = string(Flames)
 	eff.Blocking = false
 	eff.Damages = damages
 	eff.TileIdx = 0
 	return eff
 }
 
-func NewEffect(p Pos, r rune) *Effect {
+func NewEffect(p Pos, r string) *Effect {
 	eff := &Effect{}
 	eff.Pos = p
 	eff.Rune = r

@@ -1,7 +1,7 @@
 package game
 
 type OBook struct {
-	Rune   rune
+	Rune   string
 	Title  string
 	Score  int
 	Text   []string

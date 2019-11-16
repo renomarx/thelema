@@ -9,7 +9,7 @@ type Monster struct {
 func NewMonster(mt *MonsterType) *Monster {
 	monster := &Monster{}
 	monster.Speed.Init(10)
-	monster.Rune = rune(mt.Tile)
+	monster.Rune = string(mt.Tile)
 	monster.Name = mt.Name
 	monster.Health.Init(mt.Health)
 	monster.Energy.Init(mt.Energy)

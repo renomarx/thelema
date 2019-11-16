@@ -257,7 +257,7 @@ func (pnj *Pnj) Move(to Pos, l *Level) {
 }
 
 func (pnj *Pnj) Teleport(levelName string, g *Game) {
-	g.Level.MakeEffect(pnj.Pos, rune(Teleport), 200)
+	g.Level.MakeEffect(pnj.Pos, string(Teleport), 200)
 	level := g.Levels[levelName]
 	pnj.Talkable = false
 	pnj.IsPowerUsing = true

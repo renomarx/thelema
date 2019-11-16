@@ -25,7 +25,7 @@ func (fr *FightingRing) MakeStorm(p Pos, damages int, dir InputType, lifetime in
 	fr.CurrentEffect = nil
 }
 
-func (fr *FightingRing) MakeEffect(p Pos, r rune, lifetime int) {
+func (fr *FightingRing) MakeEffect(p Pos, r string, lifetime int) {
 	eff := NewEffect(p, r)
 	fr.CurrentEffect = eff
 	time.Sleep(time.Duration(lifetime) * time.Millisecond)

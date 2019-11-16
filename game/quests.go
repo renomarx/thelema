@@ -71,22 +71,20 @@ func (p *Player) finishQuestStep(questID string, stepID string, g *Game) {
 		EM.Dispatch(&Event{
 			Message: "Quest object taken",
 			Action:  ActionTake})
-		r := rune(s[0])
-		_, exists := p.Inventory.QuestObjects[r]
+		_, exists := p.Inventory.QuestObjects[s]
 		if exists {
-			delete(p.Inventory.QuestObjects, r)
+			delete(p.Inventory.QuestObjects, s)
 		}
 	}
 	for _, s := range st.ObjectsGiven {
 		EM.Dispatch(&Event{
 			Message: "Quest object given!",
 			Action:  ActionTake})
-		r := rune(s[0])
-		_, exists := g.QuestsObjects[r]
+		_, exists := g.QuestsObjects[s]
 		if !exists {
 			panic("Quest object " + s + " does not exist")
 		}
-		p.Inventory.QuestObjects[r] = &Object{Rune: r}
+		p.Inventory.QuestObjects[s] = &Object{Rune: s}
 	}
 	if st.GoldGiven > 0 {
 		EM.Dispatch(&Event{Action: ActionTakeGold})

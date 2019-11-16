@@ -266,10 +266,10 @@ func (c *Player) PowerUse(g *Game, posTo Pos) {
 		case PowerInvocation:
 			// TODO : make input control invocation for lifetime
 		case PowerCalm:
-			g.Level.MakeEffect(posTo, rune(Calm), 200)
+			g.Level.MakeEffect(posTo, string(Calm), 200)
 			// TODO
 		case PowerDeadSpeaking:
-			g.Level.MakeEffect(posTo, rune(Necromancy), 200)
+			g.Level.MakeEffect(posTo, string(Necromancy), 200)
 			c.TalkToDead(g, posTo)
 		case PowerStorm:
 			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerStorm}})
@@ -281,7 +281,7 @@ func (c *Player) PowerUse(g *Game, posTo Pos) {
 			c.LooseEnergy(c.CurrentPower.Energy)
 		case PowerHealing:
 			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
-			g.Level.MakeEffect(c.Pos, rune(Healing), 200)
+			g.Level.MakeEffect(c.Pos, string(Healing), 200)
 			c.Health.Add(c.CalculatePowerAttackScore())
 			c.LooseEnergy(c.CurrentPower.Energy)
 		default:

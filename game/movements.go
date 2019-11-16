@@ -36,7 +36,7 @@ func canGo(level *Level, pos Pos) bool {
 func isInsideMap(level *Level, pos Pos) bool {
 	if pos.Y >= 0 && pos.Y < len(level.Map) {
 		if pos.X >= 0 && pos.X < len(level.Map[pos.Y]) {
-			return level.Map[pos.Y][pos.X].T != Blank && level.Map[pos.Y][pos.X].T != 0
+			return level.Map[pos.Y][pos.X].T != Blank && level.Map[pos.Y][pos.X].T != ""
 		}
 	}
 	return false
@@ -75,7 +75,7 @@ func openDoor(g *Game, pos Pos) {
 	if o != nil {
 		switch Tile(o.Rune) {
 		case DoorClosed:
-			o.Rune = rune(DoorOpened)
+			o.Rune = string(DoorOpened)
 			o.Blocking = false
 			EM.Dispatch(&Event{Action: ActionOpenDoor})
 		}
@@ -88,7 +88,7 @@ func closeDoor(g *Game, pos Pos) {
 	if o != nil {
 		switch Tile(o.Rune) {
 		case DoorOpened:
-			o.Rune = rune(DoorClosed)
+			o.Rune = string(DoorClosed)
 			o.Blocking = true
 			EM.Dispatch(&Event{Action: ActionCloseDoor})
 		}

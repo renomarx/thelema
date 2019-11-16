@@ -69,7 +69,7 @@ func (ui *UI) drawFightingEnemies(offsetX, offsetY int) {
 				att := fr.PossibleAttacks.List[fr.PossibleAttacks.Selected]
 				if i >= fr.TargetSelected && i < fr.TargetSelected+att.Range {
 					ui.renderer.Copy(ui.textureAtlas,
-						&ui.textureIndex['ʆ'][0],
+						&ui.textureIndex["ʆ"][0],
 						&sdl.Rect{X: int32(offsetX), Y: int32(offsetY), W: 64, H: 64})
 				}
 			}

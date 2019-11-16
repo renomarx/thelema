@@ -14,7 +14,7 @@ type Game struct {
 	Level         *Level
 	Levels        map[string]*Level
 	Books         map[string]*OBook
-	QuestsObjects map[rune]*QuestObject
+	QuestsObjects map[string]*QuestObject
 	FightingRing  *FightingRing
 	Paused        bool
 	Running       bool
@@ -70,7 +70,7 @@ type Entity struct {
 
 type Object struct {
 	Entity
-	Rune      rune
+	Rune      string
 	Static    bool
 	Blocking  bool
 	IsPlaying bool

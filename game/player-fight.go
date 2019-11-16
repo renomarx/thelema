@@ -74,7 +74,7 @@ func (p *Player) Fight(ring *FightingRing) {
 			switch att.MagickType {
 			case PowerHealing:
 				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
-				ring.MakeEffect(Pos{X: 0, Y: 0}, rune(Healing), 400)
+				ring.MakeEffect(Pos{X: 0, Y: 0}, string(Healing), 400)
 				p.Health.Add(damages)
 			case PowerInvocation:
 				monster := NewInvokedSpirit()
@@ -95,7 +95,7 @@ func (p *Player) Fight(ring *FightingRing) {
 			case PowerCalm:
 				for i, f := range to {
 					y := ring.TargetSelected + i
-					ring.MakeEffect(Pos{X: 1, Y: y}, rune(Calm), 400)
+					ring.MakeEffect(Pos{X: 1, Y: y}, string(Calm), 400)
 					f.SetAggressiveness(f.GetAggressiveness() - damages)
 				}
 			default:

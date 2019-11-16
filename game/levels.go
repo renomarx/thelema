@@ -203,7 +203,7 @@ func (l *Level) MakeFlame(p Pos, damages int, lifetime int) {
 	eff.Die(l)
 }
 
-func (l *Level) MakeEffect(p Pos, r rune, lifetime int) {
+func (l *Level) MakeEffect(p Pos, r string, lifetime int) {
 	eff := NewEffect(p, r)
 
 	l.Map[p.Y][p.X].Effect = eff
