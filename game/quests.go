@@ -34,6 +34,11 @@ type QuestObject struct {
 	} `json:"quest"`
 }
 
+type QuestLink struct {
+	StepsMandatory   []string `json:"steps_mandatory"`
+	StepsFullfilling []string `json:"steps_fullfilling"`
+}
+
 func (p *Player) LoadQuests(dirpath string) {
 	filename := dirpath + "/quests/quests.json"
 	jsonFile, err := os.Open(filename)

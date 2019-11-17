@@ -24,13 +24,10 @@ type StoryChoice struct {
 	Cmd         string `json:"cmd"`
 	NodeId      string `json:"node"`
 	Highlighted bool
-	Quest       struct {
-		StepsMandatory   []string `json:"steps_mandatory"`
-		StepsFullfilling []string `json:"steps_fullfilling"`
-	} `json:"quest"`
-	Required   map[string]int `json:"required"`
-	Actions    []string       `json:"actions"`
-	BooksGiven []string       `json:"books_given"`
+	Quest       QuestLink      `json:"quest"`
+	Required    map[string]int `json:"required"`
+	Actions     []string       `json:"actions"`
+	BooksGiven  []string       `json:"books_given"`
 }
 
 func adaptDialogSpeed() {

@@ -1,10 +1,13 @@
 package game
 
+import "strings"
+
 type BookInfo struct {
-	Level       string   `json:"level"`
-	PosX        int      `json:"posX"`
-	PosY        int      `json:"posY"`
-	PowersGiven []string `json:"powers_given"`
+	Level       string    `json:"level"`
+	PosX        int       `json:"posX"`
+	PosY        int       `json:"posY"`
+	PowersGiven []string  `json:"powers_given"`
+	Quest       QuestLink `json:"quest"`
 }
 
 type OBook struct {
@@ -12,6 +15,7 @@ type OBook struct {
 	Title  string
 	Text   []string
 	Powers []string
+	Quest  QuestLink
 }
 
 type Library struct {
@@ -69,6 +73,14 @@ func (l *Library) ConfirmChoice(g *Game) {
 			Message: "You learned power: '" + pp.Name + "' with this book!",
 			Action:  ActionPower,
 			Payload: map[string]string{"type": powername}})
+	}
+	for _, questStep := range b.Quest.StepsFullfilling {
+		arr := strings.Split(questStep, ":")
+		if len(arr) > 1 {
+			questID := arr[0]
+			stepID := arr[1]
+			g.Level.Player.finishQuestStep(questID, stepID, g)
+		}
 	}
 }
 

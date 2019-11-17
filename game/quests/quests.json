@@ -40,6 +40,33 @@
       }
     }
   },
+  "letter_from_ri": {
+    "current_step": "read_the_letter",
+    "name": "La lettre du préfet",
+    "steps": {
+      "read_the_letter": {
+        "order": 1,
+        "description" : "Lisez la lettre du préfet (Arcanea - Home)"
+      },
+      "talk_to_the_prefet": {
+        "order": 2,
+        "description" : "Parlez au préfet d'Arcanea",
+        "final": true
+      }
+    }
+  },
+  "become_a_soldier": {
+    "current_step": "be_soldier",
+    "name": "Choisissez un métier",
+    "steps": {
+      "be_soldier": {
+        "order": 1,
+        "description" : "Devenez un soldat",
+        "final": true,
+        "raising": {"strength": 5, "dexterity": 2}
+      }
+    }
+  },
   "nathaniel_free": {
     "current_step": "sent_to_prison",
     "name": "La libération de Nahtaniel",

@@ -1,4 +1,12 @@
 {
+  "book_initial_letter": {
+    "level": "arcanea/home",
+    "posX": 13,
+    "posY": 1,
+    "quest": {
+      "steps_fullfilling": ["letter_from_ri:read_the_letter"]
+    }
+  },
   "book_cats": {
     "level": "arcanea/home",
     "posX": 14,

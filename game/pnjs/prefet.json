@@ -1,0 +1,43 @@
+{
+  "level": "arcanea",
+  "posX": 25,
+  "posY": 14,
+  "voice": "MALE_STANDARD",
+  "current_node": "greetings",
+  "nodes" : {
+    "greetings": {
+      "initial": true,
+      "messages": ["Bonjour."],
+      "choices": [
+        {
+          "quest": {
+            "steps_mandatory": ["letter_from_ri:read_the_letter"]
+          },
+          "cmd": "Je viens vous voir, comme convenu.",
+          "node": "choose_a_job"
+        },
+        {
+          "cmd": "Je dois y aller."
+        }
+      ]
+    },
+    "choose_a_job": {
+      "messages": [
+        "Ah, oui !",
+        "Il faut que vous choisissiez un métier parmi les suivants: soldat"
+      ],
+      "choices": [
+        {
+          "quest": {
+            "steps_mandatory": ["letter_from_ri:read_the_letter"],
+            "steps_fullfilling": ["become_a_soldier:be_soldier", "letter_from_ri:talk_to_the_prefet"]
+          },
+          "cmd": "Je veux devenir soldat."
+        },
+        {
+          "cmd": "Je dois y aller."
+        }
+      ]
+    }
+  }
+}

@@ -182,7 +182,7 @@ func (g *Game) loadBooks() {
 
 	g.Books = make(map[string]*OBook)
 	for tile, bookInfo := range books {
-		g.Books[tile] = g.loadBookFromFile(tile, bookInfo.PowersGiven)
+		g.Books[tile] = g.loadBookFromFile(tile, &bookInfo)
 		levelName := bookInfo.Level
 		l, exists := g.Levels[levelName]
 		if !exists {
@@ -195,7 +195,7 @@ func (g *Game) loadBooks() {
 	}
 }
 
-func (g *Game) loadBookFromFile(filename string, powers []string) *OBook {
+func (g *Game) loadBookFromFile(filename string, bookInfo *BookInfo) *OBook {
 	filepath := g.GameDir + "/books/" + filename + ".txt"
 	file, err := os.Open(filepath)
 	if err != nil {
@@ -219,7 +219,7 @@ func (g *Game) loadBookFromFile(filename string, powers []string) *OBook {
 		title = lines[0]
 	}
 
-	return &OBook{Title: title, Text: lines, Powers: powers, Rune: filename}
+	return &OBook{Title: title, Text: lines, Powers: bookInfo.PowersGiven, Rune: filename, Quest: bookInfo.Quest}
 }
 
 func (g *Game) loadQuestsObjects() {

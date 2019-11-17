@@ -68,6 +68,7 @@ necromancy 3,13,1
 calm 33,25,1
 
 // Books
+book_initial_letter 32,39,1
 book_cats 54,38,73
 book_dead_speaking 54,38,73
 book_invocat 54,38,73
