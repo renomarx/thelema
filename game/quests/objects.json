@@ -1,12 +1,12 @@
 {
-  "c": {
+  "alcohol": {
     "quest": {
       "id": "sarahs_gin",
       "steps_fullfilling": ["get_alcohol"]
     },
     "level": "dresde"
   },
-  "v": {
+  "herbs": {
     "quest": {
       "id": "sarahs_gin",
       "steps_fullfilling": ["get_herbs"]

@@ -2,12 +2,12 @@ package ui2d
 
 import (
 	"bufio"
-	"thelema/game"
 	"image/png"
+	"log"
 	"os"
 	"strconv"
 	"strings"
-	"unicode/utf8"
+	"thelema/game"
 
 	"github.com/veandco/go-sdl2/sdl"
 )
@@ -21,8 +21,15 @@ func (ui *UI) loadTextureIndex(filename string) map[game.Tile][]sdl.Rect {
 	indexMap := make(map[game.Tile][]sdl.Rect)
 	for scanner.Scan() {
 		sline := scanner.Text()
+		if sline == "" || sline[0:2] == "//" {
+			continue
+		}
 		line := strings.Split(sline, " ")
-		tileRune, _ := utf8.DecodeRune([]byte(line[0]))
+		if len(line) < 2 {
+			log.Fatalf("Bad format for line %s", sline)
+		}
+		log.Println(line)
+		tile := line[0]
 		xy := line[1]
 		splitXY := strings.Split(xy, ",")
 		x, _ := strconv.ParseInt(splitXY[0], 10, 64)
@@ -37,7 +44,7 @@ func (ui *UI) loadTextureIndex(filename string) map[game.Tile][]sdl.Rect {
 				y++
 			}
 		}
-		indexMap[game.Tile(tileRune)] = rects
+		indexMap[game.Tile(tile)] = rects
 	}
 
 	return indexMap
