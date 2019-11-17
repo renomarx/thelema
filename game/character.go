@@ -25,6 +25,11 @@ func (ch *Characteristic) Add(value int) {
 	}
 }
 
+func (ch *Characteristic) Raise(value int) {
+	ch.Initial += value
+	ch.Current = ch.Initial
+}
+
 func (ch *Characteristic) RaiseXp(value int) {
 	ch.Xp += value
 	if ch.Xp >= ch.Initial*CharacteristicXpMultiplier {

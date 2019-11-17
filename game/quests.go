@@ -19,10 +19,11 @@ type Step struct {
 	Order        int    `json:"order"`
 	Description  string `json:"description"`
 	IsFinished   bool
-	ObjectsTaken []string `json:"objects_taken"`
-	GoldGiven    int      `json:"gold_given"`
-	ObjectsGiven []string `json:"objects_given"`
-	Final        bool     `json:"final"`
+	ObjectsTaken []string       `json:"objects_taken"`
+	GoldGiven    int            `json:"gold_given"`
+	ObjectsGiven []string       `json:"objects_given"`
+	Raising      map[string]int `json:"raising"`
+	Final        bool           `json:"final"`
 }
 
 type QuestObject struct {
@@ -89,6 +90,22 @@ func (p *Player) finishQuestStep(questID string, stepID string, g *Game) {
 	if st.GoldGiven > 0 {
 		EM.Dispatch(&Event{Action: ActionTakeGold})
 		p.Inventory.Gold += st.GoldGiven
+	}
+	for ch, val := range st.Raising {
+		switch ch {
+		case "strength":
+			p.Strength.Raise(val)
+		case "dexterity":
+			p.Dexterity.Raise(val)
+		case "beauty":
+			p.Beauty.Raise(val)
+		case "intelligence":
+			p.Intelligence.Raise(val)
+		case "will":
+			p.Will.Raise(val)
+		case "charisma":
+			p.Charisma.Raise(val)
+		}
 	}
 }
 
