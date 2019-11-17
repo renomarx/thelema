@@ -18,10 +18,10 @@ const (
 )
 
 func (g *Game) GenerateWorld() {
-	g.loadBooks()
 	firstLevel := g.loadLevels()
 	g.loadPortals()
 	g.loadPnjsVIP()
+	g.loadBooks()
 	g.loadQuestsObjects()
 	g.Level = firstLevel
 }
@@ -166,20 +166,32 @@ func (g *Game) loadPnjsVIP() {
 }
 
 func (g *Game) loadBooks() {
-	g.Books = make(map[string]*OBook)
+	filename := g.GameDir + "/books/books.json"
+	jsonFile, err := os.Open(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer jsonFile.Close()
+	byteValue, _ := ioutil.ReadAll(jsonFile)
 
-	books := LoadFilenames(g.GameDir + "/books")
-	for _, bookFile := range books {
-		book := strings.Split(bookFile, ".")
-		bookName := book[0]
-		powers := []string{}
-		switch bookName {
-		case "invocat":
-			powers = append(powers, PowerInvocation)
-		case "dead_speaking":
-			powers = append(powers, PowerDeadSpeaking)
+	books := make(map[string]BookInfo)
+	err = json.Unmarshal(byteValue, &books)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	g.Books = make(map[string]*OBook)
+	for tile, bookInfo := range books {
+		g.Books[tile] = g.loadBookFromFile(tile, bookInfo.PowersGiven)
+		levelName := bookInfo.Level
+		l, exists := g.Levels[levelName]
+		if !exists {
+			log.Fatal("Level " + levelName + " does not exist")
 		}
-		g.Books[bookName] = g.loadBookFromFile(bookName, powers)
+		pos := Pos{X: bookInfo.PosX, Y: bookInfo.PosY}
+		physicalObj := &Object{Rune: tile, Blocking: true}
+		physicalObj.Pos = pos
+		l.Map[pos.Y][pos.X].Object = physicalObj
 	}
 }
 
@@ -207,7 +219,7 @@ func (g *Game) loadBookFromFile(filename string, powers []string) *OBook {
 		title = lines[0]
 	}
 
-	return &OBook{Title: title, Text: lines, Powers: powers, Rune: string(Book)}
+	return &OBook{Title: title, Text: lines, Powers: powers, Rune: filename}
 }
 
 func (g *Game) loadQuestsObjects() {

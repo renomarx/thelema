@@ -1,6 +1,6 @@
 {
   "level": "abigail_crypt",
-  "posx": 75,
+  "posX": 75,
   "posY": 14,
   "dead": true,
   "voice": "FEMALE_STANDARD",

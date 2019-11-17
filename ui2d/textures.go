@@ -28,7 +28,6 @@ func (ui *UI) loadTextureIndex(filename string) map[game.Tile][]sdl.Rect {
 		if len(line) < 2 {
 			log.Fatalf("Bad format for line %s", sline)
 		}
-		log.Println(line)
 		tile := line[0]
 		xy := line[1]
 		splitXY := strings.Split(xy, ",")

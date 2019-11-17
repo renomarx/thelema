@@ -1,8 +1,9 @@
 package ui2d
 
 import (
-	"github.com/veandco/go-sdl2/sdl"
 	"thelema/game"
+
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 func (ui *UI) DrawLibrary() {
@@ -11,7 +12,7 @@ func (ui *UI) DrawLibrary() {
 		ui.drawLibraryBox()
 		var offsetX = int32(PlayerMenuOffsetX*Res + 10)
 		var offsetH int32 = 0
-		_, h := ui.DrawText("Bibliothèque", TextSizeL, ColorActive, offsetX, offsetH)
+		_, h := ui.DrawText("Books", TextSizeL, ColorActive, offsetX, offsetH)
 		offsetH += h + 10
 		for i, book := range lib.Books {
 			x := int32((PlayerMenuOffsetX + i) * Res)

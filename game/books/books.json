@@ -1,0 +1,19 @@
+{
+  "book_cats": {
+    "level": "arcanea/home",
+    "posX": 14,
+    "posY": 1
+  },
+  "book_invocat": {
+    "level": "arcanea/home",
+    "posX": 15,
+    "posY": 1,
+    "powers_given": ["invocation"]
+  },
+  "book_dead_speaking": {
+    "level": "arcanea/home",
+    "posX": 16,
+    "posY": 1,
+    "powers_given": ["dead_speaking"]
+  }
+}

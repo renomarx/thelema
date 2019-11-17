@@ -1,9 +1,15 @@
 package game
 
+type BookInfo struct {
+	Level       string   `json:"level"`
+	PosX        int      `json:"posX"`
+	PosY        int      `json:"posY"`
+	PowersGiven []string `json:"powers_given"`
+}
+
 type OBook struct {
 	Rune   string
 	Title  string
-	Score  int
 	Text   []string
 	Powers []string
 }
@@ -30,23 +36,9 @@ func (l *Library) AddBook(book *OBook) {
 }
 
 func (p *Player) AddBook(o *Object, g *Game) bool {
-	// TODO : not taking book when already have it
-	if Tile(o.Rune) != Book {
-		return false
-	}
-	var firstBook *OBook
-	firstScore := 1000
-	for _, book := range g.Books {
-		if book.Score <= firstScore {
-			firstBook = book
-			firstScore = book.Score
-			if book.Score < 1000 {
-				book.Score += 1
-			}
-		}
-	}
-	if firstBook != nil {
-		p.Library.AddBook(firstBook)
+	book, e := g.Books[o.Rune]
+	if e {
+		p.Library.AddBook(book)
 		return true
 	}
 	return false
@@ -72,7 +64,11 @@ func (l *Library) ConfirmChoice(g *Game) {
 		return
 	}
 	for _, powername := range b.Powers {
-		g.Level.Player.NewPower(powername, g)
+		pp := g.Level.Player.NewPower(powername, g)
+		EM.Dispatch(&Event{
+			Message: "You learned power: '" + pp.Name + "' with this book!",
+			Action:  ActionPower,
+			Payload: map[string]string{"type": powername}})
 	}
 }
 

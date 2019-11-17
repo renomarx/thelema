@@ -87,7 +87,7 @@ func (ui *UI) DrawPlayerCharacter() {
 	if p.CharacterMenuOpen {
 		ui.drawCharacterBox()
 		var offsetH int32 = 0
-		_, h := ui.DrawText("Personnage", TextSizeL, ColorActive, PlayerMenuOffsetX*Res, offsetH)
+		_, h := ui.DrawText("Character", TextSizeL, ColorActive, PlayerMenuOffsetX*Res, offsetH)
 		offsetH += h + 10
 		offsetH = ui.DrawCharacteristics(&p.Character, PlayerMenuOffsetX, offsetH)
 		offsetH += 40
@@ -98,7 +98,7 @@ func (ui *UI) DrawPlayerCharacter() {
 func (ui *UI) DrawPowers(offsetH int32) int32 {
 	p := ui.Game.Level.Player
 	var offsetX = int32(PlayerMenuOffsetX * Res)
-	_, h := ui.DrawText("Magies (gauche ou droite pour changer)", TextSizeM, ColorGreen, offsetX, offsetH)
+	_, h := ui.DrawText("Magicks", TextSizeM, ColorGreen, offsetX, offsetH)
 	offsetH += h + 10
 
 	powernames := p.GetSortedPowernames()

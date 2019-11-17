@@ -28,13 +28,9 @@ func (pow *PlayerPower) adaptSpeed() {
 	time.Sleep(time.Duration(CharacterDeltaTime/pow.Speed) * time.Millisecond)
 }
 
-func (p *Player) NewPower(powername string, g *Game) {
+func (p *Player) NewPower(powername string, g *Game) *PlayerPower {
 	p.newPowerRaw(powername)
-	pp := p.Powers[powername]
-	EM.Dispatch(&Event{
-		Message: "You learned power: '" + string(pp.Type) + "' with this book!",
-		Action:  ActionPower,
-		Payload: map[string]string{"type": string(pp.Type)}})
+	return p.Powers[powername]
 }
 
 func (p *Player) newPowerRaw(powername string) {

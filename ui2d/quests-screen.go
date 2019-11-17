@@ -1,9 +1,10 @@
 package ui2d
 
 import (
-	"github.com/veandco/go-sdl2/sdl"
 	"sort"
 	"thelema/game"
+
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 func (ui *UI) DrawQuests() {
@@ -11,7 +12,7 @@ func (ui *UI) DrawQuests() {
 	if p.QuestMenuOpen {
 		ui.drawQuestsBox()
 		var offsetH int32 = 0
-		_, h := ui.DrawText("Quêtes", TextSizeL, ColorActive, PlayerMenuOffsetX*32, offsetH)
+		_, h := ui.DrawText("Quests", TextSizeL, ColorActive, PlayerMenuOffsetX*32, offsetH)
 		offsetH += h + 10
 
 		runningIds := make([]string, 0, len(p.Quests))
@@ -26,7 +27,7 @@ func (ui *UI) DrawQuests() {
 		sort.Strings(runningIds)
 		sort.Strings(finishedIds)
 
-		_, h = ui.DrawText("En cours:", TextSizeM, ColorActive, PlayerMenuOffsetX*32, offsetH)
+		_, h = ui.DrawText("Running:", TextSizeM, ColorActive, PlayerMenuOffsetX*32, offsetH)
 		offsetH += h
 		i := 0
 		for _, qid := range runningIds {
@@ -36,7 +37,7 @@ func (ui *UI) DrawQuests() {
 			i++
 		}
 		offsetH += Res
-		_, h = ui.DrawText("Terminées:", TextSizeM, ColorDisabled, PlayerMenuOffsetX*32, offsetH)
+		_, h = ui.DrawText("Finished:", TextSizeM, ColorDisabled, PlayerMenuOffsetX*32, offsetH)
 		offsetH += h
 		i = 0
 		for _, qid := range finishedIds {

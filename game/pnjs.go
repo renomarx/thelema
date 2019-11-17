@@ -20,8 +20,8 @@ type Pnj struct {
 
 type PnjConf struct {
 	Level       string                `json:"level"`
-	PosX        int                   `json:"posx"`
-	PosY        int                   `json:"posy"`
+	PosX        int                   `json:"posX"`
+	PosY        int                   `json:"posY"`
 	Dead        bool                  `json:"dead"`
 	Voice       string                `json:"voice"`
 	CurrentNode string                `json:"current_node"`

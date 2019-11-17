@@ -1,6 +1,6 @@
 {
   "level": "arcanea",
-  "posx": 24,
+  "posX": 24,
   "posY": 14,
   "voice": "MALE_STANDARD",
   "current_node": "greetings",

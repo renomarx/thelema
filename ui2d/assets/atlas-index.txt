@@ -51,7 +51,6 @@ herbs 39,40,1
 
 // Objects
 gold 40,40,1
-b 54,38,73
 senzu 29,40,2
 bread 9,40,2
 fruits 15,40,1
@@ -67,3 +66,10 @@ teleport 42,24,1
 skull 3,33,1
 necromancy 3,13,1
 calm 33,25,1
+
+// Books
+book_cats 54,38,73
+book_dead_speaking 54,38,73
+book_invocat 54,38,73
+book_rats 54,38,73
+book_spiders 54,38,73
