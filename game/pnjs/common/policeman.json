@@ -17,7 +17,11 @@
             "steps_mandatory": ["nathaniel_revelation:talk_to_nathaniel"],
             "steps_fullfilling": ["nathaniel_free:sent_to_prison"]
           },
-          "actions": ["send_to_level:neoroma|nathaniel|dresde/prison"]
+          "actions": [
+            "send_to_level:neoroma|nathaniel|dresde/prison",
+            "update_dialog:dresde/prison|nathaniel|from_prison",
+            "discover:dresde"
+          ]
         },
         {
           "cmd": "Je vous pisse à la raie.",

@@ -7,7 +7,7 @@
   "nodes" : {
     "greetings": {
       "initial": true,
-      "messages": ["Je pensais que cette maison n'appartenait encore à personne..."],
+      "messages": ["Je pensais que cet appartement n'appartenait encore à personne..."],
       "choices": [
         {
           "cmd": "Qui êtes-vous ?",
@@ -16,7 +16,7 @@
       ]
     },
     "who_are_you": {
-      "messages": ["Je m'appelle Nathaniel. Vous êtes le nouveau propriétaire de cette maison ?"],
+      "messages": ["Je m'appelle Nathaniel. Vous êtes le nouveau propriétaire de cet appartement ?"],
       "choices": [
         {
           "cmd": "Oui. Que faites-vous chez moi ?",
@@ -26,9 +26,21 @@
     },
     "what_are_you": {
       "messages": [
-        "Je fuis la police.",
-        "J'aimerais vous expliquer plus en détail mais je dois partir.",
-        "Si vous voulez en savoir plus, retrouvez-moi à Neoroma."
+        "Je suis en cavale, sachant votre appartement vide, je m'y suis installé pour quelques temps.",
+        "Ne vous en faîtes pas, je ne suis pas dangereux, j'ai simplement découvert des choses qui auraient dû rester cachées."
+      ],
+      "choices": [
+        {
+          "cmd": "Qu'avez-vous découvert?",
+          "node": "what_did_you_discover"
+        }
+      ]
+    },
+    "what_did_you_discover": {
+      "messages": [
+        "Je n'ai pas le temps de vous expliquer, et de toute façon, vous ne me croiriez pas.",
+        "[Il vous juge un instant]",
+        "D'accord, si vous voulez en savoir plus, retrouvez-moi à Neoroma."
       ],
       "choices": [
         {
@@ -38,7 +50,7 @@
       ]
     },
     "bye": {
-      "messages": ["Notre rencontre n'est peut-être pas dû au hasard. Nous nous reverrons..."],
+      "messages": ["Notre rencontre n'est peut-être pas due au hasard. Je vous attendrai..."],
       "choices": [
         {
           "cmd": "...",
@@ -52,14 +64,43 @@
     },
 
     "greetings2": {
-      "messages": ["Ravi de vous revoir."],
+      "messages": [
+        "Content de vous revoir!"
+      ],
       "choices": [
         {
           "cmd": "Alors, de quoi vouliez-vous me parler ?",
-          "node": "learn_necromancy",
+          "node": "learn_necromancy"
+        }
+      ]
+    },
+
+    "from_prison": {
+      "messages": [
+        "[Nathaniel porte des menottes dans une matière sombre]",
+        "Vous! Je vous en prie, libérez-moi! Il vous suffit de lancer une magie quelconque sur ces menottes."
+      ],
+      "choices": [
+        {
+          "cmd": "[Vous le libérez]",
+          "node": "free_him",
           "quest": {
             "steps_fullfilling": ["nathaniel_free:free"]
           }
+        },
+        {
+          "cmd": "Pas aujourd'hui."
+        }
+      ]
+    },
+    "free_him": {
+      "messages": [
+        "Je vous remercie. Ces menottes bloquent toute magie pour ceux qui les portent."
+      ],
+      "choices": [
+        {
+          "cmd": "Alors, de quoi vouliez-vous me parler ?",
+          "node": "learn_necromancy"
         },
         {
           "cmd": "C'est moi qui vous ai vendu à la police.",
@@ -87,7 +128,7 @@
       ]
     },
     "back_to_the_subject": {
-      "messages": ["En effet, la conscience se trouve plus facilement avec de l'argent"],
+      "messages": ["J'imagine que la conscience se trouve plus facilement avec de l'argent..."],
       "choices": [
         {
           "cmd": "Alors, de quoi vouliez-vous me parler ?",
@@ -127,7 +168,7 @@
         {
           "cmd": "Ensuite ?",
           "node": "talk_to_dead_body",
-          "books_given": ["dead_speaking"]
+          "actions": ["book_given:book_dead_speaking"]
         }
       ]
     },

@@ -161,3 +161,15 @@ func (n *StoryNode) filterPossibleChoices(p *Player) {
 	}
 	n.Choices = res
 }
+
+func (g *Game) UpdatePnjDialog(fromName, pnjName, node string) {
+	from, exists := g.Levels[fromName]
+	if !exists {
+		panic("Level " + fromName + " does not exist")
+	}
+	pnj := from.SearchPnj(pnjName)
+	if pnj == nil {
+		panic("Pnj " + pnjName + " on level " + fromName + " does not exist")
+	}
+	pnj.Dialog.SetInitialNode(node)
+}

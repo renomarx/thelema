@@ -148,6 +148,9 @@ func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
 				case "send_to_level":
 					levelPnj := strings.Split(act[1], "|")
 					g.SendToLevel(levelPnj[0], levelPnj[1], levelPnj[2])
+				case "update_dialog":
+					levelPnjDialog := strings.Split(act[1], "|")
+					g.UpdatePnjDialog(levelPnjDialog[0], levelPnjDialog[1], levelPnjDialog[2])
 				case "learn_attack":
 					p.LearnAttack(act[1])
 				case "add_key":
@@ -159,14 +162,18 @@ func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
 					}
 				case "discover":
 					g.DiscoverLevel(act[1])
+				case "book_given":
+					book, exists := g.Books[act[1]]
+					if exists {
+						p.Library.AddBook(book)
+						EM.Dispatch(&Event{
+							Action:  ActionTake,
+							Message: "You got a new book!",
+						})
+					} else {
+						log.Printf("Book %s does not exist.", act[1])
+					}
 				}
-			}
-			for _, book := range choice.BooksGiven {
-				p.Library.AddBook(g.Books[book])
-				EM.Dispatch(&Event{
-					Action:  ActionTake,
-					Message: "You got a new book!",
-				})
 			}
 			if choice.NodeId == "" {
 				pnj.StopTalking()
