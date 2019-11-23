@@ -7,18 +7,18 @@
   "current_node": "dead_greetings",
   "nodes" : {
     "dead_greetings": {
-      "messages": ["Qui me rappelle ?"],
+      "messages": ["[L'esprit reste impassible, muet.]"],
       "choices": [
         {
           "quest": {
-            "steps_mandatory": ["great_priest_past:talk_to_nathaniel_about_dead_body"],
+            "steps_mandatory": ["great_priest_past:talk_to_great_priest"],
             "steps_fullfilling": ["great_priest_past:talk_to_dead_body"]
           },
           "cmd": "Nathaniel m'envoie vous parler.",
           "node": "nathaniel_sent_me"
         },
         {
-          "cmd": "Je vous libère."
+          "cmd": "[Vous libérez l'esprit]"
         }
       ]
     },

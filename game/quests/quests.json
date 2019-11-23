@@ -18,7 +18,7 @@
       "talk_to_sarah": {
         "order": 3,
         "description" : "Bring alcohol and herbs to Sarah in Neoroma",
-        "objects_taken": ["c","v"],
+        "objects_taken": ["alcohol","herbs"],
         "gold_given": 30,
         "objects_given": [],
         "final": true
@@ -94,6 +94,10 @@
       "talk_to_dead_body": {
         "order": 2,
         "description" : "Parlez à Abigail dans la crypte."
+      },
+      "talk_to_great_priest": {
+        "order": 3,
+        "description": "Parlez au grand prêtre."
       }
     }
   }

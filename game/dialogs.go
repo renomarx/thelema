@@ -11,6 +11,7 @@ const DialogDeltaTime = 200
 type Dialog struct {
 	CurrentNode string                `json:"current_node"`
 	Nodes       map[string]*StoryNode `json:"nodes"`
+	initialNode string
 }
 
 type StoryNode struct {
@@ -36,6 +37,11 @@ func (d *Dialog) Init(p *Player) {
 	for _, n := range d.Nodes {
 		n.filterPossibleChoices(p)
 	}
+	d.initialNode = d.CurrentNode
+}
+
+func (d *Dialog) Close() {
+	d.CurrentNode = d.initialNode
 }
 
 func (d *Dialog) GetCurrentNode() *StoryNode {
@@ -61,6 +67,7 @@ func (d *Dialog) SetCurrentNode(key string) *StoryNode {
 		return nil
 	}
 	d.CurrentNode = key
+	d.initialNode = d.CurrentNode
 	return node
 }
 

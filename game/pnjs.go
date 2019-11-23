@@ -19,13 +19,23 @@ type Pnj struct {
 }
 
 type PnjConf struct {
-	Level       string                `json:"level"`
-	PosX        int                   `json:"posX"`
-	PosY        int                   `json:"posY"`
-	Dead        bool                  `json:"dead"`
-	Voice       string                `json:"voice"`
-	CurrentNode string                `json:"current_node"`
-	Nodes       map[string]*StoryNode `json:"nodes"`
+	Level             string                `json:"level"`
+	PosX              int                   `json:"posX"`
+	PosY              int                   `json:"posY"`
+	Dead              bool                  `json:"dead"`
+	Voice             string                `json:"voice"`
+	CurrentNode       string                `json:"current_node"`
+	Nodes             map[string]*StoryNode `json:"nodes"`
+	Health            int                   `json:"health"`
+	Energy            int                   `json:"energy"`
+	Strength          int                   `json:"strength"`
+	Dexterity         int                   `json:"dexterity"`
+	Beauty            int                   `json:"beauty"`
+	Will              int                   `json:"will"`
+	Intelligence      int                   `json:"intelligence"`
+	Charisma          int                   `json:"charisma"`
+	Luck              int                   `json:"luck"`
+	RegenerationSpeed int                   `json:"regeneration_speed"`
 }
 
 func NewPnj(p Pos, name string) *Pnj {
@@ -66,6 +76,36 @@ func (p *Pnj) LoadPnj(filename string) (string, Pos) {
 	json.Unmarshal(byteValue, &conf)
 
 	p.Dead = conf.Dead
+	if conf.Health != 0 {
+		p.Health.Init(conf.Health)
+	}
+	if conf.Energy != 0 {
+		p.Energy.Init(conf.Energy)
+	}
+	if conf.Strength != 0 {
+		p.Strength.Init(conf.Strength)
+	}
+	if conf.Dexterity != 0 {
+		p.Dexterity.Init(conf.Dexterity)
+	}
+	if conf.Beauty != 0 {
+		p.Beauty.Init(conf.Beauty)
+	}
+	if conf.Will != 0 {
+		p.Will.Init(conf.Will)
+	}
+	if conf.Intelligence != 0 {
+		p.Intelligence.Init(conf.Intelligence)
+	}
+	if conf.Charisma != 0 {
+		p.Charisma.Init(conf.Charisma)
+	}
+	if conf.Luck != 0 {
+		p.Luck.Init(conf.Luck)
+	}
+	if conf.RegenerationSpeed != 0 {
+		p.RegenerationSpeed.Init(conf.RegenerationSpeed)
+	}
 
 	p.Dialog = &Dialog{
 		CurrentNode: conf.CurrentNode,
@@ -181,6 +221,7 @@ func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
 }
 
 func (pnj *Pnj) StopTalking() {
+	pnj.Dialog.Close()
 	p := pnj.TalkingTo
 	p.TalkingTo = nil
 	pnj.TalkingTo = nil

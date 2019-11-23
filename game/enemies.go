@@ -6,8 +6,9 @@ type Enemy struct {
 
 func (level *Level) MakeEnemy(pnj *Pnj) *Enemy {
 	e := &Enemy{}
-	e.Aggressiveness.Init(20)
 	e.Character = pnj.Character
+	e.Aggressiveness.Init(20)
+	e.Speed.Init(10)
 	return e
 }
 

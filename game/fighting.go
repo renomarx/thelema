@@ -1,7 +1,9 @@
 package game
 
-import "math/rand"
-import "time"
+import (
+	"math/rand"
+	"time"
+)
 
 type FighterInterface interface {
 	ChooseAction(ring *FightingRing) int
