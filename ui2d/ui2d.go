@@ -1,12 +1,13 @@
 package ui2d
 
 import (
-	"github.com/veandco/go-sdl2/sdl"
-	"github.com/veandco/go-sdl2/ttf"
 	"log"
 	"path/filepath"
 	"strings"
 	"thelema/game"
+
+	"github.com/veandco/go-sdl2/sdl"
+	"github.com/veandco/go-sdl2/ttf"
 )
 
 const WindowTitle = "L'abbaye de Thelema"

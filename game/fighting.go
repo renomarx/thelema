@@ -70,8 +70,9 @@ func (g *Game) Fight(enemies []FighterInterface) {
 		Action:  ActionFight,
 		Message: "You're being attacked!",
 	})
-	g.FightingRing = NewFightingRing()
 	p := g.Level.Player
+	g.Level.MakeExplosion(p.Pos, 88, 1000)
+	g.FightingRing = NewFightingRing()
 	for _, e := range enemies {
 		g.FightingRing.AddEnemy(e)
 	}
