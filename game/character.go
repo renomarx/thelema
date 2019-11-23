@@ -43,10 +43,9 @@ const VoiceMaleStandard = "MALE_STANDARD"
 const VoiceFemaleStandard = "FEMALE_STANDARD"
 
 type Talker struct {
-	IsTalking bool
-	Dialog    *Dialog
-	Voice     string
-	Talkable  bool
+	Dialog   *Dialog
+	Voice    string
+	Talkable bool
 }
 
 type Character struct {

@@ -1,8 +1,9 @@
 package ui2d
 
 import (
-	"github.com/veandco/go-sdl2/sdl"
 	"thelema/game"
+
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 type Color sdl.Color
@@ -33,7 +34,7 @@ func (ui *UI) GetTexture(text string, size int, color sdl.Color) *sdl.Texture {
 }
 
 func (ui *UI) DrawDialog(p *game.Pnj) {
-	if p.IsTalking {
+	if p.TalkingTo != nil {
 		ui.drawDialogBox()
 		node := p.Dialog.GetCurrentNode()
 

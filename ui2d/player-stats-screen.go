@@ -1,13 +1,14 @@
 package ui2d
 
 import (
-	"github.com/veandco/go-sdl2/sdl"
 	"thelema/game"
+
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 func (ui *UI) DrawPlayerStats() {
 	p := ui.Game.Level.Player
-	if !p.IsTalking && !ui.Game.Paused {
+	if p.TalkingTo == nil && !ui.Game.Paused {
 		ui.drawPlayerStatsBox()
 		offsetH := ui.WindowHeight - Res
 		ui.drawHealthBar(10, int32(offsetH), p.Health)

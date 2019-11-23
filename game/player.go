@@ -22,7 +22,7 @@ func (p *Player) Update(g *Game) {
 	}
 	input := g.GetInput()
 	p.regenerate()
-	if p.IsTalking {
+	if p.TalkingTo != nil {
 		p.Discuss(g)
 	} else {
 		if input.Typ == Up || input.Typ == Down || input.Typ == Left || input.Typ == Right {
@@ -136,7 +136,6 @@ func (p *Player) Talk(g *Game, posTo Pos) {
 	pnj := level.Map[posTo.Y][posTo.X].Pnj
 	if pnj != nil && pnj.Talkable && !pnj.IsDead() {
 		EM.Dispatch(&Event{Action: ActionTalk})
-		p.IsTalking = true
 		p.TalkingTo = pnj
 		pnj.Talk(p, g)
 		adaptDialogSpeed()
@@ -147,7 +146,6 @@ func (p *Player) Discuss(g *Game) {
 	input := g.GetInput()
 	pnj := p.TalkingTo
 	if pnj == nil {
-		p.IsTalking = false
 		return
 	}
 	switch input.Typ {
@@ -295,7 +293,6 @@ func (p *Player) TalkToDead(g *Game, posTo Pos) {
 	pnj := level.Map[posTo.Y][posTo.X].Pnj
 	if pnj != nil && pnj.Talkable && pnj.IsDead() {
 		EM.Dispatch(&Event{Action: ActionTalk})
-		p.IsTalking = true
 		p.TalkingTo = pnj
 		pnj.Talk(p, g)
 		adaptDialogSpeed()

@@ -6,7 +6,6 @@
   "current_node": "greetings",
   "nodes" : {
     "greetings": {
-      "initial": true,
       "messages": ["Salut ! Sarah te cherche."],
       "choices": [
         {

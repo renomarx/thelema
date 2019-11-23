@@ -32,7 +32,6 @@ func newPlayer(health, energy, stg, dex, bea, wil, intel, cha, rg int) *Player {
 	player.RegenerationSpeed.Init(rg)
 	player.Luck.Init(20)
 	player.IsPowerUsing = false
-	player.IsTalking = false
 	player.IsTaking = false
 	player.Inventory = NewInventory()
 	player.Library = NewLibrary()

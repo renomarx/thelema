@@ -6,7 +6,6 @@
   "current_node": "greetings",
   "nodes" : {
     "greetings": {
-      "initial": true,
       "messages": ["Je pensais que cet appartement n'appartenait encore à personne..."],
       "choices": [
         {
@@ -54,7 +53,7 @@
       "choices": [
         {
           "cmd": "...",
-          "actions": ["teleport_to:neoroma", "set_initial_node:greetings2", "discover:neoroma"],
+          "actions": ["teleport_to:neoroma", "set_current_node:greetings2", "discover:neoroma"],
           "quest": {
             "steps_mandatory": [],
             "steps_fullfilling": ["nathaniel_revelation:talk_to_nathaniel"]

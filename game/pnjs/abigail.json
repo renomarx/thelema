@@ -7,7 +7,6 @@
   "current_node": "dead_greetings",
   "nodes" : {
     "dead_greetings": {
-      "initial": true,
       "messages": ["Qui me rappelle ?"],
       "choices": [
         {

@@ -49,7 +49,6 @@ func NewPnj(p Pos, name string) *Pnj {
 	pnj.LastActionTime = time.Now()
 	pnj.LookAt = Left
 	pnj.Talkable = true
-	pnj.IsTalking = false
 
 	return pnj
 }
@@ -77,16 +76,11 @@ func (p *Pnj) LoadPnj(filename string) (string, Pos) {
 }
 
 func (pnj *Pnj) Talk(p *Player, g *Game) {
-	// Wait for finish move
-	for pnj.Xb != 0 || pnj.Yb != 0 {
-		pnj.adaptSpeed()
-	}
 	EM.Dispatch(&Event{Action: ActionTalk, Payload: map[string]string{"voice": pnj.Voice}})
 	pnj.Dialog.Init(p)
 	node := pnj.Dialog.GetCurrentNode()
 	node.ClearHighlight()
 	node.SetHighlightedIndex(0)
-	pnj.IsTalking = true
 	pnj.TalkingTo = p
 	if p.X == pnj.X && p.Y < pnj.Y {
 		pnj.LookAt = Up
@@ -143,8 +137,8 @@ func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
 					pnj.Teleport(act[1], g)
 				case "become_enemy":
 					pnj.BecomeEnemy(g)
-				case "set_initial_node":
-					pnj.Dialog.SetInitialNode(act[1])
+				case "set_current_node":
+					pnj.Dialog.SetCurrentNode(act[1])
 				case "send_to_level":
 					levelPnj := strings.Split(act[1], "|")
 					g.SendToLevel(levelPnj[0], levelPnj[1], levelPnj[2])
@@ -188,23 +182,15 @@ func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
 
 func (pnj *Pnj) StopTalking() {
 	p := pnj.TalkingTo
-	p.IsTalking = false
 	p.TalkingTo = nil
-	pnj.IsTalking = false
 	pnj.TalkingTo = nil
-	for k, node := range pnj.Dialog.Nodes {
-		if node.Initial {
-			pnj.Dialog.CurrentNode = k
-			break
-		}
-	}
 }
 
 func (pnj *Pnj) Update(l *Level) {
 	if pnj.Dead {
 		return
 	}
-	if pnj.IsTalking {
+	if pnj.TalkingTo != nil {
 		return
 	}
 	t := time.Now()
@@ -243,6 +229,9 @@ func (pnj *Pnj) getWantedPosition() Pos {
 }
 
 func (pnj *Pnj) canMove(to Pos, level *Level) bool {
+	if pnj.TalkingTo != nil {
+		return false
+	}
 	if !canGo(level, to) {
 		return false
 	}
@@ -295,5 +284,5 @@ func (pnj *Pnj) BecomeEnemy(g *Game) {
 
 func (pnj *Pnj) Die(g *Game) {
 	pnj.Dead = true
-	pnj.Dialog.SetInitialNode("dead_greetings")
+	pnj.Dialog.SetCurrentNode("dead_greetings")
 }

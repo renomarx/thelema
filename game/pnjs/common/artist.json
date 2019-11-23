@@ -2,7 +2,6 @@
   "current_node": "greetings",
   "nodes" : {
     "greetings": {
-      "initial": true,
       "messages": ["Hello, I'm an artist."],
       "choices": [
         {

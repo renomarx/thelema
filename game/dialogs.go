@@ -14,7 +14,6 @@ type Dialog struct {
 }
 
 type StoryNode struct {
-	Initial    bool           `json:"initial"`
 	Messages   []string       `json:"messages"`
 	AllChoices []*StoryChoice `json:"choices"`
 	Choices    []*StoryChoice
@@ -27,7 +26,6 @@ type StoryChoice struct {
 	Quest       QuestLink      `json:"quest"`
 	Required    map[string]int `json:"required"`
 	Actions     []string       `json:"actions"`
-	BooksGiven  []string       `json:"books_given"`
 }
 
 func adaptDialogSpeed() {
@@ -56,16 +54,13 @@ func (d *Dialog) GetNode(key string) *StoryNode {
 	return node
 }
 
-func (d *Dialog) SetInitialNode(key string) *StoryNode {
+func (d *Dialog) SetCurrentNode(key string) *StoryNode {
 	node, exists := d.Nodes[key]
 	if !exists {
 		log.Printf("Node %s does not exist", key)
 		return nil
 	}
-	for _, n := range d.Nodes {
-		n.Initial = false
-	}
-	node.Initial = true
+	d.CurrentNode = key
 	return node
 }
 
@@ -87,11 +82,11 @@ func (n *StoryNode) ClearHighlight() {
 func (n *StoryNode) SetHighlightedIndex(i int) {
 	n.ClearHighlight()
 	len := len(n.Choices)
-	if i < 0 {
-		i = 0
-	}
 	if i >= len {
 		i = len - 1
+	}
+	if i < 0 {
+		i = 0
 	}
 	idx := i
 	n.Choices[idx].Highlighted = true
@@ -171,5 +166,6 @@ func (g *Game) UpdatePnjDialog(fromName, pnjName, node string) {
 	if pnj == nil {
 		panic("Pnj " + pnjName + " on level " + fromName + " does not exist")
 	}
-	pnj.Dialog.SetInitialNode(node)
+	log.Printf("Updating dialog node of %s to %s", pnjName, node)
+	pnj.Dialog.SetCurrentNode(node)
 }
