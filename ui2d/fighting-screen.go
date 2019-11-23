@@ -2,8 +2,9 @@ package ui2d
 
 import (
 	"fmt"
-	"github.com/veandco/go-sdl2/sdl"
 	"math/rand"
+
+	"github.com/veandco/go-sdl2/sdl"
 	// "github.com/veandco/go-sdl2/ttf"
 	// "log"
 	// "path/filepath"
@@ -16,19 +17,18 @@ func (ui *UI) DrawFightingRing() {
 	offsetY := ui.WindowHeight / 3
 	if fr != nil && fr.IsOpen {
 		ui.drawFightingScreen()
-		ui.drawFightingMenu()
-		ui.drawFightingAttacks()
-		ui.drawFightingPlayer(offsetX, offsetY)
-		ui.drawFightingFriends(offsetX+32, offsetY+100)
-		ui.drawFightingEnemies(offsetX*2, offsetY)
+		ui.drawFightingMenu(fr)
+		ui.drawFightingAttacks(fr)
+		ui.drawFightingPlayer(fr, offsetX, offsetY)
+		ui.drawFightingFriends(fr, offsetX+32, offsetY+100)
+		ui.drawFightingEnemies(fr, offsetX*2, offsetY)
 		if fr.CurrentEffect != nil {
 			ui.drawFightingEffect(fr.CurrentEffect, offsetX, offsetY)
 		}
 	}
 }
 
-func (ui *UI) drawFightingPlayer(offsetX, offsetY int) {
-	fr := ui.Game.FightingRing
+func (ui *UI) drawFightingPlayer(fr *game.FightingRing, offsetX, offsetY int) {
 	p := ui.Game.Level.Player
 	texture := ui.playerTextures[p.Name]
 	xb := 0
@@ -60,9 +60,8 @@ func (ui *UI) drawFightingPlayer(offsetX, offsetY int) {
 	ui.drawEnergyBar(int32(offsetX+xb), int32(offsetY-15), p.GetEnergy())
 }
 
-func (ui *UI) drawFightingEnemies(offsetX, offsetY int) {
-	fr := ui.Game.FightingRing
-	if fr != nil && len(fr.Enemies) > 0 {
+func (ui *UI) drawFightingEnemies(fr *game.FightingRing, offsetX, offsetY int) {
+	if len(fr.Enemies) > 0 {
 		for i, e := range fr.Enemies {
 			enemy, isPnj := e.(*game.Enemy)
 			if fr.AttackTargetSelectionOpen {
@@ -126,8 +125,7 @@ func (ui *UI) drawFightingMonster(e game.FighterInterface, offsetX, offsetY int)
 	}
 }
 
-func (ui *UI) drawFightingFriends(offsetX, offsetY int) {
-	fr := ui.Game.FightingRing
+func (ui *UI) drawFightingFriends(fr *game.FightingRing, offsetX, offsetY int) {
 	if fr != nil && len(fr.Friends) > 0 {
 		for _, e := range fr.Friends {
 			f, isFriend := e.(*game.Friend)
@@ -190,8 +188,8 @@ func (ui *UI) drawFightingScreen() {
 		&sdl.Rect{X: 0, Y: 0, W: int32(ui.WindowWidth), H: int32(ui.WindowHeight)})
 }
 
-func (ui *UI) drawFightingMenu() {
-	menu := ui.Game.FightingRing.Menu
+func (ui *UI) drawFightingMenu(fr *game.FightingRing) {
+	menu := fr.Menu
 	if menu != nil && menu.IsOpen {
 		ui.renderer.Copy(ui.uiTextures["downbox"],
 			&sdl.Rect{X: 0, Y: 0, W: 320, H: 64},
@@ -215,9 +213,8 @@ func (ui *UI) drawFightingMenu() {
 	}
 }
 
-func (ui *UI) drawFightingAttacks() {
-	fr := ui.Game.FightingRing
-	if fr != nil && fr.AttacksMenuOpen {
+func (ui *UI) drawFightingAttacks(fr *game.FightingRing) {
+	if fr.AttacksMenuOpen {
 		p := ui.Game.Level.Player
 		offsetY := (3 * ui.WindowHeight / 4) + 50
 		selectedAttack := fr.GetSelectedAttack()

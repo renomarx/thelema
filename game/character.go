@@ -210,14 +210,16 @@ func (c *Character) TakeDamages(damage int) {
 		return
 	}
 	c.damagesTaken = damage
-	for i := 0; i < 10; i++ {
+	defer func() {
+		c.damagesTaken = 0
+	}()
+	for i := 0; i < damage; i++ {
 		c.adaptSpeed()
-	}
-	c.damagesTaken = 0
-	c.Health.Current -= damage
-	if c.Health.Current <= 0 {
-		c.Dead = true
-		return
+		c.Health.Current--
+		if c.Health.Current <= 0 {
+			c.Dead = true
+			return
+		}
 	}
 }
 
