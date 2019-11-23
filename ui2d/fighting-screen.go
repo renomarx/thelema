@@ -89,9 +89,18 @@ func (ui *UI) drawFightingEnemy(e *game.Enemy, offsetX, offsetY int) {
 	tileY := 9 * 64
 	tileX := 64 * ((-1*e.Xb + Res) / (Res / 8))
 	if e.IsAttacking() {
-		xb = (ui.WindowHeight / 3) * e.AttackPos / 32
-		tileY = tileY + 4*64
-		tileX = 64 * (6 * e.AttackPos / 32)
+		att := e.SelectedAttack
+		if att != nil {
+			switch att.Type {
+			case game.AttackTypePhysical:
+				xb = (ui.WindowHeight / 3) * e.AttackPos / 32
+				tileY = tileY + 4*64
+				tileX = 64 * (6 * e.AttackPos / 32)
+			case game.AttackTypeMagick:
+				tileY = tileY - 8*64
+				tileX = 64 * (e.AttackPos / 6)
+			}
+		}
 	}
 	if e.IsDead() {
 		tileY = 20 * 64
@@ -223,7 +232,7 @@ func (ui *UI) drawFightingAttacks(fr *game.FightingRing) {
 		ui.renderer.Copy(tex, nil, &sdl.Rect{40, int32(offsetY), w, h})
 
 		offsetX := ui.WindowWidth / 2
-		tex = ui.GetTexture(fmt.Sprintf("Power: %d", selectedAttack.GetPower(p)), TextSizeXL, ColorWhite)
+		tex = ui.GetTexture(fmt.Sprintf("Power: %d", selectedAttack.GetPower(&p.Character)), TextSizeXL, ColorWhite)
 		_, _, w, h, _ = tex.Query()
 		ui.renderer.Copy(tex, nil, &sdl.Rect{int32(offsetX), int32(offsetY), w, h})
 		tex = ui.GetTexture(fmt.Sprintf("Energy cost: %d", selectedAttack.EnergyCost), TextSizeXL, ColorWhite)

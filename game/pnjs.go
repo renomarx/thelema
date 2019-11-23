@@ -36,6 +36,7 @@ type PnjConf struct {
 	Charisma          int                   `json:"charisma"`
 	Luck              int                   `json:"luck"`
 	RegenerationSpeed int                   `json:"regeneration_speed"`
+	Powers            []string              `json:"powers"`
 }
 
 func NewPnj(p Pos, name string) *Pnj {
@@ -59,6 +60,7 @@ func NewPnj(p Pos, name string) *Pnj {
 	pnj.LastActionTime = time.Now()
 	pnj.LookAt = Left
 	pnj.Talkable = true
+	pnj.Powers = make(map[string]*PlayerPower)
 
 	return pnj
 }
@@ -105,6 +107,10 @@ func (p *Pnj) LoadPnj(filename string) (string, Pos) {
 	}
 	if conf.RegenerationSpeed != 0 {
 		p.RegenerationSpeed.Init(conf.RegenerationSpeed)
+	}
+	powers := Powers()
+	for _, pname := range conf.Powers {
+		p.Powers[pname] = powers[pname]
 	}
 
 	p.Dialog = &Dialog{

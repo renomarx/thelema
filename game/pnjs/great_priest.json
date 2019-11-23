@@ -13,6 +13,7 @@
   "will": 100,
   "charisma": 100,
   "luck": 100,
+  "powers": ["storm"],
   "current_node": "greetings",
   "nodes" : {
     "greetings": {

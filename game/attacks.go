@@ -68,7 +68,7 @@ func Attacks() []*Attack {
 	}
 }
 
-func (att *Attack) GetPower(p *Player) int {
+func (att *Attack) GetPower(p *Character) int {
 	power := 0
 	switch att.Type {
 	case AttackTypePhysical:

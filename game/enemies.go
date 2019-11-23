@@ -2,6 +2,7 @@ package game
 
 type Enemy struct {
 	Character
+	SelectedAttack *Attack
 }
 
 func (level *Level) MakeEnemy(pnj *Pnj) *Enemy {
@@ -14,7 +15,27 @@ func (level *Level) MakeEnemy(pnj *Pnj) *Enemy {
 
 func (m *Enemy) ChooseAction(ring *FightingRing) int {
 	// TODO : enemy IA
-	return m.Dexterity.Current
+	m.SelectedAttack = &Attack{
+		Speed:   20,
+		Damages: 20,
+		Name:    "Sword attack",
+		Type:    AttackTypePhysical,
+		Range:   1,
+	}
+	for _, pow := range m.Powers {
+		att := &Attack{
+			Damages:    pow.Strength,
+			Name:       pow.Name,
+			EnergyCost: pow.Energy,
+			Speed:      pow.Speed,
+			Range:      pow.Range,
+			Type:       AttackTypeMagick,
+			MagickType: pow.Type,
+		}
+		m.SelectedAttack = att
+		return att.Speed
+	}
+	return m.SelectedAttack.Speed
 }
 
 func (m *Enemy) Fight(ring *FightingRing) {
@@ -29,13 +50,41 @@ func (m *Enemy) Fight(ring *FightingRing) {
 		m.adaptSpeed()
 	}
 	m.isAttacking = false
+
+	damages := m.CalculateAttackScore()
+	if m.SelectedAttack != nil {
+		att := m.SelectedAttack
+		damages = att.GetPower(&m.Character)
+		switch att.Type {
+		case AttackTypePhysical:
+		case AttackTypeMagick:
+			switch att.MagickType {
+			case PowerHealing:
+				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
+				ring.MakeEffect(Pos{X: 1, Y: 0}, string(Healing), 400)
+				m.Health.Add(damages)
+			// case PowerInvocation:
+			// 	monster := NewInvokedSpirit()
+			// 	ring.AddFriend(monster)
+			// 	p.Will.RaiseXp(monster.Strength.Initial / 10)
+			case PowerFlames:
+				ring.MakeFlame(Pos{X: 0, Y: 0}, damages, 400)
+			case PowerStorm:
+				ring.MakeStorm(Pos{X: 0, Y: 0}, damages, Right, 200)
+			case PowerCalm:
+				ring.MakeEffect(Pos{X: 0, Y: 0}, string(Calm), 400)
+			}
+			m.LooseEnergy(att.EnergyCost)
+		}
+
+	}
 	if len(ring.Friends) > 0 {
 		for _, f := range ring.Friends {
 			if !f.IsDead() {
-				f.TakeDamages(m.CalculateAttackScore())
+				f.TakeDamages(damages)
 				return
 			}
 		}
 	}
-	ring.Player.TakeDamages(m.CalculateAttackScore())
+	ring.Player.TakeDamages(damages)
 }

@@ -62,7 +62,7 @@ func (p *Player) Fight(ring *FightingRing) {
 		}
 		p.isAttacking = false
 
-		damages := att.GetPower(p)
+		damages := att.GetPower(&p.Character)
 		switch att.Type {
 		case AttackTypePhysical:
 			for _, f := range to {
