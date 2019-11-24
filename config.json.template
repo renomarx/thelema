@@ -8,6 +8,7 @@
     "power": "z",
     "speed": "e",
     "shadow": "s",
+    "meditate": "d",
     "select": "tab",
     "escape": "escape"
   }

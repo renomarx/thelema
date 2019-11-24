@@ -28,15 +28,24 @@ func (p *Player) Update(g *Game) {
 		if input.Typ == Up || input.Typ == Down || input.Typ == Left || input.Typ == Right {
 			p.LookAt = input.Typ
 		}
-		if !p.Shadow {
-			switch g.GetInput2().Typ {
-			case SpeedUp:
-				p.Speed.Current = p.Speed.Initial * 2
-			case None:
-				p.Speed.Current = p.Speed.Initial
-			}
+		switch g.GetInput2().Typ {
+		case SpeedUp:
+			p.Speed.Current = p.Speed.Initial * 2
+		case Shadow:
+			p.Shadow = true
+			p.Speed.Current = p.Speed.Initial / 2
+		case Meditate:
+			p.Meditating = true
+			p.RegenerationSpeed.Current = p.RegenerationSpeed.Initial * 5
+		case None:
+			p.Shadow = false
+			p.Meditating = false
+			p.Speed.Current = p.Speed.Initial
+			p.RegenerationSpeed.Current = p.RegenerationSpeed.Initial
 		}
-		p.Move(g)
+		if !p.Meditating {
+			p.Move(g)
+		}
 	}
 }
 
@@ -88,8 +97,6 @@ func (p *Player) Move(g *Game) {
 		p.Take(g, posTo)
 	case Power:
 		p.PowerUse(g, posTo)
-	case Shadow:
-		p.ToggleShadowMode()
 	default:
 	}
 }
@@ -331,17 +338,4 @@ func (p *Player) AddKey(key string) {
 
 func (p *Player) LooseGold(value int) {
 	p.Inventory.Gold -= value
-}
-
-func (p *Player) ToggleShadowMode() {
-	if p.Shadow {
-		p.Shadow = false
-		p.Speed.Current = p.Speed.Initial
-	} else {
-		p.Shadow = true
-		p.Speed.Current = p.Speed.Initial / 2
-	}
-	for i := 20; i > 0; i = i - 1 {
-		p.adaptSpeed()
-	}
 }

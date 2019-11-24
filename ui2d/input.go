@@ -75,22 +75,29 @@ func (ui *UI) GetInput() {
 					input.Typ = game.Action
 				case ui.Keymap[ui.Game.Config.Keymap.Power]:
 					input.Typ = game.Power
-				case ui.Keymap[ui.Game.Config.Keymap.Shadow]:
-					input.Typ = game.Shadow
 				case ui.Keymap[ui.Game.Config.Keymap.Escape]:
 					input.Typ = game.Escape
 				case ui.Keymap[ui.Game.Config.Keymap.Select]:
 					input.Typ = game.Select
 				case ui.Keymap[ui.Game.Config.Keymap.Speed]:
 					input2.Typ = game.SpeedUp
+				case ui.Keymap[ui.Game.Config.Keymap.Shadow]:
+					input2.Typ = game.Shadow
+				case ui.Keymap[ui.Game.Config.Keymap.Meditate]:
+					input2.Typ = game.Meditate
 				}
 				ui.LastKeyDown = e.Keysym.Sym
 			}
 
 			if e.Type == sdl.KEYUP {
-				if e.Keysym.Sym == ui.Keymap[ui.Game.Config.Keymap.Speed] {
+				switch e.Keysym.Sym {
+				case ui.Keymap[ui.Game.Config.Keymap.Speed]:
 					input2.Typ = game.None
-				} else {
+				case ui.Keymap[ui.Game.Config.Keymap.Shadow]:
+					input2.Typ = game.None
+				case ui.Keymap[ui.Game.Config.Keymap.Meditate]:
+					input2.Typ = game.None
+				default:
 					if ui.LastKeyDown == e.Keysym.Sym {
 						input.Typ = game.StayStill
 					}

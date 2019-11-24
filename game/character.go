@@ -79,6 +79,7 @@ type Character struct {
 	LastRegenerationTime time.Time
 	damagesTaken         int
 	Shadow               bool
+	Meditating           bool
 }
 
 func (c *Character) GetName() string {

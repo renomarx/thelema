@@ -12,32 +12,34 @@ type Config struct {
 }
 
 type Keymap struct {
-	Up     string `json:"up"`
-	Down   string `json:"down"`
-	Left   string `json:"left"`
-	Right  string `json:"right"`
-	Action string `json:"action"`
-	Power  string `json:"power"`
-	Speed  string `json:"speed"`
-	Shadow string `json:"shadow"`
-	Select string `json:"select"`
-	Escape string `json:"escape"`
+	Up       string `json:"up"`
+	Down     string `json:"down"`
+	Left     string `json:"left"`
+	Right    string `json:"right"`
+	Action   string `json:"action"`
+	Power    string `json:"power"`
+	Speed    string `json:"speed"`
+	Shadow   string `json:"shadow"`
+	Meditate string `json:"meditate"`
+	Select   string `json:"select"`
+	Escape   string `json:"escape"`
 }
 
 func (g *Game) LoadConfig() {
 
 	config := &Config{}
 	config.Keymap = &Keymap{
-		Up:     "up",
-		Down:   "down",
-		Left:   "left",
-		Right:  "right",
-		Action: "a",
-		Power:  "z",
-		Speed:  "e",
-		Shadow: "s",
-		Select: "select",
-		Escape: "escape",
+		Up:       "up",
+		Down:     "down",
+		Left:     "left",
+		Right:    "right",
+		Action:   "a",
+		Power:    "z",
+		Speed:    "e",
+		Shadow:   "s",
+		Meditate: "d",
+		Select:   "select",
+		Escape:   "escape",
 	}
 
 	dirpath := g.GameDir

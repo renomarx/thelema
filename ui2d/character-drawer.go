@@ -36,6 +36,10 @@ func (ui *UI) drawCharacter(p *game.Character, texture *sdl.Texture) {
 		tileY = 20 * 64
 		tileX = 64 * 5
 	}
+	if p.Meditating {
+		tileY = 20 * 64
+		tileX = 64 * 2
+	}
 	if p.Shadow {
 		texture.SetColorMod(0, 0, 0)
 	} else {

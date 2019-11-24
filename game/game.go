@@ -55,6 +55,7 @@ const (
 	None
 	SpeedUp
 	Shadow
+	Meditate
 )
 
 type Input struct {
