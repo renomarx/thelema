@@ -54,6 +54,7 @@ const (
 
 	None
 	SpeedUp
+	Shadow
 )
 
 type Input struct {

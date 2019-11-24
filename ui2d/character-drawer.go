@@ -36,6 +36,11 @@ func (ui *UI) drawCharacter(p *game.Character, texture *sdl.Texture) {
 		tileY = 20 * 64
 		tileX = 64 * 5
 	}
+	if p.Shadow {
+		texture.SetColorMod(0, 0, 0)
+	} else {
+		texture.SetColorMod(255, 255, 255)
+	}
 	ui.renderer.Copy(texture,
 		&sdl.Rect{X: int32(tileX), Y: int32(tileY), W: 64, H: 64},
 		&sdl.Rect{X: int32(pos.X*Res-p.Xb-(Res/8)) + ui.Cam.X, Y: int32(pos.Y*Res-p.Yb-(Res/4)) + ui.Cam.Y, W: Res + (Res / 4), H: Res + (Res / 4)})

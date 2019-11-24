@@ -11,6 +11,9 @@ func (p *Player) TakeDamages(damage int) {
 }
 
 func (p *Player) MeetMonsters(g *Game) {
+	if p.Shadow {
+		return
+	}
 	l := g.Level
 	r := rand.Intn(100000) % 100
 	cc := l.Map[p.Y][p.X]

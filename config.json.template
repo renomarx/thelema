@@ -7,6 +7,7 @@
     "action": "a",
     "power": "z",
     "speed": "e",
+    "shadow": "s",
     "select": "tab",
     "escape": "escape"
   }

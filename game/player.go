@@ -28,10 +28,13 @@ func (p *Player) Update(g *Game) {
 		if input.Typ == Up || input.Typ == Down || input.Typ == Left || input.Typ == Right {
 			p.LookAt = input.Typ
 		}
-		if g.GetInput2().Typ == SpeedUp {
-			p.Speed.Current = p.Speed.Initial * 2.0
-		} else if g.GetInput2().Typ == None {
-			p.Speed.Current = p.Speed.Initial
+		if !p.Shadow {
+			switch g.GetInput2().Typ {
+			case SpeedUp:
+				p.Speed.Current = p.Speed.Initial * 2
+			case None:
+				p.Speed.Current = p.Speed.Initial
+			}
 		}
 		p.Move(g)
 	}
@@ -85,6 +88,8 @@ func (p *Player) Move(g *Game) {
 		p.Take(g, posTo)
 	case Power:
 		p.PowerUse(g, posTo)
+	case Shadow:
+		p.ToggleShadowMode()
 	default:
 	}
 }
@@ -191,7 +196,7 @@ func (p *Player) Take(g *Game, posTo Pos) bool {
 		qot := p.TakeQuestObject(o, g)
 		taken := ut || bt || qot
 		if taken {
-			for i := CaseLen; i > 0; i = i - 1 {
+			for i := 32; i > 0; i = i - 1 {
 				p.adaptSpeed()
 			}
 		}
@@ -257,7 +262,7 @@ func (p *Player) Recruit(pnj *Pnj, g *Game) {
 func (c *Player) PowerUse(g *Game, posTo Pos) {
 	if c.Energy.Current > 0 {
 		c.IsPowerUsing = true
-		for c.PowerPos = 0; c.PowerPos < CaseLen; c.PowerPos++ {
+		for c.PowerPos = 0; c.PowerPos < 32; c.PowerPos++ {
 			c.CurrentPower.adaptSpeed()
 		}
 		switch c.CurrentPower.Type {
@@ -326,4 +331,17 @@ func (p *Player) AddKey(key string) {
 
 func (p *Player) LooseGold(value int) {
 	p.Inventory.Gold -= value
+}
+
+func (p *Player) ToggleShadowMode() {
+	if p.Shadow {
+		p.Shadow = false
+		p.Speed.Current = p.Speed.Initial
+	} else {
+		p.Shadow = true
+		p.Speed.Current = p.Speed.Initial / 2
+	}
+	for i := 20; i > 0; i = i - 1 {
+		p.adaptSpeed()
+	}
 }

@@ -19,6 +19,7 @@ type Keymap struct {
 	Action string `json:"action"`
 	Power  string `json:"power"`
 	Speed  string `json:"speed"`
+	Shadow string `json:"shadow"`
 	Select string `json:"select"`
 	Escape string `json:"escape"`
 }
@@ -34,6 +35,7 @@ func (g *Game) LoadConfig() {
 		Action: "a",
 		Power:  "z",
 		Speed:  "e",
+		Shadow: "s",
 		Select: "select",
 		Escape: "escape",
 	}

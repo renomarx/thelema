@@ -78,6 +78,7 @@ type Character struct {
 	PowerPos             int
 	LastRegenerationTime time.Time
 	damagesTaken         int
+	Shadow               bool
 }
 
 func (c *Character) GetName() string {
