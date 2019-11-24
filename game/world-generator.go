@@ -43,6 +43,7 @@ func (g *Game) loadLevels() *Level {
 	g.Levels[worldName] = l
 	g.loadCities()
 	g.loadDungeons()
+	g.generateObjects(l, rand.Intn(100))
 
 	return g.Levels[FirstLevelName]
 }
@@ -91,6 +92,7 @@ func (g *Game) loadDungeons() {
 			if fileArr[1] == "map" {
 				mapName := "dungeons/" + levelName
 				l := g.LoadMapTemplate(mapName, levelName)
+				g.generateObjects(l, rand.Intn(20))
 				g.Levels[fileArr[0]] = l
 			}
 		}
@@ -285,6 +287,25 @@ func (g *Game) generatePnjs(l *Level, nbPnjs int) {
 			filename := g.GameDir + "/pnjs/common/" + pnj.Name + ".json"
 			pnj.LoadPnj(filename)
 			l.Map[pos.Y][pos.X].Pnj = pnj
+		}
+	}
+}
+
+func (g *Game) generateObjects(l *Level, nbObjects int) {
+	objects := []Tile{
+		Fruits,
+		Senzu,
+		Bread,
+		Water,
+		Steak,
+	}
+	for i := 0; i < nbObjects; i++ {
+		j := rand.Intn(42) % len(objects)
+		pos := l.GetRandomFreePos()
+		if pos != nil {
+			physicalObj := &Object{Rune: string(objects[j]), Blocking: true}
+			physicalObj.Pos = *pos
+			l.Map[pos.Y][pos.X].Object = physicalObj
 		}
 	}
 }
