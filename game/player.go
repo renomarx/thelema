@@ -171,6 +171,7 @@ func (p *Player) Discuss(g *Game) {
 		EM.Dispatch(&Event{Action: ActionTalk})
 		pnj.TalkConfirmChoice(g)
 		adaptDialogSpeed()
+		p.Intelligence.RaiseXp(1)
 	default:
 	}
 }
@@ -250,6 +251,7 @@ func (p *Player) TakeBook(o *Object, g *Game) bool {
 			Message: "You got a new book!",
 		})
 		g.Level.Map[o.Y][o.X].Object = nil
+		p.Intelligence.RaiseXp(10)
 	}
 
 	return taken

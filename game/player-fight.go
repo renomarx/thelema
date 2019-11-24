@@ -38,7 +38,7 @@ func (p *Player) ChooseAction(ring *FightingRing) int {
 	case "attack":
 		att := ring.PossibleAttacks.List[ring.PossibleAttacks.Selected]
 		p.currentAttack = att
-		return att.GetSpeed(p)
+		return att.GetSpeed(&p.Character)
 	}
 	return 0
 }

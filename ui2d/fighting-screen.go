@@ -240,7 +240,7 @@ func (ui *UI) drawFightingAttacks(fr *game.FightingRing) {
 		ui.renderer.Copy(tex, nil, &sdl.Rect{int32(offsetX), int32(offsetY + 32), w, h})
 
 		offsetX = 3 * ui.WindowWidth / 4
-		tex = ui.GetTexture(fmt.Sprintf("Speed: %d", selectedAttack.GetSpeed(p)), TextSizeXL, ColorWhite)
+		tex = ui.GetTexture(fmt.Sprintf("Speed: %d", selectedAttack.GetSpeed(&p.Character)), TextSizeXL, ColorWhite)
 		_, _, w, h, _ = tex.Query()
 		ui.renderer.Copy(tex, nil, &sdl.Rect{int32(offsetX), int32(offsetY), w, h})
 		// tex = ui.GetTexture(fmt.Sprintf("Accuracy: %d", selectedAttack.Accuracy), TextSizeXL, ColorWhite)

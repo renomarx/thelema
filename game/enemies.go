@@ -35,7 +35,7 @@ func (m *Enemy) ChooseAction(ring *FightingRing) int {
 		m.SelectedAttack = att
 		return att.Speed
 	}
-	return m.SelectedAttack.Speed
+	return m.SelectedAttack.GetSpeed(&m.Character)
 }
 
 func (m *Enemy) Fight(ring *FightingRing) {

@@ -79,7 +79,7 @@ func (att *Attack) GetPower(p *Character) int {
 	return power
 }
 
-func (att *Attack) GetSpeed(p *Player) int {
+func (att *Attack) GetSpeed(p *Character) int {
 	power := 0
 	switch att.Type {
 	case AttackTypePhysical:
