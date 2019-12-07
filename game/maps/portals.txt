@@ -3,6 +3,7 @@ world,30,15>dresde,25,0
 world,44,21>neoroma,25,0
 world,36,7>abigail_crypt,3,0
 world,11,13>prison_underground,1,1
+world,78,26>tulla,13,0
 arcanea,8,6>arcanea/home,9,7
 dresde,24,6>dresde/prison,9,7>prison_key
 prison_underground,49,14>dresde/prison,18,4

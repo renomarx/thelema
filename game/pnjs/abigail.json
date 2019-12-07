@@ -14,15 +14,15 @@
             "steps_mandatory": ["great_priest_past:talk_to_great_priest"],
             "steps_fullfilling": ["great_priest_past:talk_to_dead_body"]
           },
-          "cmd": "Nathaniel m'envoie vous parler.",
-          "node": "nathaniel_sent_me"
+          "cmd": "Abigail ?",
+          "node": "talk_to_me"
         },
         {
           "cmd": "[Vous libérez l'esprit]"
         }
       ]
     },
-      "nathaniel_sent_me": {
+      "talk_to_me": {
         "messages": ["TODO"],
         "choices": [
           {

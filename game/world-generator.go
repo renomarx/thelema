@@ -57,7 +57,7 @@ func (g *Game) loadCities() {
 			if fileArr[1] == "map" {
 				mapName := "cities/" + levelName
 				l := g.LoadMapTemplate(mapName, levelName)
-				g.generatePnjs(l, rand.Intn(10)+7)
+				g.generatePnjs(l, rand.Intn(len(l.Map))+1)
 				g.Levels[levelName] = l
 				g.loadHouses(mapName, levelName)
 			}
