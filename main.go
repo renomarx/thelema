@@ -3,10 +3,11 @@ package main
 import (
 	"path/filepath"
 	"thelema/game"
-	"thelema/ui2d"
+	"thelema/uipixel"
 )
 
 func main() {
+
 	absPath, _ := filepath.Abs("game")
 
 	game.EM = game.NewEventManager()
@@ -14,11 +15,17 @@ func main() {
 	g := game.NewGame(absPath)
 	g.InitSlots()
 
-	ui := ui2d.NewUI(g)
-	game.EM.Subscribe(ui)
+	// ui := ui2d.NewUI(g)
+	// game.EM.Subscribe(ui)
+	//
+	// go ui.WatchInput()
+	// go ui.Run()
 
-	go ui.WatchInput()
-	go ui.Run()
+	go g.Run()
 
-	g.Run()
+	ui := uipixel.UI{
+		WindowWidth:  800.0,
+		WindowHeight: 600.0,
+	}
+	ui.Run()
 }
