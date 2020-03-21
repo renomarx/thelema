@@ -47,7 +47,7 @@ type UI struct {
 
 func (ui *UI) doRun() {
 	cfg := pixelgl.WindowConfig{
-		Title:  "Pixel Rocks!",
+		Title:  WindowTitle,
 		Bounds: pixel.R(0, 0, ui.WindowWidth, ui.WindowHeight),
 		VSync:  true,
 	}
@@ -66,7 +66,7 @@ func (ui *UI) doRun() {
 	}
 
 	sprite := pixel.NewSprite(pic, pic.Bounds())
-	sprite.Draw(win, pixel.IM)
+	sprite.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
 
 	// END
 
