@@ -27,7 +27,7 @@ func (g *Game) GenerateWorld() {
 }
 
 func (g *Game) LoadPlayer(p *Player) {
-	gameDir := g.GameDir
+	gameDir := g.DataDir
 	p.X = PlayerInitialX
 	p.Y = PlayerInitialY
 	p.LoadQuests(gameDir)
@@ -49,7 +49,7 @@ func (g *Game) loadLevels() *Level {
 }
 
 func (g *Game) loadCities() {
-	maps := LoadFilenames(g.GameDir + "/maps/cities")
+	maps := LoadFilenames(g.DataDir + "/maps/cities")
 	for _, filemap := range maps {
 		fileArr := strings.Split(filemap, ".")
 		if len(fileArr) == 2 {
@@ -66,10 +66,10 @@ func (g *Game) loadCities() {
 }
 
 func (g *Game) loadHouses(path, cityName string) {
-	if _, err := os.Stat(g.GameDir + "/maps/" + path); os.IsNotExist(err) {
+	if _, err := os.Stat(g.DataDir + "/maps/" + path); os.IsNotExist(err) {
 		return
 	}
-	maps := LoadFilenames(g.GameDir + "/maps/" + path)
+	maps := LoadFilenames(g.DataDir + "/maps/" + path)
 	for _, filemap := range maps {
 		fileArr := strings.Split(filemap, ".")
 		if len(fileArr) == 2 {
@@ -84,7 +84,7 @@ func (g *Game) loadHouses(path, cityName string) {
 }
 
 func (g *Game) loadDungeons() {
-	maps := LoadFilenames(g.GameDir + "/maps/dungeons")
+	maps := LoadFilenames(g.DataDir + "/maps/dungeons")
 	for _, filemap := range maps {
 		fileArr := strings.Split(filemap, ".")
 		if len(fileArr) == 2 {
@@ -100,7 +100,7 @@ func (g *Game) loadDungeons() {
 }
 
 func (g *Game) loadPortals() {
-	filepath := g.GameDir + "/maps/portals.txt"
+	filepath := g.DataDir + "/maps/portals.txt"
 	file, err := os.Open(filepath)
 	if err != nil {
 		log.Fatal(err)
@@ -148,13 +148,13 @@ func (g *Game) addBidirectionalPortal(srcName string, srcPos Pos, dstName string
 }
 
 func (g *Game) loadPnjsVIP() {
-	pnjNames := LoadFilenames(g.GameDir + "/pnjs")
+	pnjNames := LoadFilenames(g.DataDir + "/pnjs")
 	for _, filename := range pnjNames {
 		fileArr := strings.Split(filename, ".")
 		if len(fileArr) == 2 && fileArr[1] == "json" {
 			p := Pos{}
 			pnj := NewPnj(p, fileArr[0])
-			filename := g.GameDir + "/pnjs/" + pnj.Name + ".json"
+			filename := g.DataDir + "/pnjs/" + pnj.Name + ".json"
 			level, pos := pnj.LoadPnj(filename)
 
 			l, exists := g.Levels[level]
@@ -168,7 +168,7 @@ func (g *Game) loadPnjsVIP() {
 }
 
 func (g *Game) loadBooks() {
-	filename := g.GameDir + "/books/books.json"
+	filename := g.DataDir + "/books/books.json"
 	jsonFile, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
@@ -198,7 +198,7 @@ func (g *Game) loadBooks() {
 }
 
 func (g *Game) loadBookFromFile(filename string, bookInfo *BookInfo) *OBook {
-	filepath := g.GameDir + "/books/" + filename + ".txt"
+	filepath := g.DataDir + "/books/" + filename + ".txt"
 	file, err := os.Open(filepath)
 	if err != nil {
 		log.Fatal(err)
@@ -225,7 +225,7 @@ func (g *Game) loadBookFromFile(filename string, bookInfo *BookInfo) *OBook {
 }
 
 func (g *Game) loadQuestsObjects() {
-	filename := g.GameDir + "/quests/objects.json"
+	filename := g.DataDir + "/quests/objects.json"
 	jsonFile, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
@@ -284,7 +284,7 @@ func (g *Game) generatePnjs(l *Level, nbPnjs int) {
 		if pos != nil {
 			pnj := NewPnj(*pos, pnjNames[j])
 			pnj.Voice = pnjVoices[pnjNames[j]]
-			filename := g.GameDir + "/pnjs/common/" + pnj.Name + ".json"
+			filename := g.DataDir + "/pnjs/common/" + pnj.Name + ".json"
 			pnj.LoadPnj(filename)
 			l.Map[pos.Y][pos.X].Pnj = pnj
 		}

@@ -8,7 +8,7 @@ import (
 )
 
 func (g *Game) LoadMapTemplate(mapName, levelName string) *Level {
-	dirpath := g.GameDir
+	dirpath := g.DataDir
 	filename := dirpath + "/maps/" + mapName + ".map"
 	isDungeon := strings.Contains(filename, "/dungeons/")
 	file, err := os.Open(filename)

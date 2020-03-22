@@ -8,7 +8,7 @@ import (
 
 func main() {
 
-	absPath, _ := filepath.Abs("game")
+	absPath, _ := filepath.Abs("data")
 
 	game.EM = game.NewEventManager()
 
@@ -16,16 +16,13 @@ func main() {
 	g.InitSlots()
 
 	// ui := ui2d.NewUI(g)
-	// game.EM.Subscribe(ui)
-	//
+
+	ui := uipixel.NewUI(g)
+	game.EM.Subscribe(ui)
+
 	// go ui.WatchInput()
-	// go ui.Run()
 
 	go g.Run()
 
-	ui := uipixel.UI{
-		WindowWidth:  800.0,
-		WindowHeight: 600.0,
-	}
 	ui.Run()
 }
