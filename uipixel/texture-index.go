@@ -35,7 +35,7 @@ func (ui *UI) loadTextureIndex(filename string) map[game.Tile][]pixel.Rect {
 		c, _ := strconv.ParseInt(splitXY[2], 10, 64)
 		var rects []pixel.Rect
 		for i := 0; i < int(c); i++ {
-			rects = append(rects, pixel.R(float64(x*32), float64(y*32), 32, 32))
+			rects = append(rects, pixel.R(float64(x*32), float64(y*32), float64((x+1)*32), float64((y+1)*32)))
 			x++
 			if x > 62 {
 				x = 0
