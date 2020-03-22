@@ -144,7 +144,7 @@ func (ui *UI) doRun() {
 	}
 	ui.win = win
 
-	for !win.Closed() {
+	for !win.Closed() && ui.Game.Running {
 		win.Clear(colornames.Skyblue)
 		ui.Draw()
 		ui.GetInput()
