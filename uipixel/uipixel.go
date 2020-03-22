@@ -179,7 +179,7 @@ func (ui *UI) Draw() {
 	// ui.DrawLevel()
 	// ui.DrawFightingRing()
 	ui.DrawMenu()
-	// ui.DrawGameGeneratorScreen()
+	ui.DrawGameGeneratorScreen()
 	// ui.DrawEvents()
 }
 
@@ -191,6 +191,7 @@ func (ui *UI) drawObject(pos game.Pos, tile game.Tile) {
 }
 
 func (ui *UI) drawSprite(sprite *pixel.Sprite, X, Y float64) {
+	Y = ui.WindowHeight - Y - 24
 	mat := pixel.IM
 	mat = mat.Moved(pixel.V(X, Y))
 	sprite.Draw(ui.win, mat)
