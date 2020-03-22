@@ -6,13 +6,14 @@ import (
 	"os"
 	"strings"
 	"thelema/game"
-	"time"
 
 	_ "image/png"
 
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
+	"github.com/faiface/pixel/text"
 	"golang.org/x/image/colornames"
+	"golang.org/x/image/font/basicfont"
 )
 
 const WindowTitle = "L'abbaye de Thelema"
@@ -23,14 +24,14 @@ const MaxFontSize = 25
 const Res = 32
 
 type Camera struct {
-	X int32
-	Y int32
+	X float64
+	Y float64
 }
 
 type UI struct {
 	WindowWidth  float64
 	WindowHeight float64
-	// window             *sdl.Window
+	win          *pixelgl.Window
 	// renderer           *sdl.Renderer
 	textureAtlas       pixel.Picture
 	textureIndex       map[game.Tile][]pixel.Rect
@@ -41,9 +42,10 @@ type UI struct {
 	backgroundTextures map[string]pixel.Picture
 	uiTextures         map[string]pixel.Picture
 	mapTextures        map[string]pixel.Picture
+	fontAtlas          *text.Atlas
 	// Fonts              map[int]*ttf.Font
 	// Texts              map[int]*TextCache
-	// Keymap             map[string]sdl.Keycode
+	Keymap map[string]pixelgl.Button
 	// LastKeyDown        sdl.Keycode
 	// Mp                 *MusicPlayer
 	Event *UIEvent
@@ -56,7 +58,7 @@ func NewUI(g *game.Game) *UI {
 		Game:         g,
 	}
 
-	//ui.LoadKeymap()
+	ui.LoadKeymap()
 
 	ui.textureAtlas = loadPicture("assets/tiles.png")
 	ui.textureIndex = ui.loadTextureIndex("assets/atlas-index.txt")
@@ -105,21 +107,8 @@ func NewUI(g *game.Game) *UI {
 		mapName := strings.ReplaceAll(ma[0], "-", "/")
 		ui.mapTextures[mapName] = loadPicture("assets/maps/" + mapFile)
 	}
-	//
-	// if err := ttf.Init(); err != nil {
-	// 	panic(err)
-	// }
-	// ui.Fonts = make(map[int]*ttf.Font)
-	// ui.Texts = make(map[int]*TextCache)
-	// for i := MinFontSize; i < MaxFontSize; i++ {
-	// 	fontPath, _ := filepath.Abs("assets/fonts/OpenSans-Regular.ttf")
-	// 	font, err := ttf.OpenFont(fontPath, i)
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-	// 	ui.Fonts[i] = font
-	// 	ui.Texts[i] = NewTextCache()
-	// }
+	ui.fontAtlas = text.NewAtlas(basicfont.Face7x13, text.ASCII)
+
 	//
 	// ui.Mp = NewMusicPlayer()
 	// ui.Mp.LoadMusics()
@@ -153,29 +142,58 @@ func (ui *UI) doRun() {
 	if err != nil {
 		panic(err)
 	}
+	ui.win = win
 
-	pic := loadPicture("uipixel/assets/arcanea.png")
-	sprite := pixel.NewSprite(pic, pic.Bounds())
-
-	angle := 0.0
-	last := time.Now()
 	for !win.Closed() {
-		dt := time.Since(last).Seconds()
-		last = time.Now()
-
-		angle += 3 * dt
-
 		win.Clear(colornames.Skyblue)
-
-		// HERE: draw everything
-		mat := pixel.IM
-		mat = mat.Moved(win.Bounds().Center())
-		mat = mat.Rotated(win.Bounds().Center(), angle)
-		sprite.Draw(win, mat)
-		// END
-
+		ui.Draw()
+		ui.GetInput()
 		win.Update()
 	}
+
+	// pic := loadPicture("uipixel/assets/arcanea.png")
+	// sprite := pixel.NewSprite(pic, pic.Bounds())
+	//
+	// angle := 0.0
+	// last := time.Now()
+	// for !win.Closed() {
+	// 	dt := time.Since(last).Seconds()
+	// 	last = time.Now()
+	//
+	// 	angle += 3 * dt
+	//
+	// 	win.Clear(colornames.Skyblue)
+	//
+	// 	// HERE: draw everything
+	// 	mat := pixel.IM
+	// 	mat = mat.Moved(win.Bounds().Center())
+	// 	mat = mat.Rotated(win.Bounds().Center(), angle)
+	// 	sprite.Draw(win, mat)
+	// 	// END
+	//
+	// 	win.Update()
+	// }
+}
+
+func (ui *UI) Draw() {
+	// ui.DrawLevel()
+	// ui.DrawFightingRing()
+	ui.DrawMenu()
+	// ui.DrawGameGeneratorScreen()
+	// ui.DrawEvents()
+}
+
+func (ui *UI) drawObject(pos game.Pos, tile game.Tile) {
+	if len(ui.textureIndex[tile]) > 0 {
+		sprite := pixel.NewSprite(ui.textureAtlas, ui.textureIndex[tile][(pos.X+pos.Y)%len(ui.textureIndex[tile])])
+		ui.drawSprite(sprite, float64(pos.X*Res)+ui.Cam.X, float64(pos.Y*Res))
+	}
+}
+
+func (ui *UI) drawSprite(sprite *pixel.Sprite, X, Y float64) {
+	mat := pixel.IM
+	mat = mat.Moved(pixel.V(X, Y))
+	sprite.Draw(ui.win, mat)
 }
 
 func loadPicture(path string) pixel.Picture {
