@@ -1,9 +1,7 @@
 package uipixel
 
 import (
-	"image"
 	"log"
-	"os"
 	"strings"
 	"thelema/game"
 
@@ -21,7 +19,7 @@ const WindowTitle = "L'abbaye de Thelema"
 const MinFontSize = 9
 const MaxFontSize = 25
 
-const Res = 32
+const Res float64 = 32
 
 type Camera struct {
 	X float64
@@ -176,51 +174,9 @@ func (ui *UI) doRun() {
 }
 
 func (ui *UI) Draw() {
-	// ui.DrawLevel()
+	ui.DrawLevel()
 	// ui.DrawFightingRing()
 	ui.DrawMenu()
 	ui.DrawGameGeneratorScreen()
 	// ui.DrawEvents()
-}
-
-func (ui *UI) drawObject(pos game.Pos, tile game.Tile) {
-	if len(ui.textureIndex[tile]) > 0 {
-		sprite := pixel.NewSprite(ui.textureAtlas, ui.textureIndex[tile][(pos.X+pos.Y)%len(ui.textureIndex[tile])])
-		ui.DrawSprite(sprite, float64(pos.X*Res)+ui.Cam.X, float64(pos.Y*Res)+ui.Cam.Y)
-	}
-}
-
-func (ui *UI) NewSprite(pic pixel.Picture, rect pixel.Rect) *pixel.Sprite {
-	bounds := pic.Bounds()
-	rect.Min.Y = bounds.Max.Y - rect.Min.Y
-	rect.Max.Y = bounds.Max.Y - rect.Max.Y
-	return pixel.NewSprite(pic, rect)
-}
-
-func (ui *UI) DrawSprite(sprite *pixel.Sprite, X, Y float64) {
-	Y = ui.WindowHeight - Y - Res
-	mat := pixel.IM
-	mat = mat.Moved(pixel.V(X, Y))
-	sprite.Draw(ui.win, mat)
-}
-
-func (ui *UI) DrawSpriteScaled(sprite *pixel.Sprite, X, Y, w, h float64) {
-	Y = ui.WindowHeight - Y - Res
-	mat := pixel.IM
-	mat = mat.ScaledXY(pixel.V(0, 0), pixel.V(w, h))
-	mat = mat.Moved(pixel.V(X, Y))
-	sprite.Draw(ui.win, mat)
-}
-
-func loadPicture(path string) pixel.Picture {
-	file, err := os.Open(path)
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-	img, _, err := image.Decode(file)
-	if err != nil {
-		panic(err)
-	}
-	return pixel.PictureDataFromImage(img)
 }
