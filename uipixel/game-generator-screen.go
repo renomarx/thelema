@@ -25,7 +25,7 @@ func (ui *UI) DrawGameGeneratorScreen() {
 
 		currentPlayer := gg.GetCurrentPlayer()
 		_, h = ui.DrawText("Affinity:  "+currentPlayer.Affinity, TextSizeL, ColorActive, GGScreenOffsetX, offsetH)
-		// offsetH += h + 10
-		// ui.DrawCharacteristics(&currentPlayer.Character, GGScreenOffsetX, offsetH)
+		offsetH += h + 10
+		ui.DrawCharacteristics(&currentPlayer.Character, GGScreenOffsetX, offsetH)
 	}
 }
