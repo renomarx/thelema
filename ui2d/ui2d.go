@@ -169,7 +169,7 @@ func (ui *UI) drawObject(pos game.Pos, tile game.Tile) {
 
 func (ui *UI) Run() {
 	ui.Mp.PlayMusic(32)
-	for {
+	for ui.Game.Running {
 		ui.Draw()
 	}
 }

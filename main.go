@@ -2,9 +2,14 @@ package main
 
 import (
 	"path/filepath"
+	"runtime"
 	"thelema/game"
 	"thelema/ui2d"
 )
+
+func init() {
+	runtime.LockOSThread()
+}
 
 func main() {
 	absPath, _ := filepath.Abs("game")
@@ -17,8 +22,8 @@ func main() {
 	ui := ui2d.NewUI(g)
 	game.EM.Subscribe(ui)
 
-	go ui.WatchInput()
-	go ui.Run()
+	go g.Run()
 
-	g.Run()
+	go ui.WatchInput()
+	ui.Run()
 }
