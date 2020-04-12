@@ -6,7 +6,6 @@ const (
 	Blank        Tile = " "
 	Wall         Tile = "#"
 	Door         Tile = "="
-	Roof         Tile = "^"
 	Floor        Tile = "-"
 	MonsterFloor Tile = "*"
 	Ocean             = "o"
