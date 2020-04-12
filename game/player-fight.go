@@ -22,11 +22,8 @@ func (p *Player) MeetMonsters(g *Game) {
 	}
 	switch cc.T {
 	// TODO : other floor types
-	case HerbFloor:
+	case MonsterFloor:
 		bestiary := Bestiary()
-		g.FightMonsters(bestiary)
-	case DirtFloor:
-		bestiary := BestiaryUnderworld()
 		g.FightMonsters(bestiary)
 	}
 }

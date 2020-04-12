@@ -1,8 +1,9 @@
 package ui2d
 
 import (
-	"github.com/veandco/go-sdl2/sdl"
 	"thelema/game"
+
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 func (ui *UI) drawMapBox() {
@@ -90,21 +91,12 @@ func (ui *UI) drawMapObject(pos game.Pos, tile game.Tile) {
 		r = 13
 		g = 61
 		b = 122
-	case game.Tree:
-		r = 54
-		g = 109
-		b = 55
-	case game.CityEntry:
+	case game.Door:
 		r = 1
 		g = 126
 		b = 255
 		rr = 1
-	case game.Downstairs:
-		r = 55
-		g = 55
-		b = 55
-		rr = 1
-	case game.WhiteWall:
+	case game.Wall:
 		r = 136
 		g = 134
 		b = 131

@@ -47,18 +47,16 @@ func (g *Game) LoadMapTemplate(mapName, levelName string) *Level {
 				level.Map[y][x].MonstersProbability = 10
 			}
 			var t Tile
-			t = DirtFloor
+			t = Floor
 			switch Tile(c) {
 			case "", " ", "\t", "\n", "\r":
 				t = Blank
-			case DirtFloor:
-				t = DirtFloor
-			case CityFloor:
-				t = CityFloor
-			case HerbFloor:
+			case Floor:
+				t = Floor
+			case MonsterFloor:
 				level.Map[y][x].MonstersProbability = 10
-				t = HerbFloor
-			case DoorOpened, Upstairs, Downstairs, CityEntry, CityOut, HouseDoor, PrisonDoor, DungeonEntry, DungeonOut:
+				t = MonsterFloor
+			case Door:
 				level.Map[y][x].Object = &Object{Rune: string(c), Static: true}
 			default:
 				o := &Object{Rune: string(c), Static: true, Blocking: true}

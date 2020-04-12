@@ -65,28 +65,24 @@ func (p *Player) Move(g *Game) {
 	}
 	switch input.Typ {
 	case Up:
-		openDoor(g, Pos{p.X, p.Y - 1})
 		if canGo(level, Pos{p.X, p.Y - 1}) {
 			p.beforeMovingActions(g)
 			p.WalkUp()
 			p.afterMovingActions(g)
 		}
 	case Down:
-		openDoor(g, Pos{p.X, p.Y + 1})
 		if canGo(level, Pos{p.X, p.Y + 1}) {
 			p.beforeMovingActions(g)
 			p.WalkDown()
 			p.afterMovingActions(g)
 		}
 	case Left:
-		openDoor(g, Pos{p.X - 1, p.Y})
 		if canGo(level, Pos{p.X - 1, p.Y}) {
 			p.beforeMovingActions(g)
 			p.WalkLeft()
 			p.afterMovingActions(g)
 		}
 	case Right:
-		openDoor(g, Pos{p.X + 1, p.Y})
 		if canGo(level, Pos{p.X + 1, p.Y}) {
 			p.beforeMovingActions(g)
 			p.WalkRight()

@@ -104,7 +104,7 @@ func (g *Game) Run() {
 		input := g.input
 		if input.Typ == Quit {
 			log.Println("Quit")
-			break
+			g.Running = false
 		}
 		if g.menu.IsOpen {
 			g.HandleInputMenu()

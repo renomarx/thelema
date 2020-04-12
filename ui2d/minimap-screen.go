@@ -27,7 +27,7 @@ func (ui *UI) DrawMinimap() {
 				g := 0
 				b := 0
 				switch tile {
-				case game.DirtFloor, game.HerbFloor:
+				case game.Floor, game.MonsterFloor:
 					r = 255
 					g = 219
 					b = 182

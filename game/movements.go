@@ -68,29 +68,3 @@ func isThereAPortalAround(level *Level, pos Pos) bool {
 	}
 	return false
 }
-
-func openDoor(g *Game, pos Pos) {
-	level := g.Level
-	o := level.GetObject(pos.X, pos.Y)
-	if o != nil {
-		switch Tile(o.Rune) {
-		case DoorClosed:
-			o.Rune = string(DoorOpened)
-			o.Blocking = false
-			EM.Dispatch(&Event{Action: ActionOpenDoor})
-		}
-	}
-}
-
-func closeDoor(g *Game, pos Pos) {
-	level := g.Level
-	o := level.GetObject(pos.X, pos.Y)
-	if o != nil {
-		switch Tile(o.Rune) {
-		case DoorOpened:
-			o.Rune = string(DoorClosed)
-			o.Blocking = true
-			EM.Dispatch(&Event{Action: ActionCloseDoor})
-		}
-	}
-}

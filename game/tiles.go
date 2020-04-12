@@ -3,27 +3,13 @@ package game
 type Tile string
 
 const (
-	StoneWall    Tile = "#"
-	DirtFloor    Tile = "."
-	HerbFloor    Tile = ":"
-	CityFloor    Tile = "*"
-	DoorClosed   Tile = "|"
-	DoorOpened   Tile = "/"
-	Tree         Tile = "&"
 	Blank        Tile = " "
-	Statue       Tile = "é"
-	Window       Tile = "("
-	WhiteWall    Tile = "$"
-	Clothe       Tile = "à"
-	Upstairs     Tile = "^"
-	Downstairs   Tile = "~"
-	Ocean        Tile = "o"
-	CityEntry    Tile = ">"
-	CityOut      Tile = "<"
-	HouseDoor    Tile = "="
-	PrisonDoor   Tile = "!"
-	DungeonEntry Tile = "]"
-	DungeonOut   Tile = "["
+	Wall         Tile = "#"
+	Door         Tile = "="
+	Roof         Tile = "^"
+	Floor        Tile = "-"
+	MonsterFloor Tile = "*"
+	Ocean             = "o"
 
 	// Monsters and invocations
 	Rat      Tile = "rat"
