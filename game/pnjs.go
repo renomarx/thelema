@@ -256,9 +256,7 @@ func (pnj *Pnj) Update(l *Level) {
 }
 
 func (pnj *Pnj) getWantedPosition() Pos {
-	pos := Pos{}
-	pos.X = pnj.X
-	pos.Y = pnj.Y
+	pos := pnj.Pos
 
 	r := rand.Intn(5)
 	switch r {

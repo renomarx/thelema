@@ -48,7 +48,13 @@ func (l *Level) GetPnj(p Pos) *Pnj {
 }
 
 func (l *Level) GetRandomFreePos(z int) *Pos {
+	if len(l.Map[z]) == 0 {
+		return nil
+	}
 	y := rand.Intn(len(l.Map[z]))
+	if len(l.Map[z][y]) == 0 {
+		return nil
+	}
 	x := rand.Intn(len(l.Map[z][y]))
 	pos := Pos{X: x, Y: y, Z: z}
 	i := 0

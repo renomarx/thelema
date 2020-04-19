@@ -4,18 +4,23 @@ import (
 	"bufio"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 )
 
 func (g *Game) LoadMapTemplate(mapName, levelName string) *Level {
 	dirpath := g.GameDir
-	filename := dirpath + "/maps/" + mapName + ".map"
 
 	level := NewLevel()
 	level.Name = levelName
 
-	// FIXME : load all
-	g.doLoadMapTemplate(filename, 0, level)
+	z := 0
+	filename := dirpath + "/maps/" + mapName + ".map"
+	for FileExists(filename) {
+		g.doLoadMapTemplate(filename, z, level)
+		z++
+		filename = dirpath + "/maps/" + mapName + strconv.Itoa(z) + ".map"
+	}
 
 	return level
 }
@@ -76,4 +81,14 @@ func (g *Game) doLoadMapTemplate(filename string, z int, level *Level) {
 
 	level.Map = append(level.Map, m)
 
+}
+
+// fileExists checks if a file exists and is not a directory before we
+// try using it to prevent further errors.
+func FileExists(filename string) bool {
+	info, err := os.Stat(filename)
+	if os.IsNotExist(err) {
+		return false
+	}
+	return !info.IsDir()
 }
