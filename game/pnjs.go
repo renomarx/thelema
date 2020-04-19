@@ -22,6 +22,7 @@ type PnjConf struct {
 	Level             string                `json:"level"`
 	PosX              int                   `json:"posX"`
 	PosY              int                   `json:"posY"`
+	PosZ              int                   `json:"posZ"`
 	Dead              bool                  `json:"dead"`
 	Voice             string                `json:"voice"`
 	CurrentNode       string                `json:"current_node"`
@@ -118,7 +119,7 @@ func (p *Pnj) LoadPnj(filename string) (string, Pos) {
 		Nodes:       conf.Nodes,
 	}
 
-	return conf.Level, Pos{X: conf.PosX, Y: conf.PosY}
+	return conf.Level, Pos{X: conf.PosX, Y: conf.PosY, Z: conf.PosZ}
 }
 
 func (pnj *Pnj) Talk(p *Player, g *Game) {
@@ -292,9 +293,9 @@ func (pnj *Pnj) canMove(to Pos, level *Level) bool {
 }
 
 func (pnj *Pnj) Move(to Pos, l *Level) {
-	lastPos := Pos{X: pnj.Pos.X, Y: pnj.Pos.Y}
-	l.Map[pnj.Y][pnj.X].Pnj = nil
-	l.Map[to.Y][to.X].Pnj = pnj
+	lastPos := pnj.Pos
+	l.Map[pnj.Z][pnj.Y][pnj.X].Pnj = nil
+	l.Map[to.Z][to.Y][to.X].Pnj = pnj
 	pnj.Pos = to
 	pnj.moveFromTo(lastPos, to)
 }
@@ -313,11 +314,11 @@ func (pnj *Pnj) Teleport(levelName string, g *Game) {
 }
 
 func (pnj *Pnj) ChangeLevel(from *Level, to *Level) {
-	from.Map[pnj.Y][pnj.X].Pnj = nil
+	from.Map[pnj.Z][pnj.Y][pnj.X].Pnj = nil
 	if to != nil {
-		pos := to.GetRandomFreePos()
+		pos := to.GetRandomFreePos(0) // FIXME
 		pnj.Pos = *pos
-		to.Map[pos.Y][pos.X].Pnj = pnj
+		to.Map[pos.Z][pos.Y][pos.X].Pnj = pnj
 	}
 }
 

@@ -162,7 +162,7 @@ func (g *Game) loadPnjsVIP() {
 				panic("Level " + level + " does not exist")
 			}
 			pnj.Pos = pos
-			l.Map[pos.Y][pos.X].Pnj = pnj
+			l.Map[pos.Z][pos.Y][pos.X].Pnj = pnj
 		}
 	}
 }
@@ -190,10 +190,10 @@ func (g *Game) loadBooks() {
 		if !exists {
 			log.Fatal("Level " + levelName + " does not exist")
 		}
-		pos := Pos{X: bookInfo.PosX, Y: bookInfo.PosY}
+		pos := Pos{X: bookInfo.PosX, Y: bookInfo.PosY, Z: bookInfo.PosZ}
 		physicalObj := &Object{Rune: tile, Blocking: true}
 		physicalObj.Pos = pos
-		l.Map[pos.Y][pos.X].Object = physicalObj
+		l.Map[pos.Z][pos.Y][pos.X].Object = physicalObj
 	}
 }
 
@@ -247,11 +247,11 @@ func (g *Game) loadQuestsObjects() {
 		if !exists {
 			log.Fatal("Level " + obj.Level + " does not exist")
 		}
-		pos := l.GetRandomFreePos()
+		pos := l.GetRandomFreePos(0) // FIXME
 		if pos != nil {
 			physicalObj := &Object{Rune: key, Blocking: true}
 			physicalObj.Pos = *pos
-			l.Map[pos.Y][pos.X].Object = physicalObj
+			l.Map[pos.Z][pos.Y][pos.X].Object = physicalObj
 			objectsByRune[key] = obj
 		} else {
 			log.Fatal("No place left on level " + obj.Level)
@@ -280,13 +280,13 @@ func (g *Game) generatePnjs(l *Level, nbPnjs int) {
 	} // TODO : better sex handling
 	for i := 0; i < nbPnjs; i++ {
 		j := i % len(pnjNames)
-		pos := l.GetRandomFreePos()
+		pos := l.GetRandomFreePos(0) // FIXME
 		if pos != nil {
 			pnj := NewPnj(*pos, pnjNames[j])
 			pnj.Voice = pnjVoices[pnjNames[j]]
 			filename := g.GameDir + "/pnjs/common/" + pnj.Name + ".json"
 			pnj.LoadPnj(filename)
-			l.Map[pos.Y][pos.X].Pnj = pnj
+			l.Map[pos.Z][pos.Y][pos.X].Pnj = pnj
 		}
 	}
 }
@@ -301,11 +301,11 @@ func (g *Game) generateObjects(l *Level, nbObjects int) {
 	}
 	for i := 0; i < nbObjects; i++ {
 		j := rand.Intn(42) % len(objects)
-		pos := l.GetRandomFreePos()
+		pos := l.GetRandomFreePos(0) // FIXME
 		if pos != nil {
 			physicalObj := &Object{Rune: string(objects[j]), Blocking: true}
 			physicalObj.Pos = *pos
-			l.Map[pos.Y][pos.X].Object = physicalObj
+			l.Map[pos.Z][pos.Y][pos.X].Object = physicalObj
 		}
 	}
 }

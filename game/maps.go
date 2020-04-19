@@ -10,6 +10,17 @@ import (
 func (g *Game) LoadMapTemplate(mapName, levelName string) *Level {
 	dirpath := g.GameDir
 	filename := dirpath + "/maps/" + mapName + ".map"
+
+	level := NewLevel()
+	level.Name = levelName
+
+	// FIXME : load all
+	g.doLoadMapTemplate(filename, 0, level)
+
+	return level
+}
+
+func (g *Game) doLoadMapTemplate(filename string, z int, level *Level) {
 	isDungeon := strings.Contains(filename, "/dungeons/")
 	file, err := os.Open(filename)
 	if err != nil {
@@ -17,34 +28,23 @@ func (g *Game) LoadMapTemplate(mapName, levelName string) *Level {
 	}
 	defer file.Close()
 
+	var m [][]Case
+
 	scanner := bufio.NewScanner(file)
-	var levelLines []string
-	longestRow := 0
+	y := 0
 	for scanner.Scan() {
 		line := scanner.Text()
-		levelLines = append(levelLines, line)
-		if len(line) > longestRow {
-			longestRow = len(line)
-		}
-	}
 
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
-	}
-
-	level := NewLevel()
-	level.Name = levelName
-	level.InitMaps(len(levelLines), longestRow)
-	for y := 0; y < len(level.Map); y++ {
-		line := levelLines[y]
 		// Re-compose line to handle utf8
 		var utf8line []rune
 		for _, c := range line {
 			utf8line = append(utf8line, c)
 		}
+		var row []Case
 		for x, c := range utf8line {
+			var ca Case
 			if isDungeon {
-				level.Map[y][x].MonstersProbability = 10
+				ca.MonstersProbability = 10
 			}
 			var t Tile
 			t = Floor
@@ -54,18 +54,26 @@ func (g *Game) LoadMapTemplate(mapName, levelName string) *Level {
 			case Floor:
 				t = Floor
 			case MonsterFloor:
-				level.Map[y][x].MonstersProbability = 10
+				ca.MonstersProbability = 10
 				t = MonsterFloor
 			case Door:
-				level.Map[y][x].Object = &Object{Rune: string(c), Static: true}
+				ca.Object = &Object{Rune: string(c), Static: true}
 			default:
 				o := &Object{Rune: string(c), Static: true, Blocking: true}
-				o.Pos = Pos{x, y}
-				level.Map[y][x].Object = o
+				o.Pos = Pos{X: x, Y: y, Z: z}
+				ca.Object = o
 			}
-			level.Map[y][x].T = t
+			ca.T = t
+			row = append(row, ca)
 		}
+		m = append(m, row)
+		y++
 	}
 
-	return level
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	level.Map = append(level.Map, m)
+
 }

@@ -8,7 +8,7 @@ type Level struct {
 	Width      int
 	Height     int
 	Player     *Player
-	Map        [][]Case
+	Map        [][][]Case
 	Paused     bool
 	PRay       int
 	Discovered bool
@@ -23,33 +23,39 @@ type Case struct {
 	MonstersProbability int
 }
 
-func (l *Level) GetObject(x, y int) *Object {
-	if y >= 0 && y < len(l.Map) {
-		if x >= 0 && x < len(l.Map[y]) {
-			return l.Map[y][x].Object
+func (l *Level) GetObject(p Pos) *Object {
+	x := p.X
+	y := p.Y
+	z := p.Z
+	if y >= 0 && y < len(l.Map[z]) {
+		if x >= 0 && x < len(l.Map[z][y]) {
+			return l.Map[z][y][x].Object
 		}
 	}
 	return nil
 }
 
-func (l *Level) GetPnj(x, y int) *Pnj {
-	if y >= 0 && y < len(l.Map) {
-		if x >= 0 && x < len(l.Map[y]) {
-			return l.Map[y][x].Pnj
+func (l *Level) GetPnj(p Pos) *Pnj {
+	x := p.X
+	y := p.Y
+	z := p.Z
+	if y >= 0 && y < len(l.Map[z]) {
+		if x >= 0 && x < len(l.Map[z][y]) {
+			return l.Map[z][y][x].Pnj
 		}
 	}
 	return nil
 }
 
-func (l *Level) GetRandomFreePos() *Pos {
-	x := rand.Intn(len(l.Map[0]))
-	y := rand.Intn(len(l.Map))
-	pos := Pos{X: x, Y: y}
+func (l *Level) GetRandomFreePos(z int) *Pos {
+	y := rand.Intn(len(l.Map[z]))
+	x := rand.Intn(len(l.Map[z][y]))
+	pos := Pos{X: x, Y: y, Z: z}
 	i := 0
 	for !canGo(l, pos) && i < 333 {
-		x := rand.Intn(len(l.Map[0]))
-		y := rand.Intn(len(l.Map))
-		pos = Pos{X: x, Y: y}
+		y := rand.Intn(len(l.Map[z]))
+		x := rand.Intn(len(l.Map[z][y]))
+		pos = Pos{X: x, Y: y, Z: z}
 		i++
 	}
 	if i >= 333 {
@@ -64,26 +70,46 @@ func NewLevel() *Level {
 	return level
 }
 
-func (level *Level) InitMaps(height, width int) {
-	level.Width = width
-	level.Height = height
-	level.Map = make([][]Case, height)
-	for i := range level.Map {
-		level.Map[i] = make([]Case, width)
-	}
-}
-
 func (l *Level) handleMap() {
-	for y := l.Player.Y - l.PRay; y < l.Player.Y+l.PRay; y++ {
-		for x := l.Player.X - l.PRay; x < l.Player.X+l.PRay; x++ {
-			if y >= 0 && y < len(l.Map) {
-				if x >= 0 && x < len(l.Map[y]) {
-					c := l.Map[y][x]
-					l.handlePnj(c.Pnj)
-				}
+	minZ, maxZ := l.GetZBounds()
+	for z := minZ; z < maxZ; z++ {
+		minY, maxY := l.GetYBounds(z)
+		for y := minY; y < maxY; y++ {
+			minX, maxX := l.GetXBounds(z, y)
+			for x := minX; x < maxX; x++ {
+				c := l.Map[z][y][x]
+				l.handlePnj(c.Pnj)
 			}
 		}
 	}
+}
+
+func (l *Level) GetZBounds() (int, int) {
+	return 0, len(l.Map)
+}
+
+func (l *Level) GetYBounds(z int) (int, int) {
+	minY := 0
+	if l.Player.Y-l.PRay > minY {
+		minY = l.Player.Y - l.PRay
+	}
+	maxY := len(l.Map[z])
+	if l.Player.Y+l.PRay < maxY {
+		maxY = l.Player.Y + l.PRay
+	}
+	return minY, maxY
+}
+
+func (l *Level) GetXBounds(z, y int) (int, int) {
+	minX := 0
+	if l.Player.X-l.PRay > minX {
+		minX = l.Player.X - l.PRay
+	}
+	maxX := len(l.Map[z][y])
+	if l.Player.X+l.PRay < maxX {
+		maxX = l.Player.X + l.PRay
+	}
+	return minX, maxX
 }
 
 func (l *Level) handlePnj(m *Pnj) {
@@ -97,7 +123,7 @@ func (l *Level) handlePnj(m *Pnj) {
 }
 
 func (level *Level) OpenPortal(g *Game, pos Pos) {
-	port := level.Map[pos.Y][pos.X].Portal
+	port := level.Map[pos.Z][pos.Y][pos.X].Portal
 	if port != nil {
 		p := level.Player
 		if port.Key != "" {
@@ -120,7 +146,7 @@ func (level *Level) OpenPortal(g *Game, pos Pos) {
 }
 
 func (level *Level) AddPortal(posFrom Pos, portal *Portal) {
-	level.Map[posFrom.Y][posFrom.X].Portal = portal
+	level.Map[posFrom.Z][posFrom.Y][posFrom.X].Portal = portal
 }
 
 func (g *Game) SendToLevel(fromName, pnjName, toName string) {
@@ -140,12 +166,17 @@ func (g *Game) SendToLevel(fromName, pnjName, toName string) {
 }
 
 func (l *Level) SearchPnj(pnjName string) *Pnj {
-	for y := 0; y < len(l.Map); y++ {
-		for x := 0; x < len(l.Map[y]); x++ {
-			if l.Map[y][x].Pnj != nil {
-				pnj := l.Map[y][x].Pnj
-				if pnj.Name == pnjName {
-					return pnj
+	minZ, maxZ := l.GetZBounds()
+	for z := minZ; z < maxZ; z++ {
+		minY, maxY := l.GetYBounds(z)
+		for y := minY; y < maxY; y++ {
+			minX, maxX := l.GetXBounds(z, y)
+			for x := minX; x < maxX; x++ {
+				if l.Map[z][y][x].Pnj != nil {
+					pnj := l.Map[z][y][x].Pnj
+					if pnj.Name == pnjName {
+						return pnj
+					}
 				}
 			}
 		}
@@ -155,9 +186,9 @@ func (l *Level) SearchPnj(pnjName string) *Pnj {
 
 func (l *Level) MakeExplosion(p Pos, size int, lifetime int) {
 	eff := NewExplosion(p, size, lifetime)
-	l.Map[p.Y][p.X].Effect = eff
+	l.Map[p.Z][p.Y][p.X].Effect = eff
 	time.Sleep(time.Duration(lifetime) * time.Millisecond)
-	l.Map[p.Y][p.X].Effect = nil
+	l.Map[p.Z][p.Y][p.X].Effect = nil
 }
 
 func (l *Level) MakeRangeStorm(p Pos, damages int, dir InputType, lifetime int, rg int) {
@@ -171,7 +202,7 @@ func (l *Level) MakeStorm(storm *Effect, lifetime int) {
 	if !storm.canBe(l, storm.Pos) {
 		return
 	}
-	l.Map[storm.Pos.Y][storm.Pos.X].Effect = storm
+	l.Map[storm.Pos.Z][storm.Pos.Y][storm.Pos.X].Effect = storm
 	time.Sleep(time.Duration(lifetime) * time.Second)
 	storm.Die(l)
 }
@@ -192,7 +223,7 @@ func (l *Level) MakeFlame(p Pos, damages int, lifetime int) {
 		return
 	}
 	eff.TileIdx = 0
-	l.Map[p.Y][p.X].Effect = eff
+	l.Map[p.Z][p.Y][p.X].Effect = eff
 	time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
 	eff.TileIdx = 1
 	time.Sleep(time.Duration(lifetime) * time.Millisecond * 250)
@@ -206,9 +237,9 @@ func (l *Level) MakeFlame(p Pos, damages int, lifetime int) {
 func (l *Level) MakeEffect(p Pos, r string, lifetime int) {
 	eff := NewEffect(p, r)
 
-	l.Map[p.Y][p.X].Effect = eff
+	l.Map[p.Z][p.Y][p.X].Effect = eff
 	time.Sleep(time.Duration(lifetime) * time.Millisecond)
-	l.Map[p.Y][p.X].Effect = nil
+	l.Map[p.Z][p.Y][p.X].Effect = nil
 }
 
 func (g *Game) DiscoverLevel(levelName string) {

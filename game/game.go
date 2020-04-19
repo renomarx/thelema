@@ -63,7 +63,7 @@ type Input struct {
 }
 
 type Pos struct {
-	X, Y int
+	X, Y, Z int
 }
 
 type Entity struct {

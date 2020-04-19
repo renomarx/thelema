@@ -7,7 +7,7 @@ type Friend struct {
 func (level *Level) MakeFriend(pnj *Pnj) *Friend {
 	f := &Friend{}
 	f.Character = pnj.Character
-	level.Map[pnj.Y][pnj.X].Pnj = nil
+	level.Map[pnj.Z][pnj.Y][pnj.X].Pnj = nil
 	return f
 }
 

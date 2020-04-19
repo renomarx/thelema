@@ -16,11 +16,11 @@ func (ui *UI) DrawMinimap() {
 		CamY := int32((mapHeight / 2) - player.Y)
 
 		minY := int(math.Floor(math.Max(0, float64(player.Y-(mapHeight/2)-2))))
-		maxY := int(math.Floor(math.Min(float64(len(level.Map)), float64(player.Y+(mapHeight/2)+2))))
-		minX := int(math.Floor(math.Max(0, float64(player.X-(mapWidth/2)-2))))
-		maxX := int(math.Floor(math.Min(float64(len(level.Map[0])), float64(player.X+(mapWidth/2)+2))))
+		maxY := int(math.Floor(math.Min(float64(len(level.Map[player.Z])), float64(player.Y+(mapHeight/2)+2))))
 		for y := minY; y < maxY; y++ {
-			row := level.Map[y]
+			row := level.Map[player.Z][y]
+			minX := int(math.Floor(math.Max(0, float64(player.X-(mapWidth/2)-2))))
+			maxX := int(math.Floor(math.Min(float64(len(level.Map[player.Z][y])), float64(player.X+(mapWidth/2)+2))))
 			for x := minX; x < maxX; x++ {
 				tile := row[x].T
 				r := 0

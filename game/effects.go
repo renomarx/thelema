@@ -105,7 +105,7 @@ func NewEffect(p Pos, r string) *Effect {
 }
 
 func (e *Effect) Die(l *Level) {
-	l.Map[e.Y][e.X].Effect = nil
+	l.Map[e.Z][e.Y][e.X].Effect = nil
 }
 
 func (e *Effect) canBe(level *Level, pos Pos) bool {

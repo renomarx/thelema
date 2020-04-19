@@ -6,6 +6,7 @@ type BookInfo struct {
 	Level       string    `json:"level"`
 	PosX        int       `json:"posX"`
 	PosY        int       `json:"posY"`
+	PosZ        int       `json:"posZ"`
 	PowersGiven []string  `json:"powers_given"`
 	Quest       QuestLink `json:"quest"`
 }

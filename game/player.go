@@ -52,38 +52,38 @@ func (p *Player) Update(g *Game) {
 func (p *Player) Move(g *Game) {
 	input := g.GetInput()
 	level := g.Level
-	posTo := Pos{p.X, p.Y + 1}
+	posTo := Pos{X: p.X, Y: p.Y + 1, Z: p.Z}
 	switch p.LookAt {
 	case Up:
-		posTo = Pos{p.X, p.Y - 1}
+		posTo = Pos{X: p.X, Y: p.Y - 1, Z: p.Z}
 	case Down:
-		posTo = Pos{p.X, p.Y + 1}
+		posTo = Pos{X: p.X, Y: p.Y + 1, Z: p.Z}
 	case Left:
-		posTo = Pos{p.X - 1, p.Y}
+		posTo = Pos{X: p.X - 1, Y: p.Y, Z: p.Z}
 	case Right:
-		posTo = Pos{p.X + 1, p.Y}
+		posTo = Pos{X: p.X + 1, Y: p.Y, Z: p.Z}
 	}
 	switch input.Typ {
 	case Up:
-		if canGo(level, Pos{p.X, p.Y - 1}) {
+		if canGo(level, Pos{X: p.X, Y: p.Y - 1, Z: p.Z}) {
 			p.beforeMovingActions(g)
 			p.WalkUp()
 			p.afterMovingActions(g)
 		}
 	case Down:
-		if canGo(level, Pos{p.X, p.Y + 1}) {
+		if canGo(level, Pos{X: p.X, Y: p.Y + 1, Z: p.Z}) {
 			p.beforeMovingActions(g)
 			p.WalkDown()
 			p.afterMovingActions(g)
 		}
 	case Left:
-		if canGo(level, Pos{p.X - 1, p.Y}) {
+		if canGo(level, Pos{X: p.X - 1, Y: p.Y, Z: p.Z}) {
 			p.beforeMovingActions(g)
 			p.WalkLeft()
 			p.afterMovingActions(g)
 		}
 	case Right:
-		if canGo(level, Pos{p.X + 1, p.Y}) {
+		if canGo(level, Pos{X: p.X + 1, Y: p.Y, Z: p.Z}) {
 			p.beforeMovingActions(g)
 			p.WalkRight()
 			p.afterMovingActions(g)
@@ -141,7 +141,7 @@ func (p *Player) openPortal(g *Game, pos Pos) {
 
 func (p *Player) Talk(g *Game, posTo Pos) {
 	level := g.Level
-	pnj := level.Map[posTo.Y][posTo.X].Pnj
+	pnj := level.Map[posTo.Z][posTo.Y][posTo.X].Pnj
 	if pnj != nil && pnj.Talkable && !pnj.IsDead() {
 		EM.Dispatch(&Event{Action: ActionTalk})
 		p.TalkingTo = pnj
@@ -192,7 +192,7 @@ func (p *Player) IsQuestOpenStepFinished(questID string, stepID string) bool {
 
 func (p *Player) Take(g *Game, posTo Pos) bool {
 	level := g.Level
-	o := level.Map[posTo.Y][posTo.X].Object
+	o := level.Map[posTo.Z][posTo.Y][posTo.X].Object
 	if o != nil {
 		p.IsTaking = true
 		ut := p.TakeUsable(o, g)
@@ -220,7 +220,7 @@ func (p *Player) TakeQuestObject(o *Object, g *Game) bool {
 		Message: "You got a special object!",
 	})
 	p.Inventory.QuestObjects[o.Rune] = o
-	g.Level.Map[o.Y][o.X].Object = nil
+	g.Level.Map[o.Z][o.Y][o.X].Object = nil
 
 	for _, stepID := range qo.Quest.StepsFullfilling {
 		p.finishQuestStep(qo.Quest.ID, stepID, g)
@@ -233,7 +233,7 @@ func (p *Player) TakeUsable(o *Object, g *Game) bool {
 	taken := p.Inventory.TakeUsable(o)
 	if taken {
 		EM.Dispatch(&Event{Action: ActionTake})
-		g.Level.Map[o.Y][o.X].Object = nil
+		g.Level.Map[o.Z][o.Y][o.X].Object = nil
 	}
 
 	return taken
@@ -246,7 +246,7 @@ func (p *Player) TakeBook(o *Object, g *Game) bool {
 			Action:  ActionTake,
 			Message: "You got a new book!",
 		})
-		g.Level.Map[o.Y][o.X].Object = nil
+		g.Level.Map[o.Z][o.Y][o.X].Object = nil
 		p.Intelligence.RaiseXp(10)
 	}
 
@@ -300,7 +300,7 @@ func (c *Player) PowerUse(g *Game, posTo Pos) {
 
 func (p *Player) TalkToDead(g *Game, posTo Pos) {
 	level := g.Level
-	pnj := level.Map[posTo.Y][posTo.X].Pnj
+	pnj := level.Map[posTo.Z][posTo.Y][posTo.X].Pnj
 	if pnj != nil && pnj.Talkable && pnj.IsDead() {
 		EM.Dispatch(&Event{Action: ActionTalk})
 		p.TalkingTo = pnj

@@ -41,8 +41,8 @@ func (ui *UI) DrawMap() {
 		}
 
 		portals := make(map[game.Pos]*game.Portal)
-		for y := 0; y < len(level.Map); y++ {
-			row := level.Map[y]
+		for y := 0; y < len(level.Map[player.Z]); y++ {
+			row := level.Map[player.Z][y]
 			for x := 0; x < len(row); x++ {
 				mapX := x * mapWidth / len(row)
 				mapY := y * mapHeight / len(level.Map)
