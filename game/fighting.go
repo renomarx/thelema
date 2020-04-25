@@ -70,7 +70,7 @@ func (g *Game) FightMonsters(bestiary []*MonsterType) {
 func (g *Game) Fight(enemies []FighterInterface) {
 	EM.Dispatch(&Event{
 		Action:  ActionFight,
-		Message: "You're being attacked!",
+		Message: "Vous êtes attaqué!",
 	})
 	p := g.Level.Player
 	g.Level.MakeExplosion(p.Pos, 88, 1000)

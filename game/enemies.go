@@ -41,7 +41,7 @@ func (m *Enemy) ChooseAction(ring *FightingRing) int {
 func (m *Enemy) Fight(ring *FightingRing) {
 	if m.GetAggressiveness() <= 0 {
 		EM.Dispatch(&Event{
-			Message: m.Name + " is calmed, not attacking.",
+			Message: m.Name + " est calmé, n'attaquera pas.",
 		})
 		return
 	}

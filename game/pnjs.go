@@ -214,7 +214,7 @@ func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
 						p.Library.AddBook(book)
 						EM.Dispatch(&Event{
 							Action:  ActionTake,
-							Message: "You got a new book!",
+							Message: "Vous avez un nouveau livre!",
 						})
 					} else {
 						log.Printf("Book %s does not exist.", act[1])

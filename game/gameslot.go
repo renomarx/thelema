@@ -19,21 +19,21 @@ func SaveGame(g *Game, slot string) {
 	filepath := g.generateSlotFilepath(slot)
 	EM.Dispatch(&Event{
 		Action:  ActionMenuConfirm,
-		Message: "Saving game..."})
+		Message: "Sauvegarde..."})
 	err := writeGob(filepath, g)
 	if err != nil {
 		panic(err)
 	}
 	EM.Dispatch(&Event{
 		Action:  ActionMenuConfirm,
-		Message: "Saved!"})
+		Message: "Sauvegardé!"})
 }
 
 func LoadGame(g *Game, slot string) {
 	filepath := g.generateSlotFilepath(slot)
 	EM.Dispatch(&Event{
 		Action:  ActionMenuConfirm,
-		Message: "Loading game..."})
+		Message: "Chargement..."})
 	lg := NewGame(g.GameDir)
 	err := readGob(filepath, lg)
 	*g = *lg
@@ -42,7 +42,7 @@ func LoadGame(g *Game, slot string) {
 	}
 	EM.Dispatch(&Event{
 		Action:  ActionMenuConfirm,
-		Message: "Loaded."})
+		Message: "Chargé."})
 }
 
 func (g *Game) generateSlotFilepath(slot string) string {

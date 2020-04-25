@@ -159,7 +159,7 @@ func (g *Game) HandleInputMenu() {
 				EM.Dispatch(&Event{
 					Action:  ActionChangeLevel,
 					Payload: map[string]string{"levelName": g.Level.Name},
-					Message: "Loaded level"})
+					Message: "Niveau chargé"})
 			case MenuCmdQuit:
 				g.Running = false
 			default:

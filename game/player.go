@@ -217,7 +217,7 @@ func (p *Player) TakeQuestObject(o *Object, g *Game) bool {
 	}
 	EM.Dispatch(&Event{
 		Action:  ActionTake,
-		Message: "You got a special object!",
+		Message: "Vous avez un nouvel objet spécial!",
 	})
 	p.Inventory.QuestObjects[o.Rune] = o
 	g.Level.Map[o.Z][o.Y][o.X].Object = nil
@@ -244,7 +244,7 @@ func (p *Player) TakeBook(o *Object, g *Game) bool {
 	if taken {
 		EM.Dispatch(&Event{
 			Action:  ActionTake,
-			Message: "You got a new book!",
+			Message: "Vous avez un nouveau livre!",
 		})
 		g.Level.Map[o.Z][o.Y][o.X].Object = nil
 		p.Intelligence.RaiseXp(10)
@@ -256,7 +256,7 @@ func (p *Player) TakeBook(o *Object, g *Game) bool {
 func (p *Player) Recruit(pnj *Pnj, g *Game) {
 	if p.Friend != nil {
 		EM.Dispatch(&Event{
-			Message: "You already have a friend, you can't recruit.",
+			Message: "Vous avez déjà un compagnon, impossible de recruter plus.",
 		})
 		return
 	}
@@ -319,7 +319,7 @@ func (p *Player) LearnAttack(attackName string) {
 		if att.Name == attackName {
 			p.Attacks = append(p.Attacks, att)
 			EM.Dispatch(&Event{
-				Message: "You learned a new attack: " + att.Name + " !",
+				Message: "Vous avez appris une nouvelle attaque: " + att.Name + " !",
 			})
 		}
 	}
@@ -329,7 +329,7 @@ func (p *Player) AddKey(key string) {
 	new := p.Inventory.AddKey(key)
 	if new {
 		EM.Dispatch(&Event{
-			Message: "You got a new key: " + key + " !",
+			Message: "Vous avez une nouvelle clé: " + key + " !",
 		})
 	}
 }

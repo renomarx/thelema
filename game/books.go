@@ -71,7 +71,7 @@ func (l *Library) ConfirmChoice(g *Game) {
 	for _, powername := range b.Powers {
 		pp := g.Level.Player.NewPower(powername, g)
 		EM.Dispatch(&Event{
-			Message: "You learned power: '" + pp.Name + "' with this book!",
+			Message: "Vous avez appris la magie: '" + pp.Name + "' avec ce livre!",
 			Action:  ActionPower,
 			Payload: map[string]string{"type": powername}})
 	}

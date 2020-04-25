@@ -232,18 +232,18 @@ func (ui *UI) drawFightingAttacks(fr *game.FightingRing) {
 		ui.renderer.Copy(tex, nil, &sdl.Rect{40, int32(offsetY), w, h})
 
 		offsetX := ui.WindowWidth / 2
-		tex = ui.GetTexture(fmt.Sprintf("Power: %d", selectedAttack.GetPower(&p.Character)), TextSizeXL, ColorWhite)
+		tex = ui.GetTexture(fmt.Sprintf("Puissance: %d", selectedAttack.GetPower(&p.Character)), TextSizeXL, ColorWhite)
 		_, _, w, h, _ = tex.Query()
 		ui.renderer.Copy(tex, nil, &sdl.Rect{int32(offsetX), int32(offsetY), w, h})
-		tex = ui.GetTexture(fmt.Sprintf("Energy cost: %d", selectedAttack.EnergyCost), TextSizeXL, ColorWhite)
+		tex = ui.GetTexture(fmt.Sprintf("Coût en énergie: %d", selectedAttack.EnergyCost), TextSizeXL, ColorWhite)
 		_, _, w, h, _ = tex.Query()
 		ui.renderer.Copy(tex, nil, &sdl.Rect{int32(offsetX), int32(offsetY + 32), w, h})
 
 		offsetX = 3 * ui.WindowWidth / 4
-		tex = ui.GetTexture(fmt.Sprintf("Speed: %d", selectedAttack.GetSpeed(&p.Character)), TextSizeXL, ColorWhite)
+		tex = ui.GetTexture(fmt.Sprintf("Vitesse: %d", selectedAttack.GetSpeed(&p.Character)), TextSizeXL, ColorWhite)
 		_, _, w, h, _ = tex.Query()
 		ui.renderer.Copy(tex, nil, &sdl.Rect{int32(offsetX), int32(offsetY), w, h})
-		// tex = ui.GetTexture(fmt.Sprintf("Accuracy: %d", selectedAttack.Accuracy), TextSizeXL, ColorWhite)
+		// tex = ui.GetTexture(fmt.Sprintf("Précision: %d", selectedAttack.Accuracy), TextSizeXL, ColorWhite)
 		// _, _, w, h, _ = tex.Query()
 		// ui.renderer.Copy(tex, nil, &sdl.Rect{int32(offsetX), int32(offsetY + 32), w, h})
 

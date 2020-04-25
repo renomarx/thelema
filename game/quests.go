@@ -70,12 +70,12 @@ func (p *Player) finishQuestStep(questID string, stepID string, g *Game) {
 		q.IsFinished = true
 		EM.Dispatch(&Event{
 			Action:  ActionQuestFinished,
-			Message: "You finished " + q.Name + " quest !",
+			Message: "Vous avez fini la quête " + q.Name + " !",
 		})
 	}
 	for _, s := range st.ObjectsTaken {
 		EM.Dispatch(&Event{
-			Message: "Quest object taken",
+			Message: "Objet spécial pris.",
 			Action:  ActionTake})
 		_, exists := p.Inventory.QuestObjects[s]
 		if exists {
@@ -84,7 +84,7 @@ func (p *Player) finishQuestStep(questID string, stepID string, g *Game) {
 	}
 	for _, s := range st.ObjectsGiven {
 		EM.Dispatch(&Event{
-			Message: "Quest object given!",
+			Message: "Objet spécial récupéré!",
 			Action:  ActionTake})
 		_, exists := g.QuestsObjects[s]
 		if !exists {

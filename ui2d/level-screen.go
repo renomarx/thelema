@@ -103,7 +103,7 @@ func (ui *UI) DrawLevel() {
 
 		// Menus
 		ui.DrawMinimap()
-		ui.DrawPlayerStats()
 		ui.DrawPlayerMenu()
+		ui.DrawPlayerStats()
 	}
 }

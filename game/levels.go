@@ -134,7 +134,7 @@ func (level *Level) OpenPortal(g *Game, pos Pos) {
 		p := level.Player
 		if port.Key != "" {
 			if !p.Inventory.HasKey(port.Key) {
-				EM.Dispatch(&Event{Message: "You need the key " + port.Key + " to open this portal."})
+				EM.Dispatch(&Event{Message: "Clé nécessaire: " + port.Key + " pour ouvrir cette porte."})
 				return
 			}
 		}
@@ -147,7 +147,7 @@ func (level *Level) OpenPortal(g *Game, pos Pos) {
 		EM.Dispatch(&Event{
 			Action:  ActionChangeLevel,
 			Payload: map[string]string{"levelName": g.Level.Name},
-			Message: "Going to " + port.LevelTo})
+			Message: "Entré à " + port.LevelTo})
 	}
 }
 

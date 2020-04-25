@@ -38,7 +38,7 @@ func (gg *GameGenerator) ConfirmChoice(g *Game) {
 	EM.Dispatch(&Event{
 		Action:  ActionChangeLevel,
 		Payload: map[string]string{"levelName": g.Level.Name},
-		Message: "First level loaded"})
+		Message: "Premier niveau chargé"})
 }
 
 func (gg *GameGenerator) Close() {
