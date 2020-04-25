@@ -270,7 +270,7 @@ func (c *Player) PowerUse(g *Game, posTo Pos) {
 		for c.PowerPos = 0; c.PowerPos < 32; c.PowerPos++ {
 			c.CurrentPower.adaptSpeed()
 		}
-		switch c.CurrentPower.Type {
+		switch c.CurrentPower.UID {
 		case PowerInvocation:
 			// TODO : make input control invocation for lifetime
 		case PowerCalm:

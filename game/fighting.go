@@ -230,7 +230,7 @@ func (fr *FightingRing) LoadPossibleAttacks(p *Player) {
 				Speed:      pow.Speed,
 				Range:      pow.Range,
 				Type:       AttackTypeMagick,
-				MagickType: pow.Type,
+				MagickType: pow.UID,
 			}
 			fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, att)
 		}

@@ -111,7 +111,12 @@ func (p *Pnj) LoadPnj(filename string) (string, Pos) {
 	}
 	powers := Powers()
 	for _, pname := range conf.Powers {
-		p.Powers[pname] = powers[pname]
+		pow := powers.GetPower(pname)
+		if pow == nil {
+			log.Printf("Error: power %s does not exist", pname)
+		} else {
+			p.Powers[pname] = pow
+		}
 	}
 
 	p.Dialog = &Dialog{

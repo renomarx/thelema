@@ -30,7 +30,7 @@ func (m *Enemy) ChooseAction(ring *FightingRing) int {
 			Speed:      pow.Speed,
 			Range:      pow.Range,
 			Type:       AttackTypeMagick,
-			MagickType: pow.Type,
+			MagickType: pow.UID,
 		}
 		m.SelectedAttack = att
 		return att.Speed

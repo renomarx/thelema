@@ -7,7 +7,7 @@ type Attack struct {
 	Name       string
 	Range      int
 	Type       AttackType
-	MagickType PowerType
+	MagickType string
 }
 type AttackType string
 
