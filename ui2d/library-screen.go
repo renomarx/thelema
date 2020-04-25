@@ -12,7 +12,7 @@ func (ui *UI) DrawLibrary() {
 		ui.drawLibraryBox()
 		var offsetX = int32(PlayerMenuOffsetX*Res + 10)
 		var offsetH int32 = 0
-		_, h := ui.DrawText("Books", TextSizeL, ColorActive, offsetX, offsetH)
+		_, h := ui.DrawText("Livres", TextSizeL, ColorActive, offsetX, offsetH)
 		offsetH += h + 10
 		for i, book := range lib.Books {
 			x := int32((PlayerMenuOffsetX + i) * Res)
@@ -48,7 +48,7 @@ func (ui *UI) drawLibraryBox() {
 	for x := PlayerMenuOffsetX; x <= ui.WindowWidth/Res; x++ {
 		for y := 0; y <= ui.WindowHeight/Res; y++ {
 			ui.renderer.Copy(ui.textureAtlas,
-				&ui.textureIndex["Ʈ"][0],
+				&ui.textureIndex["ß"][0],
 				&sdl.Rect{X: int32(x * Res), Y: int32(y * Res), W: Res, H: Res})
 		}
 	}

@@ -1,10 +1,10 @@
 package game
 
-const PlayerMenuCmdCharacter = "Character"
-const PlayerMenuCmdInventory = "Inventory"
-const PlayerMenuCmdLibrary = "Books"
-const PlayerMenuCmdQuests = "Quests"
-const PlayerMenuCmdMap = "Map"
+const PlayerMenuCmdCharacter = "Personnage"
+const PlayerMenuCmdInventory = "Inventaire"
+const PlayerMenuCmdLibrary = "Livres"
+const PlayerMenuCmdQuests = "Journal"
+const PlayerMenuCmdMap = "Carte"
 
 func (p *Player) LoadPlayerMenu() {
 	menu := &Menu{IsOpen: false}

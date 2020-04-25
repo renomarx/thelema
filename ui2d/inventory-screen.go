@@ -14,7 +14,7 @@ func (ui *UI) DrawInventory() {
 		ui.drawInventoryBox()
 		var offsetX = int32(PlayerMenuOffsetX*Res + 10)
 		var offsetH int32 = 0
-		_, h := ui.DrawText("Inventory", TextSizeL, ColorActive, offsetX, offsetH)
+		_, h := ui.DrawText("Inventaire", TextSizeL, ColorActive, offsetX, offsetH)
 		offsetH += h + 10
 		gold := strconv.Itoa(inventory.Gold)
 		ui.renderer.Copy(ui.textureAtlas,
@@ -22,7 +22,7 @@ func (ui *UI) DrawInventory() {
 			&sdl.Rect{X: int32(offsetX), Y: offsetH, W: Res, H: Res})
 		_, h = ui.DrawText(gold, TextSizeM, ColorDisabled, (PlayerMenuOffsetX+1)*Res, offsetH)
 		offsetH += h + Res
-		_, h = ui.DrawText("Quest objects:", TextSizeM, ColorDisabled, offsetX, offsetH)
+		_, h = ui.DrawText("Objets spéciaux:", TextSizeM, ColorDisabled, offsetX, offsetH)
 		offsetH += h
 
 		runes := make([]string, 0, len(inventory.QuestObjects))
@@ -33,12 +33,12 @@ func (ui *UI) DrawInventory() {
 		i := 0
 		for _, r := range runes {
 			ui.renderer.Copy(ui.textureAtlas,
-				&ui.textureIndex[game.Tile(r[0])][0],
+				&ui.textureIndex[game.Tile(r)][0],
 				&sdl.Rect{X: int32((PlayerMenuOffsetX + i) * Res), Y: offsetH, W: Res, H: Res})
 			i++
 		}
 		offsetH += 64
-		_, h = ui.DrawText("Common objects:", TextSizeM, ColorActive, offsetX, offsetH)
+		_, h = ui.DrawText("Objets communs:", TextSizeM, ColorActive, offsetX, offsetH)
 		offsetH += h
 		i = 0
 		for _, usable := range inventory.Usables {
@@ -61,7 +61,7 @@ func (ui *UI) drawInventoryBox() {
 	for x := PlayerMenuOffsetX; x <= ui.WindowWidth/Res; x++ {
 		for y := 0; y <= ui.WindowHeight/Res; y++ {
 			ui.renderer.Copy(ui.textureAtlas,
-				&ui.textureIndex["Ʈ"][0],
+				&ui.textureIndex["ß"][0],
 				&sdl.Rect{X: int32(x * Res), Y: int32(y * Res), W: Res, H: Res})
 		}
 	}
