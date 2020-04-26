@@ -13,6 +13,7 @@ const PowerHealing = "healing"
 const PowerDeadSpeaking = "dead_speaking"
 const PowerCalm = "calm"
 const PowerBrutalStrength = "brutal_strength"
+const PowerQuickening = "quickening"
 
 const MagickCategoryPhysical = "physical"
 const MagickCategoryAstral = "astral"
@@ -61,18 +62,33 @@ func (m Magicks) GetPower(uid string) *PlayerPower {
 
 func Powers() Magicks {
 	return Magicks{
+		// Physical
+		//Earth
 		PlayerPower{
 			UID:         PowerBrutalStrength,
 			Speed:       20,
 			Energy:      30,
 			Strength:    2,
 			Tile:        BrutalStrengthIcon,
-			Description: "Augmente votre force.",
 			Name:        "Force brute",
+			Description: "Augmente votre force.",
 			IsAttack:    true,
 			Category:    MagickCategoryPhysical,
 			Element:     MagickElementEarth,
 		},
+		PlayerPower{
+			UID:         PowerQuickening,
+			Speed:       20,
+			Energy:      30,
+			Strength:    2,
+			Tile:        QuickeningIcon,
+			Name:        "Hâte",
+			Description: "Augmente votre vitesse.",
+			IsAttack:    true,
+			Category:    MagickCategoryPhysical,
+			Element:     MagickElementEarth,
+		},
+		// Air
 		PlayerPower{
 			UID:         PowerStorm,
 			Speed:       15,
@@ -80,12 +96,15 @@ func Powers() Magicks {
 			Strength:    30,
 			Tile:        StormIcon,
 			Range:       1,
-			Description: "Crée un éclair entre vous et la cible.",
+			Description: "Electrocute la cible.",
 			Name:        "Eclair",
 			IsAttack:    true,
 			Category:    MagickCategoryPhysical,
 			Element:     MagickElementAir,
 		},
+
+		// Astral
+		// Earth
 		PlayerPower{
 			UID:         PowerHealing,
 			Speed:       4,
@@ -98,6 +117,7 @@ func Powers() Magicks {
 			Category:    MagickCategoryAstral,
 			Element:     MagickElementEarth,
 		},
+		// Water
 		PlayerPower{
 			UID:         PowerCalm,
 			Tile:        CalmIcon,
@@ -111,6 +131,7 @@ func Powers() Magicks {
 			Category:    MagickCategoryAstral,
 			Element:     MagickElementWater,
 		},
+		// Fire
 		PlayerPower{
 			UID:         PowerInvocation,
 			Speed:       5,
@@ -122,6 +143,9 @@ func Powers() Magicks {
 			Category:    MagickCategoryAstral,
 			Element:     MagickElementFire,
 		},
+
+		// Mental
+		// Ether
 		PlayerPower{
 			UID:         PowerDeadSpeaking,
 			Tile:        NecromancyIcon,
@@ -132,11 +156,14 @@ func Powers() Magicks {
 			Category:    MagickCategoryMental,
 			Element:     MagickElementEther,
 		},
+
+		// High
+		// Fire
 		PlayerPower{
 			UID:         PowerFlames,
 			Speed:       3,
-			Energy:      100,
-			Strength:    60,
+			Energy:      200,
+			Strength:    90,
 			Tile:        FlamesIcon,
 			Range:       5,
 			Description: "Crée un gigantesque incendie sur vos cibles.",

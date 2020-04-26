@@ -54,12 +54,13 @@ calm 33,25,1
 
 // Powers Icons
 brutal_strength_icon 21,30,1
-storm_icon 54,26,4
-healing_icon 40,24,1
+quickening_icon 53,30,4
+storm_icon 1,29,4
+healing_icon 34,32,1
 invocation_icon 38,31,1
 necromancy_icon 3,33,1
-calm_icon 33,25,1
-flames_icon 38,23,4
+calm_icon 43,31,1
+flames_icon 28,31,1
 
 // Books
 book_initial_letter 32,39,1

@@ -76,6 +76,10 @@ func (p *Player) Fight(ring *FightingRing) {
 				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerBrutalStrength}})
 				ring.MakeEffect(Pos{X: 0, Y: 0}, string(Healing), 400) // FIXME
 				p.RaiseCharacteristic("Strength", damages)
+			case PowerQuickening:
+				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerQuickening}})
+				ring.MakeEffect(Pos{X: 0, Y: 0}, string(Healing), 400) // FIXME
+				p.RaiseCharacteristic("Dexterity", damages)
 			case PowerHealing:
 				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
 				ring.MakeEffect(Pos{X: 0, Y: 0}, string(Healing), 400)

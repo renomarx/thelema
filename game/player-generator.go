@@ -40,6 +40,7 @@ func newPlayer(health, energy, stg, dex, bea, wil, intel, cha, rg int) *Player {
 	player.Powers = make(map[string]*PlayerPower)
 	// TODO : load only first powers
 	player.NewPower(PowerBrutalStrength)
+	player.NewPower(PowerQuickening)
 	player.NewPower(PowerHealing)
 	player.NewPower(PowerFlames)
 	player.NewPower(PowerStorm)

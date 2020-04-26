@@ -52,6 +52,7 @@ const (
 
 	// Icons
 	BrutalStrengthIcon Tile = "brutal_strength_icon"
+	QuickeningIcon     Tile = "quickening_icon"
 	StormIcon          Tile = "storm_icon"
 	HealingIcon        Tile = "healing_icon"
 	InvocationIcon     Tile = "invocation_icon"
