@@ -72,6 +72,10 @@ func (p *Player) Fight(ring *FightingRing) {
 			p.Dexterity.RaiseXp(1)
 		case AttackTypeMagick:
 			switch att.MagickType {
+			case PowerBrutalStrength:
+				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerBrutalStrength}})
+				ring.MakeEffect(Pos{X: 0, Y: 0}, string(Healing), 400) // FIXME
+				p.RaiseCharacteristic("Strength", damages)
 			case PowerHealing:
 				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
 				ring.MakeEffect(Pos{X: 0, Y: 0}, string(Healing), 400)
@@ -96,7 +100,7 @@ func (p *Player) Fight(ring *FightingRing) {
 				for i, f := range to {
 					y := ring.TargetSelected + i
 					ring.MakeEffect(Pos{X: 1, Y: y}, string(Calm), 400)
-					f.SetAggressiveness(f.GetAggressiveness() - damages)
+					f.LowerCharacteristic("Aggressiveness", damages)
 				}
 			default:
 				log.Println("power default : ", att.MagickType)

@@ -12,6 +12,7 @@ const PowerStorm = "storm"
 const PowerHealing = "healing"
 const PowerDeadSpeaking = "dead_speaking"
 const PowerCalm = "calm"
+const PowerBrutalStrength = "brutal_strength"
 
 const MagickCategoryPhysical = "physical"
 const MagickCategoryAstral = "astral"
@@ -61,11 +62,23 @@ func (m Magicks) GetPower(uid string) *PlayerPower {
 func Powers() Magicks {
 	return Magicks{
 		PlayerPower{
+			UID:         PowerBrutalStrength,
+			Speed:       20,
+			Energy:      30,
+			Strength:    2,
+			Tile:        BrutalStrengthIcon,
+			Description: "Augmente votre force.",
+			Name:        "Force brute",
+			IsAttack:    true,
+			Category:    MagickCategoryPhysical,
+			Element:     MagickElementEarth,
+		},
+		PlayerPower{
 			UID:         PowerStorm,
 			Speed:       15,
 			Energy:      30,
 			Strength:    30,
-			Tile:        Storm,
+			Tile:        StormIcon,
 			Range:       1,
 			Description: "Crée un éclair entre vous et la cible.",
 			Name:        "Eclair",
@@ -78,7 +91,7 @@ func Powers() Magicks {
 			Speed:       4,
 			Energy:      20,
 			Strength:    20,
-			Tile:        Healing,
+			Tile:        HealingIcon,
 			Description: "Régénère la santé.",
 			Name:        "Soin",
 			IsAttack:    true,
@@ -87,7 +100,7 @@ func Powers() Magicks {
 		},
 		PlayerPower{
 			UID:         PowerCalm,
-			Tile:        Calm,
+			Tile:        CalmIcon,
 			Speed:       10,
 			Energy:      20,
 			Strength:    20,
@@ -102,7 +115,7 @@ func Powers() Magicks {
 			UID:         PowerInvocation,
 			Speed:       5,
 			Energy:      50,
-			Tile:        Spirit,
+			Tile:        InvocationIcon,
 			Description: "Invoque une créature astrale.",
 			Name:        "Invocation",
 			IsAttack:    true,
@@ -111,7 +124,7 @@ func Powers() Magicks {
 		},
 		PlayerPower{
 			UID:         PowerDeadSpeaking,
-			Tile:        Skull,
+			Tile:        NecromancyIcon,
 			Speed:       5,
 			Energy:      20,
 			Description: "Rappelle l'esprit d'un mort.",
@@ -124,7 +137,7 @@ func Powers() Magicks {
 			Speed:       3,
 			Energy:      100,
 			Strength:    60,
-			Tile:        Flames,
+			Tile:        FlamesIcon,
 			Range:       5,
 			Description: "Crée un gigantesque incendie sur vos cibles.",
 			Name:        "Incendie",
@@ -135,12 +148,7 @@ func Powers() Magicks {
 	}
 }
 
-func (p *Player) NewPower(powername string, g *Game) *PlayerPower {
-	p.newPowerRaw(powername)
-	return p.Powers[powername]
-}
-
-func (p *Player) newPowerRaw(powername string) {
+func (p *Player) NewPower(powername string) *PlayerPower {
 	_, exists := p.Powers[powername]
 	if !exists {
 		magicks := Powers()
@@ -151,6 +159,7 @@ func (p *Player) newPowerRaw(powername string) {
 			p.Powers[powername] = pow
 		}
 	}
+	return p.Powers[powername]
 }
 
 func (p *Player) NextPower() {

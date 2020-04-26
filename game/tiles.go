@@ -47,7 +47,15 @@ const (
 	Storm      Tile = "storm"
 	Healing    Tile = "healing"
 	Teleport   Tile = "teleport"
-	Skull      Tile = "skull"
 	Necromancy Tile = "necromancy"
 	Calm       Tile = "calm"
+
+	// Icons
+	BrutalStrengthIcon Tile = "brutal_strength_icon"
+	StormIcon          Tile = "storm_icon"
+	HealingIcon        Tile = "healing_icon"
+	InvocationIcon     Tile = "invocation_icon"
+	NecromancyIcon     Tile = "necromancy_icon"
+	CalmIcon           Tile = "calm_icon"
+	FlamesIcon         Tile = "flames_icon"
 )

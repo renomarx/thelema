@@ -9,14 +9,13 @@ type FighterInterface interface {
 	ChooseAction(ring *FightingRing) int
 	Fight(ring *FightingRing)
 	IsDead() bool
+	IsCalmed() bool
 	TakeDamages(damages int)
 	GetTile() Tile
 	GetHealth() Characteristic
 	GetEnergy() Characteristic
 	IsHurt() int
 	IsAttacking() bool
-	GetAggressiveness() int
-	SetAggressiveness(ag int)
 	GetFightingPos() Pos
 	SetFightingPos(p Pos)
 	LowerCharacteristic(name string, value int)
@@ -145,7 +144,7 @@ func (ring *FightingRing) IsFinished() bool {
 		return true
 	}
 	for _, e := range ring.Enemies {
-		if !e.IsDead() && e.GetAggressiveness() > 0 {
+		if !e.IsDead() && !e.IsCalmed() {
 			return false
 		}
 	}

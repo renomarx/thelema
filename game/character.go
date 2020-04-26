@@ -254,12 +254,8 @@ func (c *Character) IsAttacking() bool {
 	return c.isAttacking
 }
 
-func (c *Character) SetAggressiveness(ag int) {
-	c.Aggressiveness.Current = ag
-}
-
-func (c *Character) GetAggressiveness() int {
-	return c.Aggressiveness.Current
+func (c *Character) IsCalmed() bool {
+	return c.Aggressiveness.Current <= 0
 }
 
 func (c *Character) GetFightingPos() Pos {
@@ -271,13 +267,58 @@ func (c *Character) SetFightingPos(p Pos) {
 }
 
 func (c *Character) LowerCharacteristic(name string, value int) {
-	// TODO
+	switch name {
+	case "Health":
+		c.Health.Lower(value)
+	case "Energy":
+		c.Energy.Lower(value)
+	case "Strength":
+		c.Strength.Lower(value)
+	case "Dexterity":
+		c.Dexterity.Lower(value)
+	case "Beauty":
+		c.Beauty.Lower(value)
+	case "Will":
+		c.Will.Lower(value)
+	case "Intelligence":
+		c.Intelligence.Lower(value)
+	case "Charisma":
+		c.Charisma.Lower(value)
+	case "Luck":
+		c.Luck.Lower(value)
+	case "Aggressiveness":
+		c.Aggressiveness.Lower(value)
+	}
 }
 
 func (c *Character) RaiseCharacteristic(name string, value int) {
-	// TODO
+	switch name {
+	case "Strength":
+		c.Strength.Raise(value)
+	case "Dexterity":
+		c.Dexterity.Raise(value)
+	case "Beauty":
+		c.Beauty.Raise(value)
+	case "Will":
+		c.Will.Raise(value)
+	case "Intelligence":
+		c.Intelligence.Raise(value)
+	case "Charisma":
+		c.Charisma.Raise(value)
+	case "Luck":
+		c.Luck.Raise(value)
+	case "Aggressiveness":
+		c.Aggressiveness.Raise(value)
+	}
 }
 
 func (c *Character) ResetFightingSkills() {
-	// TODO
+	c.Strength.Reset()
+	c.Dexterity.Reset()
+	c.Beauty.Reset()
+	c.Will.Reset()
+	c.Intelligence.Reset()
+	c.Charisma.Reset()
+	c.Luck.Reset()
+	c.Aggressiveness.Reset()
 }

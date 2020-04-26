@@ -39,11 +39,12 @@ func newPlayer(health, energy, stg, dex, bea, wil, intel, cha, rg int) *Player {
 	player.Attacks = attacks[:2]
 	player.Powers = make(map[string]*PlayerPower)
 	// TODO : load only first powers
-	player.newPowerRaw(PowerHealing)
-	player.newPowerRaw(PowerFlames)
-	player.newPowerRaw(PowerStorm)
-	player.newPowerRaw(PowerInvocation)
-	player.newPowerRaw(PowerCalm)
+	player.NewPower(PowerBrutalStrength)
+	player.NewPower(PowerHealing)
+	player.NewPower(PowerFlames)
+	player.NewPower(PowerStorm)
+	player.NewPower(PowerInvocation)
+	player.NewPower(PowerCalm)
 	player.CurrentPower = player.Powers[PowerHealing]
 	player.LastRegenerationTime = time.Now()
 	player.LoadPlayerMenu()

@@ -69,7 +69,7 @@ func (l *Library) ConfirmChoice(g *Game) {
 		return
 	}
 	for _, powername := range b.Powers {
-		pp := g.Level.Player.NewPower(powername, g)
+		pp := g.Level.Player.NewPower(powername)
 		EM.Dispatch(&Event{
 			Message: "Vous avez appris la magie: '" + pp.Name + "' avec ce livre!",
 			Action:  ActionPower,
