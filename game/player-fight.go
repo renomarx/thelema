@@ -75,7 +75,7 @@ func (p *Player) Fight(ring *FightingRing) {
 			case PowerHealing:
 				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
 				ring.MakeEffect(Pos{X: 0, Y: 0}, string(Healing), 400)
-				p.Health.Add(damages)
+				p.Health.Restore(damages)
 			case PowerInvocation:
 				monster := NewInvokedSpirit()
 				ring.AddFriend(monster)

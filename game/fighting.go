@@ -17,6 +17,11 @@ type FighterInterface interface {
 	IsAttacking() bool
 	GetAggressiveness() int
 	SetAggressiveness(ag int)
+	GetFightingPos() Pos
+	SetFightingPos(p Pos)
+	LowerCharacteristic(name string, value int)
+	RaiseCharacteristic(name string, value int)
+	ResetFightingSkills()
 }
 
 type FightingRing struct {
@@ -75,22 +80,38 @@ func (g *Game) Fight(enemies []FighterInterface) {
 	p := g.Level.Player
 	g.Level.MakeExplosion(p.Pos, 88, 1000)
 	g.FightingRing = NewFightingRing()
+	y := 0
 	for _, e := range enemies {
+		e.SetFightingPos(Pos{X: 1, Y: y})
 		g.FightingRing.AddEnemy(e)
+		y++
 	}
 	g.FightingRing.Player = p
+	g.FightingRing.Player.SetFightingPos(Pos{X: 0, Y: 0})
 	if p.Friend != nil && !p.Friend.IsDead() {
+		p.Friend.SetFightingPos(Pos{X: 0, Y: 1})
 		g.FightingRing.AddFriend(p.Friend)
 	}
 	g.FightingRing.Start()
 	for g.FightingRing.IsOpen {
 		g.FightingRing.PlayRound(g)
 	}
+	g.FightingRing.Close()
 	g.FightingRing = nil
 	EM.Dispatch(&Event{
 		Action:  ActionStopFight,
 		Payload: map[string]string{"levelName": g.Level.Name},
 	})
+}
+
+func (ring *FightingRing) Close() {
+	ring.Player.ResetFightingSkills()
+	for _, e := range ring.Enemies {
+		e.ResetFightingSkills()
+	}
+	for _, f := range ring.Friends {
+		f.ResetFightingSkills()
+	}
 }
 
 func NewFightingRing() *FightingRing {

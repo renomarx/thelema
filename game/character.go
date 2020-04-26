@@ -18,14 +18,14 @@ func (ch *Characteristic) Init(value int) {
 	ch.Xp = 0
 }
 
-func (ch *Characteristic) Add(value int) {
+func (ch *Characteristic) Restore(value int) {
 	ch.Current += value
 	if ch.Current > ch.Initial {
 		ch.Current = ch.Initial
 	}
 }
 
-func (ch *Characteristic) Raise(value int) {
+func (ch *Characteristic) RaisePermanently(value int) {
 	ch.Initial += value
 	ch.Current = ch.Initial
 }
@@ -39,6 +39,22 @@ func (ch *Characteristic) RaiseXp(value int) {
 	}
 }
 
+func (ch *Characteristic) Raise(value int) {
+	ch.Current += value
+}
+
+func (ch *Characteristic) Lower(value int) {
+	tmp := ch.Current - value
+	if tmp < 0 {
+		tmp = 0
+	}
+	ch.Current = tmp
+}
+
+func (ch *Characteristic) Reset() {
+	ch.Current = ch.Initial
+}
+
 const VoiceMaleStandard = "MALE_STANDARD"
 const VoiceFemaleStandard = "FEMALE_STANDARD"
 
@@ -48,8 +64,18 @@ type Talker struct {
 	Talkable bool
 }
 
+type Fighter struct {
+	FightingPos  Pos
+	Attacks      []*Attack
+	isAttacking  bool
+	AttackPos    int
+	PowerPos     int
+	damagesTaken int
+}
+
 type Character struct {
 	MovingObject
+	Fighter
 	LookAt               InputType
 	Name                 string
 	Health               Characteristic
@@ -71,13 +97,8 @@ type Character struct {
 	VisionRange          int
 	Powers               map[string]*PlayerPower
 	CurrentPower         *PlayerPower
-	Attacks              []*Attack
-	IsPowerUsing         bool
-	isAttacking          bool
-	AttackPos            int
-	PowerPos             int
 	LastRegenerationTime time.Time
-	damagesTaken         int
+	IsPowerUsing         bool
 	Shadow               bool
 	Meditating           bool
 }
@@ -239,4 +260,24 @@ func (c *Character) SetAggressiveness(ag int) {
 
 func (c *Character) GetAggressiveness() int {
 	return c.Aggressiveness.Current
+}
+
+func (c *Character) GetFightingPos() Pos {
+	return c.FightingPos
+}
+
+func (c *Character) SetFightingPos(p Pos) {
+	c.FightingPos = p
+}
+
+func (c *Character) LowerCharacteristic(name string, value int) {
+	// TODO
+}
+
+func (c *Character) RaiseCharacteristic(name string, value int) {
+	// TODO
+}
+
+func (c *Character) ResetFightingSkills() {
+	// TODO
 }

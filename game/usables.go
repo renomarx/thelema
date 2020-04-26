@@ -36,8 +36,8 @@ func (f Food) GetObject() *Object {
 
 func (f Food) Use(g *Game) {
 	p := g.Level.Player
-	p.Health.Add(f.Health)
-	p.Energy.Add(f.Energy)
+	p.Health.Restore(f.Health)
+	p.Energy.Restore(f.Energy)
 	EM.Dispatch(&Event{
 		Action:  ActionEat,
 		Message: fmt.Sprintf("Santé régénerée de %d", f.Health)})

@@ -99,17 +99,17 @@ func (p *Player) finishQuestStep(questID string, stepID string, g *Game) {
 	for ch, val := range st.Raising {
 		switch ch {
 		case "strength":
-			p.Strength.Raise(val)
+			p.Strength.RaisePermanently(val)
 		case "dexterity":
-			p.Dexterity.Raise(val)
+			p.Dexterity.RaisePermanently(val)
 		case "beauty":
-			p.Beauty.Raise(val)
+			p.Beauty.RaisePermanently(val)
 		case "intelligence":
-			p.Intelligence.Raise(val)
+			p.Intelligence.RaisePermanently(val)
 		case "will":
-			p.Will.Raise(val)
+			p.Will.RaisePermanently(val)
 		case "charisma":
-			p.Charisma.Raise(val)
+			p.Charisma.RaisePermanently(val)
 		}
 	}
 }

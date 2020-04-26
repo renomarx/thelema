@@ -290,7 +290,7 @@ func (c *Player) PowerUse(g *Game, posTo Pos) {
 		case PowerHealing:
 			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
 			g.Level.MakeEffect(c.Pos, string(Healing), 200)
-			c.Health.Add(c.CalculatePowerAttackScore())
+			c.Health.Restore(c.CalculatePowerAttackScore())
 			c.LooseEnergy(c.CurrentPower.Energy)
 		default:
 		}
