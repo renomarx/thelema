@@ -14,6 +14,8 @@ const PowerDeadSpeaking = "dead_speaking"
 const PowerCalm = "calm"
 const PowerBrutalStrength = "brutal_strength"
 const PowerQuickening = "quickening"
+const PowerRockBody = "rock_body"
+const PowerLightness = "lightness"
 
 const MagickCategoryPhysical = "physical"
 const MagickCategoryAstral = "astral"
@@ -79,11 +81,23 @@ func Powers() Magicks {
 		PlayerPower{
 			UID:         PowerQuickening,
 			Speed:       20,
-			Energy:      30,
+			Energy:      20,
 			Strength:    2,
 			Tile:        QuickeningIcon,
 			Name:        "Hâte",
 			Description: "Augmente votre vitesse.",
+			IsAttack:    true,
+			Category:    MagickCategoryPhysical,
+			Element:     MagickElementEarth,
+		},
+		PlayerPower{
+			UID:         PowerRockBody,
+			Speed:       20,
+			Energy:      40,
+			Strength:    5,
+			Tile:        RockBodyIcon,
+			Name:        "Corps de pierre",
+			Description: "Augmente votre défense.",
 			IsAttack:    true,
 			Category:    MagickCategoryPhysical,
 			Element:     MagickElementEarth,
@@ -98,6 +112,18 @@ func Powers() Magicks {
 			Range:       1,
 			Description: "Electrocute la cible.",
 			Name:        "Eclair",
+			IsAttack:    true,
+			Category:    MagickCategoryPhysical,
+			Element:     MagickElementAir,
+		},
+		PlayerPower{
+			UID:         PowerLightness,
+			Speed:       20,
+			Energy:      40,
+			Strength:    3,
+			Tile:        LightnessIcon,
+			Name:        "Légèreté",
+			Description: "Augmente votre esquive.",
 			IsAttack:    true,
 			Category:    MagickCategoryPhysical,
 			Element:     MagickElementAir,

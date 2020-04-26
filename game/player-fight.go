@@ -5,9 +5,16 @@ import (
 	"math/rand"
 )
 
-func (p *Player) TakeDamages(damage int) {
-	p.Character.TakeDamages(damage)
+func (p *Player) TakeDamages(damage int) bool {
+	done := p.Character.TakeDamages(damage)
+	if !done {
+		EM.Dispatch(&Event{
+			Message: "Vous avez esquivé l'attaque!",
+		})
+		return false
+	}
 	p.Health.RaiseXp(damage)
+	return true
 }
 
 func (p *Player) MeetMonsters(g *Game) {
@@ -80,6 +87,10 @@ func (p *Player) Fight(ring *FightingRing) {
 				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerQuickening}})
 				ring.MakeEffect(Pos{X: 0, Y: 0}, string(Healing), 400) // FIXME
 				p.RaiseCharacteristic("Dexterity", damages)
+			case PowerRockBody:
+				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerRockBody}})
+				ring.MakeEffect(Pos{X: 0, Y: 0}, string(Healing), 400) // FIXME
+				p.RaiseCharacteristic("Defense", damages)
 			case PowerHealing:
 				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
 				ring.MakeEffect(Pos{X: 0, Y: 0}, string(Healing), 400)
@@ -100,6 +111,10 @@ func (p *Player) Fight(ring *FightingRing) {
 					ring.MakeStorm(Pos{X: 1, Y: y}, damages, Right, 200)
 					f.TakeDamages(damages)
 				}
+			case PowerLightness:
+				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerLightness}})
+				ring.MakeEffect(Pos{X: 0, Y: 0}, string(Healing), 400) // FIXME
+				p.RaiseCharacteristic("Evasion", damages)
 			case PowerCalm:
 				for i, f := range to {
 					y := ring.TargetSelected + i

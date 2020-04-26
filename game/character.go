@@ -1,6 +1,9 @@
 package game
 
-import "time"
+import (
+	"math/rand"
+	"time"
+)
 
 const CharacterDeltaTime = 100
 
@@ -90,6 +93,8 @@ type Character struct {
 	Charisma             Characteristic
 	Luck                 Characteristic
 	Aggressiveness       Characteristic
+	Defense              Characteristic
+	Evasion              Characteristic
 	Affinity             string
 	ActionPoints         float64
 	LastActionTime       time.Time
@@ -228,9 +233,25 @@ func (c *Character) LooseEnergy(cost int) {
 	}
 }
 
-func (c *Character) TakeDamages(damage int) {
+func (c *Character) TakeDamages(damage int) bool {
 	if c.Dead {
-		return
+		return true
+	}
+	if c.Evasion.Current > 0 {
+		r := rand.Intn(c.Evasion.Current)
+		if r > damage {
+			return false
+		}
+	}
+	def := c.Defense.Current
+	if def > 0 {
+		d10 := damage / 10
+		d90 := 9 * d10
+		d90 -= d90 * def / 100
+		if d90 < 0 {
+			d90 = 0
+		}
+		damage = d10 + d90
 	}
 	c.damagesTaken = damage
 	defer func() {
@@ -241,9 +262,10 @@ func (c *Character) TakeDamages(damage int) {
 		c.Health.Current--
 		if c.Health.Current <= 0 {
 			c.Dead = true
-			return
+			return true
 		}
 	}
+	return true
 }
 
 func (c *Character) IsHurt() int {
@@ -309,6 +331,10 @@ func (c *Character) RaiseCharacteristic(name string, value int) {
 		c.Luck.Raise(value)
 	case "Aggressiveness":
 		c.Aggressiveness.Raise(value)
+	case "Defense":
+		c.Defense.Raise(value)
+	case "Evasion":
+		c.Evasion.Raise(value)
 	}
 }
 
@@ -321,4 +347,6 @@ func (c *Character) ResetFightingSkills() {
 	c.Charisma.Reset()
 	c.Luck.Reset()
 	c.Aggressiveness.Reset()
+	c.Defense.Reset()
+	c.Evasion.Reset()
 }

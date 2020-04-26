@@ -59,4 +59,6 @@ const (
 	NecromancyIcon     Tile = "necromancy_icon"
 	CalmIcon           Tile = "calm_icon"
 	FlamesIcon         Tile = "flames_icon"
+	RockBodyIcon       Tile = "rock_body_icon"
+	LightnessIcon      Tile = "lightness_icon"
 )

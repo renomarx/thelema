@@ -55,7 +55,9 @@ calm 33,25,1
 // Powers Icons
 brutal_strength_icon 21,30,1
 quickening_icon 53,30,4
+rock_body_icon 35,30,1
 storm_icon 1,29,4
+lightness_icon 56,30,1
 healing_icon 34,32,1
 invocation_icon 38,31,1
 necromancy_icon 3,33,1

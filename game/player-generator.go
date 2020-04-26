@@ -41,9 +41,11 @@ func newPlayer(health, energy, stg, dex, bea, wil, intel, cha, rg int) *Player {
 	// TODO : load only first powers
 	player.NewPower(PowerBrutalStrength)
 	player.NewPower(PowerQuickening)
+	player.NewPower(PowerRockBody)
 	player.NewPower(PowerHealing)
 	player.NewPower(PowerFlames)
 	player.NewPower(PowerStorm)
+	player.NewPower(PowerLightness)
 	player.NewPower(PowerInvocation)
 	player.NewPower(PowerCalm)
 	player.CurrentPower = player.Powers[PowerHealing]
