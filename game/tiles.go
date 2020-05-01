@@ -49,6 +49,7 @@ const (
 	Teleport   Tile = "teleport"
 	Necromancy Tile = "necromancy"
 	Calm       Tile = "calm"
+	Ice        Tile = "ice"
 
 	// Icons
 	BrutalStrengthIcon Tile = "brutal_strength_icon"
@@ -61,4 +62,6 @@ const (
 	FlamesIcon         Tile = "flames_icon"
 	RockBodyIcon       Tile = "rock_body_icon"
 	LightnessIcon      Tile = "lightness_icon"
+	CharmIcon          Tile = "charm_icon"
+	GlaciationIcon     Tile = "glaciation_icon"
 )

@@ -91,19 +91,13 @@ func (p *Player) Fight(ring *FightingRing) {
 				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerRockBody}})
 				ring.MakeEffect(Pos{X: 0, Y: 0}, string(Healing), 400) // FIXME
 				p.RaiseCharacteristic("Defense", damages)
-			case PowerHealing:
-				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
-				ring.MakeEffect(Pos{X: 0, Y: 0}, string(Healing), 400)
-				p.Health.Restore(damages)
-			case PowerInvocation:
-				monster := NewInvokedSpirit()
-				ring.AddFriend(monster)
-				p.Will.RaiseXp(monster.Strength.Initial / 10)
-			case PowerFlames:
+			case PowerGlaciation:
 				for i, f := range to {
 					y := ring.TargetSelected + i
-					ring.MakeFlame(Pos{X: 1, Y: y}, damages, 400)
+					EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerRockBody}})
+					ring.MakeEffect(Pos{X: 1, Y: y}, string(Ice), 600)
 					f.TakeDamages(damages)
+					f.LowerCharacteristic("Dexterity", damages/10)
 				}
 			case PowerStorm:
 				for i, f := range to {
@@ -115,11 +109,25 @@ func (p *Player) Fight(ring *FightingRing) {
 				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerLightness}})
 				ring.MakeEffect(Pos{X: 0, Y: 0}, string(Healing), 400) // FIXME
 				p.RaiseCharacteristic("Evasion", damages)
+			case PowerHealing:
+				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
+				ring.MakeEffect(Pos{X: 0, Y: 0}, string(Healing), 400)
+				p.Health.Restore(damages)
 			case PowerCalm:
 				for i, f := range to {
 					y := ring.TargetSelected + i
 					ring.MakeEffect(Pos{X: 1, Y: y}, string(Calm), 400)
 					f.LowerCharacteristic("Aggressiveness", damages)
+				}
+			case PowerInvocation:
+				monster := NewInvokedSpirit()
+				ring.AddFriend(monster)
+				p.Will.RaiseXp(monster.Strength.Initial / 10)
+			case PowerFlames:
+				for i, f := range to {
+					y := ring.TargetSelected + i
+					ring.MakeFlame(Pos{X: 1, Y: y}, damages, 400)
+					f.TakeDamages(damages)
 				}
 			default:
 				log.Println("power default : ", att.MagickType)

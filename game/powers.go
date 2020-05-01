@@ -6,16 +6,71 @@ import (
 	"time"
 )
 
-const PowerInvocation = "invocation"
-const PowerFlames = "flames"
-const PowerStorm = "storm"
-const PowerHealing = "healing"
-const PowerDeadSpeaking = "dead_speaking"
-const PowerCalm = "calm"
 const PowerBrutalStrength = "brutal_strength"
 const PowerQuickening = "quickening"
 const PowerRockBody = "rock_body"
+
+const PowerCharm = "charm"
+const PowerGlaciation = "glaciation"
+
+const PowerStorm = "storm"
 const PowerLightness = "lightness"
+
+const PowerKiai = "kiai"
+const PowerFireball = "fireball"
+
+const PowerPoison = "poison"
+const PowerRoot = "root"
+const PowerWeakening = "weakening"
+const PowerVampirism = "vampirism"
+
+const PowerHealing = "healing"
+const PowerRecovery = "recovery"
+
+const PowerCalm = "calm"
+const PowerMadness = "madness"
+const PowerFear = "fear"
+
+const PowerMeditation = "meditation"
+const PowerConcentration = "concentration"
+
+const PowerInvocation = "invocation"
+const PowerBanishment = "banishment"
+
+const PowerCurse = "curse"
+const PowerPossession = "possession"
+
+const PowerLevitation = "levitation"
+const PowerParalysis = "paralysis"
+
+const PowerHypnosis = "hypnosis"
+const PowerProtection = "protection"
+
+const PowerInvisibility = "invisibility"
+const PowerPrediction = "prediction"
+const PowerSplit = "split"
+
+const PowerCreation = "creation"
+const PowerDevotion = "devotion"
+
+const PowerDomination = "domination"
+const PowerDeadSpeaking = "dead_speaking"
+
+const PowerEarthquake = "earthquake"
+const PowerGolem = "golem"
+
+const PowerRevolution = "revolution"
+const PowerPeace = "peace"
+
+const PowerTempest = "tempest"
+const PowerDivination = "divination"
+
+const PowerTeleportation = "teleportation"
+const PowerDisintegration = "disintegration"
+const PowerFlames = "flames"
+
+const PowerResurrection = "resurrection"
+const PowerDeath = "death"
 
 const MagickCategoryPhysical = "physical"
 const MagickCategoryAstral = "astral"
@@ -39,6 +94,7 @@ type PlayerPower struct {
 	Description string
 	Name        string
 	IsAttack    bool
+	IsEffect    bool
 	Category    MagickCategory
 	Element     MagickElement
 }
@@ -101,6 +157,33 @@ func Powers() Magicks {
 			IsAttack:    true,
 			Category:    MagickCategoryPhysical,
 			Element:     MagickElementEarth,
+		},
+		// Water
+		PlayerPower{
+			UID:         PowerCharm,
+			Speed:       20,
+			Energy:      10,
+			Strength:    5,
+			Tile:        CharmIcon,
+			Range:       1,
+			Description: "Augmente votre beauté.",
+			Name:        "Charme",
+			IsAttack:    false,
+			Category:    MagickCategoryPhysical,
+			Element:     MagickElementWater,
+		},
+		PlayerPower{
+			UID:         PowerGlaciation,
+			Speed:       10,
+			Energy:      30,
+			Strength:    20,
+			Tile:        GlaciationIcon,
+			Range:       1,
+			Description: "Glace votre cible.",
+			Name:        "Glaciation",
+			IsAttack:    true,
+			Category:    MagickCategoryPhysical,
+			Element:     MagickElementWater,
 		},
 		// Air
 		PlayerPower{
