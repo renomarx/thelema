@@ -42,6 +42,7 @@ func newPlayer(health, energy, stg, dex, bea, wil, intel, cha, rg int) *Player {
 	player.NewPower(PowerBrutalStrength)
 	player.NewPower(PowerQuickening)
 	player.NewPower(PowerRockBody)
+	player.NewPower(PowerCharm)
 	player.NewPower(PowerGlaciation)
 	player.NewPower(PowerHealing)
 	player.NewPower(PowerFlames)

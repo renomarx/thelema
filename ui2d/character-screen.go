@@ -1,6 +1,7 @@
 package ui2d
 
 import (
+	"fmt"
 	"strconv"
 	"thelema/game"
 
@@ -108,7 +109,6 @@ func (ui *UI) DrawPowers(offsetH int32) int32 {
 		game.MagickCategoryAstral:   300,
 		game.MagickCategoryMental:   450,
 		game.MagickCategoryHigh:     600,
-		game.MagickCategoryMeta:     750,
 	}
 
 	elementsOffset := map[game.MagickElement]int32{
@@ -119,17 +119,16 @@ func (ui *UI) DrawPowers(offsetH int32) int32 {
 		game.MagickElementEther: 200,
 	}
 
-	ui.DrawText("Physique", TextSizeM, ColorGreen, offsetX+categoriesOffset[game.MagickCategoryPhysical], offsetH)
-	ui.DrawText("Astrale", TextSizeM, ColorGreen, offsetX+categoriesOffset[game.MagickCategoryAstral], offsetH)
-	ui.DrawText("Mentale", TextSizeM, ColorGreen, offsetX+categoriesOffset[game.MagickCategoryMental], offsetH)
-	ui.DrawText("Sacré", TextSizeM, ColorGreen, offsetX+categoriesOffset[game.MagickCategoryHigh], offsetH)
-	ui.DrawText("Meta", TextSizeM, ColorGreen, offsetX+categoriesOffset[game.MagickCategoryMeta], offsetH)
+	ui.DrawText(fmt.Sprintf("Physique (%d)", p.GetMagickLevel(game.MagickCategoryPhysical)), TextSizeM, ColorGreen, offsetX+categoriesOffset[game.MagickCategoryPhysical], offsetH)
+	ui.DrawText(fmt.Sprintf("Astrale (%d)", p.GetMagickLevel(game.MagickCategoryAstral)), TextSizeM, ColorGreen, offsetX+categoriesOffset[game.MagickCategoryAstral], offsetH)
+	ui.DrawText(fmt.Sprintf("Mentale (%d)", p.GetMagickLevel(game.MagickCategoryMental)), TextSizeM, ColorGreen, offsetX+categoriesOffset[game.MagickCategoryMental], offsetH)
+	ui.DrawText(fmt.Sprintf("Sacré (%d)", p.GetMagickLevel(game.MagickCategoryHigh)), TextSizeM, ColorGreen, offsetX+categoriesOffset[game.MagickCategoryHigh], offsetH)
 
-	ui.DrawText("Terre", TextSizeM, ColorGreen, offsetX, offsetH+elementsOffset[game.MagickElementEarth])
-	ui.DrawText("Eau", TextSizeM, ColorGreen, offsetX, offsetH+elementsOffset[game.MagickElementWater])
-	ui.DrawText("Air", TextSizeM, ColorGreen, offsetX, offsetH+elementsOffset[game.MagickElementAir])
-	ui.DrawText("Feu", TextSizeM, ColorGreen, offsetX, offsetH+elementsOffset[game.MagickElementFire])
-	ui.DrawText("Ether", TextSizeM, ColorGreen, offsetX, offsetH+elementsOffset[game.MagickElementEther])
+	ui.DrawText(fmt.Sprintf("Terre (%d)", p.GetElementalAffinity(game.MagickElementEarth)), TextSizeM, ColorGreen, offsetX, offsetH+elementsOffset[game.MagickElementEarth])
+	ui.DrawText(fmt.Sprintf("Eau (%d)", p.GetElementalAffinity(game.MagickElementWater)), TextSizeM, ColorGreen, offsetX, offsetH+elementsOffset[game.MagickElementWater])
+	ui.DrawText(fmt.Sprintf("Air (%d)", p.GetElementalAffinity(game.MagickElementAir)), TextSizeM, ColorGreen, offsetX, offsetH+elementsOffset[game.MagickElementAir])
+	ui.DrawText(fmt.Sprintf("Feu (%d)", p.GetElementalAffinity(game.MagickElementFire)), TextSizeM, ColorGreen, offsetX, offsetH+elementsOffset[game.MagickElementFire])
+	ui.DrawText(fmt.Sprintf("Ether (%d)", p.GetElementalAffinity(game.MagickElementEther)), TextSizeM, ColorGreen, offsetX, offsetH+elementsOffset[game.MagickElementEther])
 
 	magicksNumber := make(map[string]int32)
 	for _, powername := range powernames {

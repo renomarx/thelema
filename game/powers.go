@@ -76,7 +76,6 @@ const MagickCategoryPhysical = "physical"
 const MagickCategoryAstral = "astral"
 const MagickCategoryMental = "mental"
 const MagickCategoryHigh = "high"
-const MagickCategoryMeta = "meta"
 
 const MagickElementEarth = "earth"
 const MagickElementWater = "water"
