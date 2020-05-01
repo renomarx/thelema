@@ -24,13 +24,15 @@ func (m *Enemy) ChooseAction(ring *FightingRing) int {
 	}
 	for _, pow := range m.Powers {
 		att := &Attack{
-			Damages:    pow.Strength,
-			Name:       pow.Name,
-			EnergyCost: pow.Energy,
-			Speed:      pow.Speed,
-			Range:      pow.Range,
-			Type:       AttackTypeMagick,
-			MagickType: pow.UID,
+			Damages:        pow.Strength,
+			Name:           pow.Name,
+			EnergyCost:     pow.Energy,
+			Speed:          pow.Speed,
+			Range:          pow.Range,
+			Type:           AttackTypeMagick,
+			MagickUID:      pow.UID,
+			MagickElement:  pow.Element,
+			MagickCategory: pow.Category,
 		}
 		m.SelectedAttack = att
 		return att.Speed
@@ -58,7 +60,7 @@ func (m *Enemy) Fight(ring *FightingRing) {
 		switch att.Type {
 		case AttackTypePhysical:
 		case AttackTypeMagick:
-			switch att.MagickType {
+			switch att.MagickUID {
 			case PowerHealing:
 				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
 				ring.MakeEffect(Pos{X: 1, Y: 0}, string(Healing), 400)

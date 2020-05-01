@@ -106,6 +106,8 @@ type Character struct {
 	IsPowerUsing         bool
 	Shadow               bool
 	Meditating           bool
+	ElementalAffinities  map[MagickElement]int
+	MagickLevel          map[MagickCategory]int
 }
 
 func (c *Character) GetName() string {
@@ -349,4 +351,30 @@ func (c *Character) ResetFightingSkills() {
 	c.Aggressiveness.Reset()
 	c.Defense.Reset()
 	c.Evasion.Reset()
+}
+
+func (c *Character) GetElementalAffinity(element MagickElement) int {
+	_, e := c.ElementalAffinities[element]
+	if !e {
+		c.ElementalAffinities[element] = 0
+	}
+	return c.ElementalAffinities[element]
+}
+
+func (c *Character) RaiseElementalAffinity(element MagickElement, x int) {
+	c.GetElementalAffinity(element)
+	c.ElementalAffinities[element] += x
+}
+
+func (c *Character) GetMagickLevel(cat MagickCategory) int {
+	_, e := c.MagickLevel[cat]
+	if !e {
+		c.MagickLevel[cat] = 0
+	}
+	return c.MagickLevel[cat]
+}
+
+func (c *Character) RaiseMagickLevel(cat MagickCategory, x int) {
+	c.GetMagickLevel(cat)
+	c.MagickLevel[cat] += x
 }

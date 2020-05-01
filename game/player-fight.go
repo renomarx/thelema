@@ -78,7 +78,7 @@ func (p *Player) Fight(ring *FightingRing) {
 			p.Strength.RaiseXp(damages * len(to) / 10)
 			p.Dexterity.RaiseXp(1)
 		case AttackTypeMagick:
-			switch att.MagickType {
+			switch att.MagickUID {
 			case PowerBrutalStrength:
 				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerBrutalStrength}})
 				ring.MakeEffect(Pos{X: 0, Y: 0}, string(Healing), 400) // FIXME
@@ -130,7 +130,7 @@ func (p *Player) Fight(ring *FightingRing) {
 					f.TakeDamages(damages)
 				}
 			default:
-				log.Println("power default : ", att.MagickType)
+				log.Println("power default : ", att.MagickUID)
 				for _, f := range to {
 					f.TakeDamages(damages)
 				}
@@ -143,6 +143,8 @@ func (p *Player) Fight(ring *FightingRing) {
 			}
 			p.Will.RaiseXp(damages * targetsNumber / 10)
 			p.Energy.RaiseXp(att.EnergyCost)
+			p.RaiseElementalAffinity(att.MagickElement, 1)
+			p.RaiseMagickLevel(att.MagickCategory, 1)
 		}
 	}
 }

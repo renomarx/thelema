@@ -244,13 +244,14 @@ func (fr *FightingRing) LoadPossibleAttacks(p *Player) {
 	for _, pow := range p.Powers {
 		if pow.IsAttack {
 			att := &Attack{
-				Damages:    pow.Strength,
-				Name:       pow.Name,
-				EnergyCost: pow.Energy,
-				Speed:      pow.Speed,
-				Range:      pow.Range,
-				Type:       AttackTypeMagick,
-				MagickType: pow.UID,
+				Damages:       pow.Strength,
+				Name:          pow.Name,
+				EnergyCost:    pow.Energy,
+				Speed:         pow.Speed,
+				Range:         pow.Range,
+				Type:          AttackTypeMagick,
+				MagickUID:     pow.UID,
+				MagickElement: pow.Element,
 			}
 			fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, att)
 		}

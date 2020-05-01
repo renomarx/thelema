@@ -51,6 +51,8 @@ func newPlayer(health, energy, stg, dex, bea, wil, intel, cha, rg int) *Player {
 	player.NewPower(PowerCalm)
 	player.CurrentPower = player.Powers[PowerHealing]
 	player.LastRegenerationTime = time.Now()
+	player.ElementalAffinities = make(map[MagickElement]int)
+	player.MagickLevel = make(map[MagickCategory]int)
 	player.LoadPlayerMenu()
 
 	return player

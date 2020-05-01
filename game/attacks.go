@@ -1,13 +1,15 @@
 package game
 
 type Attack struct {
-	Damages    int
-	Speed      int
-	EnergyCost int
-	Name       string
-	Range      int
-	Type       AttackType
-	MagickType string
+	Damages        int
+	Speed          int
+	EnergyCost     int
+	Name           string
+	Range          int
+	Type           AttackType
+	MagickUID      string
+	MagickElement  MagickElement
+	MagickCategory MagickCategory
 }
 type AttackType string
 
@@ -74,7 +76,7 @@ func (att *Attack) GetPower(p *Character) int {
 	case AttackTypePhysical:
 		power = att.Damages * p.CalculateAttackScore() / 10
 	case AttackTypeMagick:
-		power = att.Damages * p.CalculatePowerAttackScore() / 10
+		power = (att.Damages*p.CalculatePowerAttackScore() + p.GetElementalAffinity(att.MagickElement)) / 10
 	}
 	return power
 }
