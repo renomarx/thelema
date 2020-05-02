@@ -5,6 +5,9 @@ import (
 	"time"
 )
 
+const FightingActionAttack = "attack"
+const FightingActionRun = "run"
+
 type FighterInterface interface {
 	ChooseAction(ring *FightingRing) int
 	Fight(ring *FightingRing)
@@ -96,10 +99,19 @@ func (g *Game) Fight(enemies []FighterInterface) {
 	for g.FightingRing.Running {
 		g.FightingRing.PlayRound(g)
 	}
-	EM.Dispatch(&Event{
-		Message: "Vous avez vaincu tous les ennemis!",
-	})
-	time.Sleep(2 * time.Second)
+	if g.FightingRing.SelectedPlayerAction == FightingActionRun {
+		EM.Dispatch(&Event{
+			Message: "Vous avez fui le combat!",
+		})
+		time.Sleep(1 * time.Second)
+	} else {
+		EM.Dispatch(&Event{
+			Action:  ActionWinFight,
+			Message: "Vous avez vaincu tous les ennemis!",
+		})
+		time.Sleep(2 * time.Second)
+	}
+
 	g.FightingRing.Close()
 	g.FightingRing = nil
 	EM.Dispatch(&Event{

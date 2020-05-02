@@ -25,6 +25,7 @@ const ActionCharacteristicUp = "CHARACTERISTIC_UP"
 
 const ActionFight = "FIGHT"
 const ActionAttack = "ATTACK"
+const ActionWinFight = "WIN_FIGHT"
 const ActionStopFight = "STOP_FIGHT"
 
 type Event struct {

@@ -41,7 +41,7 @@ func (fr *FightingRing) HandleInputFightingMenu(input *Input) {
 				fr.AttacksMenuOpen = true
 				adaptMenuSpeed()
 			case PlayerMenuCmdRun:
-				fr.SelectedPlayerAction = "run"
+				fr.SelectedPlayerAction = FightingActionRun
 				DispatchEventMenu(ActionMenuClose)
 				fr.CloseFightingMenu()
 				adaptMenuSpeed()
@@ -63,7 +63,7 @@ func (fr *FightingRing) HandleInputFightingMenu(input *Input) {
 			case Action2:
 				fr.AttackTargetSelectionOpen = false
 			case Action:
-				fr.SelectedPlayerAction = "attack"
+				fr.SelectedPlayerAction = FightingActionAttack
 				fr.AttackTargetSelectionOpen = false
 				fr.AttacksMenuOpen = false
 				DispatchEventMenu(ActionMenuClose)
@@ -89,7 +89,7 @@ func (fr *FightingRing) HandleInputFightingMenu(input *Input) {
 				adaptMenuSpeed()
 			case Action:
 				if fr.GetSelectedAttack().Range == 0 {
-					fr.SelectedPlayerAction = "attack"
+					fr.SelectedPlayerAction = FightingActionAttack
 					fr.AttacksMenuOpen = false
 					DispatchEventMenu(ActionMenuClose)
 					menu.ClearSelected()

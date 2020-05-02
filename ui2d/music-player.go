@@ -122,6 +122,9 @@ func (mp *MusicPlayer) On(e *game.Event) {
 		mp.PlaySound("piano.wav", 64)
 	case game.ActionFight:
 		mp.ChangeMusic("stress.wav", 64)
+	case game.ActionWinFight:
+		mp.StopMusic()
+		mp.PlaySound("orchestra.wav", 64)
 	case game.ActionStopFight:
 		mp.PlayMusicForLevel(e.Payload["levelName"])
 	}

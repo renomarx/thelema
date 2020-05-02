@@ -36,9 +36,9 @@ func (p *Player) MeetMonsters(g *Game) {
 
 func (p *Player) ChooseAction(ring *FightingRing) int {
 	switch ring.SelectedPlayerAction {
-	case "run":
+	case FightingActionRun:
 		return p.Dexterity.Current
-	case "attack":
+	case FightingActionAttack:
 		att := ring.PossibleAttacks.List[ring.PossibleAttacks.Selected]
 		p.SelectedAttack = att
 		return att.GetSpeed(&p.Character)
@@ -48,9 +48,9 @@ func (p *Player) ChooseAction(ring *FightingRing) int {
 
 func (p *Player) Fight(ring *FightingRing) {
 	switch ring.SelectedPlayerAction {
-	case "run":
+	case FightingActionRun:
 		ring.End()
-	case "attack":
+	case FightingActionAttack:
 		att := p.SelectedAttack
 		var to []FighterInterface
 		idx := 0
