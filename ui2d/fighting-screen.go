@@ -103,6 +103,7 @@ func (ui *UI) drawFightingEnemy(e *game.Enemy, offsetX, offsetY int) {
 	if e.IsDead() {
 		tileY = 20 * 64
 		tileX = 64 * 5
+		texture.SetColorMod(255, 0, 0)
 	}
 	if e.IsHurt() > 0 {
 		xb = -16
@@ -110,26 +111,30 @@ func (ui *UI) drawFightingEnemy(e *game.Enemy, offsetX, offsetY int) {
 	ui.renderer.Copy(texture,
 		&sdl.Rect{X: int32(tileX), Y: int32(tileY), W: 64, H: 64},
 		&sdl.Rect{X: int32(offsetX - xb), Y: int32(offsetY), W: 64, H: 64})
+	texture.SetColorMod(255, 255, 255)
 	ui.drawHealthBar(int32(offsetX-xb), int32(offsetY-15), e.GetHealth())
 }
 
 func (ui *UI) drawFightingMonster(e game.FighterInterface, offsetX, offsetY int) {
-	if !e.IsDead() {
-		xb := 0
-		yb := 0
-		fieldLen := 4
-		if e.IsAttacking() {
-			xb = ui.WindowHeight / 3
-			yb = rand.Intn(fieldLen*2) - fieldLen
-		}
-		if e.IsHurt() > 0 {
-			xb = -16
-		}
-		ui.renderer.Copy(ui.textureAtlas,
-			&ui.textureIndex[e.GetTile()][0],
-			&sdl.Rect{X: int32(offsetX - xb), Y: int32(offsetY + yb), W: 64, H: 64})
-		ui.drawHealthBar(int32(offsetX-xb), int32(offsetY-15), e.GetHealth())
+	xb := 0
+	yb := 0
+	fieldLen := 4
+	if e.IsAttacking() {
+		xb = ui.WindowHeight / 3
+		yb = rand.Intn(fieldLen*2) - fieldLen
 	}
+	texture := ui.textureAtlas
+	if e.IsDead() {
+		texture.SetColorMod(255, 0, 0)
+	}
+	if e.IsHurt() > 0 {
+		xb = -16
+	}
+	ui.renderer.Copy(texture,
+		&ui.textureIndex[e.GetTile()][0],
+		&sdl.Rect{X: int32(offsetX - xb), Y: int32(offsetY + yb), W: 64, H: 64})
+	texture.SetColorMod(255, 255, 255)
+	ui.drawHealthBar(int32(offsetX-xb), int32(offsetY-15), e.GetHealth())
 }
 
 func (ui *UI) drawFightingFriends(fr *game.FightingRing, offsetX, offsetY int) {

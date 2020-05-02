@@ -25,6 +25,7 @@ type FighterInterface interface {
 
 type FightingRing struct {
 	IsOpen                    bool
+	Running                   bool
 	Round                     int
 	SelectedPlayerAction      string
 	Player                    FighterInterface
@@ -92,9 +93,13 @@ func (g *Game) Fight(enemies []FighterInterface) {
 		g.FightingRing.AddFriend(p.Friend)
 	}
 	g.FightingRing.Start()
-	for g.FightingRing.IsOpen {
+	for g.FightingRing.Running {
 		g.FightingRing.PlayRound(g)
 	}
+	EM.Dispatch(&Event{
+		Message: "Vous avez vaincu tous les ennemis!",
+	})
+	time.Sleep(2 * time.Second)
 	g.FightingRing.Close()
 	g.FightingRing = nil
 	EM.Dispatch(&Event{
@@ -104,6 +109,7 @@ func (g *Game) Fight(enemies []FighterInterface) {
 }
 
 func (ring *FightingRing) Close() {
+	ring.IsOpen = false
 	ring.Player.ResetFightingSkills()
 	for _, e := range ring.Enemies {
 		e.ResetFightingSkills()
@@ -133,10 +139,11 @@ func (ring *FightingRing) AddFriend(f FighterInterface) {
 
 func (ring *FightingRing) Start() {
 	ring.IsOpen = true
+	ring.Running = true
 }
 
 func (ring *FightingRing) End() {
-	ring.IsOpen = false
+	ring.Running = false
 }
 
 func (ring *FightingRing) IsFinished() bool {
@@ -201,21 +208,15 @@ func (ring *FightingRing) PlayRound(g *Game) {
 
 func (fr *FightingRing) clearRound() {
 	fr.roundFighters = nil
-	var enemies []FighterInterface
-	for _, e := range fr.Enemies {
-		if !e.IsDead() {
-			enemies = append(enemies, e)
-		}
+	i := 0
+	for i < len(fr.Enemies) && fr.Enemies[i].IsDead() {
+		i++
 	}
-	fr.Enemies = enemies
-	var friends []FighterInterface
-	for _, f := range fr.Friends {
-		if !f.IsDead() {
-			friends = append(friends, f)
-		}
+	if i == len(fr.Enemies) {
+		fr.End()
+		return
 	}
-	fr.Friends = friends
-	fr.TargetSelected = 0
+	fr.TargetSelected = i
 }
 
 func (ring *FightingRing) prepareRoundFighter(f FighterInterface, speed int) {
@@ -265,27 +266,24 @@ func (fr *FightingRing) GetSelectedAttack() Attack {
 
 func (fr *FightingRing) NextTarget() {
 	i := fr.TargetSelected + 1
+	for i < len(fr.Enemies) && fr.Enemies[i].IsDead() {
+		i++
+	}
 	if i >= len(fr.Enemies) {
-		i = len(fr.Enemies) - 1
+		return
 	}
 	fr.TargetSelected = i
 }
 
 func (fr *FightingRing) LastTarget() {
 	i := fr.TargetSelected - 1
+	for i >= 0 && fr.Enemies[i].IsDead() {
+		i--
+	}
 	if i < 0 {
-		i = 0
+		return
 	}
 	fr.TargetSelected = i
-}
-
-func (fr *FightingRing) GetFirstEnemyNotDead() FighterInterface {
-	for _, e := range fr.Enemies {
-		if !e.IsDead() {
-			return e
-		}
-	}
-	return nil
 }
 
 func (a *Attack) adaptSpeed() {
