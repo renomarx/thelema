@@ -2,7 +2,6 @@ package game
 
 type Enemy struct {
 	Character
-	SelectedAttack *Attack
 }
 
 func (level *Level) MakeEnemy(pnj *Pnj) *Enemy {
@@ -15,28 +14,8 @@ func (level *Level) MakeEnemy(pnj *Pnj) *Enemy {
 
 func (m *Enemy) ChooseAction(ring *FightingRing) int {
 	// TODO : enemy IA
-	m.SelectedAttack = &Attack{
-		Speed:   20,
-		Damages: 20,
-		Name:    "Sword attack",
-		Type:    AttackTypePhysical,
-		Range:   1,
-	}
-	for _, pow := range m.Powers {
-		att := &Attack{
-			Damages:        pow.Strength,
-			Name:           pow.Name,
-			EnergyCost:     pow.Energy,
-			Speed:          pow.Speed,
-			Range:          pow.Range,
-			Type:           AttackTypeMagick,
-			MagickUID:      pow.UID,
-			MagickElement:  pow.Element,
-			MagickCategory: pow.Category,
-		}
-		m.SelectedAttack = att
-		return att.Speed
-	}
+	attacks := m.GetAttacks()
+	m.SelectedAttack = attacks[0]
 	return m.SelectedAttack.GetSpeed(&m.Character)
 }
 
@@ -47,46 +26,22 @@ func (m *Enemy) Fight(ring *FightingRing) {
 		})
 		return
 	}
-	m.isAttacking = true
-	for m.AttackPos = 0; m.AttackPos < CaseLen; m.AttackPos++ {
-		m.adaptSpeed()
-	}
-	m.isAttacking = false
 
-	damages := m.CalculateAttackScore()
-	if m.SelectedAttack != nil {
-		att := m.SelectedAttack
-		damages = att.GetPower(&m.Character)
-		switch att.Type {
-		case AttackTypePhysical:
-		case AttackTypeMagick:
-			switch att.MagickUID {
-			case PowerHealing:
-				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
-				ring.MakeEffect(Pos{X: 1, Y: 0}, string(Healing), 400)
-				m.Health.Restore(damages)
-			// case PowerInvocation:
-			// 	monster := NewInvokedSpirit()
-			// 	ring.AddFriend(monster)
-			// 	p.Will.RaiseXp(monster.Strength.Initial / 10)
-			case PowerFlames:
-				ring.MakeFlame(Pos{X: 0, Y: 0}, damages, 400)
-			case PowerStorm:
-				ring.MakeStorm(Pos{X: 0, Y: 0}, damages, Right, 200)
-			case PowerCalm:
-				ring.MakeEffect(Pos{X: 0, Y: 0}, string(Calm), 400)
-			}
-			m.LooseEnergy(att.EnergyCost)
-		}
-
-	}
-	if len(ring.Friends) > 0 {
-		for _, f := range ring.Friends {
-			if !f.IsDead() {
-				f.TakeDamages(damages)
-				return
-			}
+	var to []FighterInterface
+	idx := 0
+	att := m.SelectedAttack
+	// They first try to attack player friends
+	for i := 0; idx < att.Range && i < len(ring.Friends); i++ {
+		f := ring.Friends[i]
+		if !f.IsDead() {
+			to = append(to, f)
+			idx++
 		}
 	}
-	ring.Player.TakeDamages(damages)
+	if idx < att.Range {
+		// If there is still a place in attack range, attack player
+		to = append(to, ring.Player)
+	}
+
+	m.doAttack(ring, to)
 }

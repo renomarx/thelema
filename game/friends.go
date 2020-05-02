@@ -13,17 +13,29 @@ func (level *Level) MakeFriend(pnj *Pnj) *Friend {
 
 func (m *Friend) ChooseAction(ring *FightingRing) int {
 	// TODO : friend IA
-	return m.Dexterity.Current
+	attacks := m.GetAttacks()
+	m.SelectedAttack = attacks[0]
+	return m.SelectedAttack.GetSpeed(&m.Character)
 }
 
 func (m *Friend) Fight(ring *FightingRing) {
-	m.isAttacking = true
-	for m.AttackPos = 0; m.AttackPos < CaseLen; m.AttackPos++ {
-		m.adaptSpeed()
+	if m.IsCalmed() {
+		EM.Dispatch(&Event{
+			Message: m.Name + " est calmé, n'attaquera pas.",
+		})
+		return
 	}
-	m.isAttacking = false
-	e := ring.GetFirstEnemyNotDead()
-	if e != nil {
-		e.TakeDamages(m.CalculateAttackScore())
+
+	var to []FighterInterface
+	idx := 0
+	att := m.SelectedAttack
+	for i := 0; idx < att.Range && i < len(ring.Enemies); i++ {
+		f := ring.Enemies[i]
+		if !f.IsDead() {
+			to = append(to, f)
+			idx++
+		}
 	}
+
+	m.doAttack(ring, to)
 }

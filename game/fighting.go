@@ -36,7 +36,7 @@ type FightingRing struct {
 	AttackTargetSelectionOpen bool
 	TargetSelected            int
 	PossibleAttacks           struct {
-		List     []*Attack
+		List     []Attack
 		Selected int
 	}
 	roundFighters []RoundFighter
@@ -238,24 +238,8 @@ func (ring *FightingRing) prepareRoundFighter(f FighterInterface, speed int) {
 }
 
 func (fr *FightingRing) LoadPossibleAttacks(p *Player) {
-	for _, att := range p.Attacks {
-		fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, att)
-	}
-	for _, pow := range p.Powers {
-		if pow.IsAttack {
-			att := &Attack{
-				Damages:       pow.Strength,
-				Name:          pow.Name,
-				EnergyCost:    pow.Energy,
-				Speed:         pow.Speed,
-				Range:         pow.Range,
-				Type:          AttackTypeMagick,
-				MagickUID:     pow.UID,
-				MagickElement: pow.Element,
-			}
-			fr.PossibleAttacks.List = append(fr.PossibleAttacks.List, att)
-		}
-	}
+	attacks := p.GetAttacks()
+	fr.PossibleAttacks.List = attacks
 	fr.PossibleAttacks.Selected = 0
 }
 
@@ -275,7 +259,7 @@ func (fr *FightingRing) LastPossibleAttack() {
 	fr.PossibleAttacks.Selected = i
 }
 
-func (fr *FightingRing) GetSelectedAttack() *Attack {
+func (fr *FightingRing) GetSelectedAttack() Attack {
 	return fr.PossibleAttacks.List[fr.PossibleAttacks.Selected]
 }
 

@@ -13,7 +13,6 @@ type Player struct {
 	CharacterMenuOpen bool
 	MapMenuOpen       bool
 	Friend            *Friend
-	currentAttack     *Attack
 }
 
 func (p *Player) Update(g *Game) {

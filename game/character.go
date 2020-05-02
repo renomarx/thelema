@@ -1,6 +1,7 @@
 package game
 
 import (
+	"log"
 	"math/rand"
 	"time"
 )
@@ -68,12 +69,13 @@ type Talker struct {
 }
 
 type Fighter struct {
-	FightingPos  Pos
-	Attacks      []*Attack
-	isAttacking  bool
-	AttackPos    int
-	PowerPos     int
-	damagesTaken int
+	FightingPos    Pos
+	Attacks        []Attack
+	SelectedAttack Attack
+	isAttacking    bool
+	AttackPos      int
+	PowerPos       int
+	damagesTaken   int
 }
 
 type Character struct {
@@ -377,4 +379,123 @@ func (c *Character) GetMagickLevel(cat MagickCategory) int {
 func (c *Character) RaiseMagickLevel(cat MagickCategory, x int) {
 	c.GetMagickLevel(cat)
 	c.MagickLevel[cat] += x
+}
+
+func (c *Character) GetAttacks() []Attack {
+	var attacks []Attack
+	for _, att := range c.Attacks {
+		attacks = append(attacks, att)
+	}
+	for _, pow := range c.Powers {
+		if pow.IsAttack {
+			att := Attack{
+				Strength:      pow.Strength,
+				Name:          pow.Name,
+				EnergyCost:    pow.Energy,
+				Speed:         pow.Speed,
+				Range:         pow.Range,
+				Accuracy:      100,
+				Type:          AttackTypeMagick,
+				MagickUID:     pow.UID,
+				MagickElement: pow.Element,
+			}
+			attacks = append(attacks, att)
+		}
+	}
+	if len(attacks) == 0 {
+		allAttacks := Attacks()
+		attacks = append(attacks, allAttacks[0])
+	}
+	return attacks
+}
+
+func (c *Character) doAttack(ring *FightingRing, to []FighterInterface) {
+	att := c.SelectedAttack
+	c.isAttacking = true
+	for c.AttackPos = 0; c.AttackPos < CaseLen; c.AttackPos++ {
+		att.adaptSpeed()
+	}
+	c.isAttacking = false
+
+	damages := att.GetPower(c)
+	if damages == 0 {
+		EM.Dispatch(&Event{
+			Message: "L'attaque a échoué!",
+		})
+		return
+	}
+	switch att.Type {
+	case AttackTypePhysical:
+		for _, f := range to {
+			f.TakeDamages(damages)
+		}
+		c.Strength.RaiseXp(damages * len(to) / 10)
+		c.Dexterity.RaiseXp(1)
+	case AttackTypeMagick:
+		switch att.MagickUID {
+		case PowerBrutalStrength:
+			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerBrutalStrength}})
+			ring.MakeEffect(c.GetFightingPos(), string(Healing), 400) // FIXME
+			c.RaiseCharacteristic("Strength", damages)
+		case PowerQuickening:
+			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerQuickening}})
+			ring.MakeEffect(c.GetFightingPos(), string(Healing), 400) // FIXME
+			c.RaiseCharacteristic("Dexterity", damages)
+		case PowerRockBody:
+			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerRockBody}})
+			ring.MakeEffect(c.GetFightingPos(), string(Healing), 400) // FIXME
+			c.RaiseCharacteristic("Defense", damages)
+		case PowerGlaciation:
+			for _, f := range to {
+				EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerRockBody}})
+				ring.MakeEffect(f.GetFightingPos(), string(Ice), 600)
+				f.TakeDamages(damages)
+				f.LowerCharacteristic("Dexterity", damages/10)
+			}
+		case PowerStorm:
+			for _, f := range to {
+				ring.MakeStorm(f.GetFightingPos(), damages, Right, 200)
+				f.TakeDamages(damages)
+			}
+		case PowerLightness:
+			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerLightness}})
+			ring.MakeEffect(c.GetFightingPos(), string(Healing), 400) // FIXME
+			c.RaiseCharacteristic("Evasion", damages)
+		case PowerHealing:
+			EM.Dispatch(&Event{Action: ActionPower, Payload: map[string]string{"type": PowerHealing}})
+			ring.MakeEffect(c.GetFightingPos(), string(Healing), 400)
+			c.Health.Restore(damages)
+		case PowerCalm:
+			for _, f := range to {
+				ring.MakeEffect(f.GetFightingPos(), string(Calm), 400)
+				f.LowerCharacteristic("Aggressiveness", damages)
+			}
+		case PowerInvocation:
+			monster := NewInvokedSpirit()
+			// TODO : case enemy
+			monster.FightingPos = Pos{X: c.FightingPos.X, Y: c.FightingPos.Y + 1}
+			ring.AddFriend(monster)
+			c.Will.RaiseXp(monster.Strength.Initial / 10)
+		case PowerFlames:
+			for _, f := range to {
+				ring.MakeFlame(f.GetFightingPos(), damages, 400)
+				f.TakeDamages(damages)
+			}
+		default:
+			log.Println("power default : ", att.MagickUID)
+			for _, f := range to {
+				f.TakeDamages(damages)
+			}
+		}
+		c.LooseEnergy(att.EnergyCost)
+		c.Intelligence.RaiseXp(1)
+		targetsNumber := len(to)
+		if targetsNumber == 0 {
+			targetsNumber = 1
+		}
+		c.Will.RaiseXp(damages * targetsNumber / 10)
+		c.Energy.RaiseXp(att.EnergyCost)
+		c.RaiseElementalAffinity(att.MagickElement, 1)
+		c.RaiseMagickLevel(att.MagickCategory, 1)
+	}
 }

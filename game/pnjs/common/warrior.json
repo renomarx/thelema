@@ -20,12 +20,12 @@
       ]
     },
     "get_training": {
-      "messages": ["Je peux vous apprendre la technique Bear Assault, mais il vous en coutera 100§"],
+      "messages": ["Je peux vous apprendre la technique Charge de l'ours, mais il vous en coutera 100§"],
       "choices": [
         {
           "cmd": "C'est d'accord",
           "required": {"strength": 25, "gold": 100},
-          "actions": ["learn_attack:Bear Assault","gold_taken:100"],
+          "actions": ["learn_attack:bear_assault","gold_taken:100"],
           "node": "training_done"
         },
         {

@@ -90,16 +90,14 @@ func (ui *UI) drawFightingEnemy(e *game.Enemy, offsetX, offsetY int) {
 	tileX := 64 * ((-1*e.Xb + Res) / (Res / 8))
 	if e.IsAttacking() {
 		att := e.SelectedAttack
-		if att != nil {
-			switch att.Type {
-			case game.AttackTypePhysical:
-				xb = (ui.WindowHeight / 3) * e.AttackPos / 32
-				tileY = tileY + 4*64
-				tileX = 64 * (6 * e.AttackPos / 32)
-			case game.AttackTypeMagick:
-				tileY = tileY - 8*64
-				tileX = 64 * (e.AttackPos / 6)
-			}
+		switch att.Type {
+		case game.AttackTypePhysical:
+			xb = (ui.WindowHeight / 3) * e.AttackPos / 32
+			tileY = tileY + 4*64
+			tileX = 64 * (6 * e.AttackPos / 32)
+		case game.AttackTypeMagick:
+			tileY = tileY - 8*64
+			tileX = 64 * (e.AttackPos / 6)
 		}
 	}
 	if e.IsDead() {
@@ -243,9 +241,9 @@ func (ui *UI) drawFightingAttacks(fr *game.FightingRing) {
 		tex = ui.GetTexture(fmt.Sprintf("Vitesse: %d", selectedAttack.GetSpeed(&p.Character)), TextSizeXL, ColorWhite)
 		_, _, w, h, _ = tex.Query()
 		ui.renderer.Copy(tex, nil, &sdl.Rect{int32(offsetX), int32(offsetY), w, h})
-		// tex = ui.GetTexture(fmt.Sprintf("Précision: %d", selectedAttack.Accuracy), TextSizeXL, ColorWhite)
-		// _, _, w, h, _ = tex.Query()
-		// ui.renderer.Copy(tex, nil, &sdl.Rect{int32(offsetX), int32(offsetY + 32), w, h})
+		tex = ui.GetTexture(fmt.Sprintf("Précision: %d", selectedAttack.Accuracy)+"%", TextSizeXL, ColorWhite)
+		_, _, w, h, _ = tex.Query()
+		ui.renderer.Copy(tex, nil, &sdl.Rect{int32(offsetX), int32(offsetY + 32), w, h})
 
 	}
 }
