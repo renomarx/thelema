@@ -6,6 +6,7 @@ type Invocation struct {
 
 func NewInvokedSpirit() *Invocation {
 	monster := &Invocation{}
+	monster.Character = NewCharacter()
 	monster.Rune = string(Spirit)
 	monster.Name = "Invoked Spirit"
 	monster.Health.Init(200)

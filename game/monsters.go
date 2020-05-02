@@ -8,6 +8,7 @@ type Monster struct {
 
 func NewMonster(mt *MonsterType) *Monster {
 	monster := &Monster{}
+	monster.Character = NewCharacter()
 	monster.Speed.Init(10)
 	monster.Rune = string(mt.Tile)
 	monster.Name = mt.Name

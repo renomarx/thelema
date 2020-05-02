@@ -73,8 +73,8 @@ func (ui *UI) GetInput() {
 					input.Typ = game.Right
 				case ui.Keymap[ui.Game.Config.Keymap.Action]:
 					input.Typ = game.Action
-				case ui.Keymap[ui.Game.Config.Keymap.Power]:
-					input.Typ = game.Power
+				case ui.Keymap[ui.Game.Config.Keymap.Action2]:
+					input.Typ = game.Action2
 				case ui.Keymap[ui.Game.Config.Keymap.Escape]:
 					input.Typ = game.Escape
 				case ui.Keymap[ui.Game.Config.Keymap.Select]:

@@ -30,7 +30,7 @@ func (ui *UI) drawCharacter(p *game.Character, texture *sdl.Texture) {
 	}
 	if p.IsPowerUsing {
 		tileY = tileY - 8*64
-		tileX = 64 * (p.PowerPos / 6)
+		tileX = 64 * (p.PowerUsingStage / 6)
 	}
 	if p.IsDead() {
 		tileY = 20 * 64

@@ -42,6 +42,7 @@ type PnjConf struct {
 
 func NewPnj(p Pos, name string) *Pnj {
 	pnj := &Pnj{}
+	pnj.Character = NewCharacter()
 	pnj.Name = name
 	pnj.Speed.Init(5)
 	pnj.Health.Init(200)
@@ -61,7 +62,6 @@ func NewPnj(p Pos, name string) *Pnj {
 	pnj.LastActionTime = time.Now()
 	pnj.LookAt = Left
 	pnj.Talkable = true
-	pnj.Powers = make(map[string]*PlayerPower)
 
 	return pnj
 }
@@ -308,7 +308,7 @@ func (pnj *Pnj) Teleport(levelName string, g *Game) {
 	level := g.Levels[levelName]
 	pnj.Talkable = false
 	pnj.IsPowerUsing = true
-	for pnj.PowerPos = 0; pnj.PowerPos < CaseLen; pnj.PowerPos++ {
+	for pnj.PowerUsingStage = 0; pnj.PowerUsingStage < CaseLen; pnj.PowerUsingStage++ {
 		pnj.adaptSpeed()
 	}
 	pnj.ChangeLevel(g.Level, level)

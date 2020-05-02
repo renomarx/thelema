@@ -1,7 +1,5 @@
 package game
 
-import "time"
-
 func GeneratePlayers() []*Player {
 	var players []*Player
 	players = append(players, NewAsmodeus())
@@ -16,11 +14,8 @@ func GeneratePlayers() []*Player {
 
 func newPlayer(health, energy, stg, dex, bea, wil, intel, cha, rg int) *Player {
 	player := &Player{}
+	player.Character = NewCharacter()
 	player.Speed.Init(10)
-	player.X = 0
-	player.Y = 0
-	player.Xb = 0
-	player.Yb = 0
 	player.Health.Init(health)
 	player.Energy.Init(energy)
 	player.Strength.Init(stg)
@@ -31,13 +26,8 @@ func newPlayer(health, energy, stg, dex, bea, wil, intel, cha, rg int) *Player {
 	player.Charisma.Init(cha)
 	player.RegenerationSpeed.Init(rg)
 	player.Luck.Init(20)
-	player.IsPowerUsing = false
-	player.IsTaking = false
-	player.Inventory = NewInventory()
-	player.Library = NewLibrary()
 	attacks := Attacks()
 	player.Attacks = attacks[:2]
-	player.Powers = make(map[string]*PlayerPower)
 	// TODO : load only first powers
 	player.NewPower(PowerBrutalStrength)
 	player.NewPower(PowerQuickening)
@@ -51,10 +41,10 @@ func newPlayer(health, energy, stg, dex, bea, wil, intel, cha, rg int) *Player {
 	player.NewPower(PowerInvocation)
 	player.NewPower(PowerCalm)
 	player.CurrentPower = player.Powers[PowerHealing]
-	player.LastRegenerationTime = time.Now()
-	player.ElementalAffinities = make(map[MagickElement]int)
-	player.MagickLevel = make(map[MagickCategory]int)
+
 	player.LoadPlayerMenu()
+	player.Inventory = NewInventory()
+	player.Library = NewLibrary()
 
 	return player
 }

@@ -47,7 +47,7 @@ const (
 	Right
 	Quit
 	Action
-	Power
+	Action2
 	StayStill
 	Escape
 	Select

@@ -90,7 +90,7 @@ func (p *Player) Move(g *Game) {
 	case Action:
 		p.Talk(g, posTo)
 		p.Take(g, posTo)
-	case Power:
+	case Action2:
 		p.PowerUse(g, posTo)
 	default:
 	}
@@ -266,7 +266,7 @@ func (p *Player) Recruit(pnj *Pnj, g *Game) {
 func (c *Player) PowerUse(g *Game, posTo Pos) {
 	if c.Energy.Current > 0 {
 		c.IsPowerUsing = true
-		for c.PowerPos = 0; c.PowerPos < 32; c.PowerPos++ {
+		for c.PowerUsingStage = 0; c.PowerUsingStage < 32; c.PowerUsingStage++ {
 			c.CurrentPower.adaptSpeed()
 		}
 		switch c.CurrentPower.UID {

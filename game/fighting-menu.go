@@ -60,7 +60,7 @@ func (fr *FightingRing) HandleInputFightingMenu(input *Input) {
 				fr.LastTarget()
 				DispatchEventMenu(ActionMenuSelect)
 				adaptMenuSpeed()
-			case Power:
+			case Action2:
 				fr.AttackTargetSelectionOpen = false
 			case Action:
 				fr.SelectedPlayerAction = "attack"
@@ -82,7 +82,7 @@ func (fr *FightingRing) HandleInputFightingMenu(input *Input) {
 				fr.LastPossibleAttack()
 				DispatchEventMenu(ActionMenuSelect)
 				adaptMenuSpeed()
-			case Power:
+			case Action2:
 				fr.AttacksMenuOpen = false
 				DispatchEventMenu(ActionMenuClose)
 				menu.ClearSelected()

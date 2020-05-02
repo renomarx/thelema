@@ -5,7 +5,7 @@
     "left": "left",
     "right": "right",
     "action": "a",
-    "power": "z",
+    "action2": "z",
     "speed": "e",
     "shadow": "s",
     "meditate": "d",

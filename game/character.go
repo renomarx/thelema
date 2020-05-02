@@ -74,13 +74,22 @@ type Fighter struct {
 	SelectedAttack Attack
 	isAttacking    bool
 	AttackPos      int
-	PowerPos       int
 	damagesTaken   int
+}
+
+type PowerUser struct {
+	Powers              map[string]*Power
+	CurrentPower        *Power
+	IsPowerUsing        bool
+	PowerUsingStage     int
+	ElementalAffinities map[MagickElement]int
+	MagickLevel         map[MagickCategory]int
 }
 
 type Character struct {
 	MovingObject
 	Fighter
+	PowerUser
 	LookAt               InputType
 	Name                 string
 	Health               Characteristic
@@ -100,16 +109,20 @@ type Character struct {
 	Affinity             string
 	ActionPoints         float64
 	LastActionTime       time.Time
+	LastRegenerationTime time.Time
 	Dead                 bool
 	VisionRange          int
-	Powers               map[string]*PlayerPower
-	CurrentPower         *PlayerPower
-	LastRegenerationTime time.Time
-	IsPowerUsing         bool
 	Shadow               bool
 	Meditating           bool
-	ElementalAffinities  map[MagickElement]int
-	MagickLevel          map[MagickCategory]int
+}
+
+func NewCharacter() Character {
+	c := Character{}
+	c.LastRegenerationTime = time.Now()
+	c.Powers = make(map[string]*Power)
+	c.ElementalAffinities = make(map[MagickElement]int)
+	c.MagickLevel = make(map[MagickCategory]int)
+	return c
 }
 
 func (c *Character) GetName() string {

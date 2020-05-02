@@ -83,7 +83,7 @@ const MagickElementAir = "air"
 const MagickElementFire = "fire"
 const MagickElementEther = "ether"
 
-type PlayerPower struct {
+type Power struct {
 	UID         string
 	Tile        Tile
 	Strength    int
@@ -98,17 +98,17 @@ type PlayerPower struct {
 	Element     MagickElement
 }
 
-type Magicks []PlayerPower
+type Magicks []Power
 
 type MagickCategory string
 
 type MagickElement string
 
-func (pow *PlayerPower) adaptSpeed() {
+func (pow *Power) adaptSpeed() {
 	time.Sleep(time.Duration(CharacterDeltaTime/pow.Speed) * time.Millisecond)
 }
 
-func (m Magicks) GetPower(uid string) *PlayerPower {
+func (m Magicks) GetPower(uid string) *Power {
 	for _, pow := range m {
 		if pow.UID == uid {
 			return &pow
@@ -121,7 +121,7 @@ func Powers() Magicks {
 	return Magicks{
 		// Physical
 		//Earth
-		PlayerPower{
+		Power{
 			UID:         PowerBrutalStrength,
 			Speed:       20,
 			Energy:      30,
@@ -133,7 +133,7 @@ func Powers() Magicks {
 			Category:    MagickCategoryPhysical,
 			Element:     MagickElementEarth,
 		},
-		PlayerPower{
+		Power{
 			UID:         PowerQuickening,
 			Speed:       20,
 			Energy:      20,
@@ -145,7 +145,7 @@ func Powers() Magicks {
 			Category:    MagickCategoryPhysical,
 			Element:     MagickElementEarth,
 		},
-		PlayerPower{
+		Power{
 			UID:         PowerRockBody,
 			Speed:       20,
 			Energy:      40,
@@ -158,7 +158,7 @@ func Powers() Magicks {
 			Element:     MagickElementEarth,
 		},
 		// Water
-		PlayerPower{
+		Power{
 			UID:         PowerCharm,
 			Speed:       20,
 			Energy:      10,
@@ -171,7 +171,7 @@ func Powers() Magicks {
 			Category:    MagickCategoryPhysical,
 			Element:     MagickElementWater,
 		},
-		PlayerPower{
+		Power{
 			UID:         PowerGlaciation,
 			Speed:       10,
 			Energy:      30,
@@ -185,7 +185,7 @@ func Powers() Magicks {
 			Element:     MagickElementWater,
 		},
 		// Air
-		PlayerPower{
+		Power{
 			UID:         PowerStorm,
 			Speed:       15,
 			Energy:      30,
@@ -198,7 +198,7 @@ func Powers() Magicks {
 			Category:    MagickCategoryPhysical,
 			Element:     MagickElementAir,
 		},
-		PlayerPower{
+		Power{
 			UID:         PowerLightness,
 			Speed:       20,
 			Energy:      40,
@@ -213,7 +213,7 @@ func Powers() Magicks {
 
 		// Astral
 		// Earth
-		PlayerPower{
+		Power{
 			UID:         PowerHealing,
 			Speed:       4,
 			Energy:      20,
@@ -226,7 +226,7 @@ func Powers() Magicks {
 			Element:     MagickElementEarth,
 		},
 		// Water
-		PlayerPower{
+		Power{
 			UID:         PowerCalm,
 			Tile:        CalmIcon,
 			Speed:       10,
@@ -240,7 +240,7 @@ func Powers() Magicks {
 			Element:     MagickElementWater,
 		},
 		// Fire
-		PlayerPower{
+		Power{
 			UID:         PowerInvocation,
 			Speed:       5,
 			Energy:      50,
@@ -254,7 +254,7 @@ func Powers() Magicks {
 
 		// Mental
 		// Ether
-		PlayerPower{
+		Power{
 			UID:         PowerDeadSpeaking,
 			Tile:        NecromancyIcon,
 			Speed:       5,
@@ -267,7 +267,7 @@ func Powers() Magicks {
 
 		// High
 		// Fire
-		PlayerPower{
+		Power{
 			UID:         PowerFlames,
 			Speed:       3,
 			Energy:      200,
@@ -283,7 +283,7 @@ func Powers() Magicks {
 	}
 }
 
-func (p *Player) NewPower(powername string) *PlayerPower {
+func (p *Player) NewPower(powername string) *Power {
 	_, exists := p.Powers[powername]
 	if !exists {
 		magicks := Powers()

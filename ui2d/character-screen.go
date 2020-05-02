@@ -160,7 +160,7 @@ func (ui *UI) DrawPowers(offsetH int32) int32 {
 	return offsetH
 }
 
-func (ui *UI) DrawPower(power *game.PlayerPower, offsetX, offsetH int32) int32 {
+func (ui *UI) DrawPower(power *game.Power, offsetX, offsetH int32) int32 {
 	_, h := ui.DrawText(
 		power.Name,
 		TextSizeM,
