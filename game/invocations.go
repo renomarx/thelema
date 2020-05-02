@@ -4,20 +4,21 @@ type Invocation struct {
 	Character
 }
 
-func NewInvokedSpirit() *Invocation {
+func NewInvokedSpirit(strength int) *Invocation {
 	monster := &Invocation{}
 	monster.Character = NewCharacter()
 	monster.Rune = string(Spirit)
 	monster.Name = "Invoked Spirit"
-	monster.Health.Init(200)
-	monster.Energy.Init(200)
-	monster.Strength.Init(30)
-	monster.Dexterity.Init(30)
-	monster.Will.Init(20)
-	monster.Intelligence.Init(20)
+	monster.Health.Init(strength * 10)
+	monster.Energy.Init(strength * 10)
+	monster.Strength.Init(strength)
+	monster.Dexterity.Init(strength)
+	monster.Will.Init(strength)
+	monster.Intelligence.Init(strength)
 	monster.Luck.Init(20)
 	monster.Beauty.Init(0)
 	monster.Speed.Init(10)
+	monster.Aggressiveness.Init(strength * 10)
 	return monster
 }
 

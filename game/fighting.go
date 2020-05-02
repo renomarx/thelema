@@ -210,7 +210,7 @@ func (ring *FightingRing) PlayRound(g *Game) {
 				Action: ActionAttack,
 			})
 		}
-		if !ring.IsOpen {
+		if !ring.Running {
 			return
 		}
 	}

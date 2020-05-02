@@ -36,6 +36,7 @@ type PnjConf struct {
 	Intelligence      int                   `json:"intelligence"`
 	Charisma          int                   `json:"charisma"`
 	Luck              int                   `json:"luck"`
+	Aggressiveness    int                   `json:"aggressiveness"`
 	RegenerationSpeed int                   `json:"regeneration_speed"`
 	Powers            []string              `json:"powers"`
 }
@@ -55,6 +56,7 @@ func NewPnj(p Pos, name string) *Pnj {
 	pnj.Charisma.Init(20)
 	pnj.RegenerationSpeed.Init(1)
 	pnj.Luck.Init(10)
+	pnj.Aggressiveness.Init(200)
 	pnj.ActionPoints = 0.0
 	pnj.Pos = p
 	pnj.Xb = 0
@@ -105,6 +107,9 @@ func (p *Pnj) LoadPnj(filename string) (string, Pos) {
 	}
 	if conf.Luck != 0 {
 		p.Luck.Init(conf.Luck)
+	}
+	if conf.Aggressiveness != 0 {
+		p.Aggressiveness.Init(conf.Aggressiveness)
 	}
 	if conf.RegenerationSpeed != 0 {
 		p.RegenerationSpeed.Init(conf.RegenerationSpeed)

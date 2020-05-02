@@ -484,11 +484,10 @@ func (c *Character) doAttack(ring *FightingRing, to []FighterInterface) {
 				f.LowerCharacteristic("Aggressiveness", damages)
 			}
 		case PowerInvocation:
-			monster := NewInvokedSpirit()
+			monster := NewInvokedSpirit(damages)
 			// TODO : case enemy
 			monster.FightingPos = Pos{X: c.FightingPos.X, Y: c.FightingPos.Y + 1}
 			ring.AddFriend(monster)
-			c.Will.RaiseXp(monster.Strength.Initial / 10)
 		case PowerFlames:
 			for _, f := range to {
 				ring.MakeFlame(f.GetFightingPos(), damages, 400)

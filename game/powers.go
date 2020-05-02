@@ -244,6 +244,7 @@ func Powers() Magicks {
 			UID:         PowerInvocation,
 			Speed:       5,
 			Energy:      50,
+			Strength:    20,
 			Tile:        InvocationIcon,
 			Description: "Invoque une créature astrale.",
 			Name:        "Invocation",
