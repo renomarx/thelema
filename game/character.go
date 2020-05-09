@@ -400,7 +400,7 @@ func (c *Character) GetAttacks() []Attack {
 		attacks = append(attacks, att)
 	}
 	for _, pow := range c.Powers {
-		if pow.IsAttack {
+		if pow.IsAttack && c.Energy.Current > pow.Energy {
 			att := Attack{
 				Strength:       pow.Strength,
 				Name:           pow.Name,
