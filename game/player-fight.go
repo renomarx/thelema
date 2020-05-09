@@ -1,9 +1,5 @@
 package game
 
-import (
-	"math/rand"
-)
-
 func (p *Player) TakeDamages(damage int) bool {
 	done := p.Character.TakeDamages(damage)
 	if !done {
@@ -14,24 +10,6 @@ func (p *Player) TakeDamages(damage int) bool {
 	}
 	p.Health.RaiseXp(damage)
 	return true
-}
-
-func (p *Player) MeetMonsters(g *Game) {
-	if p.Shadow {
-		return
-	}
-	l := g.Level
-	r := rand.Intn(100000) % 100
-	cc := l.Map[p.Z][p.Y][p.X]
-	if r >= cc.MonstersProbability {
-		return
-	}
-	switch cc.T {
-	// TODO : other floor types
-	case MonsterFloor:
-		bestiary := Bestiary()
-		g.FightMonsters(bestiary)
-	}
 }
 
 func (p *Player) ChooseAction(ring *FightingRing) int {

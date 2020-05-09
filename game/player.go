@@ -103,7 +103,7 @@ func (p *Player) beforeMovingActions(g *Game) {
 func (p *Player) afterMovingActions(g *Game) {
 	p.DispatchWalkingEvent(g)
 	p.openPortal(g, p.Pos)
-	p.MeetMonsters(g)
+	g.MeetMonsters()
 }
 
 func (p *Player) DispatchWalkingEvent(g *Game) {

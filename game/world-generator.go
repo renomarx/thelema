@@ -23,6 +23,7 @@ func (g *Game) GenerateWorld() {
 	g.loadPnjsVIP()
 	g.loadBooks()
 	g.loadQuestsObjects()
+	g.LoadMonsters()
 	g.Level = firstLevel
 }
 

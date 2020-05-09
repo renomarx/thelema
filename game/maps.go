@@ -19,7 +19,7 @@ func (g *Game) LoadMapTemplate(mapName, levelName string) *Level {
 	for FileExists(filename) {
 		g.doLoadMapTemplate(filename, z, level)
 		z++
-		filename = dirpath + "/maps/" + mapName + strconv.Itoa(z) + ".map"
+		filename = dirpath + "/maps/" + mapName + "." + strconv.Itoa(z) + ".map"
 	}
 
 	return level

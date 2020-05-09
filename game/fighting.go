@@ -1,7 +1,6 @@
 package game
 
 import (
-	"math/rand"
 	"time"
 )
 
@@ -56,24 +55,6 @@ type FightingStage string
 
 const FightingChoice FightingStage = "CHOICE"
 const FightingAttacks FightingStage = "ATTACKS"
-
-func (g *Game) FightMonsters(bestiary []*MonsterType) {
-	var enemies []FighterInterface
-	nb := rand.Intn(2) + 1
-	for i := 0; i < nb; i++ {
-		m := rand.Intn(len(bestiary))
-		proba := rand.Intn(100)
-		mt := bestiary[m]
-		for proba > mt.Probability {
-			m := rand.Intn(len(bestiary))
-			proba = rand.Intn(100)
-			mt = bestiary[m]
-		}
-		mo := NewMonster(mt)
-		enemies = append(enemies, mo)
-	}
-	g.Fight(enemies)
-}
 
 func (g *Game) Fight(enemies []FighterInterface) {
 	EM.Dispatch(&Event{

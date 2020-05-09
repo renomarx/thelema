@@ -12,6 +12,7 @@ type Level struct {
 	Paused     bool
 	PRay       int
 	Discovered bool
+	Bestiary   []*MonsterType
 }
 
 type Case struct {
