@@ -1,7 +1,6 @@
 package game
 
 import (
-	"log"
 	"math/rand"
 )
 
@@ -213,7 +212,6 @@ func (g *Game) LoadMonsters() {
 		TScorpion(),
 	}
 	for name, level := range g.Levels {
-		log.Printf("Loading monsters of level %s", name)
 		level.Bestiary = defaultMonsters
 		b, e := specificMonsters[name]
 		if e {

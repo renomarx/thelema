@@ -402,15 +402,16 @@ func (c *Character) GetAttacks() []Attack {
 	for _, pow := range c.Powers {
 		if pow.IsAttack {
 			att := Attack{
-				Strength:      pow.Strength,
-				Name:          pow.Name,
-				EnergyCost:    pow.Energy,
-				Speed:         pow.Speed,
-				Range:         pow.Range,
-				Accuracy:      100,
-				Type:          AttackTypeMagick,
-				MagickUID:     pow.UID,
-				MagickElement: pow.Element,
+				Strength:       pow.Strength,
+				Name:           pow.Name,
+				EnergyCost:     pow.Energy,
+				Speed:          pow.Speed,
+				Range:          pow.Range,
+				Accuracy:       100,
+				Type:           AttackTypeMagick,
+				MagickUID:      pow.UID,
+				MagickElement:  pow.Element,
+				MagickCategory: pow.Category,
 			}
 			attacks = append(attacks, att)
 		}
