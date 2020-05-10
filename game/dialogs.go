@@ -15,9 +15,9 @@ type Dialog struct {
 }
 
 type StoryNode struct {
-	Messages   []string       `json:"messages"`
-	AllChoices []*StoryChoice `json:"choices"`
-	Choices    []*StoryChoice
+	Messages   []string      `json:"messages"`
+	AllChoices []StoryChoice `json:"choices"`
+	Choices    []StoryChoice
 }
 
 type StoryChoice struct {
@@ -99,13 +99,13 @@ func (n *StoryNode) SetHighlightedIndex(i int) {
 	n.Choices[idx].Highlighted = true
 }
 
-func (n *StoryNode) GetCurrentChoice() *StoryChoice {
+func (n *StoryNode) GetCurrentChoice() StoryChoice {
 	idx := n.GetHighlightedIndex()
 	return n.Choices[idx]
 }
 
 func (n *StoryNode) filterPossibleChoices(p *Player) {
-	var res []*StoryChoice
+	var res []StoryChoice
 	for _, choice := range n.AllChoices {
 		isPossible := true
 		for _, questStep := range choice.Quest.StepsMandatory {
@@ -164,15 +164,15 @@ func (n *StoryNode) filterPossibleChoices(p *Player) {
 	n.Choices = res
 }
 
-func (g *Game) UpdatePnjDialog(fromName, pnjName, node string) {
+func (g *Game) UpdateNpcDialog(fromName, npcName, node string) {
 	from, exists := g.Levels[fromName]
 	if !exists {
 		panic("Level " + fromName + " does not exist")
 	}
-	pnj := from.SearchPnj(pnjName)
-	if pnj == nil {
-		panic("Pnj " + pnjName + " on level " + fromName + " does not exist")
+	npc := from.SearchNpc(npcName)
+	if npc == nil {
+		panic("Npc " + npcName + " on level " + fromName + " does not exist")
 	}
-	log.Printf("Updating dialog node of %s to %s", pnjName, node)
-	pnj.Dialog.SetCurrentNode(node)
+	log.Printf("Updating dialog node of %s to %s", npcName, node)
+	npc.Dialog.SetCurrentNode(node)
 }

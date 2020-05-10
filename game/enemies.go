@@ -4,9 +4,9 @@ type Enemy struct {
 	Character
 }
 
-func (level *Level) MakeEnemy(pnj *Pnj) *Enemy {
+func (level *Level) MakeEnemy(npc *Npc) *Enemy {
 	e := &Enemy{}
-	e.Character = pnj.Character
+	e.Character = npc.Character
 	e.Aggressiveness.Init(20)
 	e.Speed.Init(10)
 	return e

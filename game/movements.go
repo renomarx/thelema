@@ -1,7 +1,7 @@
 package game
 
-func isThereAPnj(level *Level, pos Pos) bool {
-	return level.GetPnj(pos) != nil
+func isThereANpc(level *Level, pos Pos) bool {
+	return level.GetNpc(pos) != nil
 }
 
 func isThereAPlayerCharacter(level *Level, pos Pos) bool {
@@ -27,7 +27,7 @@ func canGo(level *Level, pos Pos) bool {
 	if isThereABlockingObject(level, pos) {
 		return false
 	}
-	if isThereAPnj(level, pos) {
+	if isThereANpc(level, pos) {
 		return false
 	}
 	return true

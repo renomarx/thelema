@@ -20,7 +20,7 @@ const (
 func (g *Game) GenerateWorld() {
 	firstLevel := g.loadLevels()
 	g.loadPortals()
-	g.loadPnjsVIP()
+	g.loadNpcsVIP()
 	g.loadBooks()
 	g.loadQuestsObjects()
 	g.LoadMonsters()
@@ -58,7 +58,7 @@ func (g *Game) loadCities() {
 			if fileArr[1] == "map" {
 				mapName := "cities/" + levelName
 				l := g.LoadMapTemplate(mapName, levelName)
-				g.generatePnjs(l, rand.Intn(len(l.Map))+1)
+				g.generateNpcs(l, rand.Intn(len(l.Map))+1)
 				g.Levels[levelName] = l
 				g.loadHouses(mapName, levelName)
 			}
@@ -148,22 +148,22 @@ func (g *Game) addBidirectionalPortal(srcName string, srcPos Pos, dstName string
 	dstLevel.AddPortal(dstPos, &Portal{LevelTo: srcName, PosTo: srcPos, Key: key})
 }
 
-func (g *Game) loadPnjsVIP() {
-	pnjNames := LoadFilenames(g.GameDir + "/pnjs")
-	for _, filename := range pnjNames {
+func (g *Game) loadNpcsVIP() {
+	npcNames := LoadFilenames(g.GameDir + "/npcs")
+	for _, filename := range npcNames {
 		fileArr := strings.Split(filename, ".")
 		if len(fileArr) == 2 && fileArr[1] == "json" {
 			p := Pos{}
-			pnj := NewPnj(p, fileArr[0])
-			filename := g.GameDir + "/pnjs/" + pnj.Name + ".json"
-			level, pos := pnj.LoadPnj(filename)
+			npc := NewNpc(p, fileArr[0])
+			filename := g.GameDir + "/npcs/" + npc.Name + ".json"
+			level, pos := npc.LoadNpc(filename)
 
 			l, exists := g.Levels[level]
 			if !exists {
 				panic("Level " + level + " does not exist")
 			}
-			pnj.Pos = pos
-			l.Map[pos.Z][pos.Y][pos.X].Pnj = pnj
+			npc.Pos = pos
+			l.Map[pos.Z][pos.Y][pos.X].Npc = npc
 		}
 	}
 }
@@ -262,8 +262,8 @@ func (g *Game) loadQuestsObjects() {
 	g.QuestsObjects = objectsByRune
 }
 
-func (g *Game) generatePnjs(l *Level, nbPnjs int) {
-	pnjNames := []string{
+func (g *Game) generateNpcs(l *Level, nbNpcs int) {
+	npcNames := []string{
 		"warrior",
 		"doctor",
 		"policeman",
@@ -271,7 +271,7 @@ func (g *Game) generatePnjs(l *Level, nbPnjs int) {
 		"lord",
 		"monk",
 	} // TODO : different number for each type
-	pnjVoices := map[string]string{
+	npcVoices := map[string]string{
 		"warrior":   VoiceMaleStandard,
 		"doctor":    VoiceFemaleStandard,
 		"policeman": VoiceMaleStandard,
@@ -279,15 +279,15 @@ func (g *Game) generatePnjs(l *Level, nbPnjs int) {
 		"lord":      VoiceMaleStandard,
 		"monk":      VoiceMaleStandard,
 	} // TODO : better sex handling
-	for i := 0; i < nbPnjs; i++ {
-		j := i % len(pnjNames)
+	for i := 0; i < nbNpcs; i++ {
+		j := i % len(npcNames)
 		pos := l.GetRandomFreePos(0) // FIXME
 		if pos != nil {
-			pnj := NewPnj(*pos, pnjNames[j])
-			pnj.Voice = pnjVoices[pnjNames[j]]
-			filename := g.GameDir + "/pnjs/common/" + pnj.Name + ".json"
-			pnj.LoadPnj(filename)
-			l.Map[pos.Z][pos.Y][pos.X].Pnj = pnj
+			npc := NewNpc(*pos, npcNames[j])
+			npc.Voice = npcVoices[npcNames[j]]
+			filename := g.GameDir + "/npcs/common/" + npc.Name + ".json"
+			npc.LoadNpc(filename)
+			l.Map[pos.Z][pos.Y][pos.X].Npc = npc
 		}
 	}
 }

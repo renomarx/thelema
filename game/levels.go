@@ -20,7 +20,7 @@ type Case struct {
 	Portal              *Portal
 	Object              *Object
 	Effect              *Effect
-	Pnj                 *Pnj
+	Npc                 *Npc
 	MonstersProbability int
 }
 
@@ -36,13 +36,13 @@ func (l *Level) GetObject(p Pos) *Object {
 	return nil
 }
 
-func (l *Level) GetPnj(p Pos) *Pnj {
+func (l *Level) GetNpc(p Pos) *Npc {
 	x := p.X
 	y := p.Y
 	z := p.Z
 	if y >= 0 && y < len(l.Map[z]) {
 		if x >= 0 && x < len(l.Map[z][y]) {
-			return l.Map[z][y][x].Pnj
+			return l.Map[z][y][x].Npc
 		}
 	}
 	return nil
@@ -85,7 +85,7 @@ func (l *Level) handleMap() {
 			minX, maxX := l.GetXBounds(z, y)
 			for x := minX; x < maxX; x++ {
 				c := l.Map[z][y][x]
-				l.handlePnj(c.Pnj)
+				l.handleNpc(c.Npc)
 			}
 		}
 	}
@@ -119,10 +119,10 @@ func (l *Level) GetXBounds(z, y int) (int, int) {
 	return minX, maxX
 }
 
-func (l *Level) handlePnj(m *Pnj) {
+func (l *Level) handleNpc(m *Npc) {
 	if m != nil && !m.IsPlaying {
 		m.IsPlaying = true
-		go func(m *Pnj) {
+		go func(m *Npc) {
 			m.Update(l)
 			m.IsPlaying = false
 		}(m)
@@ -156,33 +156,33 @@ func (level *Level) AddPortal(posFrom Pos, portal *Portal) {
 	level.Map[posFrom.Z][posFrom.Y][posFrom.X].Portal = portal
 }
 
-func (g *Game) SendToLevel(fromName, pnjName, toName string) {
+func (g *Game) SendToLevel(fromName, npcName, toName string) {
 	from, exists := g.Levels[fromName]
 	if !exists {
 		panic("Level " + fromName + " does not exist")
 	}
-	pnj := from.SearchPnj(pnjName)
-	if pnj == nil {
-		panic("Pnj " + pnjName + " on level " + fromName + " does not exist")
+	npc := from.SearchNpc(npcName)
+	if npc == nil {
+		panic("Npc " + npcName + " on level " + fromName + " does not exist")
 	}
 	to, exists := g.Levels[toName]
 	if !exists {
 		panic("Level " + toName + " does not exist")
 	}
-	pnj.ChangeLevel(from, to)
+	npc.ChangeLevel(from, to)
 }
 
-func (l *Level) SearchPnj(pnjName string) *Pnj {
+func (l *Level) SearchNpc(npcName string) *Npc {
 	minZ, maxZ := l.GetZBounds()
 	for z := minZ; z < maxZ; z++ {
 		minY, maxY := l.GetYBounds(z)
 		for y := minY; y < maxY; y++ {
 			minX, maxX := l.GetXBounds(z, y)
 			for x := minX; x < maxX; x++ {
-				if l.Map[z][y][x].Pnj != nil {
-					pnj := l.Map[z][y][x].Pnj
-					if pnj.Name == pnjName {
-						return pnj
+				if l.Map[z][y][x].Npc != nil {
+					npc := l.Map[z][y][x].Npc
+					if npc.Name == npcName {
+						return npc
 					}
 				}
 			}

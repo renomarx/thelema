@@ -63,7 +63,7 @@ func (ui *UI) drawFightingPlayer(fr *game.FightingRing, offsetX, offsetY int) {
 func (ui *UI) drawFightingEnemies(fr *game.FightingRing, offsetX, offsetY int) {
 	if len(fr.Enemies) > 0 {
 		for i, e := range fr.Enemies {
-			enemy, isPnj := e.(*game.Enemy)
+			enemy, isNpc := e.(*game.Enemy)
 			if fr.AttackTargetSelectionOpen {
 				att := fr.PossibleAttacks.List[fr.PossibleAttacks.Selected]
 				if i >= fr.TargetSelected && i < fr.TargetSelected+att.Range {
@@ -72,7 +72,7 @@ func (ui *UI) drawFightingEnemies(fr *game.FightingRing, offsetX, offsetY int) {
 						&sdl.Rect{X: int32(offsetX), Y: int32(offsetY), W: 64, H: 64})
 				}
 			}
-			if isPnj {
+			if isNpc {
 				ui.drawFightingEnemy(enemy, offsetX, offsetY)
 			} else {
 				ui.drawFightingMonster(e, offsetX, offsetY)
@@ -84,7 +84,7 @@ func (ui *UI) drawFightingEnemies(fr *game.FightingRing, offsetX, offsetY int) {
 }
 
 func (ui *UI) drawFightingEnemy(e *game.Enemy, offsetX, offsetY int) {
-	texture := ui.pnjTextures[e.Name]
+	texture := ui.npcTextures[e.Name]
 	xb := 0
 	tileY := 9 * 64
 	tileX := 64 * ((-1*e.Xb + Res) / (Res / 8))
@@ -153,7 +153,7 @@ func (ui *UI) drawFightingFriends(fr *game.FightingRing, offsetX, offsetY int) {
 }
 
 func (ui *UI) drawFightingFriend(f *game.Friend, offsetX, offsetY int) {
-	texture := ui.pnjTextures[f.Name]
+	texture := ui.npcTextures[f.Name]
 	xb := 0
 	tileY := 11 * 64
 	tileX := 64 * ((-1*f.Xb + Res) / (Res / 8))

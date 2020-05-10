@@ -5,5 +5,5 @@ import (
 )
 
 func (ui *UI) drawFriend(p *game.Friend) {
-	ui.drawCharacter(&p.Character, ui.pnjTextures[p.Name])
+	ui.drawCharacter(&p.Character, ui.npcTextures[p.Name])
 }

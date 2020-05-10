@@ -12,7 +12,7 @@ func init() {
 }
 
 func main() {
-	absPath, _ := filepath.Abs("game")
+	absPath, _ := filepath.Abs("data")
 
 	game.EM = game.NewEventManager()
 

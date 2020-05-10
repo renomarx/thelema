@@ -3,7 +3,7 @@ package game
 type Player struct {
 	Character
 	Talker
-	TalkingTo         *Pnj
+	TalkingTo         *Npc
 	Quests            map[string]*Quest
 	Inventory         *Inventory
 	Library           *Library
@@ -140,31 +140,31 @@ func (p *Player) openPortal(g *Game, pos Pos) {
 
 func (p *Player) Talk(g *Game, posTo Pos) {
 	level := g.Level
-	pnj := level.Map[posTo.Z][posTo.Y][posTo.X].Pnj
-	if pnj != nil && pnj.Talkable && !pnj.IsDead() {
+	npc := level.Map[posTo.Z][posTo.Y][posTo.X].Npc
+	if npc != nil && npc.Talkable && !npc.IsDead() {
 		EM.Dispatch(&Event{Action: ActionTalk})
-		p.TalkingTo = pnj
-		pnj.Talk(p, g)
+		p.TalkingTo = npc
+		npc.Talk(p, g)
 		adaptDialogSpeed()
 	}
 }
 
 func (p *Player) Discuss(g *Game) {
 	input := g.GetInput()
-	pnj := p.TalkingTo
-	if pnj == nil {
+	npc := p.TalkingTo
+	if npc == nil {
 		return
 	}
 	switch input.Typ {
 	case Up:
-		pnj.TalkChoiceUp()
+		npc.TalkChoiceUp()
 		adaptDialogSpeed()
 	case Down:
-		pnj.TalkChoiceDown()
+		npc.TalkChoiceDown()
 		adaptDialogSpeed()
 	case Action:
 		EM.Dispatch(&Event{Action: ActionTalk})
-		pnj.TalkConfirmChoice(g)
+		npc.TalkConfirmChoice(g)
 		adaptDialogSpeed()
 		p.Intelligence.RaiseXp(1)
 	default:
@@ -252,14 +252,14 @@ func (p *Player) TakeBook(o *Object, g *Game) bool {
 	return taken
 }
 
-func (p *Player) Recruit(pnj *Pnj, g *Game) {
+func (p *Player) Recruit(npc *Npc, g *Game) {
 	if p.Friend != nil {
 		EM.Dispatch(&Event{
 			Message: "Vous avez déjà un compagnon, impossible de recruter plus.",
 		})
 		return
 	}
-	f := g.Level.MakeFriend(pnj)
+	f := g.Level.MakeFriend(npc)
 	p.Friend = f
 }
 
@@ -299,11 +299,11 @@ func (c *Player) PowerUse(g *Game, posTo Pos) {
 
 func (p *Player) TalkToDead(g *Game, posTo Pos) {
 	level := g.Level
-	pnj := level.Map[posTo.Z][posTo.Y][posTo.X].Pnj
-	if pnj != nil && pnj.Talkable && pnj.IsDead() {
+	npc := level.Map[posTo.Z][posTo.Y][posTo.X].Npc
+	if npc != nil && npc.Talkable && npc.IsDead() {
 		EM.Dispatch(&Event{Action: ActionTalk})
-		p.TalkingTo = pnj
-		pnj.Talk(p, g)
+		p.TalkingTo = npc
+		npc.Talk(p, g)
 		adaptDialogSpeed()
 	}
 }

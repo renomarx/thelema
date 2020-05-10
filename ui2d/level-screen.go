@@ -69,9 +69,9 @@ func (ui *UI) DrawLevel() {
 						}
 					}
 
-					pnj := c.Pnj
-					if pnj != nil {
-						ui.drawPnj(pnj)
+					npc := c.Npc
+					if npc != nil {
+						ui.drawNpc(npc)
 					}
 				}
 			}

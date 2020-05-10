@@ -4,6 +4,6 @@ import (
 	"thelema/game"
 )
 
-func (ui *UI) drawPnj(p *game.Pnj) {
-	ui.drawCharacter(&p.Character, ui.pnjTextures[p.Name])
+func (ui *UI) drawNpc(p *game.Npc) {
+	ui.drawCharacter(&p.Character, ui.npcTextures[p.Name])
 }

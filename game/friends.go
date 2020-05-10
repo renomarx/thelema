@@ -4,10 +4,10 @@ type Friend struct {
 	Character
 }
 
-func (level *Level) MakeFriend(pnj *Pnj) *Friend {
+func (level *Level) MakeFriend(npc *Npc) *Friend {
 	f := &Friend{}
-	f.Character = pnj.Character
-	level.Map[pnj.Z][pnj.Y][pnj.X].Pnj = nil
+	f.Character = npc.Character
+	level.Map[npc.Z][npc.Y][npc.X].Npc = nil
 	return f
 }
 

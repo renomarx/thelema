@@ -33,10 +33,10 @@ func (ui *UI) GetTexture(text string, size int, color sdl.Color) *sdl.Texture {
 	return tex
 }
 
-func (ui *UI) DrawDialog(p *game.Pnj) {
-	if p.TalkingTo != nil {
+func (ui *UI) DrawDialog(c *game.Npc) {
+	if c.TalkingTo != nil {
 		ui.drawDialogBox()
-		node := p.Dialog.GetCurrentNode()
+		node := c.Dialog.GetCurrentNode()
 
 		offsetH := (3 * ui.WindowHeight / 4) + DialogScreenOffsetY
 		for _, text := range node.Messages {

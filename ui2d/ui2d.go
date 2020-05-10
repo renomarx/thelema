@@ -32,7 +32,7 @@ type UI struct {
 	Cam                Camera
 	Game               *game.Game
 	playerTextures     map[string]*sdl.Texture
-	pnjTextures        map[string]*sdl.Texture
+	npcTextures        map[string]*sdl.Texture
 	backgroundTextures map[string]*sdl.Texture
 	uiTextures         map[string]*sdl.Texture
 	mapTextures        map[string]*sdl.Texture
@@ -86,24 +86,24 @@ func NewUI(g *game.Game) *UI {
 		ui.playerTextures[playerName] = ui.imgFileToTexture("ui2d/assets/player/" + playerFile)
 	}
 
-	ui.pnjTextures = make(map[string]*sdl.Texture)
-	pnjFiles := game.LoadFilenames("ui2d/assets/pnjs/")
-	for _, pnjFile := range pnjFiles {
-		pnj := strings.Split(pnjFile, ".")
-		pnjName := pnj[0]
-		ui.pnjTextures[pnjName] = ui.imgFileToTexture("ui2d/assets/pnjs/" + pnjFile)
+	ui.npcTextures = make(map[string]*sdl.Texture)
+	npcFiles := game.LoadFilenames("ui2d/assets/npcs/")
+	for _, npcFile := range npcFiles {
+		npc := strings.Split(npcFile, ".")
+		npcName := npc[0]
+		ui.npcTextures[npcName] = ui.imgFileToTexture("ui2d/assets/npcs/" + npcFile)
 	}
-	commonPnjFiles := game.LoadFilenames("ui2d/assets/pnjs/common/")
-	for _, pnjFile := range commonPnjFiles {
-		pnj := strings.Split(pnjFile, ".")
-		pnjName := pnj[0]
-		ui.pnjTextures[pnjName] = ui.imgFileToTexture("ui2d/assets/pnjs/common/" + pnjFile)
+	commonNpcFiles := game.LoadFilenames("ui2d/assets/npcs/common/")
+	for _, npcFile := range commonNpcFiles {
+		npc := strings.Split(npcFile, ".")
+		npcName := npc[0]
+		ui.npcTextures[npcName] = ui.imgFileToTexture("ui2d/assets/npcs/common/" + npcFile)
 	}
-	enemyPnjFiles := game.LoadFilenames("ui2d/assets/pnjs/enemy/")
-	for _, pnjFile := range enemyPnjFiles {
-		pnj := strings.Split(pnjFile, ".")
-		pnjName := pnj[0]
-		ui.pnjTextures[pnjName] = ui.imgFileToTexture("ui2d/assets/pnjs/enemy/" + pnjFile)
+	enemyNpcFiles := game.LoadFilenames("ui2d/assets/npcs/enemy/")
+	for _, npcFile := range enemyNpcFiles {
+		npc := strings.Split(npcFile, ".")
+		npcName := npc[0]
+		ui.npcTextures[npcName] = ui.imgFileToTexture("ui2d/assets/npcs/enemy/" + npcFile)
 	}
 
 	ui.backgroundTextures = make(map[string]*sdl.Texture)

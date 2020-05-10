@@ -11,14 +11,14 @@ import (
 	"time"
 )
 
-type Pnj struct {
+type Npc struct {
 	Character
 	Talker
 	TalkingTo      *Player
 	IsPlayerFriend bool
 }
 
-type PnjConf struct {
+type NpcConf struct {
 	Level             string                `json:"level"`
 	PosX              int                   `json:"posX"`
 	PosY              int                   `json:"posY"`
@@ -41,34 +41,34 @@ type PnjConf struct {
 	Powers            []string              `json:"powers"`
 }
 
-func NewPnj(p Pos, name string) *Pnj {
-	pnj := &Pnj{}
-	pnj.Character = NewCharacter()
-	pnj.Name = name
-	pnj.Speed.Init(5)
-	pnj.Health.Init(200)
-	pnj.Energy.Init(200)
-	pnj.Strength.Init(20)
-	pnj.Dexterity.Init(20)
-	pnj.Beauty.Init(20)
-	pnj.Will.Init(20)
-	pnj.Intelligence.Init(20)
-	pnj.Charisma.Init(20)
-	pnj.RegenerationSpeed.Init(1)
-	pnj.Luck.Init(10)
-	pnj.Aggressiveness.Init(200)
-	pnj.ActionPoints = 0.0
-	pnj.Pos = p
-	pnj.Xb = 0
-	pnj.Yb = 0
-	pnj.LastActionTime = time.Now()
-	pnj.LookAt = Left
-	pnj.Talkable = true
+func NewNpc(p Pos, name string) *Npc {
+	npc := &Npc{}
+	npc.Character = NewCharacter()
+	npc.Name = name
+	npc.Speed.Init(5)
+	npc.Health.Init(200)
+	npc.Energy.Init(200)
+	npc.Strength.Init(20)
+	npc.Dexterity.Init(20)
+	npc.Beauty.Init(20)
+	npc.Will.Init(20)
+	npc.Intelligence.Init(20)
+	npc.Charisma.Init(20)
+	npc.RegenerationSpeed.Init(1)
+	npc.Luck.Init(10)
+	npc.Aggressiveness.Init(200)
+	npc.ActionPoints = 0.0
+	npc.Pos = p
+	npc.Xb = 0
+	npc.Yb = 0
+	npc.LastActionTime = time.Now()
+	npc.LookAt = Left
+	npc.Talkable = true
 
-	return pnj
+	return npc
 }
 
-func (p *Pnj) LoadPnj(filename string) (string, Pos) {
+func (c *Npc) LoadNpc(filename string) (string, Pos) {
 	jsonFile, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
@@ -77,42 +77,42 @@ func (p *Pnj) LoadPnj(filename string) (string, Pos) {
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 
-	conf := PnjConf{}
+	conf := NpcConf{}
 	json.Unmarshal(byteValue, &conf)
 
-	p.Dead = conf.Dead
+	c.Dead = conf.Dead
 	if conf.Health != 0 {
-		p.Health.Init(conf.Health)
+		c.Health.Init(conf.Health)
 	}
 	if conf.Energy != 0 {
-		p.Energy.Init(conf.Energy)
+		c.Energy.Init(conf.Energy)
 	}
 	if conf.Strength != 0 {
-		p.Strength.Init(conf.Strength)
+		c.Strength.Init(conf.Strength)
 	}
 	if conf.Dexterity != 0 {
-		p.Dexterity.Init(conf.Dexterity)
+		c.Dexterity.Init(conf.Dexterity)
 	}
 	if conf.Beauty != 0 {
-		p.Beauty.Init(conf.Beauty)
+		c.Beauty.Init(conf.Beauty)
 	}
 	if conf.Will != 0 {
-		p.Will.Init(conf.Will)
+		c.Will.Init(conf.Will)
 	}
 	if conf.Intelligence != 0 {
-		p.Intelligence.Init(conf.Intelligence)
+		c.Intelligence.Init(conf.Intelligence)
 	}
 	if conf.Charisma != 0 {
-		p.Charisma.Init(conf.Charisma)
+		c.Charisma.Init(conf.Charisma)
 	}
 	if conf.Luck != 0 {
-		p.Luck.Init(conf.Luck)
+		c.Luck.Init(conf.Luck)
 	}
 	if conf.Aggressiveness != 0 {
-		p.Aggressiveness.Init(conf.Aggressiveness)
+		c.Aggressiveness.Init(conf.Aggressiveness)
 	}
 	if conf.RegenerationSpeed != 0 {
-		p.RegenerationSpeed.Init(conf.RegenerationSpeed)
+		c.RegenerationSpeed.Init(conf.RegenerationSpeed)
 	}
 	powers := Powers()
 	for _, pname := range conf.Powers {
@@ -120,11 +120,11 @@ func (p *Pnj) LoadPnj(filename string) (string, Pos) {
 		if pow == nil {
 			log.Printf("Error: power %s does not exist", pname)
 		} else {
-			p.Powers[pname] = pow
+			c.Powers[pname] = pow
 		}
 	}
 
-	p.Dialog = &Dialog{
+	c.Dialog = &Dialog{
 		CurrentNode: conf.CurrentNode,
 		Nodes:       conf.Nodes,
 	}
@@ -132,49 +132,49 @@ func (p *Pnj) LoadPnj(filename string) (string, Pos) {
 	return conf.Level, Pos{X: conf.PosX, Y: conf.PosY, Z: conf.PosZ}
 }
 
-func (pnj *Pnj) Talk(p *Player, g *Game) {
-	EM.Dispatch(&Event{Action: ActionTalk, Payload: map[string]string{"voice": pnj.Voice}})
-	pnj.Dialog.Init(p)
-	node := pnj.Dialog.GetCurrentNode()
+func (npc *Npc) Talk(p *Player, g *Game) {
+	EM.Dispatch(&Event{Action: ActionTalk, Payload: map[string]string{"voice": npc.Voice}})
+	npc.Dialog.Init(p)
+	node := npc.Dialog.GetCurrentNode()
 	node.ClearHighlight()
 	node.SetHighlightedIndex(0)
-	pnj.TalkingTo = p
-	if p.X == pnj.X && p.Y < pnj.Y {
-		pnj.LookAt = Up
+	npc.TalkingTo = p
+	if p.X == npc.X && p.Y < npc.Y {
+		npc.LookAt = Up
 	}
-	if p.X == pnj.X && p.Y > pnj.Y {
-		pnj.LookAt = Down
+	if p.X == npc.X && p.Y > npc.Y {
+		npc.LookAt = Down
 	}
-	if p.Y == pnj.Y && p.X < pnj.X {
-		pnj.LookAt = Left
+	if p.Y == npc.Y && p.X < npc.X {
+		npc.LookAt = Left
 	}
-	if p.Y == pnj.Y && p.X > pnj.X {
-		pnj.LookAt = Right
+	if p.Y == npc.Y && p.X > npc.X {
+		npc.LookAt = Right
 	}
 }
 
-func (pnj *Pnj) TalkChoiceUp() {
-	node := pnj.Dialog.GetCurrentNode()
+func (npc *Npc) TalkChoiceUp() {
+	node := npc.Dialog.GetCurrentNode()
 	choiceIdx := node.GetHighlightedIndex()
 	node.SetHighlightedIndex(choiceIdx - 1)
 }
 
-func (pnj *Pnj) TalkChoiceDown() {
-	node := pnj.Dialog.GetCurrentNode()
+func (npc *Npc) TalkChoiceDown() {
+	node := npc.Dialog.GetCurrentNode()
 	choiceIdx := node.GetHighlightedIndex()
 	node.SetHighlightedIndex(choiceIdx + 1)
 }
 
-func (pnj *Pnj) TalkConfirmChoice(g *Game) {
-	node := pnj.Dialog.GetCurrentNode()
+func (npc *Npc) TalkConfirmChoice(g *Game) {
+	node := npc.Dialog.GetCurrentNode()
 	choice := node.GetCurrentChoice()
-	pnj.ChooseTalkOption(choice.Cmd, g)
+	npc.ChooseTalkOption(choice.Cmd, g)
 }
 
-func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
-	node := pnj.Dialog.GetCurrentNode()
-	nodeTo := pnj.Dialog.CurrentNode
-	p := pnj.TalkingTo
+func (npc *Npc) ChooseTalkOption(cmd string, g *Game) {
+	node := npc.Dialog.GetCurrentNode()
+	nodeTo := npc.Dialog.CurrentNode
+	p := npc.TalkingTo
 	for _, choice := range node.Choices {
 		if choice.Cmd == cmd {
 			for _, questStep := range choice.Quest.StepsFullfilling {
@@ -189,19 +189,19 @@ func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
 				act := strings.Split(action, ":")
 				switch act[0] {
 				case "recruit":
-					p.Recruit(pnj, g)
+					p.Recruit(npc, g)
 				case "teleport_to":
-					pnj.Teleport(act[1], g)
+					npc.Teleport(act[1], g)
 				case "become_enemy":
-					pnj.BecomeEnemy(g)
+					npc.BecomeEnemy(g)
 				case "set_current_node":
-					pnj.Dialog.SetCurrentNode(act[1])
+					npc.Dialog.SetCurrentNode(act[1])
 				case "send_to_level":
-					levelPnj := strings.Split(act[1], "|")
-					g.SendToLevel(levelPnj[0], levelPnj[1], levelPnj[2])
+					levelNpc := strings.Split(act[1], "|")
+					g.SendToLevel(levelNpc[0], levelNpc[1], levelNpc[2])
 				case "update_dialog":
-					levelPnjDialog := strings.Split(act[1], "|")
-					g.UpdatePnjDialog(levelPnjDialog[0], levelPnjDialog[1], levelPnjDialog[2])
+					levelNpcDialog := strings.Split(act[1], "|")
+					g.UpdateNpcDialog(levelNpcDialog[0], levelNpcDialog[1], levelNpcDialog[2])
 				case "learn_attack":
 					p.LearnAttack(act[1])
 				case "add_key":
@@ -227,46 +227,46 @@ func (pnj *Pnj) ChooseTalkOption(cmd string, g *Game) {
 				}
 			}
 			if choice.NodeId == "" {
-				pnj.StopTalking()
+				npc.StopTalking()
 				return
 			}
 			nodeTo = choice.NodeId
 		}
 	}
-	pnj.Dialog.CurrentNode = nodeTo
-	EM.Dispatch(&Event{Action: ActionTalk, Payload: map[string]string{"voice": pnj.Voice}})
+	npc.Dialog.CurrentNode = nodeTo
+	EM.Dispatch(&Event{Action: ActionTalk, Payload: map[string]string{"voice": npc.Voice}})
 }
 
-func (pnj *Pnj) StopTalking() {
-	pnj.Dialog.Close()
-	p := pnj.TalkingTo
+func (npc *Npc) StopTalking() {
+	npc.Dialog.Close()
+	p := npc.TalkingTo
 	p.TalkingTo = nil
-	pnj.TalkingTo = nil
+	npc.TalkingTo = nil
 }
 
-func (pnj *Pnj) Update(l *Level) {
-	if pnj.Dead {
+func (npc *Npc) Update(l *Level) {
+	if npc.Dead {
 		return
 	}
-	if pnj.TalkingTo != nil {
+	if npc.TalkingTo != nil {
 		return
 	}
 	t := time.Now()
-	deltaD := t.Sub(pnj.LastActionTime)
+	deltaD := t.Sub(npc.LastActionTime)
 	delta := 0.001 * float64(deltaD.Nanoseconds())
-	pnj.ActionPoints += float64(pnj.Speed.Current) * delta
-	pos := pnj.getWantedPosition()
-	if pnj.ActionPoints >= 1000000 { // 1 second
-		if pnj.canMove(pos, l) {
-			pnj.Move(pos, l)
+	npc.ActionPoints += float64(npc.Speed.Current) * delta
+	pos := npc.getWantedPosition()
+	if npc.ActionPoints >= 1000000 { // 1 second
+		if npc.canMove(pos, l) {
+			npc.Move(pos, l)
 		}
-		pnj.ActionPoints = 0.0
+		npc.ActionPoints = 0.0
 	}
-	pnj.LastActionTime = time.Now()
+	npc.LastActionTime = time.Now()
 }
 
-func (pnj *Pnj) getWantedPosition() Pos {
-	pos := pnj.Pos
+func (npc *Npc) getWantedPosition() Pos {
+	pos := npc.Pos
 
 	r := rand.Intn(5)
 	switch r {
@@ -284,8 +284,8 @@ func (pnj *Pnj) getWantedPosition() Pos {
 	return pos
 }
 
-func (pnj *Pnj) canMove(to Pos, level *Level) bool {
-	if pnj.TalkingTo != nil {
+func (npc *Npc) canMove(to Pos, level *Level) bool {
+	if npc.TalkingTo != nil {
 		return false
 	}
 	if !canGo(level, to) {
@@ -300,45 +300,45 @@ func (pnj *Pnj) canMove(to Pos, level *Level) bool {
 	return true
 }
 
-func (pnj *Pnj) Move(to Pos, l *Level) {
-	lastPos := pnj.Pos
-	l.Map[pnj.Z][pnj.Y][pnj.X].Pnj = nil
-	l.Map[to.Z][to.Y][to.X].Pnj = pnj
-	pnj.Pos = to
-	pnj.moveFromTo(lastPos, to)
+func (npc *Npc) Move(to Pos, l *Level) {
+	lastPos := npc.Pos
+	l.Map[npc.Z][npc.Y][npc.X].Npc = nil
+	l.Map[to.Z][to.Y][to.X].Npc = npc
+	npc.Pos = to
+	npc.moveFromTo(lastPos, to)
 }
 
-func (pnj *Pnj) Teleport(levelName string, g *Game) {
-	g.Level.MakeEffect(pnj.Pos, string(Teleport), 200)
+func (npc *Npc) Teleport(levelName string, g *Game) {
+	g.Level.MakeEffect(npc.Pos, string(Teleport), 200)
 	level := g.Levels[levelName]
-	pnj.Talkable = false
-	pnj.IsPowerUsing = true
-	for pnj.PowerUsingStage = 0; pnj.PowerUsingStage < CaseLen; pnj.PowerUsingStage++ {
-		pnj.adaptSpeed()
+	npc.Talkable = false
+	npc.IsPowerUsing = true
+	for npc.PowerUsingStage = 0; npc.PowerUsingStage < CaseLen; npc.PowerUsingStage++ {
+		npc.adaptSpeed()
 	}
-	pnj.ChangeLevel(g.Level, level)
-	pnj.IsPowerUsing = false
-	pnj.Talkable = true
+	npc.ChangeLevel(g.Level, level)
+	npc.IsPowerUsing = false
+	npc.Talkable = true
 }
 
-func (pnj *Pnj) ChangeLevel(from *Level, to *Level) {
-	from.Map[pnj.Z][pnj.Y][pnj.X].Pnj = nil
+func (npc *Npc) ChangeLevel(from *Level, to *Level) {
+	from.Map[npc.Z][npc.Y][npc.X].Npc = nil
 	if to != nil {
 		pos := to.GetRandomFreePos(0) // FIXME
-		pnj.Pos = *pos
-		to.Map[pos.Z][pos.Y][pos.X].Pnj = pnj
+		npc.Pos = *pos
+		to.Map[pos.Z][pos.Y][pos.X].Npc = npc
 	}
 }
 
-func (pnj *Pnj) BecomeEnemy(g *Game) {
-	e := g.Level.MakeEnemy(pnj)
+func (npc *Npc) BecomeEnemy(g *Game) {
+	e := g.Level.MakeEnemy(npc)
 	g.Fight([]FighterInterface{e})
 	if e.IsDead() {
-		pnj.Die(g)
+		npc.Die(g)
 	}
 }
 
-func (pnj *Pnj) Die(g *Game) {
-	pnj.Dead = true
-	pnj.Dialog.SetCurrentNode("dead_greetings")
+func (npc *Npc) Die(g *Game) {
+	npc.Dead = true
+	npc.Dialog.SetCurrentNode("dead_greetings")
 }
