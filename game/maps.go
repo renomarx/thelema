@@ -9,7 +9,7 @@ import (
 )
 
 func (g *Game) LoadMapTemplate(mapName, levelName string) *Level {
-	dirpath := g.GameDir
+	dirpath := g.DataDir
 
 	level := NewLevel()
 	level.Name = levelName

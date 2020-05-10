@@ -10,7 +10,7 @@ const CaseLen = 32
 var EM *EventManager
 
 type Game struct {
-	GameDir       string
+	DataDir       string
 	Level         *Level
 	Levels        map[string]*Level
 	Books         map[string]*OBook
@@ -89,7 +89,7 @@ type MovingObject struct {
 }
 
 func NewGame(gameDir string) *Game {
-	game := &Game{Paused: false, Running: true, Playing: false, GameDir: gameDir}
+	game := &Game{Paused: false, Running: true, Playing: false, DataDir: gameDir}
 	game.LoadConfig()
 	game.LoadMenu()
 	game.menu.IsOpen = true

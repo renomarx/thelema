@@ -3,12 +3,12 @@ package game
 import "strings"
 
 type BookInfo struct {
-	Level       string    `json:"level"`
-	PosX        int       `json:"posX"`
-	PosY        int       `json:"posY"`
-	PosZ        int       `json:"posZ"`
-	PowersGiven []string  `json:"powers_given"`
-	Quest       QuestLink `json:"quest"`
+	Level       string    `yaml:"level"`
+	PosX        int       `yaml:"posX"`
+	PosY        int       `yaml:"posY"`
+	PosZ        int       `yaml:"posZ"`
+	PowersGiven []string  `yaml:"powers_given"`
+	Quest       QuestLink `yaml:"quest"`
 }
 
 type OBook struct {

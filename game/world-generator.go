@@ -2,13 +2,14 @@ package game
 
 import (
 	"bufio"
-	"encoding/json"
 	"io/ioutil"
 	"log"
 	"math/rand"
 	"os"
 	"strconv"
 	"strings"
+
+	yaml "gopkg.in/yaml.v2"
 )
 
 const (
@@ -28,7 +29,7 @@ func (g *Game) GenerateWorld() {
 }
 
 func (g *Game) LoadPlayer(p *Player) {
-	gameDir := g.GameDir
+	gameDir := g.DataDir
 	p.X = PlayerInitialX
 	p.Y = PlayerInitialY
 	p.LoadQuests(gameDir)
@@ -50,7 +51,7 @@ func (g *Game) loadLevels() *Level {
 }
 
 func (g *Game) loadCities() {
-	maps := LoadFilenames(g.GameDir + "/maps/cities")
+	maps := LoadFilenames(g.DataDir + "/maps/cities")
 	for _, filemap := range maps {
 		fileArr := strings.Split(filemap, ".")
 		if len(fileArr) == 2 {
@@ -67,10 +68,10 @@ func (g *Game) loadCities() {
 }
 
 func (g *Game) loadHouses(path, cityName string) {
-	if _, err := os.Stat(g.GameDir + "/maps/" + path); os.IsNotExist(err) {
+	if _, err := os.Stat(g.DataDir + "/maps/" + path); os.IsNotExist(err) {
 		return
 	}
-	maps := LoadFilenames(g.GameDir + "/maps/" + path)
+	maps := LoadFilenames(g.DataDir + "/maps/" + path)
 	for _, filemap := range maps {
 		fileArr := strings.Split(filemap, ".")
 		if len(fileArr) == 2 {
@@ -85,7 +86,7 @@ func (g *Game) loadHouses(path, cityName string) {
 }
 
 func (g *Game) loadDungeons() {
-	maps := LoadFilenames(g.GameDir + "/maps/dungeons")
+	maps := LoadFilenames(g.DataDir + "/maps/dungeons")
 	for _, filemap := range maps {
 		fileArr := strings.Split(filemap, ".")
 		if len(fileArr) == 2 {
@@ -101,7 +102,7 @@ func (g *Game) loadDungeons() {
 }
 
 func (g *Game) loadPortals() {
-	filepath := g.GameDir + "/maps/portals.txt"
+	filepath := g.DataDir + "/maps/portals.txt"
 	file, err := os.Open(filepath)
 	if err != nil {
 		log.Fatal(err)
@@ -149,13 +150,13 @@ func (g *Game) addBidirectionalPortal(srcName string, srcPos Pos, dstName string
 }
 
 func (g *Game) loadNpcsVIP() {
-	npcNames := LoadFilenames(g.GameDir + "/npcs")
+	npcNames := LoadFilenames(g.DataDir + "/npcs")
 	for _, filename := range npcNames {
 		fileArr := strings.Split(filename, ".")
 		if len(fileArr) == 2 && fileArr[1] == "yaml" {
 			p := Pos{}
 			npc := NewNpc(p, fileArr[0])
-			filename := g.GameDir + "/npcs/" + npc.Name + ".yaml"
+			filename := g.DataDir + "/npcs/" + npc.Name + ".yaml"
 			level, pos := npc.LoadNpc(filename)
 
 			l, exists := g.Levels[level]
@@ -169,16 +170,16 @@ func (g *Game) loadNpcsVIP() {
 }
 
 func (g *Game) loadBooks() {
-	filename := g.GameDir + "/books/books.json"
-	jsonFile, err := os.Open(filename)
+	filename := g.DataDir + "/books/books.yaml"
+	yamlFile, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer jsonFile.Close()
-	byteValue, _ := ioutil.ReadAll(jsonFile)
+	defer yamlFile.Close()
+	byteValue, _ := ioutil.ReadAll(yamlFile)
 
 	books := make(map[string]BookInfo)
-	err = json.Unmarshal(byteValue, &books)
+	err = yaml.Unmarshal(byteValue, &books)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -199,7 +200,7 @@ func (g *Game) loadBooks() {
 }
 
 func (g *Game) loadBookFromFile(filename string, bookInfo *BookInfo) *OBook {
-	filepath := g.GameDir + "/books/" + filename + ".txt"
+	filepath := g.DataDir + "/books/" + filename + ".txt"
 	file, err := os.Open(filepath)
 	if err != nil {
 		log.Fatal(err)
@@ -226,18 +227,18 @@ func (g *Game) loadBookFromFile(filename string, bookInfo *BookInfo) *OBook {
 }
 
 func (g *Game) loadQuestsObjects() {
-	filename := g.GameDir + "/quests/objects.json"
-	jsonFile, err := os.Open(filename)
+	filename := g.DataDir + "/quests/objects.yaml"
+	yamlFile, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer jsonFile.Close()
+	defer yamlFile.Close()
 
-	byteValue, _ := ioutil.ReadAll(jsonFile)
+	byteValue, _ := ioutil.ReadAll(yamlFile)
 
 	objects := make(map[string]*QuestObject)
 
-	err = json.Unmarshal(byteValue, &objects)
+	err = yaml.Unmarshal(byteValue, &objects)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -260,6 +261,23 @@ func (g *Game) loadQuestsObjects() {
 	}
 
 	g.QuestsObjects = objectsByRune
+}
+
+func (p *Player) LoadQuests(dirpath string) {
+	filename := dirpath + "/quests/quests.yaml"
+	yamlFile, err := os.Open(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer yamlFile.Close()
+
+	byteValue, _ := ioutil.ReadAll(yamlFile)
+
+	quests := make(map[string]*Quest)
+
+	yaml.Unmarshal(byteValue, &quests)
+
+	p.Quests = quests
 }
 
 func (g *Game) generateNpcs(l *Level, nbNpcs int) {
@@ -285,7 +303,7 @@ func (g *Game) generateNpcs(l *Level, nbNpcs int) {
 		if pos != nil {
 			npc := NewNpc(*pos, npcNames[j])
 			npc.Voice = npcVoices[npcNames[j]]
-			filename := g.GameDir + "/npcs/common/" + npc.Name + ".yaml"
+			filename := g.DataDir + "/npcs/common/" + npc.Name + ".yaml"
 			npc.LoadNpc(filename)
 			l.Map[pos.Z][pos.Y][pos.X].Npc = npc
 		}

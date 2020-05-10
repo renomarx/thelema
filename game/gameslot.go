@@ -34,7 +34,7 @@ func LoadGame(g *Game, slot string) {
 	EM.Dispatch(&Event{
 		Action:  ActionMenuConfirm,
 		Message: "Chargement..."})
-	lg := NewGame(g.GameDir)
+	lg := NewGame(g.DataDir)
 	err := readGob(filepath, lg)
 	*g = *lg
 	if err != nil {
@@ -46,7 +46,7 @@ func LoadGame(g *Game, slot string) {
 }
 
 func (g *Game) generateSlotFilepath(slot string) string {
-	return g.GameDir + "/../saves/" + slot + ".sav"
+	return g.DataDir + "/../saves/" + slot + ".sav"
 }
 
 func writeGob(filepath string, object interface{}) error {

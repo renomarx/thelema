@@ -1,59 +1,38 @@
 package game
 
 import (
-	"encoding/json"
-	"io/ioutil"
-	"log"
-	"os"
 	"sort"
 )
 
 type Quest struct {
-	CurrentStepId string           `json:"current_step"`
-	Name          string           `json:"name"`
-	Steps         map[string]*Step `json:"steps"`
+	CurrentStepId string           `yaml:"current_step"`
+	Name          string           `yaml:"name"`
+	Steps         map[string]*Step `yaml:"steps"`
 	IsFinished    bool
 }
 
 type Step struct {
-	Order        int    `json:"order"`
-	Description  string `json:"description"`
+	Order        int    `yaml:"order"`
+	Description  string `yaml:"description"`
 	IsFinished   bool
-	ObjectsTaken []string       `json:"objects_taken"`
-	GoldGiven    int            `json:"gold_given"`
-	ObjectsGiven []string       `json:"objects_given"`
-	Raising      map[string]int `json:"raising"`
-	Final        bool           `json:"final"`
+	ObjectsTaken []string       `yaml:"objects_taken"`
+	GoldGiven    int            `yaml:"gold_given"`
+	ObjectsGiven []string       `yaml:"objects_given"`
+	Raising      map[string]int `yaml:"raising"`
+	Final        bool           `yaml:"final"`
 }
 
 type QuestObject struct {
-	Level string `json:"level"`
+	Level string `yaml:"level"`
 	Quest struct {
-		ID               string   `json:"id"`
-		StepsFullfilling []string `json:"steps_fullfilling"`
-	} `json:"quest"`
+		ID               string   `yaml:"id"`
+		StepsFullfilling []string `yaml:"steps_fullfilling"`
+	} `yaml:"quest"`
 }
 
 type QuestLink struct {
-	StepsMandatory   []string `json:"steps_mandatory"`
-	StepsFullfilling []string `json:"steps_fullfilling"`
-}
-
-func (p *Player) LoadQuests(dirpath string) {
-	filename := dirpath + "/quests/quests.json"
-	jsonFile, err := os.Open(filename)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer jsonFile.Close()
-
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-
-	quests := make(map[string]*Quest)
-
-	json.Unmarshal(byteValue, &quests)
-
-	p.Quests = quests
+	StepsMandatory   []string `yaml:"steps_mandatory"`
+	StepsFullfilling []string `yaml:"steps_fullfilling"`
 }
 
 func (p *Player) finishQuestStep(questID string, stepID string, g *Game) {

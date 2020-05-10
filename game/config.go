@@ -42,7 +42,7 @@ func (g *Game) LoadConfig() {
 		Escape:   "escape",
 	}
 
-	dirpath := g.GameDir
+	dirpath := g.DataDir
 	filename := dirpath + "/../config.json"
 	jsonFile, err := os.Open(filename)
 	if err == nil {
