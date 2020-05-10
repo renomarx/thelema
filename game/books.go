@@ -21,7 +21,7 @@ type OBook struct {
 
 type Library struct {
 	IsOpen     bool
-	Books      []*OBook
+	Books      []OBook
 	currentIdx int
 }
 
@@ -31,7 +31,7 @@ func NewLibrary() *Library {
 	return lib
 }
 
-func (l *Library) AddBook(book *OBook) {
+func (l *Library) AddBook(book OBook) {
 	for _, b := range l.Books {
 		if book.Title == b.Title {
 			return
@@ -101,7 +101,7 @@ func (l *Library) GetCurrentBook() *OBook {
 	if len(l.Books) == 0 {
 		return nil
 	}
-	return l.Books[l.currentIdx]
+	return &l.Books[l.currentIdx]
 }
 
 func (l *Library) HandleInput(g *Game) {

@@ -24,7 +24,7 @@ func (ui *UI) DrawDiary() {
 			offsetH += h
 		}
 		offsetH += Res
-		_, h = ui.DrawText("Terminées:", TextSizeM, ColorDisabled, PlayerMenuOffsetX*32, offsetH)
+		_, h = ui.DrawText("Terminé:", TextSizeM, ColorDisabled, PlayerMenuOffsetX*32, offsetH)
 		offsetH += h
 		for _, st := range done {
 			h = ui.DrawStep(st, offsetH, ColorDisabled)
@@ -33,7 +33,7 @@ func (ui *UI) DrawDiary() {
 	}
 }
 
-func (ui *UI) DrawStep(st *game.Step, offsetH int32, color sdl.Color) int32 {
+func (ui *UI) DrawStep(st game.Step, offsetH int32, color sdl.Color) int32 {
 	_, h := ui.DrawText("- "+st.Name, TextSizeS, color, PlayerMenuOffsetX*32+10+10, offsetH)
 	return h
 }

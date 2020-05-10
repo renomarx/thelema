@@ -13,9 +13,9 @@ type Game struct {
 	DataDir        string
 	Level          *Level
 	Levels         map[string]*Level
-	Books          map[string]*OBook
-	Steps          map[string]*Step
-	SpecialObjects map[string]*SpecialObject
+	Books          map[string]OBook
+	Steps          map[string]Step
+	SpecialObjects map[string]SpecialObject
 	FightingRing   *FightingRing
 	Paused         bool
 	Running        bool

@@ -184,7 +184,7 @@ func (g *Game) loadBooks() {
 		log.Fatal(err)
 	}
 
-	g.Books = make(map[string]*OBook)
+	g.Books = make(map[string]OBook)
 	for tile, bookInfo := range books {
 		book := g.loadBookFromFile(tile, &bookInfo)
 		book.validate(tile, g)
@@ -201,7 +201,7 @@ func (g *Game) loadBooks() {
 	}
 }
 
-func (g *Game) loadBookFromFile(filename string, bookInfo *BookInfo) *OBook {
+func (g *Game) loadBookFromFile(filename string, bookInfo *BookInfo) OBook {
 	filepath := g.DataDir + "/books/" + filename + ".txt"
 	file, err := os.Open(filepath)
 	if err != nil {
@@ -225,7 +225,7 @@ func (g *Game) loadBookFromFile(filename string, bookInfo *BookInfo) *OBook {
 		title = lines[0]
 	}
 
-	return &OBook{
+	return OBook{
 		Title:          title,
 		Text:           lines,
 		Powers:         bookInfo.PowersGiven,
@@ -245,7 +245,7 @@ func (g *Game) loadSteps() {
 
 	byteValue, _ := ioutil.ReadAll(yamlFile)
 
-	steps := make(map[string]*Step)
+	steps := make(map[string]Step)
 
 	yaml.Unmarshal(byteValue, &steps)
 
@@ -262,14 +262,14 @@ func (g *Game) loadSpecialObjects() {
 
 	byteValue, _ := ioutil.ReadAll(yamlFile)
 
-	objects := make(map[string]*SpecialObject)
+	objects := make(map[string]SpecialObject)
 
 	err = yaml.Unmarshal(byteValue, &objects)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	objectsByRune := make(map[string]*SpecialObject)
+	objectsByRune := make(map[string]SpecialObject)
 	for key, obj := range objects {
 		obj.validate(key, g)
 		l, exists := g.Levels[obj.Level]

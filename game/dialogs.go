@@ -101,7 +101,7 @@ func (n *StoryNode) SetHighlightedIndex(i int) {
 
 func (n *StoryNode) GetCurrentChoice() StoryChoice {
 	idx := n.GetHighlightedIndex()
-	if idx > len(n.Choices) {
+	if idx >= len(n.Choices) {
 		log.Printf("Error: No choice possible for dialog")
 		return StoryChoice{}
 	}
@@ -118,7 +118,7 @@ func (n *StoryNode) filterPossibleChoices(g *Game) {
 			if !e {
 				log.Fatalf("Step %s does not exist", stID)
 			}
-			if st.state != StepStateTODO {
+			if st.State != StepStateTODO {
 				isPossible = false
 			}
 		}
