@@ -1,0 +1,40 @@
+---
+current_node: greetings
+nodes:
+  greetings:
+    messages:
+    - Bonjour.
+    choices:
+    - cmd: J'ai besoin de votre aide (recruter)
+      required:
+        beauty: 25
+        charisma: 25
+      actions:
+      - recruit
+    - cmd: Pouvez-vous m'entrainer au combat ?
+      required:
+        strength: 25
+      node: get_training
+    - cmd: Je dois y aller.
+  get_training:
+    messages:
+    - Je peux vous apprendre la technique Charge de l'ours, mais il vous en coutera
+      100§
+    choices:
+    - cmd: C'est d'accord
+      required:
+        strength: 25
+        gold: 100
+      actions:
+      - learn_attack:bear_assault
+      - gold_taken:100
+      node: training_done
+    - cmd: Je la connais déjà.
+    - cmd: Je n'ai pas assez d'argent sur moi.
+    - cmd: Non merci, ça ne m'intéresse pas.
+  training_done:
+    messages:
+    - "[Il vous montre quelques mouvements d'épée]"
+    - Votre entrainement est terminé.
+    choices:
+    - cmd: Merci!

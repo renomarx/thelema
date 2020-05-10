@@ -1,0 +1,8 @@
+---
+current_node: greetings
+nodes:
+  greetings:
+    messages:
+    - Hello, I'm an artist.
+    choices:
+    - cmd: That's beautiful.

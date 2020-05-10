@@ -1,0 +1,25 @@
+---
+level: abigail_crypt
+posX: 75
+posY: 14
+dead: true
+voice: FEMALE_STANDARD
+current_node: dead_greetings
+nodes:
+  dead_greetings:
+    messages:
+    - "[L'esprit reste impassible, muet.]"
+    choices:
+    - quest:
+        steps_mandatory:
+        - great_priest_past:talk_to_great_priest
+        steps_fullfilling:
+        - great_priest_past:talk_to_dead_body
+      cmd: Abigail ?
+      node: talk_to_me
+    - cmd: "[Vous libérez l'esprit]"
+  talk_to_me:
+    messages:
+    - TODO
+    choices:
+    - cmd: Je vous libère.

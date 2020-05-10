@@ -9,24 +9,24 @@ import (
 const DialogDeltaTime = 200
 
 type Dialog struct {
-	CurrentNode string                `json:"current_node"`
-	Nodes       map[string]*StoryNode `json:"nodes"`
+	CurrentNode string                `yaml:"current_node"`
+	Nodes       map[string]*StoryNode `yaml:"nodes"`
 	initialNode string
 }
 
 type StoryNode struct {
-	Messages   []string      `json:"messages"`
-	AllChoices []StoryChoice `json:"choices"`
-	Choices    []StoryChoice
+	Messages   []string      `yaml:"messages"`
+	AllChoices []StoryChoice `yaml:"choices"`
+	Choices    []StoryChoice `yaml:"-"`
 }
 
 type StoryChoice struct {
-	Cmd         string `json:"cmd"`
-	NodeId      string `json:"node"`
+	Cmd         string `yaml:"cmd"`
+	NodeId      string `yaml:"node"`
 	Highlighted bool
-	Quest       QuestLink      `json:"quest"`
-	Required    map[string]int `json:"required"`
-	Actions     []string       `json:"actions"`
+	Quest       QuestLink      `yaml:"quest"`
+	Required    map[string]int `yaml:"required"`
+	Actions     []string       `yaml:"actions"`
 }
 
 func adaptDialogSpeed() {
@@ -88,15 +88,17 @@ func (n *StoryNode) ClearHighlight() {
 
 func (n *StoryNode) SetHighlightedIndex(i int) {
 	n.ClearHighlight()
-	len := len(n.Choices)
-	if i >= len {
-		i = len - 1
+	length := len(n.Choices)
+	if i >= length {
+		i = length - 1
 	}
 	if i < 0 {
 		i = 0
 	}
 	idx := i
-	n.Choices[idx].Highlighted = true
+	if len(n.Choices) > idx {
+		n.Choices[idx].Highlighted = true
+	}
 }
 
 func (n *StoryNode) GetCurrentChoice() StoryChoice {

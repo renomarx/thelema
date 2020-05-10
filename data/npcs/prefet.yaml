@@ -1,0 +1,48 @@
+---
+level: arcanea
+posX: 25
+posY: 14
+voice: MALE_STANDARD
+current_node: greetings
+nodes:
+  greetings:
+    messages:
+    - Bonjour.
+    choices:
+    - quest:
+        steps_mandatory:
+        - letter_from_ri:read_the_letter
+      cmd: Je viens vous voir, comme convenu.
+      node: choose_a_job
+    - cmd: Je dois y aller.
+  choose_a_job:
+    messages:
+    - 'Ah, oui ! Il faut que vous choisissiez un métier parmi les suivants:'
+    - Soldat, médecin, artiste, prêtre, ambassadeur.
+    choices:
+    - quest:
+        steps_fullfilling:
+        - become_a_soldier:be_soldier
+        - letter_from_ri:talk_to_the_prefet
+      cmd: Je veux devenir soldat.
+    - quest:
+        steps_fullfilling:
+        - become_a_doctor:be_doctor
+        - letter_from_ri:talk_to_the_prefet
+      cmd: Je veux devenir médecin.
+    - quest:
+        steps_fullfilling:
+        - become_an_artist:be_artist
+        - letter_from_ri:talk_to_the_prefet
+      cmd: Je veux devenir artiste.
+    - quest:
+        steps_fullfilling:
+        - become_a_priest:be_priest
+        - letter_from_ri:talk_to_the_prefet
+      cmd: Je veux devenir prêtre.
+    - quest:
+        steps_fullfilling:
+        - become_an_ambassador:be_ambassador
+        - letter_from_ri:talk_to_the_prefet
+      cmd: Je veux devenir ambassadeur.
+    - cmd: Il faut que j'y réflechisse encore.

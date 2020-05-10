@@ -152,10 +152,10 @@ func (g *Game) loadNpcsVIP() {
 	npcNames := LoadFilenames(g.GameDir + "/npcs")
 	for _, filename := range npcNames {
 		fileArr := strings.Split(filename, ".")
-		if len(fileArr) == 2 && fileArr[1] == "json" {
+		if len(fileArr) == 2 && fileArr[1] == "yaml" {
 			p := Pos{}
 			npc := NewNpc(p, fileArr[0])
-			filename := g.GameDir + "/npcs/" + npc.Name + ".json"
+			filename := g.GameDir + "/npcs/" + npc.Name + ".yaml"
 			level, pos := npc.LoadNpc(filename)
 
 			l, exists := g.Levels[level]
@@ -285,7 +285,7 @@ func (g *Game) generateNpcs(l *Level, nbNpcs int) {
 		if pos != nil {
 			npc := NewNpc(*pos, npcNames[j])
 			npc.Voice = npcVoices[npcNames[j]]
-			filename := g.GameDir + "/npcs/common/" + npc.Name + ".json"
+			filename := g.GameDir + "/npcs/common/" + npc.Name + ".yaml"
 			npc.LoadNpc(filename)
 			l.Map[pos.Z][pos.Y][pos.X].Npc = npc
 		}

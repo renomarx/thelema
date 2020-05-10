@@ -1,0 +1,99 @@
+---
+level: abigail_crypt
+posX: 75
+posY: 15
+voice: MALE_STANDARD
+health: 2000
+energy: 2000
+strength: 20
+dexterity: 20
+beauty: 75
+intelligence: 100
+will: 100
+charisma: 100
+luck: 100
+powers:
+- storm
+current_node: greetings
+nodes:
+  greetings:
+    messages:
+    - "[La personne en face de vous dégage une incommensurable aura de puissance]"
+    - Que faîtes-vous ici?
+    choices:
+    - quest:
+        steps_mandatory:
+        - great_priest_past:talk_to_nathaniel_about_dead_body
+        steps_fullfilling:
+        - great_priest_past:talk_to_great_priest
+      cmd: Je ne fais que passer. L'endroit est charmant, non ? Et vous, qui êtes-vous?
+      node: first_contact
+    - cmd: Je dois y aller.
+  first_contact:
+    messages:
+    - Ainsi, vous êtes l'envoyé de Nathaniel...
+    - Je suis celui qu'on appelle le grand prêtre.
+    choices:
+    - cmd: Ah! Donc vous savez qui je suis. Comment l'avez-vous deviné?
+      node: how_did_you_guess
+    - cmd: Je dois y aller.
+  how_did_you_guess:
+    messages:
+    - Peu de personnes connaissent cette crypte.
+    - Et il est évident que Nathaniel ne viendra pas de lui-même.
+    choices:
+    - cmd: Pourquoi? Que suis-je sensé trouvé ici ?
+      node: what_am_i_doing
+    - cmd: Je dois y aller.
+  what_am_i_doing:
+    messages:
+    - Il ne vous a donc rien révélé ?
+    - Pour le moment, vous n'avez rien fait de mal, vous suivez simplement aveuglément
+      une voie qui vous a été tracée.
+    - Mais je vous mets en garde, ne rappelez pas l'esprit des morts. Ils ont quitté
+      ce monde et doivent être laissés en paix.
+    choices:
+    - cmd: "..."
+      node: what_am_i_doing2
+  what_am_i_doing2:
+    messages:
+    - Si vous voulez assouvir votre soif de connaissance, allez plutôt à l'école de
+      magie à Tulla.
+    - Mais si vous rappelez l'esprit d'Abigail, nous risquons de devenir ennemis.
+      Ce n'est pas ce que vous voulez.
+    choices:
+    - cmd: Très bien, je suivrai vos directives.
+      actions:
+      - discover:tulla
+      node: ok_bye
+    - cmd: Je ferai comme bon me semble.
+      actions:
+      - discover:tulla
+      node: as_you_like_bye
+    - cmd: Nous allons plutôt en finir ici et maintenant. [Vous l'attaquez]
+      actions:
+      - discover:tulla
+      - become_enemy
+  ok_bye:
+    messages:
+    - Vous feriez bien. Au revoir.
+    choices:
+    - cmd: Au revoir.
+      actions:
+      - teleport_to:neoroma
+      - set_current_node:second_contact
+  as_you_like_bye:
+    messages:
+    - "[Il vous regarde d'un air compatissant]"
+    - Comme vous voudrez. Je dois maintenant m'en aller.
+    choices:
+    - cmd: "..."
+      actions:
+      - teleport_to:neoroma
+      - set_current_node:second_contact
+      - discover:tulla
+  second_contact:
+    messages:
+    - TODO
+    choices:
+    - cmd: TODO

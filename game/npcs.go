@@ -1,7 +1,6 @@
 package game
 
 import (
-	"encoding/json"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -9,6 +8,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	yaml "gopkg.in/yaml.v2"
 )
 
 type Npc struct {
@@ -19,26 +20,26 @@ type Npc struct {
 }
 
 type NpcConf struct {
-	Level             string                `json:"level"`
-	PosX              int                   `json:"posX"`
-	PosY              int                   `json:"posY"`
-	PosZ              int                   `json:"posZ"`
-	Dead              bool                  `json:"dead"`
-	Voice             string                `json:"voice"`
-	CurrentNode       string                `json:"current_node"`
-	Nodes             map[string]*StoryNode `json:"nodes"`
-	Health            int                   `json:"health"`
-	Energy            int                   `json:"energy"`
-	Strength          int                   `json:"strength"`
-	Dexterity         int                   `json:"dexterity"`
-	Beauty            int                   `json:"beauty"`
-	Will              int                   `json:"will"`
-	Intelligence      int                   `json:"intelligence"`
-	Charisma          int                   `json:"charisma"`
-	Luck              int                   `json:"luck"`
-	Aggressiveness    int                   `json:"aggressiveness"`
-	RegenerationSpeed int                   `json:"regeneration_speed"`
-	Powers            []string              `json:"powers"`
+	Level             string                `yaml:"level"`
+	PosX              int                   `yaml:"posX"`
+	PosY              int                   `yaml:"posY"`
+	PosZ              int                   `yaml:"posZ"`
+	Dead              bool                  `yaml:"dead"`
+	Voice             string                `yaml:"voice"`
+	CurrentNode       string                `yaml:"current_node"`
+	Nodes             map[string]*StoryNode `yaml:"nodes"`
+	Health            int                   `yaml:"health"`
+	Energy            int                   `yaml:"energy"`
+	Strength          int                   `yaml:"strength"`
+	Dexterity         int                   `yaml:"dexterity"`
+	Beauty            int                   `yaml:"beauty"`
+	Will              int                   `yaml:"will"`
+	Intelligence      int                   `yaml:"intelligence"`
+	Charisma          int                   `yaml:"charisma"`
+	Luck              int                   `yaml:"luck"`
+	Aggressiveness    int                   `yaml:"aggressiveness"`
+	RegenerationSpeed int                   `yaml:"regeneration_speed"`
+	Powers            []string              `yaml:"powers"`
 }
 
 func NewNpc(p Pos, name string) *Npc {
@@ -69,16 +70,16 @@ func NewNpc(p Pos, name string) *Npc {
 }
 
 func (c *Npc) LoadNpc(filename string) (string, Pos) {
-	jsonFile, err := os.Open(filename)
+	yamlFile, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer jsonFile.Close()
+	defer yamlFile.Close()
 
-	byteValue, _ := ioutil.ReadAll(jsonFile)
+	byteValue, _ := ioutil.ReadAll(yamlFile)
 
 	conf := NpcConf{}
-	json.Unmarshal(byteValue, &conf)
+	yaml.Unmarshal(byteValue, &conf)
 
 	c.Dead = conf.Dead
 	if conf.Health != 0 {
@@ -135,9 +136,6 @@ func (c *Npc) LoadNpc(filename string) (string, Pos) {
 func (npc *Npc) Talk(p *Player, g *Game) {
 	EM.Dispatch(&Event{Action: ActionTalk, Payload: map[string]string{"voice": npc.Voice}})
 	npc.Dialog.Init(p)
-	node := npc.Dialog.GetCurrentNode()
-	node.ClearHighlight()
-	node.SetHighlightedIndex(0)
 	npc.TalkingTo = p
 	if p.X == npc.X && p.Y < npc.Y {
 		npc.LookAt = Up
@@ -151,6 +149,14 @@ func (npc *Npc) Talk(p *Player, g *Game) {
 	if p.Y == npc.Y && p.X > npc.X {
 		npc.LookAt = Right
 	}
+	npc.doTalk()
+}
+
+func (npc *Npc) doTalk() {
+	EM.Dispatch(&Event{Action: ActionTalk, Payload: map[string]string{"voice": npc.Voice}})
+	node := npc.Dialog.GetCurrentNode()
+	node.ClearHighlight()
+	node.SetHighlightedIndex(0)
 }
 
 func (npc *Npc) TalkChoiceUp() {
@@ -234,7 +240,7 @@ func (npc *Npc) ChooseTalkOption(cmd string, g *Game) {
 		}
 	}
 	npc.Dialog.CurrentNode = nodeTo
-	EM.Dispatch(&Event{Action: ActionTalk, Payload: map[string]string{"voice": npc.Voice}})
+	npc.doTalk()
 }
 
 func (npc *Npc) StopTalking() {
