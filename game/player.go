@@ -308,14 +308,14 @@ func (p *Player) TalkToDead(g *Game, posTo Pos) {
 	}
 }
 
-func (p *Player) LearnAttack(attackName string) {
+func (p *Player) LearnAttack(attackUID string) {
 	for _, att := range p.Attacks {
-		if att.Name == attackName {
+		if att.Name == attackUID {
 			return
 		}
 	}
 	for _, att := range Attacks() {
-		if att.Name == attackName {
+		if att.UID == attackUID {
 			p.Attacks = append(p.Attacks, att)
 			EM.Dispatch(&Event{
 				Message: "Vous avez appris une nouvelle attaque: " + att.Name + " !",
