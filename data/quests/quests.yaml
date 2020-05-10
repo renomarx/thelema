@@ -33,6 +33,9 @@ nathaniel_revelation:
     talk_to_nathaniel2:
       order: 2
       description: Retrouvez Nathaniel (Neoroma)
+    report_to_nathaniel:
+      order: 3
+      description: Rapportez les propos d'Abigail à Nathaniel (Tulla)
       final: true
 
 

@@ -9,42 +9,25 @@ nodes:
 
   greetings:
     messages:
-    - Je pensais que cet appartement n'appartenait encore à personne...
+    - Aïe. Cet appartement était sensé être vide.
     choices:
-    - cmd: Qui êtes-vous ?
+    - cmd: Qui êtes-vous ? Que faites-vous chez moi ?
       node: who_are_you
 
   who_are_you:
     messages:
-    - Je m'appelle Nathaniel. Vous êtes le nouveau propriétaire de cet appartement
-      ?
+    - Je m'appelle Nathaniel.
+    - Désolé pour mon intrusion chez vous; tenez, pour m'excuser.
+    - "[Il vous donne un livre]"
     choices:
-    - cmd: Oui. Que faites-vous chez moi ?
-      node: what_are_you
-
-  what_are_you:
-    messages:
-    - Je suis en cavale, sachant votre appartement vide, je m'y suis installé pour
-      quelques temps.
-    - Ne vous en faîtes pas, je ne suis pas dangereux, j'ai simplement découvert des
-      choses qui auraient dû rester cachées.
-    choices:
-    - cmd: Qu'avez-vous découvert?
-      node: what_did_you_discover
-
-  what_did_you_discover:
-    messages:
-    - Je n'ai pas le temps de vous expliquer, et de toute façon, vous ne me croiriez
-      pas.
-    - "[Il vous juge un instant]"
-    - D'accord, si vous voulez en savoir plus, retrouvez-moi à Neoroma.
-    choices:
-    - cmd: Attendez!
+    - cmd: ...
       node: bye
+      actions:
+      - book_given:book_dead_speaking
 
   bye:
     messages:
-    - Notre rencontre n'est peut-être pas due au hasard. Je vous attendrai...
+    - Je pars pour Neoroma. S'il vous plait, oubliez que vous m'avez vu.
     choices:
     - cmd: "..."
       actions:
@@ -56,12 +39,9 @@ nodes:
         steps_fullfilling:
         - nathaniel_revelation:talk_to_nathaniel
 
-  greetings2:
-    messages:
-    - Content de vous revoir!
-    choices:
-    - cmd: Alors, de quoi vouliez-vous me parler ?
-      node: learn_necromancy
+  #
+  # FROM PRISON
+  #
   from_prison:
     messages:
     - "[Nathaniel porte des menottes dans une matière sombre]"
@@ -77,9 +57,9 @@ nodes:
 
   free_him:
     messages:
-    - Je vous remercie. Ces menottes bloquent toute magie pour ceux qui les portent.
+    - Merci! Ces menottes bloquent toute magie pour ceux qui les portent.
     choices:
-    - cmd: Alors, de quoi vouliez-vous me parler ?
+    - cmd: Pourquoi êtes-vous en prison ?
       node: learn_necromancy
     - cmd: C'est moi qui vous ai vendu à la police.
       node: not_cool
@@ -90,63 +70,43 @@ nodes:
   not_cool:
     messages:
     - Ah ah ah! Vous me vendez, puis vous me libérez.
-    - Quelles sont vos raisons ?
+    - Puisque vous semblez disposé à m'aider, peut-être pourriez-vous me rendre encore un petit service.
     choices:
-    - cmd: Je me suis trouvé une consience
-      node: back_to_the_subject
-    - cmd: Je n'allais pas cracher sur 100§...
-      node: back_to_the_subject2
-
-  back_to_the_subject:
-    messages:
-    - J'imagine que la conscience se trouve plus facilement avec de l'argent...
-    choices:
-    - cmd: Alors, de quoi vouliez-vous me parler ?
-      node: learn_necromancy
-
-  back_to_the_subject2:
-    messages:
-    - C'est pas faux.
-    choices:
-    - cmd: Alors, de quoi vouliez-vous me parler ?
-      node: learn_necromancy
-
-  learn_necromancy:
-    messages:
-    - Vous me paraissez très capable.
-    - Je pourrai vous expliquer ce que je sais mais je n'ai pas de preuves à vous
-      apporter,
-    - il faut donc que vous le découvriez par vous-même.
-    choices:
-    - cmd: Que dois-je faire ?
-      node: learn_necromancy2
-
-  learn_necromancy2:
-    messages:
-    - D'abord, vous devez apprendre à communiquer avec les morts.
-    - Lorsque j'étais à l'école de magie du Grand Prêtre, j'ai pu subtiliser quelques
-      manuels interdits;
-    - En voici un exemplaire.
-    choices:
-    - cmd: Ensuite ?
+    - cmd: Qu'est-ce que vous voulez?
       node: talk_to_dead_body
-      actions:
-      - book_given:book_dead_speaking
+  #
+  # END PRISON
+  #
+
+
+  greetings2:
+    messages:
+    - Tient, on se connait, non ?
+    choices:
+    - cmd: Vous étiez chez moi.
+      node: meet_again
+
+  meet_again:
+    messages:
+    - Ah oui! Si on se rencontre de nouveau, c'est que vous ne m'avez pas dénoncé!
+    - Merci. Puisque vous êtes là, j'aurai bien besoin d'un petit service.
+    choices:
+    - cmd: Qu'est-ce que vous voulez?
+      node: talk_to_dead_body
 
   talk_to_dead_body:
     messages:
-    - Ensuite, il se trouve une crypte où est enterrée une certaine personne.
-    - Allez dans cette crypte, trouvez le cadavre et rappelez son esprit. Il vous
-      donnera les réponses.
+    - Vous vous rappelez du livre que je vous ai donné ?
+    - L'avez-vous lu ? Il vous apprendra à communiquer avec l'esprit des morts.
     choices:
-    - cmd: Les réponses à quoi ?
-      node: final_answer
+    - cmd: ...
+      node: talk_to_dead_body_next
 
-  final_answer:
+  talk_to_dead_body_next:
     messages:
-    - Aux questions que vous vous posez, ou que vous finirez par vous poser!
-    - Il est temps pour moi de partir. Cette fois, je ne crois pas que nous nous reverrons.
-    - Adieu...
+    - Il y a une crypte au nord-est d'Arcanea, dans laquelle est enterrée une femme du nom d'Abigail
+    - Pourriez-vous y aller, communiquer avec son esprit et me rapporter ses propos?
+    - Si vous faites ça pour moi, retrouvez-moi à Tulla. Je serais en mesure de vous donner d'autres pouvoirs.
     choices:
     - cmd: "..."
       quest:
@@ -154,4 +114,11 @@ nodes:
         - great_priest_past:talk_to_nathaniel_about_dead_body
         - nathaniel_revelation:talk_to_nathaniel2
       actions:
-      - teleport_to:nil
+      - teleport_to:tulla
+      - set_current_node:greetings3
+
+  greetings3:
+    messages:
+    - TODO
+    choices:
+    - cmd: Bye.
