@@ -20,7 +20,7 @@ const ActionMenuOpen = "MENU_OPEN"
 const ActionMenuClose = "MENU_CLOSE"
 const ActionReadBook = "READ_BOOK"
 
-const ActionQuestFinished = "QUEST_FINISHED"
+const ActionStepFinished = "STEP_FINISHED"
 const ActionCharacteristicUp = "CHARACTERISTIC_UP"
 
 const ActionFight = "FIGHT"

@@ -14,30 +14,28 @@ func (ui *UI) DrawDiary() {
 		_, h := ui.DrawText("Journal", TextSizeL, ColorActive, PlayerMenuOffsetX*32, offsetH)
 		offsetH += h + 10
 
-		todo := ui.Game.GetSteps(game.StepStateTODO)
-		done := ui.Game.GetSteps(game.StepStateDONE)
+		todo := ui.Game.GetOrderedSteps(game.StepStateTODO)
+		done := ui.Game.GetOrderedSteps(game.StepStateDONE)
 
 		_, h = ui.DrawText("A faire:", TextSizeM, ColorActive, PlayerMenuOffsetX*32, offsetH)
 		offsetH += h
 		for _, st := range todo {
 			h = ui.DrawStep(st, offsetH, ColorActive)
-			offsetH = h
+			offsetH += h
 		}
 		offsetH += Res
 		_, h = ui.DrawText("Terminées:", TextSizeM, ColorDisabled, PlayerMenuOffsetX*32, offsetH)
 		offsetH += h
 		for _, st := range done {
 			h = ui.DrawStep(st, offsetH, ColorDisabled)
-			offsetH = h
+			offsetH += h
 		}
 	}
 }
 
 func (ui *UI) DrawStep(st *game.Step, offsetH int32, color sdl.Color) int32 {
 	_, h := ui.DrawText("- "+st.Name, TextSizeS, color, PlayerMenuOffsetX*32+10+10, offsetH)
-	offsetH += h
-	offsetH += 10
-	return offsetH
+	return h
 }
 
 func (ui *UI) drawDiaryBox() {

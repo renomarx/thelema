@@ -1,5 +1,10 @@
 package game
 
+import (
+	"sort"
+	"time"
+)
+
 const StepStateTODO = "TODO"
 const StepStateDONE = "DONE"
 const StepStateCANCELED = "CANCELED"
@@ -11,15 +16,23 @@ type Step struct {
 	ObjectsGiven []string       `yaml:"objects_given"`
 	Raising      map[string]int `yaml:"raising"`
 	state        string
+	updatedAt    time.Time
 }
 
-func (g *Game) GetSteps(state string) []*Step {
+type StepsByDate []*Step
+
+func (a StepsByDate) Len() int           { return len(a) }
+func (a StepsByDate) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a StepsByDate) Less(i, j int) bool { return a[i].updatedAt.After(a[j].updatedAt) }
+
+func (g *Game) GetOrderedSteps(state string) []*Step {
 	var res []*Step
 	for _, st := range g.Steps {
 		if st.state == state {
 			res = append(res, st)
 		}
 	}
+	sort.Sort(StepsByDate(res))
 	return res
 }
 
@@ -29,6 +42,7 @@ func (g *Game) beginStep(stepID string) {
 		panic("Step " + stepID + " does not exist")
 	}
 	st.state = StepStateTODO
+	st.updatedAt = time.Now()
 }
 
 func (g *Game) cancelStep(stepID string) {
@@ -37,6 +51,7 @@ func (g *Game) cancelStep(stepID string) {
 		panic("Step " + stepID + " does not exist")
 	}
 	st.state = StepStateCANCELED
+	st.updatedAt = time.Now()
 }
 
 func (g *Game) finishStep(stepID string) {
@@ -45,11 +60,11 @@ func (g *Game) finishStep(stepID string) {
 		panic("Step " + stepID + " does not exist")
 	}
 	st.state = StepStateDONE
+	st.updatedAt = time.Now()
 
 	p := g.Level.Player
 	EM.Dispatch(&Event{
-		Action:  ActionQuestFinished,
-		Message: "Vous avez terminé: " + st.Name + " !",
+		Action: ActionStepFinished,
 	})
 	for _, s := range st.ObjectsTaken {
 		EM.Dispatch(&Event{

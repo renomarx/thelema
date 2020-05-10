@@ -101,6 +101,10 @@ func (n *StoryNode) SetHighlightedIndex(i int) {
 
 func (n *StoryNode) GetCurrentChoice() StoryChoice {
 	idx := n.GetHighlightedIndex()
+	if idx > len(n.Choices) {
+		log.Printf("Error: No choice possible for dialog")
+		return StoryChoice{}
+	}
 	return n.Choices[idx]
 }
 

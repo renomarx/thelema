@@ -21,11 +21,11 @@ const (
 func (g *Game) GenerateWorld() {
 	firstLevel := g.loadLevels()
 	g.loadPortals()
+	g.loadSteps()
 	g.loadNpcsVIP()
 	g.loadBooks()
-	g.LoadSteps()
 	g.loadSpecialObjects()
-	g.LoadMonsters()
+	g.loadMonsters()
 	g.Level = firstLevel
 }
 
@@ -138,11 +138,11 @@ func (g *Game) loadPortals() {
 func (g *Game) addBidirectionalPortal(srcName string, srcPos Pos, dstName string, dstPos Pos, key string) {
 	srcLevel, e := g.Levels[srcName]
 	if !e {
-		panic("Level " + srcName + " does not exist.")
+		panic("Portals: Level " + srcName + " does not exist.")
 	}
 	dstLevel, e := g.Levels[dstName]
 	if !e {
-		panic("Level " + dstName + " does not exist.")
+		panic("Portals: Level " + dstName + " does not exist.")
 	}
 	srcLevel.AddPortal(srcPos, &Portal{LevelTo: dstName, PosTo: dstPos, Key: key})
 	dstLevel.AddPortal(dstPos, &Portal{LevelTo: srcName, PosTo: srcPos, Key: key})
@@ -157,6 +157,7 @@ func (g *Game) loadNpcsVIP() {
 			npc := NewNpc(p, fileArr[0])
 			filename := g.DataDir + "/npcs/" + npc.Name + ".yaml"
 			level, pos := npc.LoadNpc(filename)
+			npc.validate(g)
 
 			l, exists := g.Levels[level]
 			if !exists {
@@ -185,7 +186,9 @@ func (g *Game) loadBooks() {
 
 	g.Books = make(map[string]*OBook)
 	for tile, bookInfo := range books {
-		g.Books[tile] = g.loadBookFromFile(tile, &bookInfo)
+		book := g.loadBookFromFile(tile, &bookInfo)
+		book.validate(tile, g)
+		g.Books[tile] = book
 		levelName := bookInfo.Level
 		l, exists := g.Levels[levelName]
 		if !exists {
@@ -232,7 +235,7 @@ func (g *Game) loadBookFromFile(filename string, bookInfo *BookInfo) *OBook {
 	}
 }
 
-func (g *Game) LoadSteps() {
+func (g *Game) loadSteps() {
 	filename := g.DataDir + "/quests/steps.yaml"
 	yamlFile, err := os.Open(filename)
 	if err != nil {
@@ -268,6 +271,7 @@ func (g *Game) loadSpecialObjects() {
 
 	objectsByRune := make(map[string]*SpecialObject)
 	for key, obj := range objects {
+		obj.validate(key, g)
 		l, exists := g.Levels[obj.Level]
 		if !exists {
 			log.Fatal("Level " + obj.Level + " does not exist")
@@ -311,6 +315,7 @@ func (g *Game) generateNpcs(l *Level, nbNpcs int) {
 			npc.Voice = npcVoices[npcNames[j]]
 			filename := g.DataDir + "/npcs/common/" + npc.Name + ".yaml"
 			npc.LoadNpc(filename)
+			npc.validate(g)
 			l.Map[pos.Z][pos.Y][pos.X].Npc = npc
 		}
 	}

@@ -116,8 +116,6 @@ func (mp *MusicPlayer) On(e *game.Event) {
 		mp.PlayMonsterRoar(e)
 	case game.ActionTakeGold:
 		mp.PlaySound("coin3.wav", 48)
-	case game.ActionQuestFinished:
-		mp.PlaySound("orchestra.wav", 64)
 	case game.ActionCharacteristicUp:
 		mp.PlaySound("piano.wav", 64)
 	case game.ActionFight:

@@ -13,6 +13,8 @@ nodes:
     choices:
     - cmd: Qui êtes-vous ? Que faites-vous chez moi ?
       node: who_are_you
+      steps_beginning:
+      - talk_to_nathaniel
 
   who_are_you:
     messages:
@@ -34,11 +36,11 @@ nodes:
       - teleport_to:neoroma
       - set_current_node:greetings2
       - discover:neoroma
-    steps_finishing:
-    - talk_to_nathaniel
-    steps_beginning:
-    - talk_to_nathaniel2
-    - send_nathaniel_to_prison
+      steps_finishing:
+      - talk_to_nathaniel
+      steps_beginning:
+      - talk_to_nathaniel2
+      - send_nathaniel_to_prison
 
   #
   # FROM PRISON

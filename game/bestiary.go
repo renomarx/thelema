@@ -194,7 +194,7 @@ func (g *Game) FightMonsters(bestiary []*MonsterType) {
 	g.Fight(enemies)
 }
 
-func (g *Game) LoadMonsters() {
+func (g *Game) loadMonsters() {
 	defaultMonsters := []*MonsterType{
 		TRat(),
 		TSpider(),
