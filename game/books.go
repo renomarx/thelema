@@ -1,22 +1,22 @@
 package game
 
-import "strings"
-
 type BookInfo struct {
-	Level       string    `yaml:"level"`
-	PosX        int       `yaml:"posX"`
-	PosY        int       `yaml:"posY"`
-	PosZ        int       `yaml:"posZ"`
-	PowersGiven []string  `yaml:"powers_given"`
-	Quest       QuestLink `yaml:"quest"`
+	Level          string   `yaml:"level"`
+	PosX           int      `yaml:"posX"`
+	PosY           int      `yaml:"posY"`
+	PosZ           int      `yaml:"posZ"`
+	PowersGiven    []string `yaml:"powers_given"`
+	StepsFinishing []string `yaml:"steps_finishing"`
+	StepsBeginning []string `yaml:"steps_beginning"`
 }
 
 type OBook struct {
-	Rune   string
-	Title  string
-	Text   []string
-	Powers []string
-	Quest  QuestLink
+	Rune           string
+	Title          string
+	Text           []string
+	Powers         []string
+	StepsFinishing []string `yaml:"steps_finishing"`
+	StepsBeginning []string `yaml:"steps_beginning"`
 }
 
 type Library struct {
@@ -75,13 +75,11 @@ func (l *Library) ConfirmChoice(g *Game) {
 			Action:  ActionPower,
 			Payload: map[string]string{"type": powername}})
 	}
-	for _, questStep := range b.Quest.StepsFullfilling {
-		arr := strings.Split(questStep, ":")
-		if len(arr) > 1 {
-			questID := arr[0]
-			stepID := arr[1]
-			g.Level.Player.finishQuestStep(questID, stepID, g)
-		}
+	for _, stID := range b.StepsBeginning {
+		g.beginStep(stID)
+	}
+	for _, stID := range b.StepsFinishing {
+		g.finishStep(stID)
 	}
 }
 

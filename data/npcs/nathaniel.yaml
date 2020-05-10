@@ -34,10 +34,11 @@ nodes:
       - teleport_to:neoroma
       - set_current_node:greetings2
       - discover:neoroma
-      quest:
-        steps_mandatory: []
-        steps_fullfilling:
-        - nathaniel_revelation:talk_to_nathaniel
+    steps_finishing:
+    - talk_to_nathaniel
+    steps_beginning:
+    - talk_to_nathaniel2
+    - send_nathaniel_to_prison
 
   #
   # FROM PRISON
@@ -50,22 +51,16 @@ nodes:
     choices:
     - cmd: "[Vous le libérez]"
       node: free_him
-      quest:
-        steps_fullfilling:
-        - nathaniel_free:free
+      steps_finishing:
+      - free_nathaniel
     - cmd: Pas aujourd'hui.
 
   free_him:
     messages:
     - Merci! Ces menottes bloquent toute magie pour ceux qui les portent.
     choices:
-    - cmd: Pourquoi êtes-vous en prison ?
-      node: learn_necromancy
     - cmd: C'est moi qui vous ai vendu à la police.
       node: not_cool
-      quest:
-        steps_mandatory:
-        - nathaniel_free:sent_to_prison
 
   not_cool:
     messages:
@@ -85,6 +80,8 @@ nodes:
     choices:
     - cmd: Vous étiez chez moi.
       node: meet_again
+      steps_canceling:
+      - send_nathaniel_to_prison
 
   meet_again:
     messages:
@@ -109,10 +106,10 @@ nodes:
     - Si vous faites ça pour moi, retrouvez-moi à Tulla. Je serais en mesure de vous donner d'autres pouvoirs.
     choices:
     - cmd: "..."
-      quest:
-        steps_fullfilling:
-        - great_priest_past:talk_to_nathaniel_about_dead_body
-        - nathaniel_revelation:talk_to_nathaniel2
+      steps_finishing:
+      - talk_to_nathaniel2
+      steps_beginning:
+      - make_abigail_talk
       actions:
       - teleport_to:tulla
       - set_current_node:greetings3

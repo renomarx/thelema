@@ -23,16 +23,15 @@ func (g *Game) GenerateWorld() {
 	g.loadPortals()
 	g.loadNpcsVIP()
 	g.loadBooks()
-	g.loadQuestsObjects()
+	g.LoadSteps()
+	g.loadSpecialObjects()
 	g.LoadMonsters()
 	g.Level = firstLevel
 }
 
 func (g *Game) LoadPlayer(p *Player) {
-	gameDir := g.DataDir
 	p.X = PlayerInitialX
 	p.Y = PlayerInitialY
-	p.LoadQuests(gameDir)
 	p.LoadPlayerMenu()
 	g.Level.Player = p
 }
@@ -223,10 +222,34 @@ func (g *Game) loadBookFromFile(filename string, bookInfo *BookInfo) *OBook {
 		title = lines[0]
 	}
 
-	return &OBook{Title: title, Text: lines, Powers: bookInfo.PowersGiven, Rune: filename, Quest: bookInfo.Quest}
+	return &OBook{
+		Title:          title,
+		Text:           lines,
+		Powers:         bookInfo.PowersGiven,
+		Rune:           filename,
+		StepsBeginning: bookInfo.StepsBeginning,
+		StepsFinishing: bookInfo.StepsFinishing,
+	}
 }
 
-func (g *Game) loadQuestsObjects() {
+func (g *Game) LoadSteps() {
+	filename := g.DataDir + "/quests/steps.yaml"
+	yamlFile, err := os.Open(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer yamlFile.Close()
+
+	byteValue, _ := ioutil.ReadAll(yamlFile)
+
+	steps := make(map[string]*Step)
+
+	yaml.Unmarshal(byteValue, &steps)
+
+	g.Steps = steps
+}
+
+func (g *Game) loadSpecialObjects() {
 	filename := g.DataDir + "/quests/objects.yaml"
 	yamlFile, err := os.Open(filename)
 	if err != nil {
@@ -236,14 +259,14 @@ func (g *Game) loadQuestsObjects() {
 
 	byteValue, _ := ioutil.ReadAll(yamlFile)
 
-	objects := make(map[string]*QuestObject)
+	objects := make(map[string]*SpecialObject)
 
 	err = yaml.Unmarshal(byteValue, &objects)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	objectsByRune := make(map[string]*QuestObject)
+	objectsByRune := make(map[string]*SpecialObject)
 	for key, obj := range objects {
 		l, exists := g.Levels[obj.Level]
 		if !exists {
@@ -260,24 +283,7 @@ func (g *Game) loadQuestsObjects() {
 		}
 	}
 
-	g.QuestsObjects = objectsByRune
-}
-
-func (p *Player) LoadQuests(dirpath string) {
-	filename := dirpath + "/quests/quests.yaml"
-	yamlFile, err := os.Open(filename)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer yamlFile.Close()
-
-	byteValue, _ := ioutil.ReadAll(yamlFile)
-
-	quests := make(map[string]*Quest)
-
-	yaml.Unmarshal(byteValue, &quests)
-
-	p.Quests = quests
+	g.SpecialObjects = objectsByRune
 }
 
 func (g *Game) generateNpcs(l *Level, nbNpcs int) {

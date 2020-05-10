@@ -10,13 +10,12 @@ nodes:
     messages:
     - "[L'esprit reste impassible, muet.]"
     choices:
-    - quest:
-        steps_mandatory:
-        - great_priest_past:talk_to_great_priest
-        steps_fullfilling:
-        - great_priest_past:talk_to_dead_body
-      cmd: Abigail ?
+    - cmd: Abigail ?
       node: talk_to_me
+      steps_finishing:
+      - make_abigail_talk
+      - talk_to_dead_body
+      # add steps_beginning
     - cmd: "[Vous libérez l'esprit]"
   talk_to_me:
     messages:

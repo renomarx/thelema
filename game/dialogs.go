@@ -2,7 +2,6 @@ package game
 
 import (
 	"log"
-	"strings"
 	"time"
 )
 
@@ -21,22 +20,21 @@ type StoryNode struct {
 }
 
 type StoryChoice struct {
-	Cmd         string `yaml:"cmd"`
-	NodeId      string `yaml:"node"`
-	Highlighted bool
-	Quest       QuestLink      `yaml:"quest"`
-	Required    map[string]int `yaml:"required"`
-	Actions     []string       `yaml:"actions"`
+	Cmd            string `yaml:"cmd"`
+	NodeId         string `yaml:"node"`
+	Highlighted    bool
+	StepsFinishing []string       `yaml:"steps_finishing"`
+	StepsCanceling []string       `yaml:"steps_canceling"`
+	StepsBeginning []string       `yaml:"steps_beginning"`
+	Required       map[string]int `yaml:"required"`
+	Actions        []string       `yaml:"actions"`
 }
 
 func adaptDialogSpeed() {
 	time.Sleep(time.Duration(DialogDeltaTime) * time.Millisecond)
 }
 
-func (d *Dialog) Init(p *Player) {
-	for _, n := range d.Nodes {
-		n.filterPossibleChoices(p)
-	}
+func (d *Dialog) Init(g *Game) {
 	d.initialNode = d.CurrentNode
 }
 
@@ -106,31 +104,18 @@ func (n *StoryNode) GetCurrentChoice() StoryChoice {
 	return n.Choices[idx]
 }
 
-func (n *StoryNode) filterPossibleChoices(p *Player) {
+func (n *StoryNode) filterPossibleChoices(g *Game) {
+	p := g.Level.Player
 	var res []StoryChoice
 	for _, choice := range n.AllChoices {
 		isPossible := true
-		for _, questStep := range choice.Quest.StepsMandatory {
-			arr := strings.Split(questStep, ":")
-			if len(arr) > 1 {
-				questID := arr[0]
-				stepID := arr[1]
-				if !p.IsQuestOpen(questID) {
-					isPossible = false
-				}
-				if !p.IsQuestOpenStepFinished(questID, stepID) {
-					isPossible = false
-				}
+		for _, stID := range choice.StepsFinishing {
+			st, e := g.Steps[stID]
+			if !e {
+				log.Fatalf("Step %s does not exist", stID)
 			}
-		}
-		for _, questStep := range choice.Quest.StepsFullfilling {
-			arr := strings.Split(questStep, ":")
-			if len(arr) > 1 {
-				questID := arr[0]
-				stepID := arr[1]
-				if p.IsStepFinished(questID, stepID) {
-					isPossible = false
-				}
+			if st.state != StepStateTODO {
+				isPossible = false
 			}
 		}
 		if len(choice.Required) > 0 {

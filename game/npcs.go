@@ -135,7 +135,7 @@ func (c *Npc) LoadNpc(filename string) (string, Pos) {
 
 func (npc *Npc) Talk(p *Player, g *Game) {
 	EM.Dispatch(&Event{Action: ActionTalk, Payload: map[string]string{"voice": npc.Voice}})
-	npc.Dialog.Init(p)
+	npc.Dialog.Init(g)
 	npc.TalkingTo = p
 	if p.X == npc.X && p.Y < npc.Y {
 		npc.LookAt = Up
@@ -149,12 +149,13 @@ func (npc *Npc) Talk(p *Player, g *Game) {
 	if p.Y == npc.Y && p.X > npc.X {
 		npc.LookAt = Right
 	}
-	npc.doTalk()
+	npc.doTalk(g)
 }
 
-func (npc *Npc) doTalk() {
+func (npc *Npc) doTalk(g *Game) {
 	EM.Dispatch(&Event{Action: ActionTalk, Payload: map[string]string{"voice": npc.Voice}})
 	node := npc.Dialog.GetCurrentNode()
+	node.filterPossibleChoices(g)
 	node.ClearHighlight()
 	node.SetHighlightedIndex(0)
 }
@@ -183,13 +184,14 @@ func (npc *Npc) ChooseTalkOption(cmd string, g *Game) {
 	p := npc.TalkingTo
 	for _, choice := range node.Choices {
 		if choice.Cmd == cmd {
-			for _, questStep := range choice.Quest.StepsFullfilling {
-				arr := strings.Split(questStep, ":")
-				if len(arr) > 1 {
-					questID := arr[0]
-					stepID := arr[1]
-					p.finishQuestStep(questID, stepID, g)
-				}
+			for _, stID := range choice.StepsBeginning {
+				g.beginStep(stID)
+			}
+			for _, stID := range choice.StepsFinishing {
+				g.finishStep(stID)
+			}
+			for _, stID := range choice.StepsCanceling {
+				g.cancelStep(stID)
 			}
 			for _, action := range choice.Actions {
 				act := strings.Split(action, ":")
@@ -240,7 +242,7 @@ func (npc *Npc) ChooseTalkOption(cmd string, g *Game) {
 		}
 	}
 	npc.Dialog.CurrentNode = nodeTo
-	npc.doTalk()
+	npc.doTalk(g)
 }
 
 func (npc *Npc) StopTalking() {

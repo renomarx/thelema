@@ -1,0 +1,85 @@
+---
+
+talk_to_jason_about_sarah:
+  name: Parler à Jason de Sarah
+
+get_alcohol_for_sarah:
+  name: Récupérer une bouteille d'alcool à Dresde
+
+get_herbs_for_sarah:
+  name: Récupérer des épices à Neoroma
+
+bring_alcohol_to_sarah:
+  name: Apporter l'alcool à Sarah à Neoroma
+  objects_taken:
+  - alcohol
+
+bring_herbs_to_sarah:
+  name: Apporter les épices à Sarah à Neoroma
+  objects_taken:
+  - herbs
+
+get_30dollars_from_sarah:
+  name: Récupérer tes 30 dollars.
+  gold_given: 30
+  objects_given: []
+
+talk_to_nathaniel:
+  name: Parler à Nathaniel (Arcanea - Home)
+
+talk_to_nathaniel2:
+  name: Retrouver Nathaniel (Neoroma)
+
+report_to_nathaniel:
+  name: Rapporter les propos d'Abigail à Nathaniel (Tulla)
+
+read_the_prefet_letter:
+  name: Lire la lettre du préfet (Arcanea - Home)
+
+talk_to_the_prefet:
+  name: Parler au préfet d'Arcanea
+
+become_a_soldier:
+  name: Devenir un soldat
+  raising:
+    strength: 5
+    dexterity: 2
+
+become_a_doctor:
+  name: Devenir un médecin
+  raising:
+    intelligence: 5
+    dexterity: 2
+
+become_an_artist:
+  name: Devenir un artiste
+  raising:
+    charisma: 3
+    beauty: 2
+    dexterity: 2
+
+become_a_priest:
+  name: Devenir un prêtre
+  raising:
+    will: 5
+    intelligence: 2
+
+become_an_ambassador:
+  name: Devenir un ambassadeur
+  final: true
+  raising:
+    charisma: 5
+    intelligence: 2
+
+send_nathaniel_to_prison:
+  name: Parler de Nathaniel à la police (facultatif)
+  gold_given: 100
+
+free_nathaniel:
+  name: Libérer Nathaniel (Dresde - Prison)
+
+make_abigail_talk:
+  name: Faire parler l'esprit d'Abigail dans la crypte.
+
+talk_to_dead_abigail:
+  name: Parler à Abigail dans la crypte.

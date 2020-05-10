@@ -3,23 +3,27 @@ level: neoroma
 posX: 24
 posY: 14
 voice: FEMALE_STANDARD
+
 current_node: greetings
 nodes:
+
   greetings:
     messages:
     - Salut BB.
     choices:
-    - quest:
-        steps_mandatory:
-        - sarahs_gin:get_herbs
-        - sarahs_gin:get_alcohol
-        steps_fullfilling:
-        - sarahs_gin:talk_to_sarah
-      cmd: Tiens, voici les ingrédients que tu voulais.
+    - cmd: Tiens, voici les ingrédients que tu voulais.
       node: thanks
+      steps_finishing:
+      - bring_alcohol_to_sarah
+      - bring_herbs_to_sarah
+      steps_beginning:
+      - get_30dollars_from_sarah
     - cmd: A plus.
+
   thanks:
     messages:
     - Merci ! Tiens, voilà tes 30$ !
     choices:
     - cmd: A plus.
+      steps_finishing:
+      - get_30dollars_from_sarah

@@ -5,44 +5,65 @@ posY: 14
 voice: MALE_STANDARD
 current_node: greetings
 nodes:
+
   greetings:
     messages:
     - Bonjour.
     choices:
-    - quest:
-        steps_mandatory:
-        - letter_from_ri:read_the_letter
-      cmd: Je viens vous voir, comme convenu.
+    - cmd: Je viens vous voir, comme convenu.
       node: choose_a_job
+      steps_finishing:
+      - talk_to_the_prefet
+      steps_beginning:
+      - become_a_soldier
+      - become_a_doctor
+      - become_an_artist
+      - become_a_priest
+      - become_an_ambassador
     - cmd: Je dois y aller.
+
   choose_a_job:
     messages:
     - 'Ah, oui ! Il faut que vous choisissiez un métier parmi les suivants:'
     - Soldat, médecin, artiste, prêtre, ambassadeur.
     choices:
-    - quest:
-        steps_fullfilling:
-        - become_a_soldier:be_soldier
-        - letter_from_ri:talk_to_the_prefet
-      cmd: Je veux devenir soldat.
-    - quest:
-        steps_fullfilling:
-        - become_a_doctor:be_doctor
-        - letter_from_ri:talk_to_the_prefet
-      cmd: Je veux devenir médecin.
-    - quest:
-        steps_fullfilling:
-        - become_an_artist:be_artist
-        - letter_from_ri:talk_to_the_prefet
-      cmd: Je veux devenir artiste.
-    - quest:
-        steps_fullfilling:
-        - become_a_priest:be_priest
-        - letter_from_ri:talk_to_the_prefet
-      cmd: Je veux devenir prêtre.
-    - quest:
-        steps_fullfilling:
-        - become_an_ambassador:be_ambassador
-        - letter_from_ri:talk_to_the_prefet
-      cmd: Je veux devenir ambassadeur.
-    - cmd: Il faut que j'y réflechisse encore.
+    - cmd: Je veux devenir soldat.
+      steps_finishing:
+      - become_a_soldier
+      steps_canceling:
+      - become_a_doctor
+      - become_an_artist
+      - become_a_priest
+      - become_an_ambassador
+    - cmd: Je veux devenir médecin.
+      steps_finishing:
+      - become_a_doctor
+      steps_canceling:
+      - become_a_soldier
+      - become_an_artist
+      - become_a_priest
+      - become_an_ambassador
+    - cmd: Je veux devenir artiste.
+      steps_finishing:
+      - become_an_artist
+      steps_canceling:
+      - become_a_soldier
+      - become_a_doctor
+      - become_a_priest
+      - become_an_ambassador
+    - cmd: Je veux devenir prêtre.
+      steps_finishing:
+      - become_a_priest
+      steps_canceling:
+      - become_a_soldier
+      - become_a_doctor
+      - become_an_artist
+      - become_an_ambassador
+    - cmd: Je veux devenir ambassadeur.
+      steps_finishing:
+      - become_an_ambassador
+      steps_canceling:
+      - become_a_soldier
+      - become_a_doctor
+      - become_an_artist
+      - become_a_priest

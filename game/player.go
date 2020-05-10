@@ -4,7 +4,6 @@ type Player struct {
 	Character
 	Talker
 	TalkingTo         *Npc
-	Quests            map[string]*Quest
 	Inventory         *Inventory
 	Library           *Library
 	IsTaking          bool
@@ -171,24 +170,6 @@ func (p *Player) Discuss(g *Game) {
 	}
 }
 
-func (p *Player) IsQuestOpen(questID string) bool {
-	return !p.Quests[questID].IsFinished
-}
-
-func (p *Player) IsStepFinished(questID string, stepID string) bool {
-	if p.Quests[questID].IsFinished {
-		return true
-	}
-	return p.Quests[questID].Steps[stepID].IsFinished
-}
-
-func (p *Player) IsQuestOpenStepFinished(questID string, stepID string) bool {
-	if p.Quests[questID].IsFinished {
-		return false
-	}
-	return p.Quests[questID].Steps[stepID].IsFinished
-}
-
 func (p *Player) Take(g *Game, posTo Pos) bool {
 	level := g.Level
 	o := level.Map[posTo.Z][posTo.Y][posTo.X].Object
@@ -196,7 +177,7 @@ func (p *Player) Take(g *Game, posTo Pos) bool {
 		p.IsTaking = true
 		ut := p.TakeUsable(o, g)
 		bt := p.TakeBook(o, g)
-		qot := p.TakeQuestObject(o, g)
+		qot := p.TakeSpecialObject(o, g)
 		taken := ut || bt || qot
 		if taken {
 			for i := 32; i > 0; i = i - 1 {
@@ -209,8 +190,8 @@ func (p *Player) Take(g *Game, posTo Pos) bool {
 	return false
 }
 
-func (p *Player) TakeQuestObject(o *Object, g *Game) bool {
-	qo, isQuestObject := g.QuestsObjects[o.Rune]
+func (p *Player) TakeSpecialObject(o *Object, g *Game) bool {
+	qo, isQuestObject := g.SpecialObjects[o.Rune]
 	if !isQuestObject {
 		return false
 	}
@@ -221,8 +202,11 @@ func (p *Player) TakeQuestObject(o *Object, g *Game) bool {
 	p.Inventory.QuestObjects[o.Rune] = o
 	g.Level.Map[o.Z][o.Y][o.X].Object = nil
 
-	for _, stepID := range qo.Quest.StepsFullfilling {
-		p.finishQuestStep(qo.Quest.ID, stepID, g)
+	for _, stID := range qo.StepsBeginning {
+		g.beginStep(stID)
+	}
+	for _, stID := range qo.StepsFinishing {
+		g.finishStep(stID)
 	}
 
 	return true

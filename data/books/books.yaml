@@ -3,9 +3,10 @@ book_initial_letter:
   level: arcanea/home
   posX: 13
   posY: 1
-  quest:
-    steps_fullfilling:
-    - letter_from_ri:read_the_letter
+  steps_finishing:
+  - read_the_prefet_letter
+  steps_beginning:
+  - talk_to_the_prefet
 
 book_cats:
   level: arcanea/home
