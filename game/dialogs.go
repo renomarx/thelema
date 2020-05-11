@@ -8,26 +8,26 @@ import (
 const DialogDeltaTime = 200
 
 type Dialog struct {
-	CurrentNode string                `yaml:"current_node"`
-	Nodes       map[string]*StoryNode `yaml:"nodes"`
+	CurrentNode string                 `yaml:"current_node"`
+	Nodes       map[string]*DialogNode `yaml:"nodes"`
 	initialNode string
 }
 
-type StoryNode struct {
-	Messages   []string      `yaml:"messages"`
-	AllChoices []StoryChoice `yaml:"choices"`
-	Choices    []StoryChoice `yaml:"-"`
+type DialogNode struct {
+	Messages   []string       `yaml:"messages"`
+	AllChoices []DialogChoice `yaml:"choices"`
+	Choices    []DialogChoice `yaml:"-"`
 }
 
-type StoryChoice struct {
-	Cmd            string `yaml:"cmd"`
-	NodeId         string `yaml:"node"`
-	Highlighted    bool
+type DialogChoice struct {
+	Cmd            string         `yaml:"cmd"`
+	NodeId         string         `yaml:"node"`
 	StepsFinishing []string       `yaml:"steps_finishing"`
 	StepsCanceling []string       `yaml:"steps_canceling"`
 	StepsBeginning []string       `yaml:"steps_beginning"`
 	Required       map[string]int `yaml:"required"`
 	Actions        []string       `yaml:"actions"`
+	Highlighted    bool           `yaml:"-"`
 }
 
 func adaptDialogSpeed() {
@@ -42,7 +42,7 @@ func (d *Dialog) Close() {
 	d.CurrentNode = d.initialNode
 }
 
-func (d *Dialog) GetCurrentNode() *StoryNode {
+func (d *Dialog) GetCurrentNode() *DialogNode {
 	node, exists := d.Nodes[d.CurrentNode]
 	if !exists {
 		panic("Dialog node " + d.CurrentNode + " does not exist")
@@ -50,7 +50,7 @@ func (d *Dialog) GetCurrentNode() *StoryNode {
 	return node
 }
 
-func (d *Dialog) GetNode(key string) *StoryNode {
+func (d *Dialog) GetNode(key string) *DialogNode {
 	node, exists := d.Nodes[key]
 	if !exists {
 		panic("Dialog node " + key + " does not exist")
@@ -58,7 +58,7 @@ func (d *Dialog) GetNode(key string) *StoryNode {
 	return node
 }
 
-func (d *Dialog) SetCurrentNode(key string) *StoryNode {
+func (d *Dialog) SetCurrentNode(key string) *DialogNode {
 	node, exists := d.Nodes[key]
 	if !exists {
 		log.Printf("Node %s does not exist", key)
@@ -69,7 +69,7 @@ func (d *Dialog) SetCurrentNode(key string) *StoryNode {
 	return node
 }
 
-func (n *StoryNode) GetHighlightedIndex() int {
+func (n *DialogNode) GetHighlightedIndex() int {
 	for i := 0; i < len(n.Choices); i++ {
 		if n.Choices[i].Highlighted {
 			return i
@@ -78,13 +78,13 @@ func (n *StoryNode) GetHighlightedIndex() int {
 	return 0
 }
 
-func (n *StoryNode) ClearHighlight() {
+func (n *DialogNode) ClearHighlight() {
 	for j := 0; j < len(n.Choices); j++ {
 		n.Choices[j].Highlighted = false
 	}
 }
 
-func (n *StoryNode) SetHighlightedIndex(i int) {
+func (n *DialogNode) SetHighlightedIndex(i int) {
 	n.ClearHighlight()
 	length := len(n.Choices)
 	if i >= length {
@@ -99,18 +99,18 @@ func (n *StoryNode) SetHighlightedIndex(i int) {
 	}
 }
 
-func (n *StoryNode) GetCurrentChoice() StoryChoice {
+func (n *DialogNode) GetCurrentChoice() DialogChoice {
 	idx := n.GetHighlightedIndex()
 	if idx >= len(n.Choices) {
 		log.Printf("Error: No choice possible for dialog")
-		return StoryChoice{}
+		return DialogChoice{}
 	}
 	return n.Choices[idx]
 }
 
-func (n *StoryNode) filterPossibleChoices(g *Game) {
+func (n *DialogNode) filterPossibleChoices(g *Game) {
 	p := g.Level.Player
-	var res []StoryChoice
+	var res []DialogChoice
 	for _, choice := range n.AllChoices {
 		isPossible := true
 		for _, stID := range choice.StepsFinishing {

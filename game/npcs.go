@@ -27,7 +27,7 @@ type NpcConf struct {
 	Dead              bool                  `yaml:"dead"`
 	Voice             string                `yaml:"voice"`
 	CurrentNode       string                `yaml:"current_node"`
-	Nodes             map[string]*StoryNode `yaml:"nodes"`
+	Nodes             map[string]*DialogNode `yaml:"nodes"`
 	Health            int                   `yaml:"health"`
 	Energy            int                   `yaml:"energy"`
 	Strength          int                   `yaml:"strength"`
