@@ -1,8 +1,8 @@
 ---
 level: arcanea
 posX: 9
-posY: 4
-posZ: 1
+posY: 3
+posZ: 0
 voice: MALE_STANDARD
 
 current_node: greetings
@@ -14,7 +14,7 @@ nodes:
     choices:
     - cmd: Que veut-elle ?
       node: sarah_quest
-      steps_beginning:
+      steps_finishing:
       - talk_to_jason_about_sarah
     - cmd: Ok, à plus.
     - cmd: "[TEST] File-moi les clés!"
@@ -26,16 +26,11 @@ nodes:
     - Elle veut que tu lui ramènes de l'alcool et des épices pour faire du Gin pour
       ce soir
     choices:
-    - quest:
-        steps_mandatory: []
-        steps_fullfilling:
-        - sarahs_gin:talk_to_jason_about_sarah
-      cmd: Ok merci.
-      steps_finishing:
-      - talk_to_jason_about_sarah
+    - cmd: Ok merci.
       steps_beginning:
       - get_alcohol_for_sarah
       - get_herbs_for_sarah
+      - bring_alcohol_and_herbs_to_sarah
 
   get_prison_key:
     messages:

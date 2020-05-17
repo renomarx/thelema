@@ -1,6 +1,42 @@
 package game
 
-import "log"
+import (
+	"log"
+	"strings"
+)
+
+func (g *Game) validateStoryGraph() {
+	initialSteps := make(map[string]Step)
+	remainingSteps := make(map[string]Step)
+	for stID, st := range g.Steps {
+		initialSteps[stID] = st
+		remainingSteps[stID] = st
+	}
+	ng := Game{}
+	ng.Steps = initialSteps
+
+	numberOfValidatedStepsThisTurn := 1
+	for len(remainingSteps) > 0 && numberOfValidatedStepsThisTurn > 0 {
+		numberOfValidatedStepsThisTurn := 0
+		for stID := range remainingSteps {
+			if ng.isStepAccessible(stID) {
+				st := ng.Steps[stID]
+				st.State = StepStateDONE
+				ng.Steps[stID] = st
+				delete(remainingSteps, stID)
+				numberOfValidatedStepsThisTurn++
+			}
+		}
+	}
+
+	if len(remainingSteps) > 0 {
+		var keys []string
+		for stID := range remainingSteps {
+			keys = append(keys, stID)
+		}
+		log.Fatalf("Steps never reached: %s", strings.Join(keys, ","))
+	}
+}
 
 func (book *OBook) validate(key string, g *Game) {
 	for _, st := range book.StepsBeginning {

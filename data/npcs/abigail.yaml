@@ -13,7 +13,6 @@ nodes:
     - cmd: Abigail ?
       node: talk_to_me
       steps_finishing:
-      - make_abigail_talk
       - talk_to_dead_abigail
       # add steps_beginning
     - cmd: "[Vous libérez l'esprit]"

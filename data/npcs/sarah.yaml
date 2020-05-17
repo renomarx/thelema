@@ -14,10 +14,7 @@ nodes:
     - cmd: Tiens, voici les ingrédients que tu voulais.
       node: thanks
       steps_finishing:
-      - bring_alcohol_to_sarah
-      - bring_herbs_to_sarah
-      steps_beginning:
-      - get_30dollars_from_sarah
+      - bring_alcohol_and_herbs_to_sarah
     - cmd: A plus.
 
   thanks:
@@ -25,5 +22,3 @@ nodes:
     - Merci ! Tiens, voilà tes 30$ !
     choices:
     - cmd: A plus.
-      steps_finishing:
-      - get_30dollars_from_sarah

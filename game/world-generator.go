@@ -250,6 +250,7 @@ func (g *Game) loadSteps() {
 	yaml.Unmarshal(byteValue, &steps)
 
 	g.Steps = steps
+	g.validateStoryGraph()
 }
 
 func (g *Game) loadSpecialObjects() {

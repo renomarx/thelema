@@ -1,6 +1,7 @@
 package game
 
 import (
+	"log"
 	"sort"
 	"time"
 )
@@ -9,8 +10,14 @@ const StepStateTODO = "TODO"
 const StepStateDONE = "DONE"
 const StepStateCANCELED = "CANCELED"
 
+const StepStrategyOneOf = "ONE_OF"
+const StepStrategyAll = "ALL"
+const StepStrategyDefault = StepStrategyOneOf
+
 type Step struct {
 	Name         string         `yaml:"name"`
+	Parents      []string       `yaml:"parents"`
+	Strategy     string         `yaml:"strategy"`
 	ObjectsTaken []string       `yaml:"objects_taken"`
 	GoldGiven    int            `yaml:"gold_given"`
 	ObjectsGiven []string       `yaml:"objects_given"`
@@ -34,6 +41,49 @@ func (g *Game) GetOrderedSteps(state string) []Step {
 	}
 	sort.Sort(StepsByDate(res))
 	return res
+}
+
+func (g *Game) isStepAccessible(stepID string) bool {
+	st, stepExists := g.Steps[stepID]
+	if !stepExists {
+		panic("Step " + stepID + " does not exist")
+	}
+	if st.State == StepStateDONE || st.State == StepStateCANCELED {
+		return false
+	}
+	if len(st.Parents) == 0 {
+		return true
+	}
+	strategy := st.Strategy
+	if strategy != StepStrategyAll && strategy != StepStrategyOneOf {
+		strategy = StepStrategyDefault
+	}
+	switch strategy {
+	case StepStrategyOneOf:
+		for _, parentID := range st.Parents {
+			parent, parentExists := g.Steps[parentID]
+			if !parentExists {
+				log.Fatalf("Step %s does not exist", parentID)
+			}
+			if parent.State == StepStateDONE {
+				return true
+			}
+		}
+		return false
+	case StepStrategyAll:
+		for _, parentID := range st.Parents {
+			parent, parentExists := g.Steps[parentID]
+			if !parentExists {
+				log.Fatalf("Step %s does not exist", parentID)
+			}
+			if parent.State != StepStateDONE {
+				return false
+			}
+		}
+		return true
+	}
+	// Should never pass here
+	return true
 }
 
 func (g *Game) beginStep(stepID string) {

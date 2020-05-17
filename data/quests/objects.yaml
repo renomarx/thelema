@@ -1,18 +1,10 @@
 ---
 alcohol:
-  quest:
-    id: sarahs_gin
-    steps_finishing:
-    - get_alcohol_for_sarah
-    steps_beginning:
-    - bring_alcohol_to_sarah
+  steps_finishing:
+  - get_alcohol_for_sarah
   level: dresde
 
 herbs:
-  quest:
-    id: sarahs_gin
-    steps_finishing:
-    - get_herbs_for_sarah
-    steps_beginning:
-    - bring_herbs_to_sarah
+  steps_finishing:
+  - get_herbs_for_sarah
   level: neoroma

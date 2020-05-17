@@ -114,11 +114,7 @@ func (n *DialogNode) filterPossibleChoices(g *Game) {
 	for _, choice := range n.AllChoices {
 		isPossible := true
 		for _, stID := range choice.StepsFinishing {
-			st, e := g.Steps[stID]
-			if !e {
-				log.Fatalf("Step %s does not exist", stID)
-			}
-			if st.State != StepStateTODO {
+			if !g.isStepAccessible(stID) {
 				isPossible = false
 			}
 		}

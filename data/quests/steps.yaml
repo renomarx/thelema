@@ -5,22 +5,20 @@ talk_to_jason_about_sarah:
 
 get_alcohol_for_sarah:
   name: Récupérer une bouteille d'alcool à Dresde
+  parents:
+  - talk_to_jason_about_sarah
 
 get_herbs_for_sarah:
   name: Récupérer des épices à Neoroma
+  parents:
+  - talk_to_jason_about_sarah
 
-bring_alcohol_to_sarah:
-  name: Apporter l'alcool à Sarah à Neoroma
-  objects_taken:
-  - alcohol
-
-bring_herbs_to_sarah:
-  name: Apporter les épices à Sarah à Neoroma
-  objects_taken:
-  - herbs
-
-get_30dollars_from_sarah:
-  name: Récupérer tes 30 dollars.
+bring_alcohol_and_herbs_to_sarah:
+  name: Rapporter l'alcool et les épices à Sarah.
+  parents:
+  - get_alcohol_for_sarah
+  - get_herbs_for_sarah
+  strategy: ALL
   gold_given: 30
   objects_given: []
 
@@ -29,30 +27,37 @@ talk_to_nathaniel:
 
 talk_to_nathaniel2:
   name: Retrouver Nathaniel (Neoroma)
-
-report_to_nathaniel:
-  name: Rapporter les propos d'Abigail à Nathaniel (Tulla)
+  parents:
+  - talk_to_nathaniel
 
 read_the_prefet_letter:
   name: Lire la lettre du préfet (Arcanea - Home)
 
 talk_to_the_prefet:
   name: Parler au préfet d'Arcanea
+  parents:
+  - read_the_prefet_letter
 
 become_a_soldier:
   name: Devenir un soldat
+  parents:
+  - talk_to_the_prefet
   raising:
     strength: 5
     dexterity: 2
 
 become_a_doctor:
   name: Devenir un médecin
+  parents:
+  - talk_to_the_prefet
   raising:
     intelligence: 5
     dexterity: 2
 
 become_an_artist:
   name: Devenir un artiste
+  parents:
+  - talk_to_the_prefet
   raising:
     charisma: 3
     beauty: 2
@@ -60,12 +65,16 @@ become_an_artist:
 
 become_a_priest:
   name: Devenir un prêtre
+  parents:
+  - talk_to_the_prefet
   raising:
     will: 5
     intelligence: 2
 
 become_an_ambassador:
   name: Devenir un ambassadeur
+  parents:
+  - talk_to_the_prefet
   final: true
   raising:
     charisma: 5
@@ -73,13 +82,26 @@ become_an_ambassador:
 
 send_nathaniel_to_prison:
   name: Parler de Nathaniel à la police (facultatif)
+  parents:
+  - talk_to_nathaniel
   gold_given: 100
 
 free_nathaniel:
   name: Libérer Nathaniel (Dresde - Prison)
+  parents:
+  - send_nathaniel_to_prison
 
 make_abigail_talk:
   name: Faire parler l'esprit d'Abigail dans la crypte.
+  parents:
+  - talk_to_nathaniel2
 
 talk_to_dead_abigail:
   name: Parler à Abigail dans la crypte.
+  parents:
+  - make_abigail_talk
+
+report_to_nathaniel:
+  name: Rapporter les propos d'Abigail à Nathaniel (Tulla)
+  parents:
+  - talk_to_dead_abigail
