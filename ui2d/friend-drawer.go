@@ -1,7 +1,7 @@
 package ui2d
 
 import (
-	"thelema/game"
+	"github.com/renomarx/thelema/game"
 )
 
 func (ui *UI) drawFriend(p *game.Friend) {

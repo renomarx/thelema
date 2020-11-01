@@ -8,7 +8,7 @@ import (
 	// "github.com/veandco/go-sdl2/ttf"
 	// "log"
 	// "path/filepath"
-	"thelema/game"
+	"github.com/renomarx/thelema/game"
 )
 
 func (ui *UI) DrawFightingRing() {

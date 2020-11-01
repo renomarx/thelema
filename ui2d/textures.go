@@ -7,7 +7,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"thelema/game"
+	"github.com/renomarx/thelema/game"
 
 	"github.com/veandco/go-sdl2/sdl"
 )

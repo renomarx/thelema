@@ -2,7 +2,7 @@ package ui2d
 
 import (
 	"math"
-	"thelema/game"
+	"github.com/renomarx/thelema/game"
 )
 
 func (ui *UI) DrawMinimap() {

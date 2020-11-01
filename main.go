@@ -3,8 +3,9 @@ package main
 import (
 	"path/filepath"
 	"runtime"
-	"thelema/game"
-	"thelema/ui2d"
+
+	"github.com/renomarx/thelema/game"
+	"github.com/renomarx/thelema/ui2d"
 )
 
 func init() {
