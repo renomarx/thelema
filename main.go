@@ -1,30 +1,77 @@
 package main
 
 import (
-	"path/filepath"
-	"runtime"
+  "fmt"
+  "os"
+	"log"
 
-	"github.com/renomarx/thelema/game"
-	"github.com/renomarx/thelema/ui2d"
+  "github.com/lafriks/go-tiled"
+  "github.com/lafriks/go-tiled/render"
+	"github.com/hajimehoshi/ebiten/v2"
 )
 
-func init() {
-	runtime.LockOSThread()
+type Game struct{
+	img *ebiten.Image
 }
 
+func (g *Game) Update() error {
+	return nil
+}
+
+func (g *Game) Draw(screen *ebiten.Image) {
+	screen.DrawImage(g.img, nil)
+}
+
+func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
+	return 320, 240
+}
+
+const mapPath = "data/tmx/example.tmx" // Path to your Tiled Map.
+
 func main() {
-	absPath, _ := filepath.Abs("data")
+    // Parse .tmx file.
+    gameMap, err := tiled.LoadFromFile(mapPath)
+    if err != nil {
+        fmt.Printf("error parsing map: %s", err.Error())
+        os.Exit(2)
+    }
 
-	game.EM = game.NewEventManager()
+    fmt.Println(gameMap)
 
-	g := game.NewGame(absPath)
-	g.InitSlots()
+    // You can also render the map to an in-memory image for direct
+    // use with the default Renderer, or by making your own.
+    renderer, err := render.NewRenderer(gameMap)
+    if err != nil {
+        fmt.Printf("map unsupported for rendering: %s", err.Error())
+        os.Exit(2)
+    }
 
-	ui := ui2d.NewUI(g)
-	game.EM.Subscribe(ui)
+    // Render just layer 0 to the Renderer.
+    err = renderer.RenderLayer(0)
+    if err != nil {
+        fmt.Printf("layer unsupported for rendering: %s", err.Error())
+        os.Exit(2)
+    }
 
-	go g.Run()
+    // Get a reference to the Renderer's output, an image.NRGBA struct.
+    img := renderer.Result
 
-	go ui.WatchInput()
-	ui.Run()
+    // And so on. You can also export the image to a file by using the
+    // Renderer's Save functions.
+	ebiten.SetWindowSize(800, 600)
+	ebiten.SetWindowTitle("Poc ebiten with tmx file")
+
+	g := Game{}
+	g.img = ebiten.NewImageFromImage(img)
+	if g.img == nil {
+		panic("Error: img si nil")
+	}
+
+	if err := ebiten.RunGame(&g); err != nil {
+		log.Fatal(err)
+	}
+
+	// Clear the render result after copying the output if separation of
+	// layers is desired.
+	renderer.Clear()
 }
