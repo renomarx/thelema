@@ -11,7 +11,57 @@ import (
 )
 
 type Game struct{
-	img *ebiten.Image
+	layer1 *ebiten.Image
+	layer2 *ebiten.Image
+}
+
+func (g *Game) loadTmx(tmxFile string) {
+	// Parse .tmx file.
+	gameMap, err := tiled.LoadFromFile(tmxFile)
+	if err != nil {
+			fmt.Printf("error parsing map: %s", err.Error())
+			os.Exit(2)
+	}
+
+	fmt.Println(gameMap)
+
+	// You can also render the map to an in-memory image for direct
+	// use with the default Renderer, or by making your own.
+	renderer, err := render.NewRenderer(gameMap)
+	if err != nil {
+			fmt.Printf("map unsupported for rendering: %s", err.Error())
+			os.Exit(2)
+	}
+
+	// Render just layer 0 to the Renderer.
+	err = renderer.RenderLayer(0)
+	if err != nil {
+			fmt.Printf("layer unsupported for rendering: %s", err.Error())
+			os.Exit(2)
+	}
+
+	// Get a reference to the Renderer's output, an image.NRGBA struct.
+	img := renderer.Result
+	g.layer1 = ebiten.NewImageFromImage(img)
+
+	// Clear the render result after copying the output if separation of
+	// layers is desired.
+	renderer.Clear()
+
+	// Render just layer 0 to the Renderer.
+	err = renderer.RenderLayer(1)
+	if err != nil {
+			fmt.Printf("layer unsupported for rendering: %s", err.Error())
+			os.Exit(2)
+	}
+
+	// Get a reference to the Renderer's output, an image.NRGBA struct.
+	img = renderer.Result
+	g.layer2 = ebiten.NewImageFromImage(img)
+
+	// Clear the render result after copying the output if separation of
+	// layers is desired.
+	renderer.Clear()
 }
 
 func (g *Game) Update() error {
@@ -19,59 +69,31 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	screen.DrawImage(g.img, nil)
+
+	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(-200, -200)
+	//op.GeoM.Scale(0.5, 0.5)
+	screen.DrawImage(g.layer1, op)
+	screen.DrawImage(g.layer2, op)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
 	return 320, 240
 }
 
-const mapPath = "data/tmx/example.tmx" // Path to your Tiled Map.
-
 func main() {
-    // Parse .tmx file.
-    gameMap, err := tiled.LoadFromFile(mapPath)
-    if err != nil {
-        fmt.Printf("error parsing map: %s", err.Error())
-        os.Exit(2)
-    }
 
-    fmt.Println(gameMap)
 
-    // You can also render the map to an in-memory image for direct
-    // use with the default Renderer, or by making your own.
-    renderer, err := render.NewRenderer(gameMap)
-    if err != nil {
-        fmt.Printf("map unsupported for rendering: %s", err.Error())
-        os.Exit(2)
-    }
+  // And so on. You can also export the image to a file by using the
+  // Renderer's Save functions.
 
-    // Render just layer 0 to the Renderer.
-    err = renderer.RenderLayer(0)
-    if err != nil {
-        fmt.Printf("layer unsupported for rendering: %s", err.Error())
-        os.Exit(2)
-    }
-
-    // Get a reference to the Renderer's output, an image.NRGBA struct.
-    img := renderer.Result
-
-    // And so on. You can also export the image to a file by using the
-    // Renderer's Save functions.
 	ebiten.SetWindowSize(800, 600)
 	ebiten.SetWindowTitle("Poc ebiten with tmx file")
 
 	g := Game{}
-	g.img = ebiten.NewImageFromImage(img)
-	if g.img == nil {
-		panic("Error: img si nil")
-	}
+	g.loadTmx("data/tmx/example.tmx")
 
 	if err := ebiten.RunGame(&g); err != nil {
 		log.Fatal(err)
 	}
-
-	// Clear the render result after copying the output if separation of
-	// layers is desired.
-	renderer.Clear()
 }
